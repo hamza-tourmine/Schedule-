@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('modules', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('passwordClone')->nullable();
-            $table->string('image')->nullable();
-            $table->enum('role',['formateur','admin']);
-            $table->enum('status',['active','desactive'])->nullable();
+            $table->string('module_name');
+            $table->unsignedBigInteger('establishment_id');
+            $table->foreign('establishment_id')
+                ->references('id')
+                ->on('establishment')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('_modules');
     }
 };
