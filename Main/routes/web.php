@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function(){
 
 // models
 Route::controller(moduleController::class)->group(function(){
+    
     Route::get('/add-model','index')->name('addModel');
     Route::post('/create-model','create')->name('insertmodel');
     Route::get('/delatemodel/{id}','destroy');
