@@ -47,7 +47,7 @@
 
                     <div class="card">
                         <div class="card-body ">
-                            <h4 class="card-title mb-4">Projects</h4>
+                            
 
                             <div class="table-responsive">
                                 <table class="table table-centered mb-0">

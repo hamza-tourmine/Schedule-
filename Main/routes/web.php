@@ -31,6 +31,9 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 Route::middleware('auth')->group(function(){
     //Schedule
     Route::get('/dashboard' , [Schedule::class , 'index'])->name('dashboard_Admin');
+    Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');
+
+
 
     Route::get('/add-class-rooms',[classRoomsController::class,'index'])->name('add-class-rooms');
     Route::post('/insertClasses',[classRoomsController::class,'insert'])->name('insertClasses');
