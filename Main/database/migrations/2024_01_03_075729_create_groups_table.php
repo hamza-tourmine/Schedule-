@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('group_name');
-            $table->string('branch');
-            $table->year('year');
+            $table->string('branch')->nullable();
+            $table->year('year')->nullable();
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')
                 ->references('id')
