@@ -359,7 +359,7 @@
                           <span>Modules</span>
                       </a>
                       <ul class="sub-menu" aria-expanded="false">
-                          <li><a href="{{ url('FormateurModule/ListModules') }}">List des Modules</a></li>
+                          <li><a href="{{ url('ListModules') }}">List des Modules</a></li>
                       </ul>
                   </li>
           
