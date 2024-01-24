@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class group extends Model
 {
     public $timestamps = false ;
-    public $fillable =['group_name','establishment_id'];
+    public $fillable =['group_name','establishment_id','year','branch'];
     use HasFactory;
 }
