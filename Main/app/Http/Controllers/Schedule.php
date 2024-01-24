@@ -10,11 +10,12 @@ use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
 use App\Models\class_has_type;
+use App\Models\sission;
 
 class Schedule extends Controller
 {
     public function index(){
-        
+
         $establishment_id = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment_id);
 
@@ -33,6 +34,26 @@ class Schedule extends Controller
     }
 
     public function insertSession(Request $request){
+        // i removed thes from creation 'validate_date'
+        //cut day from idCase
+
+        $establishment_id = session()->get('establishment_id');
+        $sission = sission::create([
+            'day'=>$request->idCase,
+            'day_part'=>$request->dayPart,
+            'dure_sission'=>$request->dure,
+            'module_id'=>$request->modele,
+            'group_id'=>$request->group,
+        	'establishment_id'=>$establishment_id,
+            'user_id'=>$request->formateur,
+            'class_room_id'=>$request->salle,
+            'validate_date'=>null,
+            'main_emploi_id'=>null,
+            "demand_emploi_id"=>null,
+            'message'=>null,
+            'sission_type'=>$request->TypeSesion,
+        	'status_sission'=>null,
+        ]);
         return $request ;
     }
 }
