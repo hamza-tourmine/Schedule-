@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('group_name');
             $table->string('branch')->nullable();
-            $table->year('year')->nullable();
+            $table->string('year')->nullable();
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')
                 ->references('id')
