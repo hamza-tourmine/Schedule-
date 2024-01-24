@@ -21,6 +21,8 @@ class groupController extends Controller
        try{
         $group = group::create(
             [ 'group_name' =>$request->group_name,
+               'branch'=>$request->branch,
+               'year'=>$request->year,
               'establishment_id'=>$establishment
             ]
          );
@@ -53,7 +55,9 @@ class groupController extends Controller
     // update  groups
     public function update(Request $request,$id){
                $group =  group::find($id);
-               $group->group_name =$request->group_name;
+               $group->group_name = $request->group_name;
+               $group->branch = $request->branch;
+               $group->year = $request->year;
                $group->save() ;
 
                if($group){

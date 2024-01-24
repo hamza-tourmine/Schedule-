@@ -1,6 +1,6 @@
 <x-Headers>
 
-  
+
     <div style="width:50%;margin-x:auto">
         <form method='POST' action="{{route('insertGroups')}}">
             @if(session('success'))
@@ -15,10 +15,20 @@
       @endif
 
             @csrf
-            <div class="mb-3 col-3">
+            <div class="mb-3 col-6">
               <label for="exampleInputEmail1" class="form-label">group Name </label>
               <input type="text"name='group_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
+
+            <div class="mb-3 col-6">
+                <label for="exampleInputEmail1" class="form-label"> barnch </label>
+                <input type="text"name='branch' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
+
+              <div class="mb-3 col-6">
+                <label for="exampleInputEmail1" class="form-label">l'année </label>
+                <input type="text"name='year' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
 
             <button type="submit" class="btn btn-success">save</button>
         </form>
@@ -30,6 +40,8 @@
         <tr>
           <th scope="col">#</th>
           <th tpscope="col">group</th>
+          <th tpscope="col">branch</th>
+          <th tpscope="col">year</th>
           <th scope="col">actions</th>
         </tr>
       </thead>
@@ -39,6 +51,8 @@
    <tr>
     <th scope="row">{{$key +1}}</th>
     <td colspan="">{{$group->group_name}}</td>
+    <td colspan="">{{$group->branch}}</td>
+    <td colspan="">{{$group->year}}</td>
 
     <td colspan="2">
       <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url("update-group/{$group->id}")}}">Edit</a></button>
