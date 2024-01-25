@@ -28,7 +28,7 @@
                                 <h4 class="card-title">Formateur Validation</h4>
                                 <p class="card-title-desc">Affecter votre modules et groupes</p>
 
-                                <form id="form-horizontal" class="form-horizontal form-wizard-wrapper">
+                                <form id="form-horizontal" class="form-horizontal form-wizard-wrapper" action="{{ route('storeFormData') }}" method="POST">
                                     <h3>Modules</h3>
                                     <fieldset class="checkbox-group">
                                         <div class="row">
@@ -76,6 +76,7 @@
                                                             <span class="selectstyle__box">
                                                                 <select id="selectedGroup" name="selectedGroup" class="selectstyle__box__select">
                                                                     <option value="0">Groupe</option>
+                                                                    <!-- Add options dynamically if needed -->
                                                                 </select>
                                                             </span>
                                                         </p>
@@ -85,12 +86,13 @@
                                                             <span class="selectstyle__box">
                                                                 <select id="selectedModule" name="selectedModule" class="selectstyle__box__select">
                                                                     <option value="0">Module</option>
+                                                                    <!-- Add options dynamically if needed -->
                                                                 </select>
                                                             </span>
                                                         </p>
 
                                                         <p class="selectstyle selectstyle--style3">
-                                                            <button id="saveButton" disabled>Save</button>
+                                                            <button type="submit">Save</button>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -136,45 +138,6 @@
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var moduleCheckboxes = document.querySelectorAll('#form-horizontal h3:nth-of-type(1) input[type="checkbox"]');
-            var groupeCheckboxes = document.querySelectorAll('#form-horizontal h3:nth-of-type(2) input[type="checkbox"]');
-            var selectedGroupSelect = document.getElementById('selectedGroup');
-            var selectedModuleSelect = document.getElementById('selectedModule');
-            var saveButton = document.getElementById('saveButton');
-
-            moduleCheckboxes.forEach(function (checkbox) {
-                checkbox.addEventListener('change', updateSelectedOptions);
-            });
-
-            groupeCheckboxes.forEach(function (checkbox) {
-                checkbox.addEventListener('change', updateSelectedOptions);
-            });
-
-            function updateSelectedOptions() {
-                selectedGroupSelect.innerHTML = '<option value="0">Groupe</option>';
-                selectedModuleSelect.innerHTML = '<option value="0">Module</option>';
-
-                moduleCheckboxes.forEach(function (checkbox) {
-                    if (checkbox.checked) {
-                        selectedModuleSelect.innerHTML += '<option value="' + checkbox.value + '">' + checkbox.nextElementSibling.textContent + '</option>';
-                    }
-                });
-
-                groupeCheckboxes.forEach(function (checkbox) {
-                    if (checkbox.checked) {
-                        selectedGroupSelect.innerHTML += '<option value="' + checkbox.value + '">' + checkbox.nextElementSibling.textContent + '</option>';
-                    }
-                });
-
-                // Check if there are no selected options and disable the button
-                saveButton.disabled = !(selectedModuleSelect.innerHTML !== '<option value="0">Module</option>' && selectedGroupSelect.innerHTML !== '<option value="0">Groupe</option>');
-            }
-
-            // Initial update on page load
-            updateSelectedOptions();
-        });
-    </script>
+    
 </body>
 </html>
