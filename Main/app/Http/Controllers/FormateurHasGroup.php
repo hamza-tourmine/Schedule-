@@ -27,7 +27,7 @@ class FormateurHasGroup extends Controller
         $establishment_id = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment_id);
         $models = module::all()->where('establishment_id',$establishment_id);
-        return view('formateurDashboerd.my_groups',['groups'=>$groups,'models'=>$models]);
+        return view('formateurDashboerd.my_groups_Modules',['groupes'=>$groups,'modules'=>$models]);
     }
 
     //insert groups that selected by formateur

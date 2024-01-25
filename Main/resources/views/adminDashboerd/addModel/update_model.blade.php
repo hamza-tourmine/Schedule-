@@ -1,4 +1,4 @@
-<x-Headers>
+<x-HeaderMenuAdmin>
 
 
     <div style="width:50%;margin-x:auto">
@@ -25,4 +25,4 @@
 
 
 
-</x-Headers>
+</x-HeaderMenuAdmin>

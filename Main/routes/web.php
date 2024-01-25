@@ -79,7 +79,7 @@ Route::controller(formateurControllrt::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
     Route::post('/insert-formateur','create')->name('insertFormateur');
 
-    // displat mane page in formateur account
+    // displat main page in formateur account
     Route::get('/formateur','showHomepage')->name('dashboard_formateur');
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
@@ -97,7 +97,7 @@ Route::controller(FormateurHasGroup::class)->group(function(){
     //models
     Route::get('/models' , 'displaymodels')->name('selectmodels');
     //groups
-    Route::get('/groups-models' , 'diesplayMyGroups')->name('mygroups');
+    Route::get('/GroupesAndModules' , 'diesplayMyGroups')->name('mygroups');
     Route::get('/groups','displaygroups')->name('selectgroups');
     Route::post('/insertMygroups', 'insertMygroups')->name('insertMygroups');
     Route::post('/insertgroups_models','insertgroups_models')->name('insertgroups_models');
