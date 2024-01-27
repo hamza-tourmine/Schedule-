@@ -26,7 +26,7 @@
 </head>
 <body>
 
-    <x-navbar/>
+    <x-HeaderMenuFormateur/>
     <div>
         @if ($formateur)
         <h4>{{$formateur->user_name }}</h4>

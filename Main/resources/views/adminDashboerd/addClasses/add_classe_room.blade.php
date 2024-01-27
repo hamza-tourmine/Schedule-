@@ -1,4 +1,4 @@
-<x-Headers>
+<x-HeaderMenuAdmin>
 
 
 <div style="display: flex">
@@ -57,4 +57,4 @@
 </div>
 
 
-</x-Headers>
+</x-HeaderMenuAdmin>

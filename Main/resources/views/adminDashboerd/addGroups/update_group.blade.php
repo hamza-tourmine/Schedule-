@@ -1,4 +1,4 @@
-<x-Headers>
+<x-HeaderMenuAdmin>
 
     <div style="width:50%;margin-x:auto">
         <form method='POST' action="{{url("updateGroups/$group->id")}}">
@@ -20,4 +20,4 @@
     </div>
 
 
-</x-Headers>
+</x-HeaderMenuAdmin>

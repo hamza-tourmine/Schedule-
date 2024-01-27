@@ -220,7 +220,7 @@
                     />
 
                     <span class="d-none d-xl-inline-block ms-1"
-                      >Nom Formateur</span
+                      >{{session()->get('user_name')}}</span
                     >
                     <i
                       class="mdi mdi-chevron-down d-none d-xl-inline-block"
@@ -301,7 +301,7 @@
 
               <div class="mt-3">
                 <a href="#" class="text-reset fw-medium font-size-16"
-                  >Nom du Formateur</a
+                  >{{session()->get('user_name')}}</a
                 >
                 <p class="text-muted mt-1 mb-0 font-size-13">
                   Domaine du formation
@@ -359,7 +359,7 @@
                           <span>Modules</span>
                       </a>
                       <ul class="sub-menu" aria-expanded="false">
-                          <li><a href="{{ url('FormateurModule/ListModules') }}">List des Modules</a></li>
+                          <li><a href="{{ url('ListModules') }}">List des Modules</a></li>
                       </ul>
                   </li>
           
@@ -398,6 +398,8 @@
         <script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script>
 
         <script src="{{ asset('assets/js/pages/dashboard.init.js') }}"></script>
+<!-- Bootstrap JavaScript and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <script src="{{ asset('assets/js/app.js') }}"></script>
   </body>
