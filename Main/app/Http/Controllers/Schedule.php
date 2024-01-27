@@ -19,6 +19,20 @@ class Schedule extends Controller
 
 
 
+    // public function index(){
+    //     $establishment_id = session()->get('establishment_id');
+    //     $groups = group::all()->where('establishment_id',$establishment_id);
+    //     $modules = module::all()->where('establishment_id',$establishment_id);
+    //     $salles = class_room::all()->where('id_establishment',session()->get('establishment_id'));
+    //     $formateurs = user::all()->where('establishment_id',$establishment_id)->where('role','formateur');
+    //     $classType = class_room_type::all()->where('establishment_id',$establishment_id);
+    //     $id_main_emploi =  session()->get('id_main_emploi');
+
+    //     $establishment_id = session()->get('establishment_id');
+    //     $classType = class_room_type::all()->where('establishment_id',$establishment_id);
+    //     return  view('adminDashboerd.main.main',['formateurs'=>$formateurs,'groups'=>$groups,'modules'=>$modules,'salles'=>$salles,'classType'=>$classType]);
+    // }
+
     public function index(){
         $establishment_id = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment_id);
@@ -29,8 +43,23 @@ class Schedule extends Controller
         $id_main_emploi =  session()->get('id_main_emploi');
 
         $establishment_id = session()->get('establishment_id');
-        $classType = class_room_type::all()->where('establishment_id',$establishment_id);
-        return  view('adminDashboerd.main.main',['formateurs'=>$formateurs,'groups'=>$groups,'modules'=>$modules,'salles'=>$salles,'classType'=>$classType]);
+        $sission = DB::table('sissions')
+        ->select('sissions.*','modules.module_name','groups.group_name','users.user_name','class_rooms.class_name')
+        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('users', 'users.id', '=', 'sissions.user_id')
+        ->join('class_rooms','class_rooms.id','=','class_rooms.class_name')
+        ->where('sissions.establishment_id', $establishment_id)
+        ->where('sissions.main_emploi_id',$id_main_emploi)
+        ->get();
+        // return sission::all() ;
+        return  view('adminDashboerd.main.main',['sissions'=>$sission,
+                                    'formateurs'=>$formateurs,
+                                    'groups'=>$groups,
+                                    'modules'=>$modules,
+                                    'salles'=>$salles,
+                                    'classType'=>$classType
+    ]);
     }
 
     public function insertSession(Request $request){
