@@ -51,7 +51,6 @@ public function login(Request $request){
          // store id in session
         $user = auth::user();
         session(['user_name'=>$user->user_name,'user_id'=>$user->id,'establishment_id'=>$user->establishment_id]);
-
         return redirect()->route('dashboard_Admin');
     } elseif (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'formateur'])) {
         $user = Auth::user();
@@ -64,7 +63,6 @@ public function login(Request $request){
         }else {
             return redirect()->back()->withErrors(['errors'=>'your account are desibled can you see your  boss']);
         }
-
     } else {
           return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

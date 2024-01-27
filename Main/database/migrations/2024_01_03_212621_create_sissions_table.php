@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sissions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->date('day');
+            $table->string('day');
             $table->enum('day_part', ['matin', 'A.midi']);
             $table->enum('dure_sission', ['S1', 'S2', 'S1+S2']);
             $table->unsignedBigInteger('module_id')->nullable();

@@ -7,6 +7,7 @@ use App\Http\controllers\groupController;
 use App\Http\controllers\moduleController;
 use App\Http\controllers\formateurControllrt;
 use App\Http\controllers\FormateurHasGroup;
+use App\Http\Controllers\DataController;
 use App\Http\Controllers\Schedule;
 
 // use App\Http\Middleware\Authenticate;
@@ -32,6 +33,12 @@ Route::middleware('auth')->group(function(){
     //Schedule
     Route::get('/dashboard' , [Schedule::class , 'index'])->name('dashboard_Admin');
     Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');
+    Route::get('/createNewSchedule' , [Schedule::class , 'createNewSchedule'])->name('createNewSchedule');
+    Route::get('/MainFormSchadule',[Schedule::class , 'MainFormSchadule'])->name('MainFormSchadule');
+
+
+
+    //end Schedule routes
 
 
 
@@ -66,7 +73,7 @@ Route::middleware('auth')->group(function(){
 
 // models
 Route::controller(moduleController::class)->group(function(){
-    
+
     Route::get('/add-model','index')->name('addModel');
     Route::post('/create-model','create')->name('insertmodel');
     Route::get('/delatemodel/{id}','destroy');

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('main_emploi', function (Blueprint $table) {
             $table->id();
-            $table->date('year');
-            $table->date('date-start');
+            $table->date('datestart');
+            $table->date('dateend');
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')
             ->references('id')

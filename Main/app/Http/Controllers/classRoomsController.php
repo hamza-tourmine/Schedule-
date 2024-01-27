@@ -80,7 +80,7 @@ class classRoomsController extends Controller
     public function indexOfDetermineTypeOfclass(){
         $class_type = class_room_type::all()->where('establishment_id',session()->get('establishment_id'));
         $class_rooms = class_room::all()->where('id_establishment',session()->get('establishment_id'));
-      
+
         $results = DB::table('class_room_types')
         ->join('classes_has_types' ,'classes_has_types.class_room_types_id','=','class_room_types.id')
         ->join('class_rooms','class_rooms.id','=','classes_has_types.class_rooms_id')
