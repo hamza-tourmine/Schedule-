@@ -49,7 +49,7 @@
         </ul>
     </div>
 @endif
-    <form id="myForm" method="get" action="{{ route('createNewSchedule') }}">
+    <form method="get" action="{{ route('createNewSchedule') }}">
         @csrf
         <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px" class="btn btn-primary">
             Create New Schadule
@@ -322,11 +322,11 @@
                     });
 
                     // Event listener for form submission
-                    let form = document.getElementById('myForm'); // Update the form ID if needed
-                    form.addEventListener('submit', function() {
-                        // Ensure that the idCase value is set before submitting the form
-                        idCaseInput.value = idCaseInput.value.trim(); // Trim any leading/trailing whitespaces
-                    });
+                    // let form = document.getElementById('myForm'); // Update the form ID if needed
+                    // form.addEventListener('submit', function() {
+                    //     // Ensure that the idCase value is set before submitting the form
+                    //     idCaseInput.value = idCaseInput.value.trim(); // Trim any leading/trailing whitespaces
+                    // });
 
                 // Event listener for table cell clicks
                 // let cases = document.querySelectorAll('[class="Cases"]');
@@ -335,6 +335,34 @@
                 //         idCaseInput.value = this.id;
                 //     });
                 // });
+
+                    // Event listener for form submission
+    let form = document.getElementById('myForm');
+    form.addEventListener('submit', function(event) {
+        // Prevent the default form submission
+        event.preventDefault();
+
+        // Ensure that the idCase value is set before sending the AJAX request
+        idCaseInput.value = idCaseInput.value.trim();
+
+        // AJAX request to the Laravel controller
+        $.ajax({
+            url: "{{ route('insertSession') }}",
+            method: "GET",
+            data: {
+                idCase: idCaseInput.value,
+                // Add other data if needed
+            },
+            success: function(response) {
+                // Handle the success response
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                console.error(error);
+            }
+        });
+    })
             });
 
 

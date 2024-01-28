@@ -17,22 +17,6 @@ use Illuminate\Support\Facades\DB;
 class Schedule extends Controller
 {
 
-
-
-    // public function index(){
-    //     $establishment_id = session()->get('establishment_id');
-    //     $groups = group::all()->where('establishment_id',$establishment_id);
-    //     $modules = module::all()->where('establishment_id',$establishment_id);
-    //     $salles = class_room::all()->where('id_establishment',session()->get('establishment_id'));
-    //     $formateurs = user::all()->where('establishment_id',$establishment_id)->where('role','formateur');
-    //     $classType = class_room_type::all()->where('establishment_id',$establishment_id);
-    //     $id_main_emploi =  session()->get('id_main_emploi');
-
-    //     $establishment_id = session()->get('establishment_id');
-    //     $classType = class_room_type::all()->where('establishment_id',$establishment_id);
-    //     return  view('adminDashboerd.main.main',['formateurs'=>$formateurs,'groups'=>$groups,'modules'=>$modules,'salles'=>$salles,'classType'=>$classType]);
-    // }
-
     public function index(){
         $establishment_id = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment_id);
@@ -64,42 +48,43 @@ class Schedule extends Controller
 
     public function insertSession(Request $request){
      try{
-        $request->validate([
-            "modele"=>  'required',
-            "group"=>  'required',
-            "formateur"=>  'required',
-            "salle"=>  'required',
-            "salleclassTyp"=>  'required',
-            "dure"=>  'required',
-            'idcase'=>'required',
-            "dayPart"=>  'required',
-            "TypeSesion"=>  'required'
-        ]);
-        // $day = substr($request->idCase,0,3);
-        $establishment_id = session()->get('establishment_id');
-        $sission = sission::create([
-            'day'=>substr($request->idCase,0,3),
-            'day_part'=>$request->dayPart,
-            'dure_sission'=>$request->dure,
-            'module_id'=>$request->modele,
-            'group_id'=>$request->group,
-        	'establishment_id'=>$establishment_id,
-            'user_id'=>$request->formateur,
-            'class_room_id'=>$request->salle,
-            'validate_date'=>null,
-            'main_emploi_id'=>session()->get('id_main_emploi'),
-            "demand_emploi_id"=>null,
-            'message'=>null,
-            'sission_type'=>$request->TypeSesion,
-        	'status_sission'=>null,
-        ]);
-        if($sission){
-            return back();
-        }
-        return substr($request->idCase,0,3);
+        // $request->validate([
+        //     "modele"=>  'required',
+        //     "group"=>  'required',
+        //     "formateur"=>  'required',
+        //     "salle"=>  'required',
+        //     "salleclassTyp"=>  'required',
+        //     "dure"=>  'required',
+        //     'idcase'=>'required',
+        //     "dayPart"=>  'required',
+        //     "TypeSesion"=>  'required'
+        // ]);
+        // // $day = substr($request->idCase,0,3);
+        // $establishment_id = session()->get('establishment_id');
+        // $sission = sission::create([
+        //     'day'=>substr($request->idCase,0,3),
+        //     'day_part'=>$request->dayPart,
+        //     'dure_sission'=>$request->dure,
+        //     'module_id'=>$request->modele,
+        //     'group_id'=>$request->group,
+        // 	'establishment_id'=>$establishment_id,
+        //     'user_id'=>$request->formateur,
+        //     'class_room_id'=>$request->salle,
+        //     'validate_date'=>null,
+        //     'main_emploi_id'=>session()->get('id_main_emploi'),
+        //     "demand_emploi_id"=>null,
+        //     'message'=>null,
+        //     'sission_type'=>$request->TypeSesion,
+        // 	'status_sission'=>null,
+        // ]);
+        // if($sission){
+        //     return back();
+        // }
+
+        return $request ;
+        
      }catch(\Exception  $e){
         dd($e->getMessage());
-        // return $request ;
 
      }
         // dd(session());
