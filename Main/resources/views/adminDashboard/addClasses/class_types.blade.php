@@ -35,9 +35,9 @@
    @foreach ($classTypes as $classType )
  <tr>
 
-     <td colspan="4">{{$classType->class_room_types}}</td>
+     <td colspan="">{{$classType->class_room_types}}</td>
     <td>
-      <button type="button" class="btn  btn-primary">Edit</button>
+
       <button type="button" class="btn btn-danger"><a href="{{route('delate-class-type',['id'=>$classType->id])}}">Delete</a></button>
     </td>
  </tr>
@@ -47,6 +47,6 @@
       </tbody>
   </table>
         </div>
- 
+
 
 </x-HeaderMenuAdmin>

@@ -35,33 +35,22 @@ Route::middleware('auth')->group(function(){
     Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');
     Route::get('/createNewSchedule' , [Schedule::class , 'createNewSchedule'])->name('createNewSchedule');
     Route::get('/MainFormSchadule',[Schedule::class , 'MainFormSchadule'])->name('MainFormSchadule');
-
-
-
     //end Schedule routes
-
-
-
     Route::get('/add-class-rooms',[classRoomsController::class,'index'])->name('add-class-rooms');
     Route::post('/insertClasses',[classRoomsController::class,'insert'])->name('insertClasses');
     Route::post('/insert-class-type',[classRoomsController::class,'insert_class_type'])->name('insert-class-type');
     Route::get('/add-class-type',[classRoomsController::class,'show_add_class_type'])->name('add-class-type');
-
     // delate types of classes
     Route::get('/delate-class-type',[classRoomsController::class,'Delete_Types_Of_Class'])->name('delate-class-type');
-
     // Delate class room
     Route::get('/delate-class',[classRoomsController::class,'Delete_Class'])->name('delate-class');
-
     // determine type of eash class room
     Route::get('/determine-type-class-room',[classRoomsController::class ,'indexOfDetermineTypeOfclass'])->name('determine-type-class-room');
-
     // insert class with his types
     Route::post('/insert-class-with-types',[classRoomsController::class , 'insertClassWithTtypes'])->name('insert-class-with-types');
     Route::get('/delateClassWithType',[classRoomsController::class , 'deleteClassWithTypes'])->name('delateClassWithType');
     Route::get('/UpdateClasses/{id}',[classRoomsController::class , 'EditClass']);
     Route::post('/UpdateClasses',[classRoomsController::class , 'updateClass'])->name('UpdateClasses');
-
 // groups
     Route::controller(groupController::class)->group(function () {
     Route::get('/add-groups', 'index')->name('addGroups');
@@ -73,34 +62,27 @@ Route::middleware('auth')->group(function(){
 
 // modules
 Route::controller(moduleController::class)->group(function(){
-
     Route::get('/add-model','index')->name('addModule');
     Route::post('/create-model','create')->name('insertmodule');
-    Route::get('/delatemodel/{id}','destroy');
-    Route::get('/update-Model/{id}','display_update_page');
-    Route::post('/update-Model/{id}','update');
+    Route::get('/delatemodule/{id}','destroy');
+    Route::get('/update-module/{id}','display_update_page');
+    Route::post('/update-module/{id}','update');
 });
 
 // Formateru Part
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
     Route::post('/insert-formateur','create')->name('insertFormateur');
-
     // displat main page in formateur account
     Route::get('/formateur','showHomepage')->name('dashboard_formateur');
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
     Route::post('/update-formateur/{id}','update');
     Route::get('/delete-formateur/{id}','destroy');
-
-
-
-
 });
 
 // Formateur has Groups
 Route::controller(FormateurHasGroup::class)->group(function(){
-
     //modules
     Route::get('/ModuleList' , 'displaymodules')->name('selectmodules');
     //groups

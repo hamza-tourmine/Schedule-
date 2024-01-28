@@ -64,7 +64,7 @@ class moduleController extends Controller
         $module->module_name = $request->module_name ;
         $module->save();
         if($module){
-            return redirect()->route('addmodule')->with(['success'=>'you modefid module  successfuly']);
+            return redirect()->route('addModule')->with(['success'=>'you modefid module  successfuly']);
         }
 
     }
@@ -74,7 +74,7 @@ class moduleController extends Controller
     {
         $modul = module::where('id',$id)->delete();
         if($modul){
-            return redirect()->route('addmodule')->with(['success'=>'you are delate module successfuly']);
+            return redirect()->route('addModule')->with(['success'=>'you are delate module successfuly']);
         }
 
     }
