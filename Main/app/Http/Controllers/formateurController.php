@@ -8,7 +8,7 @@ use App\Models\establishment;
 use App\Models\group;
 use App\Models\module;
 use Illuminate\Support\Facades\Crypt;
-class formateurControllrt extends Controller
+class formateurController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +26,7 @@ class formateurControllrt extends Controller
         ->where('role','formateur')
         ->where('establishment_id',$establishment_id)
         ->get();
-        return view('adminDashboerd.addFormateur.add_formateur',['formateurs'=>$formateurs]);
+        return view('adminDashboard.addFormateur.add_formateur',['formateurs'=>$formateurs]);
     }
 
     /**
@@ -96,7 +96,7 @@ class formateurControllrt extends Controller
      // Assuming the model name is 'Formateur' and you're looking for a single record.
           $formateur = formateur::select('user_name')->where('id', $id_formateur)->first();
 
-        return view('formateurDashboerd.formateur',['formateur'=>$formateur]);
+        return view('formateurDashboard.formateur',['formateur'=>$formateur]);
         // return $formateur->user_name ;
     }
 
@@ -119,7 +119,7 @@ class formateurControllrt extends Controller
     public function show_update_page($id)
     {
         $formateur = formateur::find($id);
-       return view('adminDashboerd.addFormateur.update_formateur',['formateur'=>$formateur]);
+       return view('adminDashboard.addFormateur.update_formateur',['formateur'=>$formateur]);
 
     }
 

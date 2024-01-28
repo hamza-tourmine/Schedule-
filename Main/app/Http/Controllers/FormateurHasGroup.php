@@ -13,21 +13,21 @@ class FormateurHasGroup extends Controller
     {
         $establishment_id = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment_id);
-        return view('formateurDashboerd.groups',['groups'=>$groups]);
+        return view('formateurDashboard.GroupList',['groups'=>$groups]);
     }
 
-    public function displaymodels(){
+    public function displaymodules(){
         $establishment_id = session()->get('establishment_id');
-        $models = module::all()->where('establishment_id',$establishment_id);
-        return view('formateurDashboerd.model',['models'=>$models]);
+        $modules = module::all()->where('establishment_id',$establishment_id);
+        return view('formateurDashboard.ModuleList',['modules'=>$modules]);
     }
 
     public function diesplayMyGroups(){
 
         $establishment_id = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment_id);
-        $models = module::all()->where('establishment_id',$establishment_id);
-        return view('formateurDashboerd.my_groups_Modules',['groupes'=>$groups,'modules'=>$models]);
+        $modules = module::all()->where('establishment_id',$establishment_id);
+        return view('formateurDashboard.my_groups_Modules',['groupes'=>$groups,'modules'=>$modules]);
     }
 
     //insert groups that selected by formateur
@@ -46,7 +46,7 @@ class FormateurHasGroup extends Controller
          return redirect()->back()->with('success','you are  selected you groups successfully');
     }
 
-    public function insertgroups_models(Request $request){
+    public function insertgroups_modules(Request $request){
         return $request ;
     }
 

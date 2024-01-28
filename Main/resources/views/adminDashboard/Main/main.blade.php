@@ -150,7 +150,7 @@
                         </tr>
                         <!-- Modal -->
                         <form id="myForm" method="Get" action="{{ route('insertSession') }}">
-{{-- Start Model Form --}}
+{{-- Start module Form --}}
 
                             @csrf
                             <div class="modal fade col-9" id="exampleModal{{ $group->id }}" tabindex="-1"
@@ -165,8 +165,8 @@
                                         </div>
                                         <div class="modal-body">
                                             <div style="display: flex">
-                                                {{-- Model  content  --}}
-                                                <select name="modele" class="form-select"
+                                                {{-- module  content  --}}
+                                                <select name="modulee" class="form-select"
                                                     aria-label="Default select example">
                                                     <option selected>Modules</option>
                                                     @if ($modules)
@@ -259,7 +259,7 @@
                                             <button id="save" type="submit" class="btn btn-primary">Save </button>
                                         </div>
                                     </form>
-            {{-- end form Model --}}
+            {{-- end form module --}}
 
 
     </div>

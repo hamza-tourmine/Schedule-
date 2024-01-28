@@ -15,8 +15,8 @@ class moduleController extends Controller
     public function index()
     {
         $establishment  = session()->get('establishment_id');
-        $models = module::all()->where('establishment_id', $establishment );
-        return view('adminDashboerd.addModel.add_model' ,['models'=>$models]);
+        $modules = module::all()->where('establishment_id', $establishment );
+        return view('adminDashboard.addmodule.add_module' ,['modules'=>$modules]);
     }
 
     /**
@@ -28,11 +28,11 @@ class moduleController extends Controller
     {
         $establishment  = session()->get('establishment_id');
         try{
-            $model = module::create([
+            $module = module::create([
                 'module_name'=>$request->module_name,
                 'establishment_id'=>$establishment
             ]);
-            return  redirect()->back()->with(['success'=>'you createa new model']) ;
+            return  redirect()->back()->with(['success'=>'you createa new module']) ;
         }catch(\Illuminate\database\QueryException $e){
              return redirect()->back()->withErrors(['error'=>$e->errorInfo[2]]);
         }
@@ -48,8 +48,8 @@ class moduleController extends Controller
      */
     public function display_update_page($id)
     {
-        $model = module::find($id);
-        return view('adminDashboerd.addModel.update_model',['model'=>$model]);
+        $module = module::find($id);
+        return view('adminDashboard.addmodule.update_module',['module'=>$module]);
     }
 
     /**
@@ -60,11 +60,11 @@ class moduleController extends Controller
      */
     public function update(Request $request , $id)
     {
-        $model = module::find($id);
-        $model->module_name = $request->model_name ;
-        $model->save();
-        if($model){
-            return redirect()->route('addModel')->with(['success'=>'you modefid Model  successfuly']);
+        $module = module::find($id);
+        $module->module_name = $request->module_name ;
+        $module->save();
+        if($module){
+            return redirect()->route('addmodule')->with(['success'=>'you modefid module  successfuly']);
         }
 
     }
@@ -74,7 +74,7 @@ class moduleController extends Controller
     {
         $modul = module::where('id',$id)->delete();
         if($modul){
-            return redirect()->route('addModel')->with(['success'=>'you are delate model successfuly']);
+            return redirect()->route('addmodule')->with(['success'=>'you are delate module successfuly']);
         }
 
     }

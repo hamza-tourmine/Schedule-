@@ -30,7 +30,7 @@ class Schedule extends Controller
 
     //     $establishment_id = session()->get('establishment_id');
     //     $classType = class_room_type::all()->where('establishment_id',$establishment_id);
-    //     return  view('adminDashboerd.main.main',['formateurs'=>$formateurs,'groups'=>$groups,'modules'=>$modules,'salles'=>$salles,'classType'=>$classType]);
+    //     return  view('adminDashboard.main.main',['formateurs'=>$formateurs,'groups'=>$groups,'modules'=>$modules,'salles'=>$salles,'classType'=>$classType]);
     // }
 
     public function index(){
@@ -53,7 +53,7 @@ class Schedule extends Controller
         ->where('sissions.main_emploi_id',$id_main_emploi)
         ->get();
         // return sission::all() ;
-        return  view('adminDashboerd.main.main',['sissions'=>$sission,
+        return  view('adminDashboard.main.main',['sissions'=>$sission,
                                     'formateurs'=>$formateurs,
                                     'groups'=>$groups,
                                     'modules'=>$modules,

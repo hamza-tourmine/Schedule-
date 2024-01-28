@@ -5,7 +5,7 @@ use App\Http\Controllers\auth_controller;
 use App\Http\controllers\classRoomsController;
 use App\Http\controllers\groupController;
 use App\Http\controllers\moduleController;
-use App\Http\controllers\formateurControllrt;
+use App\Http\controllers\formateurController;
 use App\Http\controllers\FormateurHasGroup;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\Schedule;
@@ -71,18 +71,18 @@ Route::middleware('auth')->group(function(){
     Route::post('/updateGroups/{id}','update')->name('updateGroups');
 });
 
-// models
+// modules
 Route::controller(moduleController::class)->group(function(){
 
-    Route::get('/add-model','index')->name('addModel');
-    Route::post('/create-model','create')->name('insertmodel');
+    Route::get('/add-model','index')->name('addModule');
+    Route::post('/create-model','create')->name('insertmodule');
     Route::get('/delatemodel/{id}','destroy');
     Route::get('/update-Model/{id}','display_update_page');
     Route::post('/update-Model/{id}','update');
 });
 
 // Formateru Part
-Route::controller(formateurControllrt::class )->group(function(){
+Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
     Route::post('/insert-formateur','create')->name('insertFormateur');
 
@@ -101,13 +101,13 @@ Route::controller(formateurControllrt::class )->group(function(){
 // Formateur has Groups
 Route::controller(FormateurHasGroup::class)->group(function(){
 
-    //models
-    Route::get('/models' , 'displaymodels')->name('selectmodels');
+    //modules
+    Route::get('/ModuleList' , 'displaymodules')->name('selectmodules');
     //groups
     Route::get('/GroupesAndModules' , 'diesplayMyGroups')->name('mygroups');
-    Route::get('/groups','displaygroups')->name('selectgroups');
+    Route::get('/GroupList','displaygroups')->name('selectgroups');
     Route::post('/insertMygroups', 'insertMygroups')->name('insertMygroups');
-    Route::post('/insertgroups_models','insertgroups_models')->name('insertgroups_models');
+    Route::post('/insertgroups_modules','insertgroups_modules')->name('insertgroups_modules');
     Route::get('/insertMyModules','insertMyModules')->name('insertMyModules');
 });
 
