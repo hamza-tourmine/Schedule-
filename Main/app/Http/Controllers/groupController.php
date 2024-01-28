@@ -12,7 +12,7 @@ class groupController extends Controller
     public function index(){
         $establishment = session()->get('establishment_id');
         $groups = group::all()->where('establishment_id',$establishment);
-        return view('adminDashboerd.addGroups.add_groups',['groups'=>$groups]) ;
+        return view('adminDashboard.addGroups.add_groups',['groups'=>$groups]) ;
     }
 
      // insertv groups
@@ -49,7 +49,7 @@ class groupController extends Controller
     public function display_update_page($id){
 
         $group = group::find($id);
-        return view('adminDashboerd.addGroups.update_group',['group'=>$group]);
+        return view('adminDashboard.addGroups.update_group',['group'=>$group]);
     }
 
     // update  groups

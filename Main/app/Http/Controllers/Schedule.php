@@ -37,7 +37,7 @@ class Schedule extends Controller
         ->where('sissions.main_emploi_id',$id_main_emploi)
         ->get();
         // return sission::all() ;
-        return  view('adminDashboerd.main.main',['sissions'=>$sission,
+        return  view('adminDashboard.main.main',['sissions'=>$sission,
                                     'formateurs'=>$formateurs,
                                     'groups'=>$groups,
                                     'modules'=>$modules,
@@ -82,7 +82,7 @@ class Schedule extends Controller
         // }
 
         return $request ;
-        
+
      }catch(\Exception  $e){
         dd($e->getMessage());
 

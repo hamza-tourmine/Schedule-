@@ -28,7 +28,7 @@
                                 <h4 class="card-title">Formateur Validation</h4>
                                 <p class="card-title-desc">Affecter votre modules et groupes</p>
 
-                                <form id="form-horizontal" class="form-horizontal form-wizard-wrapper" action="{{ route('storeFormData') }}" method="POST">
+                                <form id="form-horizontal" class="form-horizontal form-wizard-wrapper" action="" method="POST">
                                     <h3>Modules</h3>
                                     <fieldset class="checkbox-group">
                                         <div class="row">

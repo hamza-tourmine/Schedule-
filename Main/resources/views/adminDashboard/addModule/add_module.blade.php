@@ -8,7 +8,7 @@
         <div class=" alert alert-danger">{{$error}}</div>
         @endforeach
         @endif
-        <form method='POST' action="{{route('insertmodel')}}">
+        <form method='POST' action="{{route('insertmodule')}}">
             @if(session('success'))
             <div id="liveAlertPlaceholder" class="alert alert-success">
                 {{ session('success') }}
@@ -25,7 +25,7 @@
         </form>
         {{-- table --}}
 
-        <h3>Models</h3>
+        <h3>modules</h3>
    <table class="table table-striped">
     <thead>
         <tr>
@@ -35,15 +35,15 @@
         </tr>
       </thead>
       <tbody>
-   @if($models)
-   @foreach ($models as $key => $model )
+   @if($modules)
+   @foreach ($modules as $key => $module )
    <tr>
     <th scope="row">{{$key +1}}</th>
-    <td colspan="">{{$model->module_name}}</td>
+    <td colspan="">{{$module->module_name}}</td>
 
     <td colspan="2">
-      <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url("update-Model/{$model->id}")}}">Edit</a></button>
-      <button type="button" class="btn btn-danger"><a href="{{url("delatemodel/{$model->id}")}}">Delete</a></button>
+      <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url("update-module/{$module->id}")}}">Edit</a></button>
+      <button type="button" class="btn btn-danger"><a href="{{url("delatemodule/{$module->id}")}}">Delete</a></button>
     </td>
   </tr>
    @endforeach

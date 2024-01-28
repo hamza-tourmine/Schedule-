@@ -16,7 +16,7 @@ class classRoomsController extends Controller
 
         $class_rooms = class_room::all()->where('id_establishment',session()->get('establishment_id'));
 
-        return view('adminDashboerd.addClasses.add_classe_room',['classes'=>$class_rooms]);
+        return view('adminDashboard.addClasses.add_classe_room',['classes'=>$class_rooms]);
     }
     // insert   class name
     public function insert(Request $request) {
@@ -58,7 +58,7 @@ class classRoomsController extends Controller
     //  show  class room in UI
     public function show_add_class_type(){
         $class_type = class_room_type::all()->where('establishment_id',session()->get('establishment_id'));
-        return view('adminDashboerd.addClasses.class_types',['classTypes'=>$class_type]);
+        return view('adminDashboard.addClasses.class_types',['classTypes'=>$class_type]);
     }
 
     // Delet type
@@ -105,7 +105,7 @@ class classRoomsController extends Controller
                  $data[$class] = $types;
             }
 
-        return view('adminDashboerd.addClasses.Determane_Class_type',['classes'=>$class_rooms,"types"=>$class_type,'classes_with_types'=>$data]);
+        return view('adminDashboard.addClasses.Determane_Class_type',['classes'=>$class_rooms,"types"=>$class_type,'classes_with_types'=>$data]);
     }
 
     //insert classes with  this types
@@ -160,7 +160,7 @@ public function deleteClassWithTypes(Request $request) {
 
 public  function EditClass($id){
     $class = class_room::find($id);
-   return view('adminDashboerd.addClasses.update_class_room ',['class'=>$class]);
+   return view('adminDashboard.addClasses.update_class_room ',['class'=>$class]);
 }
 
 public function updateClass(Request $request){

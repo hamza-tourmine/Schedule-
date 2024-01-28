@@ -300,10 +300,10 @@
                                 <li>
                                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                                         <span class="mdi mdi-book-plus"></span>
-                                        <span>Ajouter les Modeles </span>
+                                        <span>Ajouter les modules </span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addModel')}}" >Ajouter des Modules</a></li>
+                                        <li><a href="{{route('addModule')}}" >Ajouter des Modules</a></li>
 
 
                                     </ul>
