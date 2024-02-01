@@ -1,29 +1,29 @@
-<div>
-    <form wire:submit.prevent="submit">
-        <div wire:ignore.self  class="modal fade col-9" id="exampleModal{{ $group->id }}" tabindex="-1"
-            aria-labelledby="exampleModalLabel{{ $group->id }}" aria-hidden="true">
-            <div class="modal-dialog  modal-lg  ">
-                <div class="modal-content  col-9">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel{{ $group->id }}">
-                            Create session</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
+        <div class="modal-dialog  modal-lg  ">
+            <div class="modal-content  col-9">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" >
+                        Create session</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form wire:submit.prevent="createSession">
                     <div class="modal-body">
                         <div style="display: flex">
                             {{-- module  content --}}
-                            <select wire:model="module" name="module" class="form-select" aria-label="Default select example">
+                            <select wire:model="module" class="form-select"
+                                aria-label="Default select example">
                                 <option selected>Modules</option>
                                 @if ($modules)
                                     @foreach ($modules as $module)
-                                        <option value="{{ $module->id }}">{{ $module->module_name }}</option>
+                                        <option value="{{ $module->id }}">
+                                            {{ $module->module_name }}</option>
                                     @endforeach
                                 @endif
                             </select>
                             {{-- Groups --}}
                             <label for=""></label>
-                            <select wire:model="group" name="module" class="form-select" aria-label="Default select example">
+                            <select wire:model="group" class="form-select"
+                                aria-label="Default select example">
                                 <option selected>Groups</option>
                                 @if ($groups)
                                     @foreach ($groups as $group)
@@ -69,6 +69,7 @@
                                     @endforeach
                                 @endif
                             </select>
+
                             <select wire:model="dure" class="form-select"
                                 aria-label="Default select example">
                                 <option selected>Dure</option>
@@ -76,7 +77,9 @@
                                 <option value="S2">S2</option>
                                 <option value="S1+S2">S2+S1</option>
                             </select>
-                            <input type="hidden" wire:model="idCase" id="idCase" value="">
+
+                            {{-- id case --}}
+                            <input type="hidden"   value="{{$receivedVariable}}" >
                         </div>
                         {{-- day part && type sission --}}
                         <div style="display: flex">
@@ -86,6 +89,7 @@
                                 <option value="Matin">Matin</option>
                                 <option value="A.midi">AM</option>
                             </select>
+
                             <select wire:model="TypeSesion" class="form-select"
                                 aria-label="Default select example">
                                 <option selected>Types</option>
@@ -95,10 +99,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"data-bs-dismiss="modal">Close</button>
-
-                        <button wire:click="save" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Close</button>
+                        <button data-bs-dismiss="modal"
+                        aria-label="Close" type="submit" class="btn btn-primary">Save</button>
                     </div>
-    </form>
-    
+                </form>
+
+                
+
 </div>

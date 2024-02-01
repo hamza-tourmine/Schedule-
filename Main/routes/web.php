@@ -9,6 +9,7 @@ use App\Http\controllers\formateurController;
 use App\Http\controllers\FormateurHasGroup;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\Schedule;
+use App\Http\Livewire\Emploi;
 
 // use App\Http\Middleware\Authenticate;
 
