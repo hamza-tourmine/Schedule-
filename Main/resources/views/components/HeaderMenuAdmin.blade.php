@@ -166,7 +166,7 @@
                                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-2.jpg"
                                             alt="Header Avatar">
-                                        <span class="d-none d-xl-inline-block ms-1">Patrick</span>
+                                        <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name}}</span>
                                         <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
@@ -240,8 +240,7 @@
 
                             <div class="mt-3">
 
-                                <a href="#" class="text-reset fw-medium font-size-16">{{
-                              session()->get('user_name')}}</a>
+                                <a href="#" class="text-reset fw-medium font-size-16">{{Auth::user()->user_name}}</a>
                                 <p class="text-muted mt-1 mb-0 font-size-13">Admin</p>
 
                             </div>
@@ -346,7 +345,7 @@
                     </div>
                     <!-- End Page-content -->
 
-              
+
 
                 </div>
                 <!-- end main content-->

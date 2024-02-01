@@ -27,20 +27,14 @@
             th {
                 background-color: #f2f2f2;
             }
-
             thead tr.day{
                 font-size: 18px;
                 /* font-weight: bold; */
                 padding:30px
             }
-
-
-
-
-
           thead tr.se-row {
-                height: 10px !important;
-                background-color: green;
+                height: 30px !important;
+                width: 30px;
                 margin: 0px;
                 padding: 0px;
                 font-size: 16px
@@ -50,7 +44,7 @@
          @livewireStyles
     </head>
     <body>
-        <livewire:emploi/>
+        <livewire:emploi />
         @livewireScripts
     </body>
     </html>

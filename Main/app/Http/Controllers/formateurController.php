@@ -60,7 +60,7 @@ class formateurController extends Controller
 
         // generate password
         function generatePassword($length = 8) {
-            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
             $randomPassword = '';
             for ($i = 0; $i < $length; $i++) {

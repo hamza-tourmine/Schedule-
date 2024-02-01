@@ -220,7 +220,7 @@
                     />
 
                     <span class="d-none d-xl-inline-block ms-1"
-                      >{{session()->get('user_name')}}</span
+                      >{{Auth::user()->user_name}}</span
                     >
                     <i
                       class="mdi mdi-chevron-down d-none d-xl-inline-block"
@@ -263,7 +263,7 @@
                           <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="17" />
                       </span>
                   </a>
-              
+
                   <a href="{{ url('indexFormateur') }}" class="logo logo-light">
                       <span class="logo-sm">
                           <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="20" />
@@ -273,7 +273,7 @@
                       </span>
                   </a>
               </div>
-              
+
 
                 <button
                   type="button"
@@ -297,11 +297,11 @@
                     class="avatar-md mx-auto rounded-circle"
                 />
             </div>
-            
+
 
               <div class="mt-3">
                 <a href="#" class="text-reset fw-medium font-size-16"
-                  >{{session()->get('user_name')}}</a
+                  >{{ Auth::user()->user_name}}</a
                 >
                 <p class="text-muted mt-1 mb-0 font-size-13">
                   Domaine du formation
@@ -314,35 +314,35 @@
               <!-- Left Menu Start -->
               <ul class="metismenu list-unstyled" id="side-menu">
                   <li class="menu-title">Menu</li>
-          
+
                   <li>
                       <a class="waves-effect" href="{{ url('/') }}">
                           <i class="fas fa-home"></i>
                           <span>Acceuil</span>
                       </a>
                   </li>
-          
+
                   <li>
                       <a href="{{ url('calendarFormateur') }}" class="waves-effect">
                           <i class="mdi mdi-frequently-asked-questions"></i>
                           <span>RequestCalendar</span>
                       </a>
                   </li>
-          
+
                   <li>
                       <a href="{{ url('calendarFormateur') }}" class="waves-effect">
                           <i class="mdi mdi-calendar-text"></i>
                           <span>Calendar</span>
                       </a>
                   </li>
-          
+
                   <li>
                       <a href="{{ url('GroupesAndModules') }}" class="waves-effect">
                           <i class="mdi mdi-calendar-text"></i>
                           <span>Groupe & Module</span>
                       </a>
                   </li>
-          
+
                   <li>
                       <a href="javascript:void(0);" class="has-arrow waves-effect">
                           <i class="mdi mdi-account-group"></i>
@@ -352,7 +352,7 @@
                           <li><a href="{{ url('GroupList') }}">List des Groupes</a></li>
                       </ul>
                   </li>
-          
+
                   <li>
                       <a href="javascript:void(0);" class="has-arrow waves-effect">
                           <i class="mdi mdi-inbox-full"></i>
@@ -362,13 +362,13 @@
                           <li><a href="{{ url('ModuleList') }}">List des Modules</a></li>
                       </ul>
                   </li>
-          
+
                   <li>
                       <a class="dropdown-item d-block" href="{{ url('settings') }}">
                           <i class="mdi mdi-settings-outline"></i> Settings
                       </a>
                   </li>
-          
+
                   <li>
                       <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
                           <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
@@ -377,7 +377,7 @@
                   </li>
               </ul>
           </div>
-          
+
           </div>
         </div>
         <!-- Left Sidebar End -->

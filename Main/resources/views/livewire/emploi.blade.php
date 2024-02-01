@@ -1,32 +1,6 @@
 <div>
     @php
-    function getSession1($day, $group, $dayPart, $sissionType, $sissions) {
-        foreach ($sissions as $sission) {
-            if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === $dayPart && $sission->dure_sission === $sissionType) {
-                return "{$sission->group_name}<br>{$sission->class_name}<br>{$sission->user_name}";
-            }
-        }
-        return '';
-    }
 
-    function getSession2($day, $group, $dayPart, $sissionType, $sissions) {
-        foreach ($sissions as $sission) {
-            if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === $dayPart && $sission->dure_sission === $sissionType) {
-                return "{$sission->group_name}<br>{$sission->class_name}<br>{$sission->user_name}";
-            }
-        }
-        return '';
-    }
-
-
-    function getSession3($day, $group, $dayPart, $sissionType, $sissions) {
-        foreach ($sissions as $sission) {
-            if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === $dayPart && $sission->dure_sission === $sissionType) {
-                return "{$sission->group_name}<br>{$sission->class_name}<br>{$sission->user_name}";
-            }
-        }
-        return '';
-    }
 @endphp
     <h2>Schedule Table</h2>
     @if (session('success'))
