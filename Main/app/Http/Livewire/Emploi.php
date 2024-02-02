@@ -24,7 +24,17 @@ class Emploi extends Component
     public $TypeSession;
 
 
-  
+
+    
+
+
+
+
+
+
+
+
+
 
     public function render()
     {
@@ -56,4 +66,7 @@ class Emploi extends Component
 
         ]);
     }
+
+
+
 }

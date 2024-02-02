@@ -60,10 +60,13 @@ class ModalComponent extends Component
             'sission_type'=>$this->TypeSesion,
         	'status_sission'=>null,
         ]);
+
+
         // return dd($this);
         if($sission){
-          
-            return back();
+
+            return redirect()->route('dashboard_Admin');
+
         }
 
 

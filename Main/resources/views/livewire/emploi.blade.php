@@ -99,7 +99,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -108,7 +108,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -117,7 +117,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonAMidiS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -126,7 +126,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonAMidiS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -138,7 +138,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -147,7 +147,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -156,7 +156,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAMidiS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -165,7 +165,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAMidiS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -178,7 +178,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -187,7 +187,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -196,7 +196,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedS12{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -205,7 +205,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Wed{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -221,7 +221,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Thu{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -230,7 +230,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Thu{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -239,7 +239,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Thu{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -248,7 +248,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Thu{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -265,7 +265,7 @@
                   <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Fri{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -274,7 +274,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Fri{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -283,7 +283,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Fri{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -292,7 +292,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="Fri{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -305,7 +305,7 @@
                   <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -314,7 +314,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -323,7 +323,7 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatAMidiS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S1")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
@@ -332,10 +332,11 @@
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatAMidiS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === "A.midi" && $sission->dure_sission === "S2")
-                            {{ $sission->group_name }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                         @endif
                     @endforeach
                 </td>
+                
                 </tr>
                         <div wire:ignore.self  class="modal fade col-9" id="exampleModal{{ $group->id }}" tabindex="-1"
                             aria-labelledby="exampleModalLabel{{ $group->id }}" aria-hidden="true">
@@ -364,8 +365,6 @@
                 });
             });
         });
-
-
 
     </script>
 </div>

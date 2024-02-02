@@ -102,7 +102,7 @@
                         <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Close</button>
                         <button data-bs-dismiss="modal"
-                        aria-label="Close" type="submit" class="btn btn-primary">Save</button>
+                        aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
                     </div>
                 </form>
 
