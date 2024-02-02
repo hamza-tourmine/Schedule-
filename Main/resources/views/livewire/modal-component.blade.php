@@ -10,7 +10,7 @@
                     <div class="modal-body">
                         <div style="display: flex">
                             {{-- module  content --}}
-                            <select wire:model="module" class="form-select"
+                            <select wire:model="module" class="form-select "
                                 aria-label="Default select example">
                                 <option selected>Modules</option>
                                 @if ($modules)
@@ -20,18 +20,7 @@
                                     @endforeach
                                 @endif
                             </select>
-                            {{-- Groups --}}
-                            <label for=""></label>
-                            <select wire:model="group" class="form-select"
-                                aria-label="Default select example">
-                                <option selected>Groups</option>
-                                @if ($groups)
-                                    @foreach ($groups as $group)
-                                        <option value="{{ $group->id }}">
-                                            {{ $group->group_name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
+
                         </div>
                         <div style="display: flex">
                             {{-- Formateur --}}
@@ -70,25 +59,11 @@
                                 @endif
                             </select>
 
-                            <select wire:model="dure" class="form-select"
-                                aria-label="Default select example">
-                                <option selected>Dure</option>
-                                <option value="S1">S1</option>
-                                <option value="S2">S2</option>
-                                <option value="S1+S2">S2+S1</option>
-                            </select>
-
                             {{-- id case --}}
                             <input type="hidden"   value="{{$receivedVariable}}" >
                         </div>
                         {{-- day part && type sission --}}
                         <div style="display: flex">
-                            <select wire:model="dayPart" class="form-select"
-                                aria-label="Default select example">
-                                <option selected>Jour part</option>
-                                <option value="Matin">Matin</option>
-                                <option value="A.midi">AM</option>
-                            </select>
 
                             <select wire:model="TypeSesion" class="form-select"
                                 aria-label="Default select example">

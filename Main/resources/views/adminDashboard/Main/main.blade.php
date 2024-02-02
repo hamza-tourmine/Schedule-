@@ -20,6 +20,7 @@
             th,
             td {
                 height: 40px;
+                width: 60px !important;
                 border: 1px solid #ddd;
                 text-align: center;
             }

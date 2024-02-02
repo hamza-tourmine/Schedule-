@@ -41,16 +41,19 @@ class ModalComponent extends Component
     public function createSession()
 {
     try{
+        // $idcase = preg_replace('/[0-9]/', '',$this->receivedVariable);
+        $idcase = $this->receivedVariable;
 
-        // $day = substr($request->idCase,0,3);
-        $establishment_id = session()->get('establishment_id');
+        // SatAmidiS1
+        // dd(substr($idcase,10));
+        // $establishment_id = ;
         $sission = sission::create([
-            'day'=>substr($this->receivedVariable,0,3),
-            'day_part'=>$this->dayPart,
-            'dure_sission'=>$this->dure,
+            'day'=>substr($idcase,0,3),
+            'day_part'=>substr($idcase,3,5),
+            'dure_sission'=>substr($idcase,8,2),
             'module_id'=>$this->module,
-            'group_id'=>$this->group,
-        	'establishment_id'=>$establishment_id,
+            'group_id'=>substr($idcase,10),
+        	'establishment_id'=>session()->get('establishment_id'),
             'user_id'=>$this->formateur,
             'class_room_id'=>$this->salle,
             'validate_date'=>null,
@@ -60,8 +63,6 @@ class ModalComponent extends Component
             'sission_type'=>$this->TypeSesion,
         	'status_sission'=>null,
         ]);
-
-
         // return dd($this);
         if($sission){
 
