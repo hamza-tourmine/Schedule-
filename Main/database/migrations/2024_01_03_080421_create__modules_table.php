@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->string('module_name');
-            $table->unsignedBigInteger('establishment_id');
+            $table->unsignedBigInteger('establishment_id')->nullable();
             $table->foreign('establishment_id')
                 ->references('id')
                 ->on('establishment')

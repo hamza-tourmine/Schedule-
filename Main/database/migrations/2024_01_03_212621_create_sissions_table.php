@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('day');
-            $table->enum('day_part', ['matin', 'A.midi']);
-            $table->enum('dure_sission', ['S1', 'S2', 'S1+S2']);
+            $table->enum('day_part', ['matin', 'Amidi']);
+            $table->enum('dure_sission', ['S1', 'S2']);
             $table->unsignedBigInteger('module_id')->nullable();
             $table->foreign('module_id')
                 ->references('id')
