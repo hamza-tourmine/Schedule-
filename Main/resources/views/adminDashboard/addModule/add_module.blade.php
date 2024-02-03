@@ -42,8 +42,12 @@
     <td colspan="">{{$module->module_name}}</td>
 
     <td colspan="2">
-      <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url("update-module/{$module->id}")}}">Edit</a></button>
-      <button type="button" class="btn btn-danger"><a href="{{url("delatemodule/{$module->id}")}}">Delete</a></button>
+      <button type="button" class="btn  btn-primary">
+        <a style="text-decoration: none ;color:black" href="{{url("update-module/{$module->id}")}}">Edit</a>
+    </button>
+      <button type="button" class="btn btn-danger">
+        <a href="{{url("delatemodule/{$module->id}")}}">Delete</a>
+    </button>
     </td>
   </tr>
    @endforeach

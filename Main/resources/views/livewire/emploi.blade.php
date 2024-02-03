@@ -374,8 +374,6 @@
     </div>
   </div>
 
-
-
     <script>
     document.addEventListener('livewire:load', function () {
             let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
