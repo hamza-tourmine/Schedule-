@@ -51,7 +51,7 @@ public function login(Request $request){
          // store id in session
         $user = auth::user();
         session(['user_name'=>$user->user_name,'user_id'=>$user->id,'establishment_id'=>$user->establishment_id]);
-        return redirect()->route('dashboard_Admin');
+        return redirect()->route('dashboardAdmin');
     } elseif (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'formateur'])) {
         $user = Auth::user();
         if ($user->status == 'active'){

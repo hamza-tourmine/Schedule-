@@ -37,12 +37,12 @@
             <thead>
                 <tr class="day">
                     <th rowspan="3">Groups Name</th>
-                    <th colspan="4">Monday</th>
-                    <th colspan="4">Tuesday</th>
-                    <th colspan="4">Wednesday</th>
-                    <th colspan="4">Thursday</th>
-                    <th colspan="4">Friday</th>
-                    <th colspan="4">Saturday</th>
+                    <th colspan="4">Lundi</th>
+                    <th colspan="4">Mardi</th>
+                    <th colspan="4">Mercredi</th>
+                    <th colspan="4">Jeudi</th>
+                    <th colspan="4">Vendredi</th>
+                    <th colspan="4">Samedi</th>
                 </tr>
                 <tr>
 
@@ -96,7 +96,7 @@
                 <tr>
                     <td>{{$group->group_name}}</td>
               <!-- Monday -S1 -->
-                <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonmatinS1{{ $group->id }}">
+                <td  data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonmatinS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
                             {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
@@ -134,7 +134,7 @@
 
 
 
-                   <!-- Monday - S1 -->
+                   <!-- Tue - S1 -->
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TuematinS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
@@ -143,7 +143,7 @@
                     @endforeach
                 </td>
 
-                <!-- Monday - S2 -->
+                <!-- Tue - S2 -->
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TuematinS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
@@ -152,7 +152,7 @@
                     @endforeach
                 </td>
 
-                <!-- Monday - A.midi S1 -->
+                <!-- Tue - A.midi S1 -->
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAmidiS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
@@ -161,7 +161,7 @@
                     @endforeach
                 </td>
 
-                <!-- Monday - A.midi S2 -->
+                <!-- Tue - A.midi S2 -->
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAmidiS2{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
@@ -174,7 +174,7 @@
 
 
 
- <!-- Wed - S1 -->
+                <!-- Wed - S1 -->
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedmatinS1{{ $group->id }}">
                     @foreach ($sissions as $sission)
                         @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
@@ -342,18 +342,38 @@
                         <div wire:ignore.self  class="modal fade col-9" id="exampleModal{{ $group->id }}" tabindex="-1"
                             aria-labelledby="exampleModalLabel{{ $group->id }}" aria-hidden="true">
                             @livewire('modal-component', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>$formateurs,'groups'=>$groups,'group' => $group, 'modules'=>$modules])
-
                         </div>
                     @endforeach
                 @endif
             </tbody>
         </table>
     </div>
-    {{-- Main Form  --}}
 
-    <form method='get' action="{{ route('MainFormSchadule') }}">
-        <button class="btn btn-danger mx-5 mt-5 col-3">delate all</button>
-    </form>
+
+<button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+   Delete all
+  </button>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Êtes-vous sûr(e)?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Voulez-vous supprimer toutes les sessions que vous avez créées ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">fermer</button>
+          <button type="button" wire:click='deleteAllSessions' class="btn btn-danger">Oui Supprimer Tout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
     <script>

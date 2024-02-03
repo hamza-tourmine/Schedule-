@@ -189,7 +189,7 @@
                             <div>
                                 <!-- LOGO -->
                                 <div class="navbar-brand-box">
-                                    <a href="index.html" class="logo logo-dark">
+                                    <a  class="logo logo-dark">
                                         <span class="logo-sm">
                                             <img src="assets/images/logo-sm.png" alt="" height="20">
                                         </span>
@@ -198,7 +198,7 @@
                                         </span>
                                     </a>
 
-                                    <a href="index.html" class="logo logo-light">
+                                    <a  class="logo logo-light">
                                         <span class="logo-sm">
                                             <img src="assets/images/logo-sm.png" alt="" height="20">
                                         </span>
@@ -253,14 +253,36 @@
                                 <li class="menu-title">Menu</li>
 
 
-
-
                                 <li>
-                                    <a href="{{route('dashboard_Admin')}}" class=" waves-effect">
+                                    <a  href="{{route('dashboardAdmin')}}" class=" waves-effect">
                                         <i class="mdi mdi-airplay"></i>
                                         <span>Accueil</span>
                                     </a>
                                 </li>
+
+
+                                <li>
+                                    <a href="{{route('CreateEmploi')}}" class=" waves-effect">
+                                        <span class="mdi mdi-table-plus"></span>
+                                        <span>Créer un emploi</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
+                                        <span class="mdi mdi-border-all"></span>
+                                        <span> tous les emplois</span>
+                                    </a>
+                                </li>
+
+
+                                <li>
+                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
+                                        <span class="mdi mdi-border-all"></span>
+                                        <span> tous les demandes</span>
+                                    </a>
+                                </li>
+
 
 
                                 <li>

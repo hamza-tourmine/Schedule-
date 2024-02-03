@@ -2,8 +2,10 @@
 namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\sission;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 class ModalComponent extends Component
 {
+    use LivewireAlert;
     // this for create a model
     public $groups;
     public $modules ;
@@ -29,24 +31,13 @@ class ModalComponent extends Component
         $this->receivedVariable = $variable;
     }
 
-
-
-
-
-
-
     protected $rules = [
-        'group' => 'required', // Add appropriate validation rules for 'group'
+        'group' => 'required',
     ];
     public function createSession()
 {
     try{
-        // $idcase = preg_replace('/[0-9]/', '',$this->receivedVariable);
         $idcase = $this->receivedVariable;
-
-        // SatAmidiS1
-        // dd(substr($idcase,10));
-        // $establishment_id = ;
         $sission = sission::create([
             'day'=>substr($idcase,0,3),
             'day_part'=>substr($idcase,3,5),
@@ -63,47 +54,42 @@ class ModalComponent extends Component
             'sission_type'=>$this->TypeSesion,
         	'status_sission'=>null,
         ]);
-        // return dd($this);
         if($sission){
-
-            return redirect()->route('dashboard_Admin');
-
+            $this->alert('success', 'Vous créez une nouvelle session',[
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,]);
+            return redirect()->route('CreateEmploi');
         }
+     }catch (\Illuminate\Database\QueryException $e) {
+        if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
+            $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        } else {
+            $this->alert('error', $e->errorInfo[2], [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+            return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+        }
+    }
 
-
-
-     }catch(\Exception  $e){
-        dd($e->getMessage());
-     }
-        // dd(session());
-        return session()->get('id_main_emploi');
     }
     public function mount($group,$modules,$formateurs,$salles,$classType ,$groups)
     {
-
         $this->group = $group;
         $this->groups =$groups;
         $this->modules =$modules;
         $this->formateurs= $formateurs;
         $this->salles= $salles;
         $this->classType = $classType ;
-
     }
-
-
-
-
     public function render()
     {
         return view('livewire.modal-component');
     }
-
-
-
-
-
-
-
-
-
 }

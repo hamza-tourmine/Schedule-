@@ -3,6 +3,15 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" >
                         Create session</h1>
+
+                        @if ($errors->any())
+                        @foreach ( $errors->all() as $error)
+                        <div id="liveAlertPlaceholder" class="alert alert-danger">
+                            {{$error}}
+                        </div>
+                  @endforeach
+                  @endif
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -82,5 +91,6 @@
                 </form>
 
 
+ 
 
 </div>

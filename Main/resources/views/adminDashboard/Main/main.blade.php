@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Schedule Table</title>
+
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -47,6 +48,8 @@
     <body>
         <livewire:emploi />
         @livewireScripts
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <x-livewire-alert::scripts />
     </body>
     </html>
 </x-Headers>

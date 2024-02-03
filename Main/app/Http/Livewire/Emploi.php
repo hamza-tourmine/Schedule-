@@ -4,16 +4,18 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\group;
 use App\Models\module;
 use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Emploi extends Component
 {
+    use LivewireAlert;
     public $modulee;
     public $group;
     public $formateur;
@@ -23,19 +25,30 @@ class Emploi extends Component
     public $dayPart;
     public $TypeSession;
 
+    public function AddAutherEmploi(){
+        Session::forget('id_main_emploi');
+        Session::forget('datestart');
+        $this->Alert('success','Maintenant, vous pouvez créer un autre emploi du temps en
+        sélectionnant simplement la date de début.', [
+            'position' => 'center',
+            'timer' => 12000,
+            'toast' => false,
+            'width' =>650,
+           ]);
+        return redirect()->route('CreateEmploi');
 
+    }
+    public function deleteAllSessions(){
 
-    
+        DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
+        ->where('id_main_emploi', session()->get('id_main_emploi'));
+        DB::table('main_emploi')->where('establishment_id', session()->get('establishment_id'))
+        ->where('id', session()->get('id_main_emploi'));
+        Session::forget('id_main_emploi');
+        Session::forget('datestart');
+        return redirect()->route('CreateEmploi');
 
-
-
-
-
-
-
-
-
-
+    }
     public function render()
     {
          // data for  model form
@@ -46,27 +59,24 @@ class Emploi extends Component
         $formateurs = user::where('establishment_id', $establishment_id)
                           ->where('role', 'formateur')->get();
         $classType = class_room_type::where('establishment_id', $establishment_id)->get();
-        $id_main_emploi = session()->get('id_main_emploi');
+
         $sissions = DB::table('sissions')
-            ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
-            ->join('modules', 'modules.id', '=', 'sissions.module_id')
-            ->join('groups', 'groups.id', '=', 'sissions.group_id')
-            ->join('users', 'users.id', '=', 'sissions.user_id')
-            ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
-            ->where('sissions.establishment_id', $establishment_id)
-            ->where('sissions.main_emploi_id', $id_main_emploi)
-            ->get();
+        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('users', 'users.id', '=', 'sissions.user_id')
+        ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
+        ->where('sissions.establishment_id', $establishment_id)
+        ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
+        ->get();
+
         return view('livewire.emploi', [
-            'sissions' => $sissions,
+            'sissions'=>$sissions,
             'formateurs' => $formateurs,
             'groups' => $groups,
             'modules' => $modules,
             'salles' => $salles,
             'classType' => $classType,
-
         ]);
     }
-
-
-
 }
