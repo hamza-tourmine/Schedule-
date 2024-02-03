@@ -16,13 +16,12 @@ class FormateurHasGroup extends Controller
     if ($request->isMethod('post')) {
         // Handle the form submission here
         $establishment_id = session()->get('establishment_id');
-        $formateur_id = session()->get('user_id');
 
         foreach ($request->group as $item) {
             formateur_has_group::create([
                 'establishment_id' => $establishment_id,
                 'group_id' => $item,
-                'formateur_id' => $formateur_id
+                'formateur_id' => $item
             ]);
         }
 

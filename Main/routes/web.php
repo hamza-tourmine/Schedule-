@@ -97,7 +97,8 @@ Route::controller(FormateurHasGroup::class)->group(function(){
 
 // Formateur has Module
 Route::controller(FormateurHasModuleController::class)->group(function(){
-    Route::get('/formateurModule' , 'displaymodules')->name('formateurModule');    
+    Route::match(['get', 'post'], '/formateurModule', [FormateurHasModuleController::class, 'displaymodules'])->name('formateurModule');
+
 });
 
 
