@@ -6,8 +6,10 @@ use App\Http\controllers\classRoomsController;
 use App\Http\controllers\groupController;
 use App\Http\controllers\moduleController;
 use App\Http\controllers\formateurController;
-use App\Http\controllers\FormateurHasGroup;
+use App\Http\Controllers\FormateurHasGroup;
+
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\Schedule;
 use App\Http\Livewire\Emploi;
 
@@ -89,17 +91,15 @@ Route::controller(formateurController::class )->group(function(){
 
 // Formateur has Groups
 Route::controller(FormateurHasGroup::class)->group(function(){
-    //modules
-    Route::get('/ModuleList' , 'displaymodules')->name('selectmodules');
-    //groups
-    Route::get('/GroupesAndModules' , 'diesplayMyGroups')->name('mygroups');
-    Route::get('/GroupList','displaygroups')->name('selectgroups');
-    Route::post('/insertMygroups', 'insertMygroups')->name('insertMygroups');
-    Route::post('/insertgroups_modules','insertgroups_modules')->name('insertgroups_modules');
-    Route::get('/insertMyModules','insertMyModules')->name('insertMyModules');
+    Route::match(['get', 'post'], '/formateurGroupe', [FormateurHasGroup::class, 'displaygroups'])->name('formateurGroupe');
+
 });
 
-// formateur has model
+// Formateur has Module
+Route::controller(FormateurHasModuleController::class)->group(function(){
+    Route::match(['get', 'post'], '/formateurModule', [FormateurHasModuleController::class, 'displaymodules'])->name('formateurModule');
+
+});
 
 
 });

@@ -338,7 +338,10 @@
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
                                         <li><a  href="{{route('addFormateur')}}">Ajouter des formateurs</a></li>
-
+                                         <!-- Ahmed Add new item for Formateur Module -->
+                                        <li><a href="{{ route('formateurModule') }}">Formateur Module</a></li>
+                                        <!-- Ahmed Add new item for Formateur Groupe -->
+                                        <li><a href="{{ route('formateurGroupe') }}">Formateur Groupe</a></li>
 
                                     </ul>
                                 </li>
