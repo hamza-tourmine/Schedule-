@@ -41,9 +41,9 @@ class Emploi extends Component
     public function deleteAllSessions(){
 
         DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
-        ->where('id_main_emploi', session()->get('id_main_emploi'));
+        ->where('main_emploi_id', session()->get('id_main_emploi'))->delete();
         DB::table('main_emploi')->where('establishment_id', session()->get('establishment_id'))
-        ->where('id', session()->get('id_main_emploi'));
+        ->where('id', session()->get('id_main_emploi'))->delete();
         Session::forget('id_main_emploi');
         Session::forget('datestart');
         return redirect()->route('CreateEmploi');

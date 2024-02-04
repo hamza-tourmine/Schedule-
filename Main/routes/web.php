@@ -11,7 +11,7 @@ use App\Http\Controllers\FormateurHasGroup;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\Schedule;
-use App\Http\Livewire\Emploi;
+use App\Http\Livewire\ToutEmplois;
 
 // use App\Http\Middleware\Authenticate;
 

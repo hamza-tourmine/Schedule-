@@ -23,7 +23,7 @@
             Create New Schadule
         </button>
         <br>
-        <label for="">date start</label>
+        <label >date start</label>
         <div class="col-6">
             <input name="dateStart" id="dateStart" type="date" class="form-control col-6" placeholder="mm/dd/yyyy"
                 value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
@@ -31,7 +31,7 @@
     </form>
 
     <div class="table-responsive">
-        <table style="overflow:scroll " class="col-md-12 ">
+        <table  style="overflow:scroll" class="col-md-12 ">
 
 
             <thead>
@@ -353,9 +353,9 @@
 <button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
       <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
-   Delete all
+    Supprimer tout
   </button>
-  <!-- Modal -->
+  <!-- Modal for delete-->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -374,7 +374,10 @@
     </div>
   </div>
 
-    <script>
+
+<script  >
+
+
     document.addEventListener('livewire:load', function () {
             let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
             elements.forEach(element => {

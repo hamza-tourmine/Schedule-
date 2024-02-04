@@ -68,7 +68,21 @@ class ModalComponent extends Component
                 'timer' => 3000,
                 'toast' => true,
             ]);
-        } else {
+        }elseif(strpos($e->getMessage(), "Column 'user_id' cannot be null") !==false){
+            $this->alert('error', 'Vous devriez sélectionner le formateur.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }
+        elseif(strpos($e->getMessage(),"Column 'class_room_id' cannot be null") !==false){
+            $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }
+        else {
             $this->alert('error', $e->errorInfo[2], [
                 'position' => 'center',
                 'timer' => 3000,

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use App\Models\main_emploi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Models\group;
 class Schedule extends Controller
 {
     public function index(){
