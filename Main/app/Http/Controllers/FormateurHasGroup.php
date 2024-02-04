@@ -17,11 +17,12 @@ class FormateurHasGroup extends Controller
         // Handle the form submission here
         $establishment_id = session()->get('establishment_id');
 
-        foreach ($request->group as $item) {
+        foreach ($request->group as $groupId) {
+            // Assuming you have the formateur_id in the request, adjust accordingly
             formateur_has_group::create([
                 'establishment_id' => $establishment_id,
-                'group_id' => $item,
-                'formateur_id' => $item
+                'group_id' => $groupId,
+                'formateur_id' => $request->formateur,
             ]);
         }
 
@@ -38,6 +39,7 @@ class FormateurHasGroup extends Controller
 
     return view('adminDashboard.affectation.GroupList', ['groups' => $groups, 'formateurs' => $formateurs]);
 }
+
 
 
     
