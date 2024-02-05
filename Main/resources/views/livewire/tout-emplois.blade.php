@@ -45,7 +45,7 @@
 
         <div  style="max-width: 350px; ">
         <label for=""><h4>date de emploi :</h4></label>
-        <select class="form-select " wire:change="updateSelectedValue" wire:model="selectedValue">
+        <select class="form-select " wire:change="updateSelectedMainEmploi" wire:model="selectedValue">
             <option  disabled >Select date de emploi</option>
             @forEach( $Main_emplois as $Main_emploi)
             <option  value='{{$Main_emploi->id}}'>{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
@@ -59,10 +59,9 @@
         <select class="form-select " wire:change="updateSelectedtype" wire:model="selectedType">
             <option  disabled >Select type d' emploi</option>
             <option value="Formateur">formateur</option>
-            <option value="stagiaires">stagiaires</option>
+            <option value="group">stagiaires</option>
         </select>
     </div>
-        {{-- idMainEmploi : @json($idMainEmploi) --}}
 
        </div>
 
@@ -140,199 +139,429 @@
                 <tbody>
 
 
-                    @if ($groups )
+
+
+
+
+                    @if ($groups)
                         @foreach ($groups as $group)
+                        <tr>
+                            <td>{{$group->group_name}}</td>
+                      <!-- Monday -S1 -->
+                        <td  data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonmatinS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <!-- Monday -S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonmatinS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <!-- Monday - A.midi S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonAmidiS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <!-- Monday - A.midi S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonAmidiS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                           <!-- Tue - S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TuematinS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Tue - S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TuematinS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Tue - A.midi S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAmidiS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <!-- Tue - A.midi S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAmidiS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Wed - S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedmatinS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Wed - S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedmatinS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Wed - A.midi S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedAmidiS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Wed - A.midi S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedAmidiS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                         <!-- Thu - S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThumatinS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Thu - S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThumatinS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Thu - A.midi S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThuAmidiS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <!-- Thu - A.midi S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThuAmidiS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                          <!-- Fri - S1 -->
+                          <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FrimatinS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Fri - S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FrimatinS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Fri - A.midi S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FriAmidiS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Fri - A.midi S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FriAmidiS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                          <!-- Sat - S1 -->
+                          <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatmatinS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <!-- Sat - S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatmatinS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Sat - A.midi S1 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatAmidiS1{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <!-- Sat - A.midi S2 -->
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatAmidiS2{{ $group->id }}">
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                @endif
+                            @endforeach
+                        </td>
+                        </tr>
+
+                        <div   class="modal fade col-9" id="exampleModal{{ $group->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel{{ $group->id }}" aria-hidden="true">
+                            @livewire('model-update-group-emploi', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>$formateurs,'groups'=>$groups,'group' => $group, 'modules'=>$modules])
+                        </div>
+                        @endforeach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        {{-- For formateur emploi --}}
+                        @else
+                        @forEach ($formateurs as $formateur)
                     <tr>
-                        <td>{{$group->group_name}}</td>
+                        <td>{{$formateur->user_name}}</td>
                   <!-- Monday -S1 -->
-                    <td  data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonmatinS1{{ $group->id }}">
+                    <td  data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="MonmatinS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                            @if ($sission->day === 'Mon' && $sission->user_id === $formateur->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
                                 {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Monday -S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonmatinS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="MonmatinS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Mon' && $sission->user_id === $formateur->id  && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Monday - A.midi S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonAmidiS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="MonAmidiS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Mon' && $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Monday - A.midi S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="MonAmidiS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="MonAmidiS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Mon' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Mon'&& $sission->user_id === $formateur->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                        <!-- Tue - S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TuematinS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="TuematinS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            @if ($sission->day === 'Tue' && $sission->user_id === $formateur->id  && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Tue - S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TuematinS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="TuematinS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Tue' && $sission->user_id === $formateur->id  && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Tue - A.midi S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAmidiS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="TueAmidiS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Tue' && $sission->user_id === $formateur->id   && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Tue - A.midi S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="TueAmidiS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="TueAmidiS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Tue' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Tue' && $sission->user_id === $formateur->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Wed - S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedmatinS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="WedmatinS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            @if ($sission->day === 'Wed' && $sission->user_id === $formateur->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Wed - S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedmatinS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="WedmatinS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Wed' && $sission->user_id === $formateur->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Wed - A.midi S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedAmidiS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="WedAmidiS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Wed'&& $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Wed - A.midi S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="WedAmidiS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="WedAmidiS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Wed' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Wed'&& $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                      <!-- Thu - S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThumatinS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="ThumatinS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            @if ($sission->day === 'Thu' && $sission->user_id === $formateur->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Thu - S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThumatinS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="ThumatinS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Thu'&& $sission->user_id === $formateur->id  && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Thu - A.midi S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThuAmidiS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="ThuAmidiS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Thu'&& $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Thu - A.midi S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="ThuAmidiS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="ThuAmidiS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Thu'&& $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                       <!-- Fri - S1 -->
-                      <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FrimatinS1{{ $group->id }}">
+                      <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="FrimatinS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            @if ($sission->day === 'Fri' && $sission->user_id === $formateur->id  && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Fri - S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FrimatinS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="FrimatinS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Fri' && $sission->user_id === $formateur->id  && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Fri - A.midi S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FriAmidiS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="FriAmidiS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Fri' && $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Fri - A.midi S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="FriAmidiS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="FriAmidiS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Fri' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Fri' && $sission->user_id === $formateur->id   && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                       <!-- Sat - S1 -->
-                      <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatmatinS1{{ $group->id }}">
+                      <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="SatmatinS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->user_name }}
+                            @if ($sission->day === 'Sat' && $sission->user_id === $formateur->id  && $sission->day_part === 'matin' && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }} <br /> {{ $sission->class_name }} <br /> {{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Sat - S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatmatinS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="SatmatinS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Thu' && $sission->group_id === $group->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Thu'  && $sission->user_id === $formateur->id && $sission->day_part === "matin" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Sat - A.midi S1 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatAmidiS1{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="SatAmidiS1{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Sat' && $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S1")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
                     <!-- Sat - A.midi S2 -->
-                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="SatAmidiS2{{ $group->id }}">
+                    <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="SatAmidiS2{{ $formateur->id }}">
                         @foreach ($sissions as $sission)
-                            @if ($sission->day === 'Sat' && $sission->group_id === $group->id && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
-                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                            @if ($sission->day === 'Sat'&& $sission->user_id === $formateur->id  && $sission->day_part === "Amidi" && $sission->dure_sission === "S2")
+                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                             @endif
                         @endforeach
                     </td>
