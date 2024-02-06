@@ -349,7 +349,7 @@
                           <span>Groupes</span>
                       </a>
                       <ul class="sub-menu" aria-expanded="false">
-                          <li><a href="{{ url('GroupList') }}">List des Groupes</a></li>
+                          <li><a href="{{ url('FormateurGroupeList') }}">List des Groupes</a></li>
                       </ul>
                   </li>
 
@@ -359,7 +359,7 @@
                           <span>Modules</span>
                       </a>
                       <ul class="sub-menu" aria-expanded="false">
-                          <li><a href="{{ url('ModuleList') }}">List des Modules</a></li>
+                          <li><a href="{{ url('FormateurModuleList') }}">List des Modules</a></li>
                       </ul>
                   </li>
 

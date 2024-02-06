@@ -7,7 +7,8 @@ use App\Http\controllers\groupController;
 use App\Http\controllers\moduleController;
 use App\Http\controllers\formateurController;
 use App\Http\Controllers\FormateurHasGroup;
-
+use App\Http\Controllers\ShowGroupAffected;
+use App\Http\Controllers\ShowModuleAffected;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\Schedule;
@@ -92,8 +93,8 @@ Route::controller(formateurController::class )->group(function(){
 // Formateur has Groups
 Route::controller(FormateurHasGroup::class)->group(function(){
     Route::match(['get', 'post'], '/formateurGroupe', [FormateurHasGroup::class, 'displaygroups'])->name('formateurGroupe');
-
 });
+
 
 // Formateur has Module
 Route::controller(FormateurHasModuleController::class)->group(function(){
@@ -101,6 +102,8 @@ Route::controller(FormateurHasModuleController::class)->group(function(){
 
 });
 
+Route::get('formateurGroupeList',[ShowGroupAffected::class,'Show']);
 
+Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 });
 
