@@ -9,8 +9,8 @@ class ShowGroupAffected extends Controller
 {
     //
     function Show (){
-        $formateurId = Auth::id(); // Retrieve the logged-in formateur's ID
-        $GroupsList = formateur_has_group::where('formateur_id', $formateurId)->get();
+        $user_id = Auth::id(); // Retrieve the logged-in formateur's ID
+        $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         return view('formateurDashboard.FormateurGroupe.FormateurGroupeList',['GroupsList'=> $GroupsList]);
     }
 }

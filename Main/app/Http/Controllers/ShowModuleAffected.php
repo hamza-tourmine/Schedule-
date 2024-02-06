@@ -9,8 +9,8 @@ class ShowModuleAffected extends Controller
 {
     //
     function Show (){
-        $formateurId = Auth::id(); // Retrieve the logged-in formateur's ID
-        $modulesList = module_has_formateur::where('formateur_id', $formateurId)->get();
+        $user_id = Auth::id(); // Retrieve the logged-in formateur's ID
+        $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
 
         return view('formateurDashboard.FormateurModule.FormateurModuleList', ['modulesList' => $modulesList]);
     }

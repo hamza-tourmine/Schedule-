@@ -278,12 +278,6 @@
                 </a>
             </li>
 
-            <li>
-                <a href="{{ url('GroupesAndModules') }}" class="waves-effect">
-                    <i class="mdi mdi-calendar-text"></i>
-                    <span>Groupe & Module</span>
-                </a>
-            </li>
 
             <li>
                 <a href="javascript:void(0);" class="has-arrow waves-effect">
