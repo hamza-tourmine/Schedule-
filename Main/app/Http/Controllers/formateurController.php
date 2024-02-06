@@ -96,7 +96,7 @@ class formateurController extends Controller
      // Assuming the model name is 'Formateur' and you're looking for a single record.
           $formateur = formateur::select('user_name')->where('id', $id_formateur)->first();
 
-        return view('formateurDashboard.formateur',['formateur'=>$formateur]);
+        return view('formateurDashboard.Home.formateur',['formateur'=>$formateur]);
         // return $formateur->user_name ;
     }
 

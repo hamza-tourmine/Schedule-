@@ -1,6 +1,6 @@
-@extends('layout')
+@extends('layoutFormateur')
 
-@section('content')
+@section('contentFormateur')
 <div class="container-fluid">
     <div class="main-content">
         <div class="page-content">

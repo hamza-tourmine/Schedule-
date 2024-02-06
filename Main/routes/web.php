@@ -102,7 +102,7 @@ Route::controller(FormateurHasModuleController::class)->group(function(){
 
 });
 
-Route::get('formateurGroupeList',[ShowGroupAffected::class,'Show']);
+Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
 
 Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 });

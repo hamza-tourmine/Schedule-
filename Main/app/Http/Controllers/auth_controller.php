@@ -58,6 +58,7 @@ public function login(Request $request){
             $request->session()->regenerate();
             // store id in session
             $user = auth::user();
+            session(['formateur_id' => $user->id]);
             session(['user_id'=>$user->id,'establishment_id'=>$user->establishment_id]);
             return redirect()->route('dashboard_formateur');
         }else {
