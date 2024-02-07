@@ -1,5 +1,5 @@
 
-<x-HeaderMenuAdmin>
+<x-HeaderMenuFormateur>
 <div class="container-fluid">
     <div class="main-content">
         <div class="page-content">
@@ -46,5 +46,5 @@
         </div>
     </div>
 </div>
-</x-HeaderMenuAdmin>
+</x-HeaderMenuFormateur>
 
