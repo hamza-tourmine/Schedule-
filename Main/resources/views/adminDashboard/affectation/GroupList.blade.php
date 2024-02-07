@@ -1,6 +1,7 @@
-@extends('layout')
+{{-- @extends('layout')
 
-@section('content')
+@section('content') --}}
+<x-HeaderMenuAdmin>
 <div class="container-fluid">
     <div class="main-content">
         <div class="page-content">
@@ -84,4 +85,5 @@
     }
 </script>
 
-@endsection
+{{-- @endsection --}}
+</x-HeaderMenuAdmin>

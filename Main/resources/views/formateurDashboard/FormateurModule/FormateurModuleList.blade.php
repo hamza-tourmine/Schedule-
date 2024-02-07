@@ -1,6 +1,4 @@
-@extends('layoutFormateur')
-
-@section('contentFormateur')
+<x-HeaderMenuAdmin>
 <div class="container-fluid">
     <div class="main-content">
         <div class="page-content">
@@ -41,4 +39,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-HeaderMenuAdmin>
