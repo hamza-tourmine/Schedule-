@@ -44,14 +44,7 @@ class FormateurHasGroup extends Controller
 
     
 
-    public function diesplayMyGroups(){
-
-        $establishment_id = session()->get('establishment_id');
-        $groups = group::all()->where('establishment_id',$establishment_id);
-        $modules = module::all()->where('establishment_id',$establishment_id);
-        return view('formateurDashboard.my_groups_Modules',['groupes'=>$groups,'modules'=>$modules]);
-    }
-
+    
     //insert groups that selected by formateur
     public function insertMygroups(Request $request){
        
@@ -64,5 +57,5 @@ class FormateurHasGroup extends Controller
     }
 
 
-    
+
 }

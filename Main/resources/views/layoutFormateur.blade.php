@@ -229,130 +229,93 @@
                 </header>
                 <!-- ENd header  -->
  <!-- ========== Left Sidebar Start ========== -->
-                 <div class="vertical-menu">
-
-                    <div class="h-100">
-
-                        <div class="user-wid text-center py-4">
-                            <div class="user-img">
-                                <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
-                            </div>
-
-                            <div class="mt-3">
-
-                                <a href="#" class="text-reset fw-medium font-size-16">{{Auth::user()->user_name}}</a>
-                                <p class="text-muted mt-1 mb-0 font-size-13">Admin</p>
-
-                            </div>
-                        </div>
-
-                        <!--- Sidemenu -->
-                        <div id="sidebar-menu">
-                            <!-- Left Menu Start -->
-                            <ul class="metismenu list-unstyled" id="side-menu">
-                                <li class="menu-title">Menu</li>
+ <div class="vertical-menu">
+    <div class="h-100">
+      <div class="user-wid text-center py-4">
+        <div class="user-img">
+          <img
+              src="{{ asset('assets/images/users/avatar-2.jpg') }}"
+              alt=""
+              class="avatar-md mx-auto rounded-circle"
+          />
+      </div>
 
 
-                                <li>
-                                    <a  href="{{route('dashboardAdmin')}}" class=" waves-effect">
-                                        <i class="mdi mdi-airplay"></i>
-                                        <span>Accueil</span>
-                                    </a>
-                                </li>
+        <div class="mt-3">
+          <a href="#" class="text-reset fw-medium font-size-16"
+            >{{ Auth::user()->user_name}}</a
+          >
+          <p class="text-muted mt-1 mb-0 font-size-13">
+            Domaine du formation
+          </p>
+        </div>
+      </div>
+
+      <!--- Sidemenu -->
+      <div id="sidebar-menu">
+        <!-- Left Menu Start -->
+        <ul class="metismenu list-unstyled" id="side-menu">
+            <li class="menu-title">Menu</li>
+
+            <li>
+                <a class="waves-effect" href="{{ url('/') }}">
+                    <i class="fas fa-home"></i>
+                    <span>Acceuil</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('calendarFormateur') }}" class="waves-effect">
+                    <i class="mdi mdi-frequently-asked-questions"></i>
+                    <span>RequestCalendar</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ url('calendarFormateur') }}" class="waves-effect">
+                    <i class="mdi mdi-calendar-text"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
 
 
-                                <li>
-                                    <a href="{{route('CreateEmploi')}}" class=" waves-effect">
-                                        <span class="mdi mdi-table-plus"></span>
-                                        <span>Créer un emploi</span>
-                                    </a>
-                                </li>
+            <li>
+                <a href="javascript:void(0);" class="has-arrow waves-effect">
+                    <i class="mdi mdi-account-group"></i>
+                    <span>Groupes</span>
+                </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href="{{ url('FormateurGroupeList') }}">List des Groupes</a></li>
+                </ul>
+            </li>
 
-                                <li>
-                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
-                                        <span class="mdi mdi-border-all"></span>
-                                        <span> tous les emplois</span>
-                                    </a>
-                                </li>
+            <li>
+                <a href="javascript:void(0);" class="has-arrow waves-effect">
+                    <i class="mdi mdi-inbox-full"></i>
+                    <span>Modules</span>
+                </a>
+                <ul class="sub-menu" aria-expanded="false">
+                    <li><a href="{{ url('FormateurModuleList') }}">List des Modules</a></li>
+                </ul>
+            </li>
 
+            <li>
+                <a class="dropdown-item d-block" href="{{ url('settings') }}">
+                    <i class="mdi mdi-settings-outline"></i> Settings
+                </a>
+            </li>
 
-                                <li>
-                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
-                                        <span class="mdi mdi-border-all"></span>
-                                        <span> tous les demandes</span>
-                                    </a>
-                                </li>
+            <li>
+                <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                    <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
 
-
-
-                                <li>
-                                    <a href="calendar.html" class=" waves-effect">
-                                        <i class="mdi mdi-calendar-text"></i>
-                                        <span>Calendar</span>
-                                    </a>
-                                </li>
-
-                                <li class="menu-title">LES COMPOSANTS</li>
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-home-group"></span>
-                                        <span>Ajouter les salles</span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('add-class-rooms')}}">Ajouter les salles</a></li>
-                                        <li><a  href="{{route('add-class-type')}}">Ajouter les types</a></li>
-                                        <li><a  href="{{route('determine-type-class-room')}}">Afictaion des types</a></li>
-                                    </ul>
-                                </li>
-
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-grain"></span>
-                                        <span>Ajouter les groupes</span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addGroups')}}">Ajouter des groupes</a></li>
-
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-book-plus"></span>
-                                        <span>Ajouter les modules </span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addModule')}}" >Ajouter des Modules</a></li>
-
-
-                                    </ul>
-                                </li>
-
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-account-multiple"></span>
-                                        <span>Ajouter les formateurs </span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a  href="{{route('addFormateur')}}">Ajouter des formateurs</a></li>
-                                         <!-- Ahmed Add new item for Formateur Module -->
-                                        <li><a href="{{ route('formateurModule') }}">Formateur Module</a></li>
-                                        <!-- Ahmed Add new item for Formateur Groupe -->
-                                        <li><a href="{{ route('formateurGroupe') }}">Formateur Groupe</a></li>
-
-                                    </ul>
-                                </li>
-
-
-
-                            </ul>
-                        </div>
-                        <!-- Sidebar -->
-                    </div>
-                </div>
+    </div>
+  </div>
 <!-- ===========Left Sidebar End=========== -->
 
                 <!-- ============================================================== -->
@@ -363,7 +326,7 @@
                     <div class="page-content">
 
                         <div style="margin-top: 6.4rem;margin-left:2rem" class="row">
-                            @yield('content')
+                            @yield('contentFormateur')
                         </div>
                         <!-- end row -->
 
