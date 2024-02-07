@@ -32,7 +32,7 @@ class ModelUpdateGroupEmploi extends Component
 
 
     public function receiveidEmploiid($variable){
-        $this->receivedVariable['emploidateid'] = $variable;
+        return $this->receivedVariable['emploidateid'] = $variable;
     }
 
 
@@ -42,28 +42,30 @@ class ModelUpdateGroupEmploi extends Component
     }
 
     public function DeleteSession(){
-        if(sission::destroy($this->receivedVariable['emploidateid'])){
-            $this->Alert("success","Vous avez supprimé la seance  .", [
-                'position' => 'center',
-                'timer' => 1600,
-                'toast' => false,
-                'width' =>650,
-               ]);
-        }
-        $this->alert('error','Cette séance ne doit pas être supprimée', [
-            'position' => 'center',
-            'timer' => 1300,
-            'toast' => false,
-            'width' =>650,
-           ]);
+        dd($this);
+        // if(sission::destroy($this->receivedVariable['emploidateid'])){
+        //     $this->Alert("success","Vous avez supprimé la seance  .", [
+        //         'position' => 'center',
+        //         'timer' => 1600,
+        //         'toast' => false,
+        //         'width' =>650,
+        //        ]);
+        // }
+        // $this->alert('error','Cette séance ne doit pas être supprimée', [
+        //     'position' => 'center',
+        //     'timer' => 1300,
+        //     'toast' => false,
+        //     'width' =>650,
+        //    ]);
     }
 
 
     public function UpdateSession()
     {
 
-        // $day =substr($idcase,0,3);
-        // sission::where('main_emploi_id ',$this->receivedVariable['emploidateid'])->where('day',$day);
+        $day =substr($this->receiveidEmploiid,0,3);
+        dd($day);
+        sission::where('main_emploi_id ',$this->receivedVariable['emploidateid'])->where('day',$day);
     }
 
 
