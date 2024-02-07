@@ -45,10 +45,10 @@
 
         <div  style="max-width: 350px; ">
         <label for=""><h4>date de emploi :</h4></label>
-        <select class="form-select " wire:change="updateSelectedMainEmploi" wire:model="selectedValue">
+        <select class="form-select " id="date-select" wire:change="updateSelectedMainEmploi" wire:model="selectedValue">
             <option  disabled >Select date de emploi</option>
             @forEach( $Main_emplois as $Main_emploi)
-            <option  value='{{$Main_emploi->id}}'>{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
+            <option   value='{{$Main_emploi->id}}'>{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
             @endforeach
         </select>
 
@@ -608,6 +608,22 @@
 
 
 
-        </script>
+        document.addEventListener('livewire:load', function () {
+                let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
+                elements.forEach(element => {
+                    element.addEventListener('click', function() {
+                        Livewire.emit('receiveVariable', element.id);
+                    });
+                });
+
+                const selectElement = document.getElementById('date-select');
+                selectElement.addEventListener('change', function() {
+                    Livewire.emit('receiveidEmploiid', selectElement.value);
+        });
+            });
+
+</script>
+
+
     </div>
 </div>

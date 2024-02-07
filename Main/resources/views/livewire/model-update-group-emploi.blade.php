@@ -67,7 +67,7 @@
                         </select>
 
                         {{-- id case --}}
-                        <input type="hidden"   value="{{$receivedVariable}}" >
+                        <input type="hidden"   value="{{$receivedVariable['idcase']}}" >
                     </div>
                     {{-- day part && type sission --}}
                     <div style="display: flex">
@@ -81,15 +81,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Close</button>
-                    <button data-bs-dismiss="modal"
-                    aria-label="Close" type="submit"  class="btn btn-success">Updare</button>
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button data-bs-dismiss="modal" wire:click="UpdateSession" aria-label="Close" type="submit"  class="btn btn-success">Updare</button>
                 </div>
             </form>
-
-
-
+            <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="submit"  class="btn btn-danger">supprimer</button>
 
 </div>
 

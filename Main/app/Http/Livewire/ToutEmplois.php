@@ -20,6 +20,7 @@ class ToutEmplois extends Component
     public $sissions ;
     public $selectedValue ;
     public $selectedType;
+    public $receivedVariable;
 
 
 
@@ -45,6 +46,7 @@ class ToutEmplois extends Component
     public function updateSelectedMainEmploi()
     {
 
+        $this->receivedVariable['emploidateid'] = $this->selectedValue;
         return $this->selectedValue;
     }
 
