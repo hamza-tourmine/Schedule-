@@ -291,6 +291,12 @@
                                         <span>Calendar</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{route('send-mail')}}" class=" waves-effect">
+                                        <i class="mdi mdi-calendar-text"></i>
+                                        <span>Send Mail</span>
+                                    </a>
+                                </li>
 
                                 <li class="menu-title">LES COMPOSANTS</li>
 
