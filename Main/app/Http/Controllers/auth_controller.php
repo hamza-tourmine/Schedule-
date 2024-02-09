@@ -61,7 +61,7 @@ public function login(Request $request){
             session(['user_id'=>$user->id,'establishment_id'=>$user->establishment_id]);
             return redirect()->route('dashboard_formateur');
         }else {
-            return redirect()->back()->withErrors(['errors'=>'your account are desibled can you see your  boss']);
+            return redirect()->back()->withErrors(['errors'=>'Votre compte est suspendu, veuillez contacter le directeur']);
         }
     } else {
           return back()->withErrors([

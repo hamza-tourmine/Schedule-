@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Login | Qovex - Admin & Dashboard Template</title>
+    <title>Login | OFPPT </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -31,8 +31,8 @@
                         <div class="bg-login text-center">
                             <div class="bg-login-overlay"></div>
                             <div class="position-relative">
-                                <h5 class="text-white font-size-20">Welcome Back !</h5>
-                                <p class="text-white-50 mb-0">Sign in to continue to Qovex.</p>
+                                <h5 class="text-white font-size-20">Bienvenue !</h5>
+                                <p class="text-white-50 mb-0">Connectez-vous pour continuer</p>
                                 <a  href="{{route('create-account')}}" class="logo logo-admin mt-4">
                                     <img src="assets/images/logo-sm-dark.png" alt="" height="30">
                                 </a>
@@ -42,7 +42,6 @@
                             <div class="p-2">
                                 <form class="form-horizontal"method="post" action="{{route('login_into_account')}}" >
                                     @csrf
-                                    <h3>Login</h3>
                                     {{-- start --}}
                                     @if(session('success'))
                                 <div class="alert alert-success">
@@ -66,8 +65,12 @@
 
                                     <div class="mb-3">
                                         <label class="form-label" for="userpassword">Mot de passe</label>
-                                        <input type="password" name="password"class="form-control" id="userpassword"
-                                        placeholder="Enter password">
+                                        <div class="input-group">
+                                            <input type="password" name="password" class="form-control" id="userpassword" placeholder="Enter password">
+                                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                <i class="mdi mdi-eye"></i>
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div class="form-check">
@@ -94,8 +97,8 @@
                         <p>Don't have an account ? <a href="{{route('create-account')}}"
                                 class="fw-medium text-primary"> Signup now </a> </p>
                         <p>©
-                            <script>document.write(new Date().getFullYear())</script> Qovex. Crafted with <i
-                                class="mdi mdi-heart text-danger"></i> by Themesbrand
+                            <script>document.write(new Date().getFullYear())</script> OFPPT<i
+                                class="mdi mdi-heart text-danger"></i> by ISTA BEN M'SIK 
                         </p>
                     </div>
 
@@ -115,6 +118,19 @@
 
 
     <script src="{{asset('assets/js/app.js')}}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const togglePassword = document.querySelector("#togglePassword");
+            const password = document.querySelector("#userpassword");
+    
+            togglePassword.addEventListener("click", function() {
+                const type = password.getAttribute("type") === "password" ? "text" : "password";
+                password.setAttribute("type", type);
+                this.classList.toggle("active");
+            });
+        });
+    </script>
+    
 </body>
 
 </html>

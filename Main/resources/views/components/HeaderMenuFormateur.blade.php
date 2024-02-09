@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Calendar | Qovex - Admin & Dashboard Template</title>
+    <title>Formateur|Dashboard </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -258,7 +258,7 @@
           <li class="menu-title">Menu</li>
 
           <li>
-              <a class="waves-effect" href="{{ url('/') }}">
+              <a class="waves-effect" href="{{ url('dashboardFormateur') }}">
                   <i class="fas fa-home"></i>
                   <span>Acceuil</span>
               </a>

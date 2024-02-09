@@ -84,7 +84,7 @@ Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
     Route::post('/insert-formateur','create')->name('insertFormateur');
     // displat main page in formateur account
-    Route::get('/formateur','showHomepage')->name('dashboard_formateur');
+    Route::get('/dashboardFormateur','showHomepage')->name('dashboard_formateur');
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
     Route::post('/update-formateur/{id}','update');
