@@ -608,7 +608,16 @@
 
 
 
+
         document.addEventListener('livewire:load', function () {
+            
+            const selectElement = document.getElementById('date-select');
+                selectElement.addEventListener('change', function() {
+                    console.log(selectElement.value)
+                    Livewire.emit('receiveidEmploiid', selectElement.value);
+                    });
+
+
                 let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
                 elements.forEach(element => {
                     element.addEventListener('click', function() {
@@ -616,10 +625,7 @@
                     });
                 });
 
-                const selectElement = document.getElementById('date-select');
-                selectElement.addEventListener('change', function() {
-                    Livewire.emit('receiveidEmploiid', selectElement.value);
-        });
+
             });
 
 </script>

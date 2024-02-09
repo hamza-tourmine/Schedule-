@@ -34,11 +34,9 @@ Route::post('/insert',[auth_controller::class,'create_account'])->name('insert')
 Route::post('/login',[auth_controller::class ,'login'])->name('login_into_account');
 
 Route::middleware('auth')->group(function(){
+    
     // For  Accueil page
-    Route::get('dashboardAdmin',function (){
-        return view('adminDashboard.Main.Accueil');
-    })->name('dashboardAdmin');
-
+    Route::get('dashboardAdmin',function (){return view('adminDashboard.Main.Accueil'); })->name('dashboardAdmin');
     //Schedule
     Route::get('/CreateEmpoi' , [Schedule::class , 'index'])->name('CreateEmploi');
     Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');

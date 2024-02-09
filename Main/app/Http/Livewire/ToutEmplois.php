@@ -22,7 +22,36 @@ class ToutEmplois extends Component
     public $selectedType;
     public $receivedVariable;
 
+    protected $listeners = ['UpdateSession', 'dataDeleted'];
+    public function UpdateSession()
+    {
+    
+    $establishment_id = session()->get('establishment_id');
+    $sissions = DB::table('sissions')
+        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('users', 'users.id', '=', 'sissions.user_id')
+        ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
+        ->where('sissions.establishment_id', $establishment_id)
+        ->where('sissions.main_emploi_id', Session::get('idEmploiSelected'))
+        ->get();
+        $this->sissions = $sissions;
+        // Handle data update event
+        // For example, update any relevant UI or data
+    }
 
+    public function dataDeleted()
+    {
+        // Handle data delete event
+        // For example, update any relevant UI or data
+    }
+
+
+
+    public function updateSelectedtype(){
+        return $this->selectedType ;
+     }
 
 
         public function mount()
@@ -46,7 +75,7 @@ class ToutEmplois extends Component
     public function updateSelectedMainEmploi()
     {
 
-        $this->receivedVariable['emploidateid'] = $this->selectedValue;
+
         return $this->selectedValue;
     }
 
@@ -63,15 +92,12 @@ class ToutEmplois extends Component
         'toast' => false,
         'width' =>650,
        ]);
-        return redirect()->route('CreateEmploi');
+        return redirect()->route('toutlesEmploi');
 
     }
 
 
 
-    public function updateSelectedtype(){
-        return $this->selectedType ;
-     }
 
     public function render(){
 
@@ -100,7 +126,12 @@ class ToutEmplois extends Component
         ->where('sissions.main_emploi_id', !empty( $this->updateSelectedMainEmploi()) ? $this->updateSelectedMainEmploi() : Session::get('id_main_emploi'))
         ->get();
         $this->sissions=$sissions;
-            return view('livewire.tout-emplois', ['modules'=>$modules, 'salles'=>$salles,'classType'=>$classType,'groups' => $groups, 'Main_emplois' => $Main_emplois ,'formateurs'=>$formateurs]);
+            return view('livewire.tout-emplois', ['modules'=>$modules,
+            'salles'=>$salles,
+            'classType'=>$classType,
+            'groups' => $groups,
+             'Main_emplois' => $Main_emplois ,
+             'formateurs'=>$formateurs]);
         }else{
 
             $formateurs = user::where('establishment_id', $establishment_id)->get();

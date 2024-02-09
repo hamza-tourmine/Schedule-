@@ -83,10 +83,11 @@
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                    <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="submit"  class="btn btn-danger">supprimer</button>
                     <button data-bs-dismiss="modal" wire:click="UpdateSession" aria-label="Close" type="submit"  class="btn btn-success">Updare</button>
                 </div>
             </form>
-            <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="submit"  class="btn btn-danger">supprimer</button>
 
 </div>
 
