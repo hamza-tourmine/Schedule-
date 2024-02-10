@@ -38,7 +38,7 @@ class ModelUpdateGroupEmploi extends Component
     }
 
     public function receiveidEmploiid($variable){
-        // dd($variable);
+       
          // Access the variable emitted from the event
             $receivedValue = $variable;
 
@@ -131,12 +131,11 @@ class ModelUpdateGroupEmploi extends Component
             'group_id' => $group_id,
             'dure_sission' => $dure_sission
         ])->delete();
+        $this->mount();
         // return redirect()->route('toutlesEmploi');
 
 
     }
-
-
 
     public function render()
     {

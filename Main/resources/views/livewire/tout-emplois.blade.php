@@ -45,21 +45,24 @@
 
         <div  style="max-width: 350px; ">
         <label for=""><h4>date de emploi :</h4></label>
-        <select class="form-select " id="date-select" wire:change="updateSelectedMainEmploi" wire:model="selectedValue">
-            <option  disabled >Select date de emploi</option>
+
+
+        <select id='date-select' class="form-select" wire:model.live="selectedValue" wire:change="updateSelectedIDEmploi($event.target.value)">
+            <option value="" disabled>Select emploi</option>
             @forEach( $Main_emplois as $Main_emploi)
-            <option   value='{{$Main_emploi->id}}'>{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
+                <option value="{{ $Main_emploi->id }}">{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
             @endforeach
         </select>
+
 
     </div>
 
     <div  style="max-width: 350px; ">
         <label for=""><h4>type d'emploi</h4></label>
-        <select class="form-select " wire:change="updateSelectedtype" wire:model="selectedType">
-            <option  disabled >Select type d' emploi</option>
-            <option value="Formateur">formateur</option>
-            <option value="group">stagiaires</option>
+        <select class="form-select" wire:model.live="selectedType" wire:change="updateSelectedType($event.target.value)">
+            <option value="" disabled>Select type</option>
+            <option value="Formateur" selected>Formateur</option>
+            <option value="Group">Group</option>
         </select>
     </div>
 
@@ -143,7 +146,7 @@
 
 
 
-                    @if ($groups)
+                    @if ($selectedType === 'Group')
                         @foreach ($groups as $group)
                         <tr>
                             <td>{{$group->group_name}}</td>
@@ -598,6 +601,7 @@
       </div>
       <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script type="text/javascript" >
+
     function ExportToExcel(type, fn, dl) {
            var elt = document.getElementById('tbl_exporttable_to_xls');
            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
@@ -610,13 +614,11 @@
 
 
         document.addEventListener('livewire:load', function () {
-            
             const selectElement = document.getElementById('date-select');
                 selectElement.addEventListener('change', function() {
                     console.log(selectElement.value)
                     Livewire.emit('receiveidEmploiid', selectElement.value);
                     });
-
 
                 let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
                 elements.forEach(element => {
