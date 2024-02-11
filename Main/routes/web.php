@@ -11,6 +11,7 @@ use App\Http\Controllers\ShowGroupAffected;
 use App\Http\Controllers\ShowModuleAffected;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\FormateurHasModuleController;
+use App\Http\Controllers\FormateurRequestController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Schedule;
 use App\Http\Livewire\ToutEmplois;
@@ -112,3 +113,6 @@ Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 
 // mail testing
 Route::get('send-mail',[MailController::class,'index']);
+
+// request Emploi
+Route::get('DemanderEmploi',[FormateurRequestController::class,'show']);

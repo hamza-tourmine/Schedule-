@@ -15,7 +15,7 @@ class MailController extends Controller
             'body' => 'This is for testing email usign smtp',
         ];
 
-        Mail::to('ahmederrebache@gmail.com')->send(new DemoMail($mailData));
+        Mail::to('bougrinemouhcine0@gmail.com')->send(new DemoMail($mailData));
 
         dd('Email send successfully.');
     }

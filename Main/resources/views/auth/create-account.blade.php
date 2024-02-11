@@ -64,7 +64,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label" for="username">Esta</label>
+                                        <label class="form-label" for="username">Ista</label>
                                         <input type="text" name="name_establishment"  class="form-control" id="username"
                                             placeholder="Enter username">
                                     </div>
