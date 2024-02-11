@@ -1,9 +1,7 @@
 <x-HeaderMenuFormateur>
     <style>
 
-        table{
-            width: 100%;
-        }
+       
  .wrapper {
  margin: 15px auto;
  max-width: 100%; /* Set to 100% to fit within the page */
@@ -52,34 +50,89 @@
 .date-info span {
     margin-right: 10px; /* Adjust the margin as needed */
 }
-.bg-light-gray {
-    background-color: #f7f7f7;
+thead tr.day{
+    font-size: 18px;
+    padding:30px;
+    color: black;
+    height: 50px;
+    background-color: white
 }
-.table-bordered thead td, .table-bordered thead th {
-    border-bottom-width: 2px;
+thead tr.dPart{
+    font-size: 18px;
+    padding:30px;
+    color: black;
+    height: 40px;
+    background-color: gainsboro
 }
-.table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
+thead tr.se-row {
+    height: 30px !important;
+    width: 30px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    color: black;
+    background-color: white
 }
-.table-bordered td, .table-bordered th {
-    border: 1px solid #dee2e6;
+
+tbody tr.dtdynamic {
+    height: 100px !important;
+    width: 30px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    color: black;
+    background-color: gainsboro
 }
     </style>
     <div class="wrapper">
         <div class="container-calendar">
-            <h3 id="monthAndYear"></h3>
+            <h3 id="monthAndYear">hello</h3>
             <div class="button-container-calendar">
                 <button id="previous" onclick="previous()">&#8249;</button>
                 <div class="date-info">
-                    <h2> Start: <b><span id="dateStart"></span></b></h2>
-                    <h2> End: <b><span id="dateEnd"></span><b></h3>
+                    <h2> Start:<span id="dateStart"></span></h2>
+                    <h2> End: <span id="dateEnd"></span></h2>
                 </div>
                 <button id="next" onclick="next()">&#8250;</button>
+                
             </div>            
-            <table class="table-calendar" id="calendar" data-lang="en">
-                <thead id="thead-month"></thead>
-                <tbody id="calendar-body"></tbody>
+            <table id="tbl_exporttable_to_xls"  class="table-bordered text-center col-md-12"  style="width:100%">
+                <thead>
+                    <tr class="day bg-light-gray">
+                        @foreach ($days_of_week as $day_of_week)
+                            <th class="text-uppercase" colspan="4">{{$day_of_week}}</th>
+                        @endforeach
+                    </tr>
+                    <tr class="dPart bg-light-gray">
+                        @foreach ($days_of_week as $day_of_week)
+                            @foreach ($days_part as $day_part)
+                            <th class="text-uppercase" colspan="2">{{$day_part}}</th>
+                            @endforeach
+                        @endforeach
+                    </tr>
+                    <tr class="se-row bg-light-gray">
+                        @foreach ($days_of_week as $day_of_week)
+                            @foreach ($seances_part as $seance_part)
+                            <th>{{$seance_part}}</th>
+                            @endforeach
+                            
+                        @endforeach
+                    </tr>
+                </thead>
+                
+                
+                
+                <tbody>
+                   
+                    <tr class="dtdynamic bg-light-gray">
+                        @foreach ($days_of_week as $day_of_week)
+                                @foreach ($seances_part as $seance_part)
+                                <th>Agile</th>
+                                @endforeach
+                        @endforeach
+                    </tr>
+                   
+                </tbody>
             </table>
             
         </div>
@@ -87,44 +140,7 @@
             <div class="timetable-img text-center">
                 <img src="img/content/timetable.png" alt="">
             </div>
-                <table id="tbl_exporttable_to_xls"  class="table table-bordered text-center col-md-12"  style="width:100%">
-                    <thead>
-                        <tr class="bg-light-gray">
-                            @foreach ($days_of_week as $day_of_week)
-                                <th class="text-uppercase" colspan="4">{{$day_of_week}}</th>
-                            @endforeach
-                        </tr>
-                        <tr class="bg-light-gray">
-                            @foreach ($days_of_week as $day_of_week)
-                                @foreach ($days_part as $day_part)
-                                <th class="text-uppercase" colspan="2">{{$day_part}}</th>
-                                @endforeach
-                            @endforeach
-                        </tr>
-                        <tr class="bg-light-gray">
-                            @foreach ($days_of_week as $day_of_week)
-                                @foreach ($seances_part as $seance_part)
-                                <th>{{$seance_part}}</th>
-                                @endforeach
-                                
-                            @endforeach
-                        </tr>
-                    </thead>
-                    
-                    
-                    
-                    <tbody>
-                       
-                        <tr>
-                            @foreach ($days_of_week as $day_of_week)
-                                    @foreach ($seances_part as $seance_part)
-                                    <th>Agile</th>
-                                    @endforeach
-                            @endforeach
-                        </tr>
-                       
-                    </tbody>
-                </table>
+              
         </div>
     </div>
     <script>
