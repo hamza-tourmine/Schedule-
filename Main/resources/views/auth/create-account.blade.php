@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Free Register | Qovex - Admin & Dashboard Template</title>
+    <title>Register | OFPPT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -31,7 +31,7 @@
                             <div class="bg-login-overlay"></div>
                             <div class="position-relative">
                                 <h5 class="text-white font-size-20">Free Register</h5>
-                                <p class="text-white-50 mb-0">Get your free Qovex account now</p>
+                                <p class="text-white-50 mb-0">Creer votre compte et Geerer votre etablissement</p>
                                 <a  href="{{route('login')}}" class="logo logo-admin mt-4">
                                     <img src="assets/images/logo-sm-dark.png" alt="" height="30">
                                 </a>

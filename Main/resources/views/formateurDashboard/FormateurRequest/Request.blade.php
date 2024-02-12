@@ -1,89 +1,98 @@
 <x-HeaderMenuFormateur>
     <style>
+        .wrapper {
+            margin: 15px auto;
+            max-width: 100%;
+            overflow-x: auto;
+        }
 
-       
- .wrapper {
- margin: 15px auto;
- max-width: 100%; /* Set to 100% to fit within the page */
- overflow-x: auto; /* Add horizontal scroll if content exceeds width */
- }
- .container-calendar {
-        background: #ffffff;
-        padding: 15px;
-        max-width: 100%; /* Set to 100% to fit within the page */
-        margin: 0 auto;
-        overflow: auto;
-    }
+        .container-calendar {
+            background: #ffffff;
+            padding: 15px;
+            max-width: 100%;
+            margin: 0 auto;
+            overflow: auto;
+        }
 
-.button-container-calendar button {
-    cursor: pointer;
-    display: inline-block;
-    zoom: 1;
-    background: #00a2b7;
-    color: #fff;
-    border: 1px solid #0aa2b5;
-    border-radius: 4px;
-    padding: 5px 10px;
-}
-#previous {
-    float: left;
-}
+        .button-container-calendar button {
+            cursor: pointer;
+            display: inline-block;
+            zoom: 1;
+            background: #00a2b7;
+            color: #fff;
+            border: 1px solid #0aa2b5;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
 
-#next {
-    float: right;
-}
-.button-container-calendar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        #previous {
+            float: left;
+        }
 
-.date-container {
-    text-align: center;
-    flex-grow: 1; /* To allow the container to grow and fill the space */
-}
-.date-info {
-    display: flex;
-    align-items: center;
-}
+        #next {
+            float: right;
+        }
 
-.date-info span {
-    margin-right: 10px; /* Adjust the margin as needed */
-}
-thead tr.day{
-    font-size: 18px;
-    padding:30px;
-    color: black;
-    height: 50px;
-    background-color: white
-}
-thead tr.dPart{
-    font-size: 18px;
-    padding:30px;
-    color: black;
-    height: 40px;
-    background-color: gainsboro
-}
-thead tr.se-row {
-    height: 30px !important;
-    width: 30px;
-    margin: 0px;
-    padding: 0px;
-    font-size: 16px;
-    color: black;
-    background-color: white
-}
+        .button-container-calendar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-tbody tr.dtdynamic {
-    height: 100px !important;
-    width: 30px;
-    margin: 0px;
-    padding: 0px;
-    font-size: 16px;
-    color: black;
-    background-color: gainsboro
-}
+        .date-container {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .date-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-info span {
+            margin-right: 10px;
+        }
+
+        thead tr.day {
+            font-size: 18px;
+            padding: 30px;
+            color: black;
+            height: 50px;
+            background-color: white;
+        }
+
+        thead tr.dPart {
+            font-size: 18px;
+            padding: 30px;
+            color: black;
+            height: 40px;
+            background-color: gainsboro;
+        }
+
+        thead tr.se-row {
+            height: 30px !important;
+            width: 30px;
+            margin: 0px;
+            padding: 0px;
+            font-size: 16px;
+            color: black;
+            background-color: white;
+        }
+
+        tbody tr.dtdynamic {
+            height: 100px !important;
+            width: 30px;
+            margin: 0px;
+            padding: 0px;
+            font-size: 16px;
+            color: black;
+            background-color: gainsboro;
+        }
+        .fade{
+            /* top: -450px; */
+        }
     </style>
+
     <div class="wrapper">
         <div class="container-calendar">
             <h3 id="monthAndYear">hello</h3>
@@ -94,9 +103,8 @@ tbody tr.dtdynamic {
                     <h2> End: <span id="dateEnd"></span></h2>
                 </div>
                 <button id="next" onclick="next()">&#8250;</button>
-                
-            </div>            
-            <table id="tbl_exporttable_to_xls"  class="table-bordered text-center col-md-12"  style="width:100%">
+            </div>
+            <table id="tbl_exporttable_to_xls" class="table-bordered text-center col-md-12" style="width:100%">
                 <thead>
                     <tr class="day bg-light-gray">
                         @foreach ($days_of_week as $day_of_week)
@@ -106,62 +114,104 @@ tbody tr.dtdynamic {
                     <tr class="dPart bg-light-gray">
                         @foreach ($days_of_week as $day_of_week)
                             @foreach ($days_part as $day_part)
-                            <th class="text-uppercase" colspan="2">{{$day_part}}</th>
+                                <th class="text-uppercase" colspan="2">{{$day_part}}</th>
                             @endforeach
                         @endforeach
                     </tr>
                     <tr class="se-row bg-light-gray">
                         @foreach ($days_of_week as $day_of_week)
                             @foreach ($seances_part as $seance_part)
-                            <th>{{$seance_part}}</th>
+                                <th>{{$seance_part}}</th>
                             @endforeach
-                            
                         @endforeach
                     </tr>
                 </thead>
-                
-                
-                
                 <tbody>
-                   
                     <tr class="dtdynamic bg-light-gray">
                         @foreach ($days_of_week as $day_of_week)
-                                @foreach ($seances_part as $seance_part)
-                                <th>Agile</th>
-                                @endforeach
+                            @foreach ($seances_part as $seance_part)
+                                <th></th> <!-- Leave this cell empty -->
+                            @endforeach
                         @endforeach
                     </tr>
-                   
                 </tbody>
             </table>
-            
         </div>
         <div class="container">
             <div class="timetable-img text-center">
                 <img src="img/content/timetable.png" alt="">
             </div>
-              
         </div>
     </div>
+
+    {{-- start modal --}}
+    <!-- Modal -->
+    <div style="top: -450px"  class="modal fade" id="groupModuleClassModal" tabindex="-1" role="dialog" aria-labelledby="groupModuleClassModalLabel" aria-hidden="true">
+        <div class="test modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="groupModuleClassModalLabel">Sélectionner des données</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="groupModuleClassForm">
+                        <div class="form-group">
+                            <label for="group">Group:</label>
+                            <input type="text" class="form-control" id="group" name="group" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="module">Module:</label>
+                            <input type="text" class="form-control" id="module" name="module" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="class">Class:</label>
+                            <input type="text" class="form-control" id="class" name="class" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- end modal --}}
+
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get all table cells
+            var cells = document.querySelectorAll("tbody tr.dtdynamic th");
+
+            // Add click event listener to each cell
+            cells.forEach(function (cell) {
+                cell.addEventListener("click", function () {
+                    // Show the modal when a cell is clicked
+                    $('#groupModuleClassModal').modal('show');
+                });
+            });
+        });
+
         var mainEmplois = @json($main_emplois);
         var currentIndex = 0;
-    
+
         function displayItem(index) {
             document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
             document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
         }
-    
+
         function previous() {
             currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
             displayItem(currentIndex);
         }
-    
+
         function next() {
             currentIndex = (currentIndex + 1) % mainEmplois.length;
             displayItem(currentIndex);
         }
-    
+
         // Display the first item initially
         displayItem(currentIndex);
     </script>
