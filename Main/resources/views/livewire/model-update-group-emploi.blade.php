@@ -1,4 +1,7 @@
-<div>
+
+
+@foreach ($groups as $group )
+<div   class="modal fade col-9" id="exampleModal{{ $group->id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ $group->id }}" aria-hidden="true">
     <div class="modal-dialog  modal-lg  ">
         <div class="modal-content  col-9">
             <div class="modal-header">
@@ -67,7 +70,7 @@
                         </select>
 
                         {{-- id case --}}
-                        <input type="hidden"   value="{{$receivedVariable['idcase']}}" >
+                        <input type="hidden"   value="{{$receivedVariable}}" >
                     </div>
                     {{-- day part && type sission --}}
                     <div style="display: flex">
@@ -89,5 +92,9 @@
             </form>
 
 </div>
-
+    </div>
 </div>
+@endforeach
+
+
+

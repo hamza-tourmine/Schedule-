@@ -3,9 +3,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\group;
 use Livewire\Component;
 use App\Models\sission;
-use Mockery\ReceivedMethodCalls;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -17,9 +17,7 @@ class ModelUpdateGroupEmploi extends Component
     public $formateurs;
     public $salles;
     public $classType;
-
     public $receivedVariable;
-
     public $formateur;
     public $salle;
     public $TypeSesion;
@@ -31,46 +29,28 @@ class ModelUpdateGroupEmploi extends Component
 
     public function mount()
     {
-        $this->receivedVariable = [
-            // 'emploidateid' =>null,
-            'idcase' => null
-        ];
+
     }
 
     public function receiveidEmploiid($variable){
-       
-         // Access the variable emitted from the event
             $receivedValue = $variable;
-
-            // Perform any necessary operations with the received value
             session(['idEmploiSelected' => $receivedValue]);
-
-        // return $this->receivedVariable['emploidateid'] = $variable;
     }
+    // receive  id case
     public function receiveVariable($variable)
     {
-        //  dd($variable);
-        // $this->receivedVariable['idcase'] = $variable;
-        // return $variable;
-        // Access the variable emitted from the event
     $receivedValue = $variable;
-    // Perform any necessary operations with the received value
-    $this->receivedVariable['idcase'] = $receivedValue;
-    // Optionally, you can return the received value
+    $this->receivedVariable = $receivedValue;
     return $receivedValue;
     }
 
-
       public function UpdateSession()
     {
-        // $this->data->update([...]);
-        //   dd(session()->get('idEmploiSelected'));
-
         try{
-            $day = substr($this->receivedVariable['idcase'], 0, 3);
-            $day_part = substr($this->receivedVariable['idcase'], 3, 5);
-            $group_id = substr($this->receivedVariable['idcase'], 10);
-            $dure_sission = substr($this->receivedVariable['idcase'], 8, 2);
+            $day = substr($this->receivedVariable, 0, 3);
+            $day_part = substr($this->receivedVariable, 3, 5);
+            $group_id = substr($this->receivedVariable, 10);
+            $dure_sission = substr($this->receivedVariabl, 8, 2);
             $session = sission::where([
                 'main_emploi_id' => session()->get('idEmploiSelected'),
                 'day' => $day,
@@ -78,9 +58,6 @@ class ModelUpdateGroupEmploi extends Component
                 'group_id' => $group_id,
                 'dure_sission' => $dure_sission
             ])->get();
-
-            // dd( $session);
-            // if ($session) {
                     $session->day = $day;
                     $session->day_part = $day_part;
                     $session->group_id = $group_id;
@@ -95,9 +72,6 @@ class ModelUpdateGroupEmploi extends Component
                     $session->session_type = $this->TypeSesion;
                     $session->status_session = null;
                     $session->validate_date = null;
-                // return redirect()->route('toutlesEmploi');
-                $this->emit('UpdateSession');
-            // }
         }catch(\Exception $e){
             dd($e->getMessage());
         }
@@ -110,20 +84,15 @@ class ModelUpdateGroupEmploi extends Component
         // Emit event to notify parent component
 
     }
-
-
-
-
-
-
-
     public function DeleteSession()
     {
 
-        $day = substr($this->receivedVariable['idcase'], 0, 3);
-        $day_part = substr($this->receivedVariable['idcase'], 3, 5);
-        $group_id = substr($this->receivedVariable['idcase'], 10);
-        $dure_sission = substr($this->receivedVariable['idcase'], 8, 2);
+        $day = substr($this->receivedVariable, 0, 3);
+        $day_part = substr($this->receivedVariable, 3, 5);
+        $group_id = substr($this->receivedVariable, 10);
+        $dure_sission = substr($this->receivedVariable, 8, 2);
+        dd($this->receivedVariable);
+        dd( $day .'-'.$day_part.'-'.$group_id.'-'.$dure_sission);
          sission::where([
             'main_emploi_id' => Session::get('idEmploiSelected'),
             'day' => $day,
@@ -131,15 +100,14 @@ class ModelUpdateGroupEmploi extends Component
             'group_id' => $group_id,
             'dure_sission' => $dure_sission
         ])->delete();
-        $this->mount();
-        // return redirect()->route('toutlesEmploi');
-
-
+        return redirect()->route('toutlesEmploi');
     }
 
     public function render()
     {
-        return view('livewire.model-update-group-emploi');
+        $establishment_id = session()->get('establishment_id');
+        $groups = group::where('establishment_id', $establishment_id)->get();
+        return view('livewire.model-update-group-emploi',['groups'=>$groups]);
     }
 }
 
