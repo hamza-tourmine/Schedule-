@@ -95,7 +95,6 @@
 
     <div class="wrapper">
         <div class="container-calendar">
-            <h3 id="monthAndYear">hello</h3>
             <div class="button-container-calendar">
                 <button id="previous" onclick="previous()">&#8249;</button>
                 <div class="date-info">
@@ -159,15 +158,38 @@
                     <form id="groupModuleClassForm">
                         <div class="form-group">
                             <label for="group">Group:</label>
-                            <input type="text" class="form-control" id="group" name="group" required>
+                            <select class="form-control" id="group" name="group" required>
+                                @foreach ($GroupsList as $GroupList)
+                                @php
+                                $groupId = \App\Models\Group::find($GroupList['group_id'])->id;
+                                $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
+                                @endphp
+                                <option value="{{$groupId}}">{{$groupName}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="module">Module:</label>
-                            <input type="text" class="form-control" id="module" name="module" required>
+                            <select class="form-control" id="module" name="module" required>
+                                @foreach ($modulesList as $moduleList)
+                                @php
+                                $ModuleId = \App\Models\module::find($moduleList['module_id'])->id;
+                                $ModuleName = \App\Models\module::find($moduleList['module_id'])->module_name;
+                                @endphp
+                                <option value="{{$ModuleId}}">{{$ModuleName}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="class">Class:</label>
-                            <input type="text" class="form-control" id="class" name="class" required>
+                            <select class="form-control" id="class" name="class" required>
+                                @foreach ($class_rooms as $class_room)
+                                @php
+                                $RoomName = \App\Models\class_room::find($class_room['class_name'])->class_name;
+                                @endphp
+                                <option value="{{$RoomName}}">{{$RoomName}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -184,7 +206,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             // Get all table cells
             var cells = document.querySelectorAll("tbody tr.dtdynamic th");
-
+    
             // Add click event listener to each cell
             cells.forEach(function (cell) {
                 cell.addEventListener("click", function () {
@@ -192,27 +214,34 @@
                     $('#groupModuleClassModal').modal('show');
                 });
             });
+    
+            // Event listener for the "Fermer" button
+            $('#groupModuleClassModal').on('hidden.bs.modal', function () {
+                // Clear the form when the modal is hidden
+                $('#groupModuleClassForm')[0].reset();
+            });
         });
-
+    
         var mainEmplois = @json($main_emplois);
         var currentIndex = 0;
-
+    
         function displayItem(index) {
             document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
             document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
         }
-
+    
         function previous() {
             currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
             displayItem(currentIndex);
         }
-
+    
         function next() {
             currentIndex = (currentIndex + 1) % mainEmplois.length;
             displayItem(currentIndex);
         }
-
+    
         // Display the first item initially
         displayItem(currentIndex);
     </script>
+    
 </x-HeaderMenuFormateur>
