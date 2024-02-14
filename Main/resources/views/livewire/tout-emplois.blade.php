@@ -104,6 +104,11 @@
                     </tr>
                   </thead>
                 <tbody>
+
+                    <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    @livewire('model-update-group-emploi', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>$formateurs,'groups'=>$groups, 'modules'=>$modules])
+                </div>
                     @if ($selectedType === 'Group')
                     @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -113,7 +118,7 @@
                     <td>{{$group->group_name}}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal{{ $group->id }}" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
                                         {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
@@ -124,12 +129,6 @@
                     @endforeach
                 </tr>
                 @endforeach
-                @livewire('model-update-group-emploi',
-                ['classType'=>$classType,
-                'salles'=>$salles ,
-                'formateurs'=>$formateurs,
-                'modules'=>$modules])
-
 
                         {{-- For formateur emploi --}}
                         @else
@@ -138,7 +137,7 @@
                             <td>{{$formateur->user_name}}</td>
                             @foreach ( ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
                                 @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
-                                    <td  data-bs-toggle="modal" data-bs-target="#exampleModal{{ $formateur->id }}" class="Cases" id="{{$day . $sessionType . $formateur->id }}">
+                                    <td  data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day . $sessionType . $formateur->id }}">
                                         @foreach ($sissions as $sission)
                                             @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
                                                 {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
@@ -149,23 +148,20 @@
                             @endforeach
                         </tr>
                         @endforeach
-                        @livewire('model-update-group-emploi',
-                        ['classType'=>$classType,
-                        'salles'=>$salles ,
-                        'formateurs'=>$formateurs,
-                        'modules'=>$modules])
+
                     @endif
                 </tbody>
             </table>
-        </>
+        </div>
+
       <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
        telecharger</button>
       <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger col-3 mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn btn-danger col-3 mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal1">
     Supprimer tout
   </button>
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -198,7 +194,6 @@
                 selectElement.addEventListener('change', function() {
                     Livewire.emit('receiveidEmploiid', selectElement.value);
                     });
-
 
                 let elements = document.querySelectorAll('.Cases');
                 elements.forEach(element => {

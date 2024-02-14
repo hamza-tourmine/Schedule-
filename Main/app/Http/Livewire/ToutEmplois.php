@@ -23,7 +23,6 @@ class ToutEmplois extends Component
     public $selectedType;
     public $groups;
     public $receivedVariable;
-
     protected $listeners =['changeEmploiId'=>'$refresh'];
     // Method to update selected type emploi group or formateur
     public function updateSelectedType($value)
@@ -33,8 +32,12 @@ class ToutEmplois extends Component
     // Method to update selected id emploi
     public function updateSelectedIDEmploi($value)
     {
+        // dd($value);
+        session(['idEmploiSelected' => $value]);
         $this->selectedValue = $value;
     }
+
+    // for delate all sessions
     public function deleteAllSessions(){
         DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
         ->where('main_emploi_id',  $this->selectedValue)->delete();
@@ -67,6 +70,7 @@ class ToutEmplois extends Component
         ->where('sissions.establishment_id', $establishment_id)
         ->where('sissions.main_emploi_id', $this->selectedValue)
         ->get();
+
         if ($this->selectedType === 'Group') {
             $this->groups = group::where('establishment_id', $establishment_id)->get();
             $this->sissions = DB::table('sissions')
@@ -78,7 +82,7 @@ class ToutEmplois extends Component
             ->where('sissions.establishment_id', $establishment_id)
             ->where('sissions.main_emploi_id', $this->selectedValue)
             ->get();
-            //  $this->emit('changeEmploiId');
+
         }else{
             $this->formateurs = user::where(['establishment_id'=> $establishment_id,'role'=>'formateur'])->get();
             $this->sissions = $session;
