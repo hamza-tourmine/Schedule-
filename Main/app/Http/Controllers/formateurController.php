@@ -7,7 +7,7 @@ use App\Models\formateur;
 use App\Models\establishment;
 use App\Models\group;
 use App\Models\module;
-use Illuminate\Support\Facades\Crypt;
+
 class formateurController extends Controller
 {
     /**

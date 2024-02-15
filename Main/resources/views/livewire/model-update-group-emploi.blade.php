@@ -1,9 +1,7 @@
-<div>
-    <div class="modal-dialog  modal-lg  ">
+ <div class="modal-dialog  modal-lg  ">
         <div class="modal-content  col-9">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" >
-                    Create session</h1>
+                <h1 class="modal-title fs-5" >Create session</h1>
                     @if ($errors->any())
                     @foreach ( $errors->all() as $error)
                     <div id="liveAlertPlaceholder" class="alert alert-danger">
@@ -27,7 +25,6 @@
                                 @endforeach
                             @endif
                         </select>
-
                     </div>
                     <div style="display: flex">
                         {{-- Formateur --}}
@@ -67,11 +64,10 @@
                         </select>
 
                         {{-- id case --}}
-                        <input type="hidden"   value="{{$receivedVariable['idcase']}}" >
+                        <input type="hidden"   value="{{$receivedVariable}}" >
                     </div>
                     {{-- day part && type sission --}}
                     <div style="display: flex">
-
                         <select wire:model="TypeSesion" class="form-select"
                             aria-label="Default select example">
                             <option selected>Types</option>
@@ -83,11 +79,14 @@
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="button"  class="btn btn-danger">supprimer</button>
                     <button data-bs-dismiss="modal" wire:click="UpdateSession" aria-label="Close" type="submit"  class="btn btn-success">Updare</button>
                 </div>
             </form>
-            <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="submit"  class="btn btn-danger">supprimer</button>
 
 </div>
 
 </div>
+
+
+
