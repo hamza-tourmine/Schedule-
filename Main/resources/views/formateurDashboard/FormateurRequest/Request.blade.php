@@ -214,90 +214,85 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-    // Get all table cells
-    var cells = document.querySelectorAll("tbody tr.dtdynamic td");
-
-    // Add click event listener to each cell
-    cells.forEach(function (cell) {
-        cell.addEventListener("click", function () {
-            console.log("Cell clicked");
-
-            // Save the reference to the clicked cell
-            var clickedCell = this;
-
-            // Show the modal when a cell is clicked
-            $('#groupModuleClassModal').modal('show');
-
-            // Event listener for the "Soumettre" button inside the modal
-            $('#groupModuleClassForm').off('submit').on('submit', function (event) {
-                console.log("Form submitted");
-
-                event.preventDefault(); // Prevent the form from submitting normally
-
-                // Get the selected values from the form
-                var selectedGroup = $('#group option:selected').text();
-                var selectedModule = $('#module option:selected').text();
-                var selectedClass = $('#class option:selected').text();
-
-                // Concatenate the selected values
-                var selectedText = selectedGroup + ',' + selectedModule + ', ' + selectedClass;
-
-                // Create a new div element to display the information
-                var infoDiv = document.createElement('div');
-                infoDiv.innerText = selectedText;
-
-                // Append the new div under the clicked cell
-                clickedCell.appendChild(infoDiv);
-
-                // Hide the modal
-                $('#groupModuleClassModal').modal('hide');
+        // Get all table cells
+        var cells = document.querySelectorAll("tbody tr.dtdynamic td");
+    
+        // Add click event listener to each cell
+        cells.forEach(function (cell) {
+            cell.addEventListener("click", function () {
+                // console.log("Cell clicked");
+    
+                // Save the reference to the clicked cell
+                var clickedCell = this;
+    
+                // Show the modal when a cell is clicked
+                $('#groupModuleClassModal').modal('show');
+    
+                // Event listener for the "Soumettre" button inside the modal
+                $('#groupModuleClassForm').off('submit').on('submit', function (event) {
+                    console.log("Form submitted");
+    
+                    event.preventDefault(); // Prevent the form from submitting normally
+    
+                    // Get the selected values from the form
+                    var selectedGroup = $('#group option:selected').text();
+                    var selectedModule = $('#module option:selected').text();
+                    var selectedClass = $('#class option:selected').text();
+    
+                    // Update the content of the clicked cell with the selected values
+                    clickedCell.innerText = selectedGroup + '\n ' + selectedModule + '\n' + selectedClass;
+    
+                    // Hide the modal
+                    $('#groupModuleClassModal').modal('hide');
+                });
             });
         });
-    });
-
-    // Event listener for the "Fermer" button inside the modal
-    $('#groupModuleClassModal').on('click', '.btn-danger', function () {
-
-        // Hide the modal when the "Fermer" button is clicked
-        $('#groupModuleClassModal').modal('hide');
-    });
-
-    // Event listener for the "Annuler" button
-    $('#cancelButton').click(function () {
-
-        // Clear the form when the "Annuler" button is clicked
-        $('#groupModuleClassForm')[0].reset();
-        // Hide the modal
-        $('#groupModuleClassModal').modal('hide');
-    });
-
-    // Additional event listener for form submission
-    $('#groupModuleClassForm').on('submit', function (event) {
-        console.log("Form submitted");
-        event.preventDefault(); // Prevent the form from submitting normally
-    });
-});
-
     
-        var mainEmplois = @json($main_emplois);
-        var currentIndex = 0;
+        // Event listener for the "Fermer" button inside the modal
+        $('#groupModuleClassModal').on('click', '.btn-danger', function () {
     
-        function displayItem(index) {
-            document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
-            document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
-        }
+            // Hide the modal when the "Fermer" button is clicked
+            $('#groupModuleClassModal').modal('hide');
+        });
     
-        function previous() {
-            currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
+        // Event listener for the "Annuler" button
+        $('#cancelButton').click(function () {
+    
+            // Clear the form when the "Annuler" button is clicked
+            $('#groupModuleClassForm')[0].reset();
+            // Hide the modal
+            $('#groupModuleClassModal').modal('hide');
+        });
+    
+        // Additional event listener for form submission
+        $('#groupModuleClassForm').on('submit', function (event) {
+            console.log("Form submitted");
+            event.preventDefault(); // Prevent the form from submitting normally
+        });
+    
+           
+    });
+    
+        
+            var mainEmplois = @json($main_emplois);
+            var currentIndex = 0;
+        
+            function displayItem(index) {
+                document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
+                document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+            }
+        
+            function previous() {
+                currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
+                displayItem(currentIndex);
+            }
+        
+            function next() {
+                currentIndex = (currentIndex + 1) % mainEmplois.length;
+                displayItem(currentIndex);
+            }
+        
+            // Display the first item initially
             displayItem(currentIndex);
-        }
-    
-        function next() {
-            currentIndex = (currentIndex + 1) % mainEmplois.length;
-            displayItem(currentIndex);
-        }
-    
-        // Display the first item initially
-        displayItem(currentIndex);
-    </script>
+        </script>
 </x-HeaderMenuFormateur>
