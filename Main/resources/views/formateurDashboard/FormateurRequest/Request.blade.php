@@ -53,44 +53,42 @@
             margin-right: 10px;
         }
 
-        thead tr.day {
-            font-size: 18px;
-            padding: 30px;
-            color: black;
-            height: 50px;
-            background-color: white;
-        }
+        body {
+                font-family: Arial, sans-serif;
+            }
 
-        thead tr.dPart {
-            font-size: 18px;
-            padding: 30px;
-            color: black;
-            height: 40px;
-            background-color: gainsboro;
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
 
-        thead tr.se-row {
-            height: 30px !important;
-            width: 30px;
-            margin: 0px;
-            padding: 0px;
-            font-size: 16px;
-            color: black;
-            background-color: white;
-        }
+            th,
+            td {
+                height: 40px;
+                width: 60px !important;
+                border: 1px solid #ddd;
+                text-align: center;
+            }
 
-        tbody tr.dtdynamic {
-            height: 50px !important;
-            width: 30px;
-            margin: 0px;
-            padding: 0px;
-            font-size: 12px;
-            color: black;
-            background-color: gainsboro;
-        }
-        .fade{
-            /* top: -450px; */
-        }
+            th {
+                background-color: #f2f2f2;
+            }
+            thead tr.day{
+                font-size: 18px;
+                /* font-weight: bold; */
+                padding:30px
+            }
+          thead tr.se-row {
+                height: 30px !important;
+                width: 30px;
+                margin: 0px;
+                padding: 0px;
+                font-size: 16px
+            }
+
+
+        
        /* Ajoutez ces styles à votre feuille de style CSS */
        table {
     table-layout: fixed;
@@ -100,8 +98,6 @@
 
     </style>
 
-    <div class="wrapper">
-        <div class="container-calendar">
             <div class="button-container-calendar">
                 <button id="previous" onclick="previous()">&#8249;</button>
                 <div class="date-info">
@@ -110,9 +106,14 @@
                 </div>
                 <button id="next" onclick="next()">&#8250;</button>
             </div>
-            <table id="tbl_exporttable_to_xls" class="table-bordered text-center col-md-12" style="width:100%">
+
+
+
+
+        <div class="table-responsive">  
+            <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
                 <thead>
-                    <tr class="day bg-light-gray">
+                    <tr class="day">
                         @foreach ($days_of_week as $day_of_week)
                             <th class="text-uppercase" colspan="4">{{$day_of_week}}</th>
                         @endforeach
@@ -124,7 +125,7 @@
                             @endforeach
                         @endforeach
                     </tr>
-                    <tr class="se-row bg-light-gray">
+                    <tr class="se-row">
                         @foreach ($days_of_week as $day_of_week)
                             @foreach ($seances_part as $seance_part)
                                 <th>{{$seance_part}}</th>
@@ -133,15 +134,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="dtdynamic bg-light-gray">
+                    <tr class="dtdynamic bg-light-gray" >
                         @foreach ($days_of_week as $day_of_week)
                             @foreach ($seances_part as $seance_part)
-                                <th></th> <!-- Leave this cell empty -->
+                                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"></td> <!-- Leave this cell empty -->
                             @endforeach
                         @endforeach
                     </tr>
                 </tbody>
             </table>
+        </div>
         </div>
         
     </div>
@@ -213,7 +215,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
     // Get all table cells
-    var cells = document.querySelectorAll("tbody tr.dtdynamic th");
+    var cells = document.querySelectorAll("tbody tr.dtdynamic td");
 
     // Add click event listener to each cell
     cells.forEach(function (cell) {
@@ -237,8 +239,15 @@
                 var selectedModule = $('#module option:selected').text();
                 var selectedClass = $('#class option:selected').text();
 
-                // Update the content of the clicked cell with the selected values
-                clickedCell.innerText = selectedGroup + ', ' + selectedModule + ', ' + selectedClass;
+                // Concatenate the selected values
+                var selectedText = selectedGroup + ', ' + selectedModule + ', ' + selectedClass;
+
+                // Create a new div element to display the information
+                var infoDiv = document.createElement('div');
+                infoDiv.innerText = selectedText;
+
+                // Append the new div under the clicked cell
+                clickedCell.appendChild(infoDiv);
 
                 // Hide the modal
                 $('#groupModuleClassModal').modal('hide');
@@ -267,8 +276,6 @@
         console.log("Form submitted");
         event.preventDefault(); // Prevent the form from submitting normally
     });
-
-       
 });
 
     
