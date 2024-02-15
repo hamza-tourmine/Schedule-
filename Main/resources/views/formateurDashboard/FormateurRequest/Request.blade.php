@@ -6,13 +6,6 @@
             overflow-x: auto;
         }
 
-        .container-calendar {
-            background: #ffffff;
-            padding: 15px;                                          
-            max-width: 100%;
-            margin: 0 auto;
-            overflow: auto;
-        }
 
         .button-container-calendar button {
             cursor: pointer;
@@ -87,22 +80,27 @@
                 font-size: 16px
             }
 
-
-        
-       /* Ajoutez ces styles à votre feuille de style CSS */
-       table {
-    table-layout: fixed;
-    word-wrap: break-word;
-}
-
+            table {
+            table-layout: fixed;
+            word-wrap: break-word;
+            }
+            .idemploi{
+                font-weight: bold
+            }
+            .st{
+                color: tomato
+            }
+            .ed{
+                color: teal 
+            }
 
     </style>
 
             <div class="button-container-calendar">
                 <button id="previous" onclick="previous()">&#8249;</button>
                 <div class="date-info">
-                    <h2> Start:<span id="dateStart"></span></h2>
-                    <h2> End: <span id="dateEnd"></span></h2>
+                    <h2> Start:<span id="dateStart" class="idemploi st"></span></h2>
+                    <h2> End: <span id="dateEnd" class="idemploi ed"></span></h2>
                 </div>
                 <button id="next" onclick="next()">&#8250;</button>
             </div>
@@ -151,7 +149,7 @@
     
 {{-- start modal --}}
     <!-- Modal -->
-    <div style="top: -450px"  class="modal fade" id="groupModuleClassModal" tabindex="-1" role="dialog" aria-labelledby="groupModuleClassModalLabel" aria-hidden="true">
+    <div  class="modal fade" id="groupModuleClassModal" tabindex="-1" role="dialog" aria-labelledby="groupModuleClassModalLabel" aria-hidden="true">
         <div class="test modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -240,7 +238,7 @@
                 var selectedClass = $('#class option:selected').text();
 
                 // Concatenate the selected values
-                var selectedText = selectedGroup + ', ' + selectedModule + ', ' + selectedClass;
+                var selectedText = selectedGroup + ',' + selectedModule + ', ' + selectedClass;
 
                 // Create a new div element to display the information
                 var infoDiv = document.createElement('div');

@@ -229,7 +229,7 @@
 </header>
                 <!-- ENd header  -->
  <!-- ========== Left Sidebar Start ========== -->
- <div class="vertical-menu">
+ <div class="vertical-menu" style="height: 100%;">
   <div class="h-100">
     <div class="user-wid text-center py-4">
       <div class="user-img">
