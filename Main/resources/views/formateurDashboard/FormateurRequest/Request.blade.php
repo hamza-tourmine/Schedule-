@@ -80,10 +80,10 @@
                 font-size: 16px
             }
 
-            table {
+            /* table {
             table-layout: fixed;
             word-wrap: break-word;
-            }
+            } */
             .idemploi{
                 font-weight: bold
             }
@@ -190,9 +190,11 @@
                             <select class="form-control" id="class" name="class" required>
                                 @foreach ($class_rooms as $class_room)
                                     @php
-                                        $RoomName = \App\Models\class_room::find($class_room['class_name'])->class_name;
+                                        $RoomName = \App\Models\class_room::find($class_room['id'])->class_name;
+                                        $RoomId = \App\Models\class_room::find($class_room['id'])->id;
+
                                     @endphp
-                                    <option value="{{$RoomName}}">{{$RoomName}}</option>
+                                    <option value="{{$RoomId}}">{{$RoomName}}</option>
                                 @endforeach
                             </select>
                         </div>
