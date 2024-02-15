@@ -347,28 +347,31 @@
 
 
         <div class="rightbar-overlay"></div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/metismenu/metisMenu.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/metismenu/metisMenu.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/simplebar/simplebar.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/node-waves/waves.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
 
         <!-- plugin js -->
-        <script src="{{ asset('assets/libs/moment/min/moment.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/jquery-ui-dist/jquery-ui.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/@fullcalendar/core/main.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/@fullcalendar/bootstrap/main.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/@fullcalendar/daygrid/main.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/@fullcalendar/timegrid/main.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/@fullcalendar/interaction/main.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/moment/min/moment.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/@fullcalendar/core/main.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/@fullcalendar/bootstrap/main.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/@fullcalendar/daygrid/main.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/@fullcalendar/timegrid/main.min.js') }}"></script>
+        <script src="{{ asset('/assets/libs/@fullcalendar/interaction/main.min.js') }}"></script>
 
         <!-- Calendar init -->
-        <script src="{{ asset('assets/js/pages/calendar.init.js') }}"></script>
+        <script src="{{ asset('/assets/js/pages/calendar.init.js') }}"></script>
 
         <!-- App js -->
-        <script src="{{ asset('assets/js/app.js') }}"></script>
+        <script src="{{ asset('/assets/js/app.js') }}"></script>
+
+      
 
 
         

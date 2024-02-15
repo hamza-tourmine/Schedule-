@@ -8,7 +8,7 @@
 
         .container-calendar {
             background: #ffffff;
-            padding: 15px;
+            padding: 15px;                                          
             max-width: 100%;
             margin: 0 auto;
             overflow: auto;
@@ -80,17 +80,24 @@
         }
 
         tbody tr.dtdynamic {
-            height: 100px !important;
+            height: 50px !important;
             width: 30px;
             margin: 0px;
             padding: 0px;
-            font-size: 16px;
+            font-size: 12px;
             color: black;
             background-color: gainsboro;
         }
         .fade{
             /* top: -450px; */
         }
+       /* Ajoutez ces styles à votre feuille de style CSS */
+       table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+
     </style>
 
     <div class="wrapper">
@@ -136,35 +143,33 @@
                 </tbody>
             </table>
         </div>
-        <div class="container">
-            <div class="timetable-img text-center">
-                <img src="img/content/timetable.png" alt="">
-            </div>
-        </div>
+        
     </div>
 
-    {{-- start modal --}}
+    
+{{-- start modal --}}
     <!-- Modal -->
     <div style="top: -450px"  class="modal fade" id="groupModuleClassModal" tabindex="-1" role="dialog" aria-labelledby="groupModuleClassModalLabel" aria-hidden="true">
         <div class="test modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="groupModuleClassModalLabel">Sélectionner des données</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                        <span  aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="groupModuleClassForm">
+                    <form id="groupModuleClassForm"  method="POST">
+                        @csrf
                         <div class="form-group">
                             <label for="group">Group:</label>
                             <select class="form-control" id="group" name="group" required>
                                 @foreach ($GroupsList as $GroupList)
-                                @php
-                                $groupId = \App\Models\Group::find($GroupList['group_id'])->id;
-                                $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
-                                @endphp
-                                <option value="{{$groupId}}">{{$groupName}}</option>
+                                    @php
+                                        $groupId = \App\Models\Group::find($GroupList['group_id'])->id;
+                                        $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
+                                    @endphp
+                                    <option value="{{$groupId}}">{{$groupName}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -172,11 +177,11 @@
                             <label for="module">Module:</label>
                             <select class="form-control" id="module" name="module" required>
                                 @foreach ($modulesList as $moduleList)
-                                @php
-                                $ModuleId = \App\Models\module::find($moduleList['module_id'])->id;
-                                $ModuleName = \App\Models\module::find($moduleList['module_id'])->module_name;
-                                @endphp
-                                <option value="{{$ModuleId}}">{{$ModuleName}}</option>
+                                    @php
+                                        $ModuleId = \App\Models\module::find($moduleList['module_id'])->id;
+                                        $ModuleName = \App\Models\module::find($moduleList['module_id'])->module_name;
+                                    @endphp
+                                    <option value="{{$ModuleId}}">{{$ModuleName}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -184,19 +189,22 @@
                             <label for="class">Class:</label>
                             <select class="form-control" id="class" name="class" required>
                                 @foreach ($class_rooms as $class_room)
-                                @php
-                                $RoomName = \App\Models\class_room::find($class_room['class_name'])->class_name;
-                                @endphp
-                                <option value="{{$RoomName}}">{{$RoomName}}</option>
+                                    @php
+                                        $RoomName = \App\Models\class_room::find($class_room['class_name'])->class_name;
+                                    @endphp
+                                    <option value="{{$RoomName}}">{{$RoomName}}</option>
                                 @endforeach
                             </select>
                         </div>
+                        <br/>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Soumettre</button>
+
                     </form>
+                    
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                    <button type="submit" class="btn btn-primary">Soumettre</button>
-                </div>
+              
+                
             </div>
         </div>
     </div>
@@ -204,23 +212,65 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Get all table cells
-            var cells = document.querySelectorAll("tbody tr.dtdynamic th");
-    
-            // Add click event listener to each cell
-            cells.forEach(function (cell) {
-                cell.addEventListener("click", function () {
-                    // Show the modal when a cell is clicked
-                    $('#groupModuleClassModal').modal('show');
-                });
-            });
-    
-            // Event listener for the "Fermer" button
-            $('#groupModuleClassModal').on('hidden.bs.modal', function () {
-                // Clear the form when the modal is hidden
-                $('#groupModuleClassForm')[0].reset();
+    // Get all table cells
+    var cells = document.querySelectorAll("tbody tr.dtdynamic th");
+
+    // Add click event listener to each cell
+    cells.forEach(function (cell) {
+        cell.addEventListener("click", function () {
+            console.log("Cell clicked");
+
+            // Save the reference to the clicked cell
+            var clickedCell = this;
+
+            // Show the modal when a cell is clicked
+            $('#groupModuleClassModal').modal('show');
+
+            // Event listener for the "Soumettre" button inside the modal
+            $('#groupModuleClassForm').off('submit').on('submit', function (event) {
+                console.log("Form submitted");
+
+                event.preventDefault(); // Prevent the form from submitting normally
+
+                // Get the selected values from the form
+                var selectedGroup = $('#group option:selected').text();
+                var selectedModule = $('#module option:selected').text();
+                var selectedClass = $('#class option:selected').text();
+
+                // Update the content of the clicked cell with the selected values
+                clickedCell.innerText = selectedGroup + ', ' + selectedModule + ', ' + selectedClass;
+
+                // Hide the modal
+                $('#groupModuleClassModal').modal('hide');
             });
         });
+    });
+
+    // Event listener for the "Fermer" button inside the modal
+    $('#groupModuleClassModal').on('click', '.btn-danger', function () {
+
+        // Hide the modal when the "Fermer" button is clicked
+        $('#groupModuleClassModal').modal('hide');
+    });
+
+    // Event listener for the "Annuler" button
+    $('#cancelButton').click(function () {
+
+        // Clear the form when the "Annuler" button is clicked
+        $('#groupModuleClassForm')[0].reset();
+        // Hide the modal
+        $('#groupModuleClassModal').modal('hide');
+    });
+
+    // Additional event listener for form submission
+    $('#groupModuleClassForm').on('submit', function (event) {
+        console.log("Form submitted");
+        event.preventDefault(); // Prevent the form from submitting normally
+    });
+
+       
+});
+
     
         var mainEmplois = @json($main_emplois);
         var currentIndex = 0;
@@ -243,5 +293,4 @@
         // Display the first item initially
         displayItem(currentIndex);
     </script>
-    
 </x-HeaderMenuFormateur>

@@ -116,3 +116,4 @@ Route::get('send-mail',[MailController::class,'index']);
 
 // request Emploi
 Route::get('DemanderEmploi',[FormateurRequestController::class,'show']);
+
