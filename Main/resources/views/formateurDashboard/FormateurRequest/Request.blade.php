@@ -159,7 +159,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="groupModuleClassForm"  method="POST">
+                    <form id="groupModuleClassForm"  method="POST" action="{{url('reciveData')}}">
                         @csrf
                         <div class="form-group">
                             <label for="group">Group:</label>
@@ -173,7 +173,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="module">Module:</label>
                             <select class="form-control" id="module" name="module" required>
                                 @foreach ($modulesList as $moduleList)
@@ -182,6 +182,19 @@
                                         $ModuleName = \App\Models\module::find($moduleList['module_id'])->module_name;
                                     @endphp
                                     <option value="{{$ModuleId}}">{{$ModuleName}}</option>
+                                @endforeach
+                            </select>
+                        </div> --}}
+                        <div class="form-group">
+                            <label for="type">Seance Type</label>
+                            <select class="form-control" id="type" name="type" required>
+                                @foreach ($seances_type as $seance_type)
+                                    @php
+                                        $seanceID = \App\Models\sission::find($seance_type['id'])->id;
+                                        $seanceName = \App\Models\sission::find($seance_type['id'])->sission_type;
+
+                                    @endphp
+                                    <option value="{{$seanceID}}">{{$seanceName}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -236,11 +249,11 @@
     
                     // Get the selected values from the form
                     var selectedGroup = $('#group option:selected').text();
-                    var selectedModule = $('#module option:selected').text();
+                    var selectedType = $('#type option:selected').text();
                     var selectedClass = $('#class option:selected').text();
     
                     // Update the content of the clicked cell with the selected values
-                    clickedCell.innerText = selectedGroup + '\n ' + selectedModule + '\n' + selectedClass;
+                    clickedCell.innerText = selectedType + '\n ' + selectedGroup + '\n' + selectedClass;
     
                     // Hide the modal
                     $('#groupModuleClassModal').modal('hide');

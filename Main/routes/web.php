@@ -113,5 +113,5 @@ Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 Route::get('send-mail',[MailController::class,'index']);
 
 // request Emploi
-Route::get('DemanderEmploi',[FormateurRequestController::class,'show']);
+Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
 
