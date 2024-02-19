@@ -78,6 +78,7 @@
                                 <option selected>Types</option>
                                 <option value="presentielle">Presentielle</option>
                                 <option value="teams">Teams</option>
+                                <option value="EFM">EFM</option>
                             </select>
                         </div>
                     </div>

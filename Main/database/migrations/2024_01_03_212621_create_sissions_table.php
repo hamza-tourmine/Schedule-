@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('day');
             $table->enum('day_part', ['matin', 'Amidi']);
-            $table->enum('dure_sission', ['S1', 'S2']);
+            $table->enum('dure_sission', ['S1', 'S2','S3',"S4"]);
             $table->unsignedBigInteger('module_id')->nullable();
             $table->foreign('module_id')
                 ->references('id')
@@ -71,7 +71,7 @@ return new class extends Migration
                 ->onUpdate('cascade');
 
             $table->string('message')->nullable();
-            $table->enum('sission_type', ['teams', 'presentielle'])->nullable();
+            $table->enum('sission_type', ['teams', 'presentielle','EFM'])->nullable();
             $table->enum('status_sission', ["Pending", "Accepted", "Cancelled"])->nullable();
 
         });

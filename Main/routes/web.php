@@ -9,13 +9,12 @@ use App\Http\controllers\formateurController;
 use App\Http\Controllers\FormateurHasGroup;
 use App\Http\Controllers\ShowGroupAffected;
 use App\Http\Controllers\ShowModuleAffected;
-use App\Http\Controllers\DataController;
+use App\Http\Controllers\forgotPassword;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\Schedule;
-use App\Http\Livewire\ToutEmplois;
+
 
 // use App\Http\Middleware\Authenticate;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,13 +27,23 @@ use App\Http\Livewire\ToutEmplois;
 */
 
 
+// retreve password  && forgot password Routes
+Route::post('/forgot-password', [forgotPassword::class,'forgotPassword'])->name('forgotPassword');
+// return view for forgot password page
+Route::get('/forgot-password', [forgotPassword::class ,'index'])->name('ForgotPassword');
+// retrve  new passeword
+Route::post('/reset-Password', [forgotPassword::class, 'resetPassword'])->name('resetPassword');
+// return  a view for page  that can  return view for page   change password
+Route::get('/reset-password/{token}',[forgotPassword::class , 'resetPasswordView'])->name('resetPasswordView');
+//login and  create an account
+
+
 Route::get('/',function(){return view('auth.login');})->name('login');
 Route::get('/create-account',[auth_controller::class ,'index'])->name('create-account');
 Route::post('/insert',[auth_controller::class,'create_account'])->name('insert');
 Route::post('/login',[auth_controller::class ,'login'])->name('login_into_account');
-
 Route::middleware('auth')->group(function(){
-    
+
     // For  Accueil page
     Route::get('dashboardAdmin',function (){return view('adminDashboard.Main.Accueil'); })->name('dashboardAdmin');
     //Schedule

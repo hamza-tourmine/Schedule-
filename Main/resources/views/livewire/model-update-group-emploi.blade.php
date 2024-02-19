@@ -28,16 +28,27 @@
                     </div>
                     <div style="display: flex">
                         {{-- Formateur --}}
+                        @if($FormateurOrgroup==='Group')
                         <select wire:model='formateur' class="form-select"
                             aria-label="Default select example">
-                            <option selected>Formateurs</option>
-                            @if ($formateurs)
-                                @foreach ($formateurs as $formateur)
-                                    <option value="{{ $formateur->id }}">
-                                        {{ $formateur->user_name }}</option>
-                                @endforeach
-                            @endif
+
+                                <option selected>Formateurs</option>
+                                    @foreach ($formateurs as $formateur)
+                                        <option value="{{ $formateur->id }}">
+                                            {{ $formateur->user_name }}</option>
+                                    @endforeach
                         </select>
+                        @else
+                        <select wire:model='group' class="form-select"
+                        aria-label="Default select example">
+                        <option selected>Groups</option>
+                                @foreach ($groups as $group)
+                                    <option value="{{ $group->id }}">
+                                        {{ $group->group_name }}</option>
+                                @endforeach
+                        </select>
+                            @endif
+
                         {{-- salle --}}
                         <select wire:model="salle" class="form-select"
                             aria-label="Default select example">
@@ -62,7 +73,6 @@
                                 @endforeach
                             @endif
                         </select>
-
                         {{-- id case --}}
                         <input type="hidden"   value="{{$receivedVariable}}" >
                     </div>
@@ -77,7 +87,6 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="button"  class="btn btn-danger">supprimer</button>
                     <button data-bs-dismiss="modal" wire:click="UpdateSession" aria-label="Close" type="submit"  class="btn btn-success">Updare</button>

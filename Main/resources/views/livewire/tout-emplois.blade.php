@@ -40,7 +40,6 @@
     @endphp
        <div style="display: flex;justify-content: space-between">
         <h2>Schedule Table</h2>
-
         <div  style="max-width: 350px; ">
             <label for=""><h4>date de emploi :</h4></label>
             <select id='date-select' class="form-select"  wire:model="selectedValue" wire:change="updateSelectedIDEmploi($event.target.value)">
@@ -74,8 +73,6 @@
                 </ul>
             </div>
         @endif
-
-
         <div  class="table-responsive">
             <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 "  >
                 <thead>
@@ -89,7 +86,6 @@
                         <th colspan="4">Samedi</th>
                     </tr>
                     <tr>
-
                         @for ($i =0 ; $i<6 ; $i++ )
                         <th colspan="2">Matin </th>
                         <th colspan="2">A.midi </th>
@@ -105,14 +101,24 @@
                   </thead>
                 <tbody>
 
-                    <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    @livewire('model-update-group-emploi', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>$formateurs,'groups'=>$groups, 'modules'=>$modules])
-                </div>
+
                     @if ($selectedType === 'Group')
                     @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
+                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      {{-- live wire  for diplay  new model update model  --}}
+                      @livewire('model-update-group-emploi',
+                      ['classType'=>$classType,
+                      'salles'=>$salles ,
+                      'formateurs'=>$formateurs,
+                      'FormateurOrgroup'=>'Group',
+                      'modules'=>$modules,
+
+                      ]);
+                      {{-- 'receivedVariable'=>$receivedVariable --}}
+                  </div>
                 @foreach ($groups as $group)
                 <tr>
                     <td>{{$group->group_name}}</td>
@@ -129,9 +135,20 @@
                     @endforeach
                 </tr>
                 @endforeach
-
                         {{-- For formateur emploi --}}
                         @else
+                        <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        {{-- live wire  for diplay  new model update model  --}}
+                        @livewire('model-update-group-emploi',
+                        ['classType'=>$classType,
+                        'salles'=>$salles ,
+                        'FormateurOrgroup'=>'formateur',
+                        'groups'=>$groups,
+                        'modules'=>$modules,
+                        ]);
+                        {{-- 'receivedVariable'=>$receivedVariable --}}
+                    </div>
                         @forEach ($formateurs as $formateur)
                         <tr>
                             <td>{{$formateur->user_name}}</td>
@@ -148,12 +165,10 @@
                             @endforeach
                         </tr>
                         @endforeach
-
                     @endif
                 </tbody>
             </table>
         </div>
-
       <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
        telecharger</button>
       <!-- Button trigger modal -->
@@ -179,7 +194,7 @@
     </div>
   </div>
 
-      <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script type="text/javascript" >
 
     function ExportToExcel(type, fn, dl) {
@@ -189,21 +204,25 @@
              XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
              XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
         }
-        document.addEventListener('livewire:load', function () {
-            const selectElement = document.getElementById('date-select');
-                selectElement.addEventListener('change', function() {
-                    Livewire.emit('receiveidEmploiid', selectElement.value);
-                    });
 
-                let elements = document.querySelectorAll('.Cases');
-                elements.forEach(element => {
-                    element.addEventListener('click', function() {
-                        console.log(element.id);
-                        Livewire.emit('receiveVariable', element.id);
-                    });
-                });
 
-            });
+    document.addEventListener('livewire:load', function () {
+    const selectElement = document.getElementById('date-select');
+    selectElement.addEventListener('change', function() {
+        Livewire.emit('receiveidEmploiid', selectElement.value);
+    });
+
+    let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
+    elements.forEach(element => {
+        element.addEventListener('click', function() {
+            if (element.classList.contains('Cases')) {
+                Livewire.emit('receiveVariable', element.id);
+                console.log(element.id);
+            }
+        });
+    });
+});
+
 
 </script>
 

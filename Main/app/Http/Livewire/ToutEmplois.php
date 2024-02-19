@@ -19,11 +19,12 @@ class ToutEmplois extends Component
     public $idMainEmploi;
     public $sissions ;
     public $formateurs;
-    public $selectedValue  ;//i will sit default value here
+    public $selectedValue ;//i will sit default value here
     public $selectedType;
     public $groups;
     public $receivedVariable;
     protected $listeners =['changeEmploiId'=>'$refresh'];
+
     // Method to update selected type emploi group or formateur
     public function updateSelectedType($value)
     {
@@ -32,11 +33,9 @@ class ToutEmplois extends Component
     // Method to update selected id emploi
     public function updateSelectedIDEmploi($value)
     {
-        // dd($value);
         session(['idEmploiSelected' => $value]);
         $this->selectedValue = $value;
     }
-
     // for delate all sessions
     public function deleteAllSessions(){
         DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
@@ -51,7 +50,6 @@ class ToutEmplois extends Component
        ]);
        return redirect('toutlesEmploi');
     }
-
 
     public function render()
     {
@@ -95,7 +93,4 @@ class ToutEmplois extends Component
 
         ]);
     }
-
-
-
 }
