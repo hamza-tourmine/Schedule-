@@ -17,8 +17,8 @@ class FormateurRequestController extends Controller
         $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
         $classRooms = class_room::all()->where('id_establishment',session()->get('establishment_id'));
-        $main_emplois = main_emploi::all();
-        $seancesType = sission::all();
+        $main_emplois = main_emploi::all()->where('id_establishment',session()->get('establishment_id'));
+        $seancesType = ["Présentielle","Teams","EFM"];
         $daysOfWeek = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
         $daysPart = ["Matin","A.Midi"];
         $seancesPart =["SE1","SE2","SE3","SE4"];
@@ -35,6 +35,24 @@ class FormateurRequestController extends Controller
         ]
     );
     }
+    public function reciveData(Request $request){
+    $data = $request->all();
+
+    // Validate and save data to the database
+    $sission = new sission([
+        'day' => $data['dayOfWeek'],
+        'day_part' => $data['dayPart'],
+        'sission_type' => $data['type'],
+        'group_id' => $data['group'],
+        'module_id' => $data['module'],
+        'class_room_id' => $data['class'],
+    ]);
+
+    $sission->save();
+
+    return response()->json(['message' => 'Data received and saved successfully.']);
+}
+
    
 
 }
