@@ -9,7 +9,7 @@
                         <div class="card-body">
                             <h4 class="card-title">Liste Des Groupes</h4>
 
-                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap">
+                            <table id="FormateurGroupesTable" class="table table-striped table-bordered dt-responsive nowrap">
                                 <thead>
                                     <tr>
                                         <th>Nom Du Groupe</th>
@@ -41,10 +41,29 @@
                             </table>
                         </div>
                     </div>
+                    <button  class="btn btn-primary" onclick="ExportToExcel('xlsx')">Telecharger</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script>
+    function ExportToExcel(type, fn, dl) {
+       var elt = document.getElementById('FormateurGroupesTable');
+       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+
+       // Modifier le style de la feuille Excel
+       wb.Sheets['sheet1']['!cols'] = [{ wch: 30 }, { wch: 15 }, { wch: 15 }]; 
+       return dl ?
+         XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+         XLSX.writeFile(wb, fn || ('FormateurGroupesTable.' + (type || 'xlsx')));
+    }
+</script>
+
+
+
+
 </x-HeaderMenuFormateur>
+
 

@@ -11,6 +11,8 @@ use App\Http\Controllers\ShowGroupAffected;
 use App\Http\Controllers\ShowModuleAffected;
 use App\Http\Controllers\forgotPassword;
 use App\Http\Controllers\FormateurHasModuleController;
+use App\Http\Controllers\FormateurRequestController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\Schedule;
 
 
@@ -90,7 +92,7 @@ Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
     Route::post('/insert-formateur','create')->name('insertFormateur');
     // displat main page in formateur account
-    Route::get('/formateur','showHomepage')->name('dashboard_formateur');
+    Route::get('/dashboardFormateur','showHomepage')->name('dashboard_formateur');
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
     Route::post('/update-formateur/{id}','update');
@@ -113,4 +115,13 @@ Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
 
 Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 });
+
+
+
+// mail testing
+Route::get('send-mail',[MailController::class,'index']);
+
+// request Emploi
+Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
+Route::post('reciveData', [FormateurRequestController::class, 'reciveData'])->name('reciveData');
 

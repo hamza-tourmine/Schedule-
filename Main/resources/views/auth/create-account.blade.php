@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Free Register | Qovex - Admin & Dashboard Template</title>
+    <title>Register | OFPPT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -31,7 +31,7 @@
                             <div class="bg-login-overlay"></div>
                             <div class="position-relative">
                                 <h5 class="text-white font-size-20">Free Register</h5>
-                                <p class="text-white-50 mb-0">Get your free Qovex account now</p>
+                                <p class="text-white-50 mb-0">Creer votre compte et Geerer votre etablissement</p>
                                 <a  href="{{route('login')}}" class="logo logo-admin mt-4">
                                     <img src="assets/images/logo-sm-dark.png" alt="" height="30">
                                 </a>
@@ -64,7 +64,7 @@
                                     </div>
 
                                     <div class="mb-3">
-                                        <label class="form-label" for="username">Esta</label>
+                                        <label class="form-label" for="username">Ista</label>
                                         <input type="text" name="name_establishment"  class="form-control" id="username"
                                             placeholder="Enter username">
                                     </div>
@@ -80,10 +80,7 @@
                                             type="submit">Register</button>
                                     </div>
 
-                                    <div class="mt-4 text-center">
-                                        <p class="mb-0">By registering you agree to the Skote <a href="#"
-                                                class="text-primary">Terms of Use</a></p>
-                                    </div>
+                                    
                                 </form>
                             </div>
 
@@ -93,8 +90,8 @@
                         <p>Already have an account ? <a href="{{route('login')}}" class="fw-medium text-primary">
                                 Login</a> </p>
                         <p>©
-                            <script>document.write(new Date().getFullYear())</script> Qovex. Crafted with <i
-                                class="mdi mdi-heart text-danger"></i> by Themesbrand
+                                    <script>document.write(new Date().getFullYear())</script> OFPPT<i
+                                        class="mdi mdi-heart text-danger"></i> by ISTA BEN M'SIK 
                         </p>
                     </div>
 

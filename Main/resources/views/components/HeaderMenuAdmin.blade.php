@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Calendar | Qovex - Admin & Dashboard Template</title>
+    <title>Admin|Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
@@ -214,12 +214,12 @@
                                 </button>
 
                                 <!-- App Search-->
-                                <form class="app-search d-none d-lg-inline-block">
+                                {{-- <form class="app-search d-none d-lg-inline-block">
                                     <div class="position-relative">
                                         <input type="text" class="form-control" placeholder="Search...">
                                         <span class="bx bx-search-alt"></span>
                                     </div>
-                                </form>
+                                </form> --}}
 <!-- Mega menu -->
 
                             </div>
@@ -291,6 +291,7 @@
                                         <span>Calendar</span>
                                     </a>
                                 </li>
+                               
 
                                 <li class="menu-title">LES COMPOSANTS</li>
 
