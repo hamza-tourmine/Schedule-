@@ -229,10 +229,8 @@
                 </header>
                 <!-- ENd header  -->
  <!-- ========== Left Sidebar Start ========== -->
-                 <div class="vertical-menu">
-
+                 <div class="vertical-menu" style="height: 100%;">
                     <div class="h-100">
-
                         <div class="user-wid text-center py-4">
                             <div class="user-img">
                                 <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
@@ -346,7 +344,12 @@
 
                                     </ul>
                                 </li>
-
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+                                        Logout
+                                    </a>
+                                </li>
 
 
                             </ul>
