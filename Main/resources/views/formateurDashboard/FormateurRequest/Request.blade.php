@@ -172,6 +172,7 @@
                     </tr>
                 </tbody>
             </table>
+            <button>submit</button>
         </div>
         <div id="infoContainer"></div>
     </div>
@@ -220,11 +221,11 @@
                         <div class="form-group">
                             <label for="type">Seance Type</label>
                             <select class="form-control" id="type" name="type" required>
-                                @foreach ($seances_type as $seance_type)
-                                    <option>{{$seance_type}}</option>
+                                @foreach ($seances_type as $index => $seance_type)
+                                    <option value="{{ $index }}">{{ $seance_type }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div>                        
                         <div class="form-group">
                             <label for="class">Class:</label>
                             <select class="form-control" id="class" name="class" required>
@@ -252,154 +253,131 @@
     </div>
     {{-- end modal --}}
 
-    <!-- Include Vue.js from CDN -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var cells = document.querySelectorAll("tbody tr.dtdynamic td");
-            var daysOfWeek = @json($days_of_week);
-            var daysPart = @json($days_part);
-            var seancesPart = @json($seances_part);
-            var casesPerDay = 4;
-            var casesPerPartOfDay = 2;
-    
-            cells.forEach(function (cell) {
-                cell.addEventListener("click", function () {
-                    var clickedCell = this;
-    
-                    $('#groupModuleClassModal').modal('show');
-    
-                    $('#groupModuleClassForm').off('submit').on('submit', function (event) { 
-                        event.preventDefault();
-    
-                        var selectedGroup = $('#group option:selected').text();
-                        var selectedModule = $('#module option:selected').text();
-                        var selectedType = $('#type option:selected').text();
-                        var selectedClass = $('#class option:selected').text();
-    
-                        console.log('selectedGroup:', selectedGroup);
-                        console.log('selectedModule:', selectedModule);
-                        console.log('selectedType:', selectedType);
-                        console.log('selectedClass:', selectedClass);
+    var cells = document.querySelectorAll("tbody tr.dtdynamic td");
+    var daysOfWeek = @json($days_of_week);
+    var daysPart = @json($days_part);
+    var seancesPart = @json($seances_part);
+    var casesPerDay = 4;
+    var casesPerPartOfDay = 2;
 
-                        // sending data to the controller 
-                        var formData = {
-                            '_token': '{{ csrf_token() }}',
-                            'group': selectedGroup,
-                            'module': selectedModule,
-                            'type': selectedType,
-                            'class': selectedClass,
-                            'dayOfWeek': dayOfWeek,
-                            'dayPart': dayPart,
-                            'seancePart': seancePart,
-                        };
+    var clickedCell;  // Declare clickedCell outside the click event listener
 
-                        // Send an AJAX request to the controller
-                        $.ajax({
-                            type: 'POST',
-                            url: '{{ route("reciveData") }}',
-                            data: formData,
-                            success: function (response) {
-                                console.log('Data sent successfully:', response);
-                            },
-                            error: function (error) {
-                                console.error('Error sending data:', error);
-                                alert('Error sending data. Please try again.');
+    cells.forEach(function (cell) {
+        cell.addEventListener("click", function () {
+            clickedCell = this;  // Assign the clicked cell to clickedCell
 
-                            }
-                        });
+            $('#groupModuleClassModal').modal('show');
 
-
-
-
-    
-                        clickedCell.innerText = selectedType + '\n ' + selectedGroup + '\n' + selectedClass;
-    
-
-
-
-
-                        // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
-                        var totalCases = casesPerDay * daysOfWeek.length;
-                        var clickedIndex = Array.from(cell.parentNode.children).indexOf(cell);
-                        
-                        var dayOfWeekIndex = Math.floor(clickedIndex / casesPerDay) % daysOfWeek.length;
-                        var dayPartIndex = Math.floor((clickedIndex % totalCases) / casesPerPartOfDay) % daysPart.length;
-                        var seancePartIndex = (clickedIndex % totalCases) % seancesPart.length;
-    
-                       
-    
-                        var dayOfWeek = daysOfWeek[dayOfWeekIndex];
-                        var dayPart = daysPart[dayPartIndex];
-                        var seancePart = seancesPart[seancePartIndex];
-    
-                        console.log('dayOfWeek:', dayOfWeek);
-                        console.log('dayPart:', dayPart);
-                        console.log('seancePart:', seancePart);
-    
-                        // Create a new div to display the selected information
-                        var infoDiv = document.createElement("div");
-                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek + '</h3>' +
-                            '<h3>Day Part: ' + dayPart + '</h3>' +
-                            '<h3>Seance Part: ' + seancePart + '</h3>' +
-                            '<h3>Module: ' + selectedModule+ '</h3>' +
-                            '<h3>Group: ' + selectedGroup + '</h3>' +
-                            '<h3>Seance Type: ' + selectedType + '</h3>' +
-                            '<h3>class :' + selectedClass + ' </h3>';
-    
-                        // Append the new div to the "infoContainer"
-                        document.getElementById('infoContainer').innerHTML = '';
-                        document.getElementById('infoContainer').appendChild(infoDiv);
-    
-                        $('#groupModuleClassModal').modal('hide');
-                    });
-                });
-            });
-    
-            $('#groupModuleClassModal').on('click', '.btn-danger', function () {
-                $('#groupModuleClassModal').modal('hide');
-            });
-    
-            $('#cancelButton').click(function () {
-                $('#groupModuleClassForm')[0].reset();
-                $('#groupModuleClassModal').modal('hide');
-            });
-    
-            $('#groupModuleClassForm').on('submit', function (event) {
+            $('#groupModuleClassForm').off('submit').on('submit', function (event) {
                 event.preventDefault();
+
+                var selectedGroup = $('#group option:selected').val();
+                var selectedModule = $('#module option:selected').val();
+                var selectedType = $('#type option:selected').val();
+                var selectedClass = $('#class option:selected').val();
+                var ShowselectedGroup = $('#group option:selected').text();
+                var ShowselectedModule = $('#module option:selected').text();
+                var ShowselectedType = $('#type option:selected').text();
+                var ShowselectedClass = $('#class option:selected').text();
+
+                // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
+                var totalCases = casesPerDay * daysOfWeek.length;
+                var clickedIndex = Array.from(clickedCell.parentNode.children).indexOf(clickedCell);
+
+                var dayOfWeekIndex = Math.floor(clickedIndex / casesPerDay) % daysOfWeek.length;
+                var dayPartIndex = Math.floor((clickedIndex % totalCases) / casesPerPartOfDay) % daysPart.length;
+                var seancePartIndex = (clickedIndex % totalCases) % seancesPart.length;
+
+                var dayOfWeek = daysOfWeek[dayOfWeekIndex];
+                
+                var dayPart = daysPart[dayPartIndex];
+                var seancePart = seancesPart[seancePartIndex];
+
+                // Sending data to the controller
+                var formData = {
+                    '_token': '{{ csrf_token() }}',
+                    'group': selectedGroup,
+                    'module': selectedModule,
+                    'type': selectedType,
+                    'class': selectedClass,
+                    'day': dayOfWeek,
+                    'dayPart': dayPart,
+                    'seancePart': seancePart,
+                };
+
+                // Send an AJAX request to the controller
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route("reciveData") }}',
+                    data: formData,
+                    success: function (response) {
+                        console.log('Data sent successfully:', response);
+                    },
+                    error: function (error) {
+                        console.error('Error sending data:', error);
+                        console.log('Response Text:', error.responseText); // Add this line to log responseText
+                        alert('Error sending data. Please try again.');
+                    }
+                });
+
+                clickedCell.innerText = ShowselectedType + '\n ' + ShowselectedGroup + '\n' + ShowselectedClass;
+
+                // Create a new div to display the selected information
+                var infoDiv = document.createElement("div");
+                infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek + '</h3>' +
+                    '<h3>Day Part: ' + dayPart + '</h3>' +
+                    '<h3>Seance Part: ' + seancePart + '</h3>' +
+                    '<h3>Module: ' + ShowselectedModule + '</h3>' +
+                    '<h3>Group: ' + ShowselectedGroup + '</h3>' +
+                    '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
+                    '<h3>class :' + ShowselectedClass + ' </h3>';
+
+                // Append the new div to the "infoContainer"
+                document.getElementById('infoContainer').innerHTML = '';
+                document.getElementById('infoContainer').appendChild(infoDiv);
+
+                $('#groupModuleClassModal').modal('hide');
             });
-            
-
-
-             var mainEmplois = @json($main_emplois);
-             var currentIndex = 0;
-            
-    
-             document.getElementById('previous').addEventListener('click', function () {
-                 currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
-                 displayItem(currentIndex);
-             });
-
-             document.getElementById('next').addEventListener('click', function () {
-                 currentIndex = (currentIndex + 1) % mainEmplois.length;
-                 displayItem(currentIndex);
-             });
-             function displayItem(index) {
-                 document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
-                 document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
-             }
-
-    
-             displayItem(currentIndex);
         });
+    });
 
+    $('#groupModuleClassModal').on('click', '.btn-danger', function () {
+        $('#groupModuleClassModal').modal('hide');
+    });
 
+    $('#cancelButton').click(function () {
+        $('#groupModuleClassForm')[0].reset();
+        $('#groupModuleClassModal').modal('hide');
+    });
 
+    $('#groupModuleClassForm').on('submit', function (event) {
+        event.preventDefault();
+    });
 
-        
-               
+    var mainEmplois = @json($main_emplois);
+    var currentIndex = 0;
+
+    document.getElementById('previous').addEventListener('click', function () {
+        currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
+        displayItem(currentIndex);
+    });
+
+    document.getElementById('next').addEventListener('click', function () {
+        currentIndex = (currentIndex + 1) % mainEmplois.length;
+        displayItem(currentIndex);
+    });
+
+    function displayItem(index) {
+        document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
+        document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+    }
+
+    displayItem(currentIndex);
+});
 
     </script>
-      
       
     
 </x-HeaderMenuFormateur>

@@ -37,15 +37,24 @@ class FormateurRequestController extends Controller
     }
     public function reciveData(Request $request){
     $data = $request->all();
-
+    
     // Validate and save data to the database
+    $dayOfWeek = isset($data['dayOfWeek']) ? $data['dayOfWeek'] : "Jour";
     $sission = new sission([
-        'day' => $data['dayOfWeek'],
+        'day' => $dayOfWeek,
         'day_part' => $data['dayPart'],
         'sission_type' => $data['type'],
         'group_id' => $data['group'],
         'module_id' => $data['module'],
         'class_room_id' => $data['class'],
+        'establishment_id' => 1,
+        'dure_sission' => "S1",
+        'user_id' => 5,
+        'validate_date'	=>"2004-08-13",
+        'main_emploi_id'=>17,
+        "demand_emploi_id"=>1,
+        'message'=>"my msg",
+        'status_sission'=>"Accepted",
     ]);
 
     $sission->save();
