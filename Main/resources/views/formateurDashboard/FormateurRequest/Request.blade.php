@@ -262,12 +262,14 @@
     var casesPerDay = 4;
     var casesPerPartOfDay = 2;
 
-    var clickedCell;  // Declare clickedCell outside the click event listener
-
+    var clickedCell;  
+    var mainEmploiId;
+    
     cells.forEach(function (cell) {
         cell.addEventListener("click", function () {
             clickedCell = this;  // Assign the clicked cell to clickedCell
 
+            
             $('#groupModuleClassModal').modal('show');
 
             $('#groupModuleClassForm').off('submit').on('submit', function (event) {
@@ -300,13 +302,14 @@
                     '_token': '{{ csrf_token() }}',
                     'group': selectedGroup,
                     'module': selectedModule,
-                    'type': selectedType,
+                    'type': ShowselectedType,
                     'class': selectedClass,
                     'day': dayOfWeek,
                     'dayPart': dayPart,
                     'seancePart': seancePart,
+                    'mainEmploiId': mainEmploiId 
                 };
-
+                console.log(formData)
                 // Send an AJAX request to the controller
                 $.ajax({
                     type: 'POST',
@@ -358,10 +361,13 @@
 
     var mainEmplois = @json($main_emplois);
     var currentIndex = 0;
+    
 
     document.getElementById('previous').addEventListener('click', function () {
         currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
         displayItem(currentIndex);
+        
+
     });
 
     document.getElementById('next').addEventListener('click', function () {
@@ -370,13 +376,20 @@
     });
 
     function displayItem(index) {
+        if(mainEmplois.length == 0){
+        document.getElementById('dateStart').innerText ="veuillez attendre jusqu'a le directeur creer l'emploi";
+        
+    }else {
+        mainEmploiId = mainEmplois[index].id;
         document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
         document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+
+    }
     }
 
     displayItem(currentIndex);
+    
 });
-
     </script>
       
     
