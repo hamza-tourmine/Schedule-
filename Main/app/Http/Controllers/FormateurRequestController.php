@@ -11,6 +11,8 @@ use App\Models\sission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class FormateurRequestController extends Controller
 {
@@ -37,33 +39,38 @@ class FormateurRequestController extends Controller
         ]
     );
     }
-    public function reciveData(Request $request){
+    
+public function submitAllData(Request $request)
+{
+    $data = $request->all();
+    $selectedData = $data['selectedData'];
     $data = $request->all();
     $user_id = Auth::id();
     $establishment = session()->get('establishment_id');
-    
-    // Validate and save data to the database
+    // Loop through the selected data and create sissions
+    foreach ($selectedData as $item) {
+       // Validate and save data to the database
     $sission = new sission([
-        'day' => $data['day'],
-        'day_part' => $data['dayPart'],
-        'sission_type' => $data['type'],
-        'group_id' => $data['group'],
-        'module_id' => $data['module'],
-        'class_room_id' => $data['class'],
+        'day' => $item['day'],
+        'day_part' => $item['dayPart'],
+        'sission_type' => $item['type'],
+        'group_id' => $item['group'],
+        'module_id' => $item['module'],
+        'class_room_id' => $item['class'],
         'establishment_id' => $establishment,
-        'dure_sission' => $data['seancePart'],
+        'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
         // 'validate_date'	=>"",
-        'main_emploi_id'=>$data['mainEmploiId'],
+        'main_emploi_id'=>$item['mainEmploiId'],
         "demand_emploi_id"=>1,
-        'message'=>$data['message'],
+        'message'=>$item['message'],
         'status_sission'=>"Pending",
     ]);
 
     $sission->save();
+        Log::info('Sission created:', ['data' => $item]);
+    }
 
-    return response()->json(['message' => 'Data received and saved successfully.']);
-
-
+    return response()->json(['message' => 'All data submitted successfully.']);
 }
 }

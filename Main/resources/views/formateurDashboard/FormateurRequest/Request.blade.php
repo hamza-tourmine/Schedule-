@@ -17,7 +17,16 @@
             border-radius: 4px;
             padding: 5px 10px;
         }
-
+        #submitAll {
+            cursor: pointer;
+            display: inline-block;
+            zoom: 1;
+            background: #00a2b7;
+            color: #fff;
+            border: 1px solid #0aa2b5;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
         #previous {
             float: left;
         }
@@ -172,8 +181,8 @@
                     </tr>
                 </tbody>
             </table>
-            
-            <button>submit</button>
+            <br>
+            <button id="submitAll">Submit All</button>
         </div>
         <div id="infoContainer"></div>
     </div>
@@ -260,15 +269,17 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-    var cells = document.querySelectorAll("tbody tr.dtdynamic td");
-    var daysOfWeek = @json($days_of_week);
-    var daysPart = @json($days_part);
-    var seancesPart = @json($seances_part);
-    var casesPerDay = 4;
-    var casesPerPartOfDay = 2;
+        var cells = document.querySelectorAll("tbody tr.dtdynamic td");
+        var daysOfWeek = @json($days_of_week);
+        var daysPart = @json($days_part);
+        var seancesPart = @json($seances_part);
+        var casesPerDay = 4;
+        var casesPerPartOfDay = 2;
 
-    var clickedCell;  
-    var mainEmploiId;
+        var clickedCell;  
+        var mainEmploiId;
+
+        var selectedData = [];
     
     cells.forEach(function (cell) {
         cell.addEventListener("click", function () {
@@ -302,35 +313,19 @@
                 
                 var dayPart = daysPart[dayPartIndex];
                 var seancePart = seancesPart[seancePartIndex];
-
-                // Sending data to the controller
-                var formData = {
-                    '_token': '{{ csrf_token() }}',
-                    'group': selectedGroup,
-                    'module': selectedModule,
-                    'type': ShowselectedType,
-                    'class': selectedClass,
-                    'day': dayOfWeek,
-                    'dayPart': dayPart,
-                    'seancePart': seancePart,
-                    'mainEmploiId': mainEmploiId ,
-                    'message' : ShowselectedMsg
-                };
-                console.log(formData)
-                // Send an AJAX request to the controller
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route("reciveData") }}',
-                    data: formData,
-                    success: function (response) {
-                        console.log('Data sent successfully:', response);
-                    },
-                    error: function (error) {
-                        console.error('Error sending data:', error);
-                        console.log('Response Text:', error.responseText); // Add this line to log responseText
-                        alert('Error sending data. Please try again.');
-                    }
-                });
+                // all data in once
+                selectedData.push({
+                                'group': selectedGroup,
+                                'module': selectedModule,
+                                'type': ShowselectedType,
+                                'class': selectedClass,
+                                'day': dayOfWeek,
+                                'dayPart': dayPart,
+                                'seancePart': seancePart,
+                                'mainEmploiId': mainEmploiId,
+                                'message': ShowselectedMsg
+                            });
+                
 
                 clickedCell.innerText = ShowselectedType + '\n ' + ShowselectedGroup + '\n' + ShowselectedClass;
 
@@ -366,6 +361,32 @@
     $('#groupModuleClassForm').on('submit', function (event) {
         event.preventDefault();
     });
+
+
+    // sending all data code
+    document.getElementById('submitAll').addEventListener('click', function () {
+                    if (selectedData.length === 0) {
+                        alert('No data selected. Please select at least one cell.');
+                        return;
+                    }
+
+                    // Send all selected data to the server
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route("submitAllData") }}',
+                        data: { '_token': '{{ csrf_token() }}', 'selectedData': selectedData },
+                        success: function (response) {
+                            console.log('All data submitted successfully:', response);
+                            // Optionally, you can reset the selectedData array after submission
+                            selectedData = [];
+                        },
+                        error: function (error) {
+                            console.error('Error submitting data:', error.responseText  );
+                            alert('Error submitting data. Please try again.');
+                        }
+                    });
+                });
+
 
     var mainEmplois = @json($main_emplois);
     var currentIndex = 0;
