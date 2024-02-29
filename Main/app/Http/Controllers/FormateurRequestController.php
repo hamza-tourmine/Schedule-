@@ -56,7 +56,7 @@ class FormateurRequestController extends Controller
         // 'validate_date'	=>"",
         'main_emploi_id'=>$data['mainEmploiId'],
         "demand_emploi_id"=>1,
-        'message'=>"my msg",
+        'message'=>$data['message'],
         'status_sission'=>"Pending",
     ]);
 

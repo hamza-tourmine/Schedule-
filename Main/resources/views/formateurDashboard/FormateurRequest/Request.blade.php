@@ -172,6 +172,7 @@
                     </tr>
                 </tbody>
             </table>
+            
             <button>submit</button>
         </div>
         <div id="infoContainer"></div>
@@ -239,6 +240,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="class">Type your msg:</label>
+                            <input type="text" id="msg" >
+                        </div>
                         <br/>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-primary">Soumettre</button>
@@ -282,7 +287,8 @@
                 var ShowselectedGroup = $('#group option:selected').text();
                 var ShowselectedModule = $('#module option:selected').text();
                 var ShowselectedType = $('#type option:selected').text();
-                var ShowselectedClass = $('#class option:selected').text();
+                var ShowselectedClass = $('#class option:selected').text(); 
+                var ShowselectedMsg = document.getElementById("msg").value;
 
                 // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
                 var totalCases = casesPerDay * daysOfWeek.length;
@@ -307,7 +313,8 @@
                     'day': dayOfWeek,
                     'dayPart': dayPart,
                     'seancePart': seancePart,
-                    'mainEmploiId': mainEmploiId 
+                    'mainEmploiId': mainEmploiId ,
+                    'message' : ShowselectedMsg
                 };
                 console.log(formData)
                 // Send an AJAX request to the controller
@@ -335,6 +342,7 @@
                     '<h3>Module: ' + ShowselectedModule + '</h3>' +
                     '<h3>Group: ' + ShowselectedGroup + '</h3>' +
                     '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
+                    '<h3>Seance MSG: ' + ShowselectedMsg + '</h3>' +
                     '<h3>class :' + ShowselectedClass + ' </h3>';
 
                 // Append the new div to the "infoContainer"
