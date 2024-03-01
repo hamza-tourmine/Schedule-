@@ -175,15 +175,25 @@
                     <tr class="dtdynamic bg-light-gray" >
                         @foreach ($days_of_week as $day_of_week)
                             @foreach ($seances_part as $seance_part)
-                                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"></td> <!-- Leave this cell empty -->
-                            @endforeach
+                            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
+                                @foreach ($AllSeances as $AllSeance)
+                                    @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
+                                            {{ $AllSeance->sission_type }}
+                                            {{ $AllSeance->group->group_name }}
+                                            {{ $AllSeance->class_room->class_name }}
+                                    @endif
+                                @endforeach
+                            </td>
+                                        @endforeach
                         @endforeach
                     </tr>
                 </tbody>
             </table>
             <br>
             <button id="submitAll">Submit All</button>
+            
         </div>
+        
         <div id="infoContainer"></div>
     </div>
     

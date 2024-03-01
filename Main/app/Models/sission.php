@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Group;
+use App\Models\class_room;
 
 class sission extends Model
 {
@@ -22,7 +24,16 @@ class sission extends Model
             "demand_emploi_id",
             'message',
             'sission_type',
-        	'status_sission',
+        	'status_sission',   
 
     ];
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id');
+    }
+    public function class_room()
+    {
+        return $this->belongsTo(class_room::class, 'class_room_id');
+    }
+
 }

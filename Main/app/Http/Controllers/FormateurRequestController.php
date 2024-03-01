@@ -17,15 +17,16 @@ use Illuminate\Support\Facades\Log;
 class FormateurRequestController extends Controller
 {
     function show(){
-        $user_id = Auth::id(); // Retrieve the logged-in formateur's ID
+        $user_id = Auth::id(); 
+        $AllSeance = sission::where('user_id',$user_id)->get();
         $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
         $classRooms = class_room::all()->where('id_establishment',session()->get('establishment_id'));
         $main_emplois = main_emploi::all();
         $seancesType = ["Présentielle","Teams","EFM"];
         $daysOfWeek = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-        $daysPart = ["matin","Amidi"];
-        $seancesPart =["S1","S2","S3","S4"];
+        $daysPart = ["Matin","A.Midi"];
+        $seancesPart =["SE1","SE2","SE3","SE4"];
         return view('formateurDashboard.FormateurRequest.Request',
         [
             'main_emplois' => $main_emplois,
@@ -35,7 +36,8 @@ class FormateurRequestController extends Controller
             'GroupsList'=> $GroupsList,
             'modulesList' => $modulesList,
             'class_rooms' => $classRooms,
-            'seances_type' => $seancesType
+            'seances_type' => $seancesType,
+            'AllSeances' => $AllSeance
         ]
     );
     }
@@ -47,9 +49,7 @@ public function submitAllData(Request $request)
     $data = $request->all();
     $user_id = Auth::id();
     $establishment = session()->get('establishment_id');
-    // Loop through the selected data and create sissions
     foreach ($selectedData as $item) {
-       // Validate and save data to the database
     $sission = new sission([
         'day' => $item['day'],
         'day_part' => $item['dayPart'],
@@ -60,7 +60,6 @@ public function submitAllData(Request $request)
         'establishment_id' => $establishment,
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
-        // 'validate_date'	=>"",
         'main_emploi_id'=>$item['mainEmploiId'],
         "demand_emploi_id"=>1,
         'message'=>$item['message'],
