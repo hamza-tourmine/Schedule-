@@ -14,7 +14,7 @@ use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\FormateurRequestController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\Schedule;
-
+use App\Models\group;
 
 // use App\Http\Middleware\Authenticate;
 /*
@@ -44,8 +44,9 @@ Route::get('/',function(){return view('auth.login');})->name('login');
 Route::get('/create-account',[auth_controller::class ,'index'])->name('create-account');
 Route::post('/insert',[auth_controller::class,'create_account'])->name('insert');
 Route::post('/login',[auth_controller::class ,'login'])->name('login_into_account');
-Route::middleware('auth')->group(function(){
 
+// for admin
+Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
     // For  Accueil page
     Route::get('dashboardAdmin',function (){return view('adminDashboard.Main.Accueil'); })->name('dashboardAdmin');
     //Schedule
@@ -91,8 +92,6 @@ Route::controller(moduleController::class)->group(function(){
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
     Route::post('/insert-formateur','create')->name('insertFormateur');
-    // displat main page in formateur account
-    Route::get('/dashboardFormateur','showHomepage')->name('dashboard_formateur');
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
     Route::post('/update-formateur/{id}','update');
@@ -111,17 +110,22 @@ Route::controller(FormateurHasModuleController::class)->group(function(){
 
 });
 
-Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
-
-Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 });
 
 
 
-// mail testing
-Route::get('send-mail',[MailController::class,'index']);
 
-// request Emploi
-Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
-Route::post('submitAllData', [FormateurRequestController::class, 'submitAllData'])->name('submitAllData');
 
+// routes for  Formateur
+Route::middleware(['auth','RoutesForFormateur'])->group(function(){
+        // displat main page in formateur account
+        Route::get('/dashboardFormateur',[formateurController::class , 'showHomepage'])->name('dashboard_formateur');
+        // request Emploi
+        Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
+        Route::post('submitAllData', [FormateurRequestController::class, 'submitAllData'])->name('submitAllData');
+
+        Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
+        Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
+
+        
+});
