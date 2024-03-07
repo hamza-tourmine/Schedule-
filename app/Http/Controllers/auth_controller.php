@@ -16,6 +16,7 @@ class auth_controller extends Controller
 // create an  account
     public function create_account(Request $request){
         $validatedData = $request->validate([
+            'id'=> 'required',
             'user_name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
@@ -26,6 +27,7 @@ class auth_controller extends Controller
             'name_establishment' => $validatedData['name_establishment']
         ]);
         $user = User::create([
+            'id'=>$validatedData['id'],
             'user_name' => $validatedData['user_name'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),

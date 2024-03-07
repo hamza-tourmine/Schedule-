@@ -35,34 +35,33 @@
         {{-- table --}}
 
         <h3>Groups</h3>
-   <table class="table table-striped">
-    <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th tpscope="col">group</th>
-          <th tpscope="col">branch</th>
-          <th tpscope="col">year</th>
-          <th scope="col">actions</th>
-        </tr>
-      </thead>
-      <tbody>
-   @if($groups)
-   @foreach ($groups as $key => $group )
-   <tr>
-    <th scope="row">{{$key +1}}</th>
-    <td colspan="">{{$group->group_name}}</td>
-    <td colspan="">{{$group->branch}}</td>
-    <td colspan="">{{$group->year}}</td>
-
-    <td colspan="2">
-      <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url("update-group/{$group->id}")}}">Edit</a></button>
-      <button type="button" class="btn btn-danger"><a href="{{route('delateGrope',['id'=>$group->id])}}">Delete</a></button>
-    </td>
-  </tr>
-   @endforeach
-   @endif
-      </tbody>
-  </table>
+        <table style="font-saza:19px;font-weight: bold;width:70vw " class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Group</th>
+                    <th scope="col">Filière</th>
+                    <th scope="col">Année</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($groups)
+                    @foreach ($groups as $key => $group )
+                        <tr>
+                            <th scope="row">{{$key + 1}}</th>
+                            <td>{{$group->group_name}}</td>
+                            <td style="Width: 520px">{{$group->branch}}</td>
+                            <td>{{$group->year}}</td>
+                            <td style="width: 220px">
+                                <button type="button" class="btn btn-primary"><a style="text-decoration: none ;color:black" href="{{url("update-group/{$group->id}")}}">Edit</a></button>
+                                <button type="button" class="btn btn-danger"><a href="{{route('delateGrope',['id'=>$group->id])}}">Delete</a></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
 
 
     </div>

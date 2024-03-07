@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('modules', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary();
             $table->string('module_name');
             $table->unsignedBigInteger('establishment_id')->nullable();
             $table->foreign('establishment_id')

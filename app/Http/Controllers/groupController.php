@@ -20,7 +20,8 @@ class groupController extends Controller
         $establishment = session()->get('establishment_id');
        try{
         $group = group::create(
-            [ 'group_name' =>$request->group_name,
+            [ 'id'=>$establishment.$request->group_name,
+               'group_name' =>$request->group_name,
                'branch'=>$request->branch,
                'year'=>$request->year,
               'establishment_id'=>$establishment
@@ -59,7 +60,6 @@ class groupController extends Controller
                $group->branch = $request->branch;
                $group->year = $request->year;
                $group->save() ;
-
                if($group){
                   return redirect()->route('addGroups')->with(['success'=>'you are update group successfulty']);
                }

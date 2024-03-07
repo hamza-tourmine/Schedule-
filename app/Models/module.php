@@ -9,9 +9,13 @@ class module extends Model
 {
     // protected $table ='module';
     public $fillable = [
+        'id',
         'establishment_id',
         'module_name'
     ];
     public $timestamps = false ;
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
     use HasFactory;
 }

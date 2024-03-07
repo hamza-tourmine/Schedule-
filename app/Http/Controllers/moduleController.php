@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\module;
+use Illuminate\Support\Facades\Validator;
 
 class moduleController extends Controller
 {
@@ -16,6 +17,7 @@ class moduleController extends Controller
     {
         $establishment  = session()->get('establishment_id');
         $modules = module::all()->where('establishment_id', $establishment );
+        // dd($modules);
         return view('adminDashboard.addmodule.add_module' ,['modules'=>$modules]);
     }
 
@@ -26,15 +28,28 @@ class moduleController extends Controller
      */
     public function create(Request $request)
     {
-        $establishment  = session()->get('establishment_id');
-        try{
-                 module::create([
-                'module_name'=>$request->module_name,
-                'establishment_id'=>$establishment
+        $valid = Validator::make($request->all(), [
+            'id'=> 'required|unique:modules',
+            'module_name' => 'required|string|max:255', // Add validation rules for 'module_name'
+            // Add more validation rules if needed for other fields
+        ]);
+
+        if ($valid->fails()) {
+            return redirect()->back()->withErrors($valid)->withInput();
+        }
+
+        $establishment = session()->get('establishment_id');
+
+        try {
+            module::create([
+                'id' => $establishment.$request->id,
+                'module_name' => $request->module_name,
+                'establishment_id' => $establishment
             ]);
-            return  redirect()->back()->with(['success'=>'you createa new module']) ;
-        }catch(\Illuminate\database\QueryException $e){
-             return redirect()->back()->withErrors(['error'=>$e->errorInfo[2]]);
+
+            return redirect()->back()->with(['success' => 'You created a new module']);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors(['error' => $e->errorInfo[2]]);
         }
     }
 

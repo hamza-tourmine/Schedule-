@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    
+
     <div class="account-pages my-5 pt-sm-5">
         <div class="container">
             <div class="row justify-content-center">
@@ -55,6 +55,11 @@
                                         <input type="text" name="user_name" class="form-control" id="useremail"
                                             placeholder="Enter email">
                                     </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="useremail">Matricule</label>
+                                        <input type="text" name="id" class="form-control" id="useremail"
+                                            placeholder="Matricule">
+                                    </div>
                                     <input style="display:none" value="admin" type="text" name='role'class="form-control" >
 
                                     <div class="mb-3">
@@ -80,7 +85,7 @@
                                             type="submit">Register</button>
                                     </div>
 
-                                    
+
                                 </form>
                             </div>
 
@@ -91,7 +96,7 @@
                                 Login</a> </p>
                         <p>©
                                     <script>document.write(new Date().getFullYear())</script> OFPPT<i
-                                        class="mdi mdi-heart text-danger"></i> by ISTA BEN M'SIK 
+                                        class="mdi mdi-heart text-danger"></i> by ISTA BEN M'SIK
                         </p>
                     </div>
 

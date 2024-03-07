@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('day');
             $table->enum('day_part', ['matin', 'Amidi']);
             $table->enum('dure_sission', ['S1', 'S2','S3',"S4"]);
-            $table->unsignedBigInteger('module_id')->nullable();
+            $table->string('module_id')->nullable();
             $table->foreign('module_id')
                 ->references('id')
                 ->on('modules')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->unsignedBigInteger('group_id');
+            $table->string('group_id');
             $table->foreign('group_id')
                 ->references('id')
                 ->on('groups')
@@ -40,7 +40,7 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->unsignedBigInteger('user_id');
+            $table->string('user_id');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

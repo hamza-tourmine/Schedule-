@@ -14,34 +14,35 @@ return new class extends Migration
     public function up()
     {
         Schema::create('group_and_module_has_formateur', function (Blueprint $table){
-            $table->unsignedBigInteger('group_id');
+            $table->string('group_id');
             $table->foreign('group_id')
                 ->references('id')
                 ->on('groups')
                 ->onDelete('cascade');
 
-            $table->unsignedBigInteger('module_id');
+            $table->string('module_id');
             $table->foreign('module_id')
                 ->references('id')
                 ->on('modules')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-                $table->unsignedBigInteger('establishment_id');
-                $table->foreign('establishment_id')
-                    ->references('id')
-                    ->on('establishment')
-                    ->onDelete('cascade')
-                    ->onUpdate('cascade');
+            $table->unsignedBigInteger('establishment_id');
+            $table->foreign('establishment_id')
+                ->references('id')
+                ->on('establishment')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
-                    $table->unsignedBigInteger('formateur_id');
-                    $table->foreign('formateur_id')
-                    ->references('id')
-                    ->on('users')
-                    ->onDelete('cascade')
-                    ->onUpdate('cascade');
+            // Add formateur_id column
+            $table->string('formateur_id');
+            $table->foreign('formateur_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
 
-                    $table->enum('status',['encoure','fin']);
+                $table->enum('status',['encoure','fin']);
         });
     }
 

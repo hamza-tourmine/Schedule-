@@ -23,22 +23,18 @@ return new class extends Migration
                 ->onUpdate('cascade');
 
 
-                $table->unsignedBigInteger('group_id');
+                $table->string('group_id');
                 $table->foreign('group_id')
                     ->references('id')
                     ->on('groups')
                     ->onDelete('cascade');
 
-                    $table->unsignedBigInteger('formateur_id');
+                    $table->string('formateur_id');
                     $table->foreign('formateur_id')
                     ->references('id')
                     ->on('users')
                     ->onDelete('cascade')
                     ->onUpdate('cascade');
-
-
-
-
 
         });
     }

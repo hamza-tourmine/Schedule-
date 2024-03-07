@@ -9,7 +9,12 @@ class formateur extends Model
 {
     public $table = 'users' ;
     public $timestamps = false ;
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     public $fillable =[
+        'id',
         'email',
         'password',
         'role',
@@ -17,7 +22,7 @@ class formateur extends Model
         'user_name',
         'establishment_id',
         'passwordClone',
-        'matricule'
+
     ];
     use HasFactory;
 }

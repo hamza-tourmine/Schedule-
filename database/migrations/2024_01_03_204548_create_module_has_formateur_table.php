@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('module_has_formateur', function (Blueprint $table) {
-           $table->unsignedBigInteger('module_id');
+           $table->string('module_id');
            $table->enum("status",['continue','fenished'])->nullable();
             $table->foreign('module_id')
                 ->references('id')
                 ->on('modules')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
-            
-            $table->unsignedBigInteger('formateur_id');
+
+            $table->string('formateur_id');
             $table->foreign('formateur_id')
             ->references('id')
             ->on('users')

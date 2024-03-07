@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->date('date_request');
             $table->string('comment', 450);
-            $table->unsignedBigInteger('formateur_id');
+            $table->string('formateur_id');
             $table->foreign('formateur_id')
                 ->references('id')
                 ->on('users')

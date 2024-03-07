@@ -23,6 +23,10 @@
               <label for="exampleInputEmail1" class="form-label">formateur Name </label>
               <input type="text"name='formateur_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
+            <div class="mb-3 col-3">
+                <label for="exampleInputEmail1" class="form-label">Matricule formateur  </label>
+                <input type="text"name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
             <button type="submit" class="btn btn-success">save</button>
         </form>
         {{-- table --}}
@@ -43,12 +47,8 @@
             <div class="row">
                 <div class="col-md-12 ">
                     <div class="row">
-
-
                     <div class="card">
                         <div class="card-body ">
-
-
                             <div class="table-responsive">
                                 <table class="table table-centered mb-0">
                                     <thead>
@@ -59,7 +59,6 @@
                                             <th >password</th>
                                             <th >status</th>
                                             <th colspan="2">actions</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>

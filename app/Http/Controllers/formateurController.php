@@ -26,6 +26,8 @@ class formateurController extends Controller
         ->where('role','formateur')
         ->where('establishment_id',$establishment_id)
         ->get();
+        // $formateurs = formateur::all()->where('establishment_id',$establishment_id);
+        // dd($formateurs);
         return view('adminDashboard.addFormateur.add_formateur',['formateurs'=>$formateurs]);
     }
 

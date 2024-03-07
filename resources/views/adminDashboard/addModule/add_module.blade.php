@@ -20,16 +20,21 @@
               <label for="exampleInputEmail1" class="form-label">Module Name </label>
               <input type="text"name='module_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
+            <div class="mb-3 col-3">
+                <label for="exampleInputEmail1" class="form-label">Code Module  </label>
+                <input type="text"name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+              </div>
 
             <button type="submit" class="btn btn-success">save</button>
         </form>
         {{-- table --}}
 
         <h3>modules</h3>
-   <table class="table table-striped">
+   <table style="width: 70vw ; font-weight: bold;" class="table table-striped">
     <thead>
         <tr>
           <th scope="col">#</th>
+          <th > Code Modules</th>
           <th tpscope="col">Moduls</th>
           <th scope="col">actions</th>
         </tr>
@@ -39,8 +44,8 @@
    @foreach ($modules as $key => $module )
    <tr>
     <th scope="row">{{$key +1}}</th>
+    <th>fffffff</th>
     <td colspan="">{{$module->module_name}}</td>
-
     <td colspan="2">
       <button type="button" class="btn  btn-primary">
         <a style="text-decoration: none ;color:black" href="{{url("update-module/{$module->id}")}}">Edit</a>

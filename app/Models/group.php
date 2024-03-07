@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class group extends Model
 {
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     public $timestamps = false ;
-    public $fillable =['group_name','establishment_id','year','branch'];
+    public $fillable =['id','group_name','establishment_id','year','branch'];
     use HasFactory;
+
 }
