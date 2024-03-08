@@ -37,6 +37,7 @@ class ModalComponent extends Component
     public function createSession()
 {
     try{
+        dd($this);
         $idcase = $this->receivedVariable;
         $sission = sission::create([
             'day'=>substr($idcase,0,3),
