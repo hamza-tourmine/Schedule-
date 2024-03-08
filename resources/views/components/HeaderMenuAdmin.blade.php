@@ -34,7 +34,7 @@
         <div class="container-fluid">
             <!-- Begin page -->
             <div id="layout-wrapper">
-<!-- Header start -->
+            <!-- Header start -->
                 <header id="page-topbar">
                     <div class="navbar-header">
                         <div class="container-fluid">
@@ -260,11 +260,25 @@
 
 
                                 <li>
-                                    <a href="{{route('CreateEmploi')}}" class=" waves-effect">
-                                        <span class="mdi mdi-table-plus"></span>
-                                        <span>Créer un emploi</span>
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <span class="mdi mdi-book-plus"></span>
+                                        <span>Creae un emploi </span>
                                     </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les groupes</a></li>
+                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les Formateurs</a></li>
+                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> chaque formateur</a></li>
+                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> chaque group</a></li>
+
+
+                                    </ul>
                                 </li>
+
+
+
+
+
+
 
                                 <li>
                                     <a href="{{route('toutlesEmploi')}}" class=" waves-effect">

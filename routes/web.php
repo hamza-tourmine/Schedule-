@@ -9,6 +9,7 @@ use App\Http\controllers\formateurController;
 use App\Http\Controllers\FormateurHasGroup;
 use App\Http\Controllers\ShowGroupAffected;
 use App\Http\Controllers\ShowModuleAffected;
+use App\Http\Controllers\ScheduleChaqueFormateur ;
 use App\Http\Controllers\forgotPassword;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\FormateurRequestController;
@@ -48,10 +49,11 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 
 // for admin
 Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
-    // For  Accueil page
+    // For Accueil page
     Route::get('dashboardAdmin',function (){return view('adminDashboard.Main.Accueil'); })->name('dashboardAdmin');
     //Schedule
     Route::get('/CreateEmpoi' , [Schedule::class , 'index'])->name('CreateEmploi');
+    Route::get('/ChaqueFormateur' ,[ScheduleChaqueFormateur::class , 'index'])->name('ChaqueFormateur');
     Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');
     Route::get('/createNewSchedule' , [Schedule::class , 'createNewSchedule'])->name('createNewSchedule');
     Route::get('/toutlesEmploi',[Schedule::class , 'toutlesEmploi'])->name('toutlesEmploi');
@@ -71,6 +73,8 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
     Route::get('/delateClassWithType',[classRoomsController::class , 'deleteClassWithTypes'])->name('delateClassWithType');
     Route::get('/UpdateClasses/{id}',[classRoomsController::class , 'EditClass']);
     Route::post('/UpdateClasses',[classRoomsController::class , 'updateClass'])->name('UpdateClasses');
+
+
 // groups
     Route::controller(groupController::class)->group(function () {
     Route::get('/add-groups', 'index')->name('addGroups');
@@ -121,7 +125,7 @@ Route::middleware(['auth','RoutesForFormateur'])->group(function(){
         // request Emploi
         Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
         Route::post('submitAllData', [FormateurRequestController::class, 'submitAllData'])->name('submitAllData');
-        // 
+        //
         Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
         Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
 

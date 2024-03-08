@@ -32,8 +32,6 @@ class FileExcel extends Controller
         $rows = array_map('str_getcsv', explode("\n", $data));
 
         $rows = array_slice($rows , 1);
-
-
         $Formateurs = [];
         $Groups = []    ;
         $Modules = []   ;
@@ -90,7 +88,7 @@ class FileExcel extends Controller
          $this->createGroup($Groups);
          $this->createFormateur($Formateurs);
          $this->assigneModuleForEashFormateur($rows);
-         $this->assigneGroupsForEashFormateur($rows);
+
             // Filter Formateur and hes groupes
 
        }
@@ -98,6 +96,7 @@ class FileExcel extends Controller
         return redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->getMessage()]);
     }
     }
+
 
     // create account  Formateur
     function createFormateur($data){
@@ -193,42 +192,63 @@ class FileExcel extends Controller
     }
 
     // assigne  for eash formateur hes models
-    function assigneModuleForEashFormateur($rows){
+  function assigneModuleForEashFormateur($rows){
+    try{
         $establishment_id = session()->get('establishment_id');
         foreach($rows as $row){
             // Check if module exists before creating the record
+                 $group = group::where('id', $establishment_id.$row[8])->first();
             $module = Module::where('id', $establishment_id . $row[16])->first();
             if($module) {
+
                 module_has_formateur::create([
                     'establishment_id' => $establishment_id,
                     'module_id' => $establishment_id . $row[16],
                     'formateur_id' => $row[19],
                 ]);
-            } else {
+
+            }elseif($group)
+                formateur_has_group::create([
+                    'establishment_id' => $establishment_id,
+                    'group_id' => $establishment_id.$row[8],
+                    'formateur_id' => $row[19],
+                ]);
+         }
+                // $this->assigneGroupsForEashFormateur($rows);
                 // Handle the case where the module doesn't exist
                 // You can log an error, skip this record, or handle it in a way that fits your application's logic
                 // For example:
                 // Log::error('Module with ID ' . $establishment_id . $row[16] . ' does not exist.');
-            }
-        }}
 
-    function assigneGroupsForEashFormateur($rows){
-        $establishment_id = session()->get('establishment_id');
-        foreach($rows as $row){
-        $group = group::where('id', $establishment_id.$row[8])->first();
-        if($group) {
-            formateur_has_group::create([
-                'establishment_id' => $establishment_id,
-                'group_id' => $establishment_id.$row[8],
-                'formateur_id' => $row[19],
-            ]);
-        } else {
-            // Handle the case where the module doesn't exist
-            // You can log an error, skip this record, or handle it in a way that fits your application's logic
-            // For example:
-            // Log::error('Module with ID ' . $establishment_id . $row[16] . ' does not exist.');
-        }}
+
+    }catch(\Exception $e){
+        // dd($e);
     }
+    }
+
+    // function assigneGroupsForEashFormateur($rows){
+    //    try{
+    //     $establishment_id = session()->get('establishment_id');
+    //     foreach($rows as $row){
+    //         $group = group::where('id', $establishment_id.$row[8])->first();
+    //         if($group) {
+    //             formateur_has_group::create([
+    //                 'establishment_id' => $establishment_id,
+    //                 'group_id' => $establishment_id.$row[8],
+    //                 'formateur_id' => $row[19],
+    //             ]);
+    //         } else {
+    //             // dd('from  assgine groups  to eash formateur ');
+    //             // Handle the case where the group doesn't exist
+    //             // You can log an error, skip this record, or handle it in a way that fits your application's logic
+    //             // For example:
+    //             // Log::error('Group with ID ' . $establishment_id . $row[8] . ' does not exist.');
+    //         }
+    //     }
+    //    }catch(\Exception $e){
+    //     dd($e->getMessage());
+    //    }
+    // }
 
 
 }

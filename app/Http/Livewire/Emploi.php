@@ -63,7 +63,8 @@ class Emploi extends Component
         $modules = module::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();
         $formateurs = user::where('establishment_id', $establishment_id)
-                          ->where('role', 'formateur')->get();
+                          ->where('role', 'formateur')
+                          ->where('status', 'active')->get();
         $classType = class_room_type::where('establishment_id', $establishment_id)->get();
 
         $sissions = DB::table('sissions')

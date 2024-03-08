@@ -32,16 +32,18 @@
                         </div>
                         <div style="display: flex">
                             {{-- Formateur --}}
+                            @if ($formateurs)
                             <select wire:model='formateur' class="form-select"
                                 aria-label="Default select example">
                                 <option selected>Formateurs</option>
-                                @if ($formateurs)
+
                                     @foreach ($formateurs as $formateur)
                                         <option value="{{ $formateur->id }}">
                                             {{ $formateur->user_name }}</option>
                                     @endforeach
-                                @endif
+
                             </select>
+                            @endif
                             {{-- salle --}}
                             <select wire:model="salle" class="form-select"
                                 aria-label="Default select example">
