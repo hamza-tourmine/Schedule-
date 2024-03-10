@@ -26,7 +26,7 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->string('group_id');
+            $table->string('group_id')->nullable();
             $table->foreign('group_id')
                 ->references('id')
                 ->on('groups')
@@ -40,14 +40,14 @@ return new class extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->string('user_id');
+            $table->string('user_id')->nullable();
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
-            $table->unsignedBigInteger('class_room_id');
+            $table->unsignedBigInteger('class_room_id')->nullable();
             $table->foreign('class_room_id')
                 ->references('id')
                 ->on('class_rooms')

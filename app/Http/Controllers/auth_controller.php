@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\user;
 use App\Models\establishment;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +34,14 @@ class auth_controller extends Controller
             'password' => bcrypt($validatedData['password']),
             'role' => $validatedData['role'],
             'establishment_id' => $establishment->id // Assigning the establishment's ID to the user's establishment_id
+        ]);
+        Setting::create([
+            'userId'      => $validatedData['id'],
+            'typeSession' => false,
+            'module'      => false,
+            'formateur'   => false,
+            'salle'       => false,
+            'typeSalle'   => false
         ]);
 
         if ($user) {

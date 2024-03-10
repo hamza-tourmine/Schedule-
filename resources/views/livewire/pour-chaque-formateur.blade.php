@@ -34,10 +34,10 @@
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
-        <select class="form-control col-3"  name="" id="">
-            <option disabled>Formateur</option>
+        <select wire:model="formateurId" id="formateurSelected" class="form-control col-3" name="">
+            <option >Formateur</option>
             @foreach ($formateurs as $formateur)
-            <option class="form-control"  value="{{$formateur->id}}">{{$formateur->user_name}} </option>
+               <option class="form-control"  value="{{$formateur->id}}">{{$formateur->user_name}} </option>
             @endforeach
         </select>
         <label for="" style="font-size: 19px"> les Formateurs</label>
@@ -46,11 +46,9 @@
 
     <div class="table-responsive">
         <table  style="overflow:scroll" class="col-md-12 ">
-
-
             <thead>
                 <tr class="day">
-                    <th rowspan="3">Groups Name</th>
+
                     <th colspan="4">Lundi</th>
                     <th colspan="4">Mardi</th>
                     <th colspan="4">Mercredi</th>
@@ -102,19 +100,17 @@
                 </tr>
               </thead>
             <tbody>
-
                 @php
-                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
                 @endphp
-
                 <tr>
-                    <td></td>
+
                     @foreach ($dayWeek as $day)
                         @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
+                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{-- {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} --}}
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}}
                                     @endif
                                 @endforeach
                             </td>
@@ -125,11 +121,118 @@
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
                      aria-labelledby="exampleModalLabel" aria-hidden="true">
-                     @livewire('modal-component', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>null,'groups'=>$groups,'group' => $group, 'modules'=>$modules])
+                     <div class="modal-dialog  modal-lg  ">
+                        <div class="modal-content  col-9">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" >
+                                    Create session</h1>
+                                    @if ($errors->any())
+                                    @foreach ( $errors->all() as $error)
+                                    <div id="liveAlertPlaceholder" class="alert alert-danger">
+                                        {{$error}}
+                                    </div>
+                              @endforeach
+                              @endif
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form wire:submit.prevent="createSession">
+                                <div class="modal-body">
+                                    <div style="display: flex">
+                                        {{-- module  content --}}
+                                        @if (!$checkValues[0]->module)
+                                        <select wire:model="module" class="form-select "
+                                            aria-label="Default select example">
+                                            <option selected>Modules</option>
+                                            @if ($modules)
+                                                @foreach ($modules as $module)
+                                                    <option value="{{ $module->id }}">
+                                                        {{ $module->module_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @endif
+
+                                    </div>
+                                    <div style="display: flex">
+                                        {{-- Formateur --}}
+
+                                        <select wire:model='formateur' class="form-select"
+                                        aria-label="Default select example">
+                                        <option selected>Groupes</option>
+                                        @if ($groups)
+
+                                            @foreach ($groups as $groupe)
+                                                <option value="{{ $groupe->id }}">
+                                                    {{ $groupe->group_name }}</option>
+                                            @endforeach
+                                            @endif
+
+                                    </select>
+
+
+                                        {{-- salle --}}
+                                        @if (!$checkValues[0]->salle)
+                                        <select wire:model="salle" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>les salles</option>
+                                            @if ($salles)
+                                                @foreach ($salles as $salle)
+                                                    <option value="{{ $salle->id }}">
+                                                        {{ $salle->class_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @endif
+                                    </div>
+                                    {{-- tyope session --}}
+
+                                    <div style="display: flex;justify-content: space-between">
+                                        @if (!$checkValues[0]->typeSalle)
+                                        <select wire:model="salleclassTyp" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>les Types</option>
+                                            @if ($classType)
+                                                @foreach ($classType as $classTyp)
+                                                    <option value="{{ $classTyp->id }}">
+                                                        {{ $classTyp->class_room_types }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @endif
+
+
+                                    </div>
+                                    <div style="display: flex">
+                                        @if (!$checkValues[0]->typeSession)
+                                        <select wire:model="TypeSesion" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>Types</option>
+                                            <option value="presentielle">Presentielle</option>
+                                            <option value="teams">Teams</option>
+                                            <option value="EFM">EFM</option>
+                                        </select>
+                                        @endif
+                                    </div>
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button data-bs-dismiss="modal"
+                                    aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
+                                </div>
+                            </form>
+
+                    </div>
                  </div>
 
             </tbody>
+
+
         </table>
+
     </div>
 
 
@@ -156,9 +259,48 @@
       </div>
     </div>
   </div>
+  {{-- end Modal for delete  --}}
 
 
 <script  >
+// insert  session in  table
+// let formateurSelect = document.getElementById('formateurSelected');
+// let tdClass = document.getElementsByClassName('tdClass');
+
+// formateurSelect.addEventListener('change', function() {
+//     let formateurId = this.value;
+//     // wire:model="selectedOption";
+//     // this->emit("selectedOption");
+//     // Livewire.emit('optionSelected',formateurId );
+//     fetch('/formateur-Selected/' + formateurId)
+//         .then(response => {
+//             if (!response.ok){
+//                 console.log(response);
+//                 throw new Error('Network response was not ok');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             // Clear existing content of all tdClass elements
+//             for (let i = 0; i < tdClass.length; i++) {
+//                 tdClass[i].innerHTML = '';
+//             }
+
+//             // Insert new data into corresponding tdClass elements
+//             data.forEach(item => {
+//                 let id = item.day + item.day_part + item.dure_sission;
+//                 let element = document.getElementById(id);
+//                 if (element) {
+//                     element.innerHTML = item.group_name + ' ' + item.sission_type + ' ' + item.class_name;
+//                 }
+//             });
+
+//             // Update UI with fetched data
+//         })
+//         .catch(error => {
+//             console.error('Error fetching data:', error);
+//         });
+// });
 
 
     document.addEventListener('livewire:load', function () {

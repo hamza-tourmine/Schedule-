@@ -87,7 +87,7 @@ class FileExcel extends Controller
          $this->createModuls($Modules);
          $this->createGroup($Groups);
          $this->createFormateur($Formateurs);
-         $this->assigneModuleForEashFormateur($rows);
+         $this->assigneModuleAndGroupForEashFormateur($rows);
 
             // Filter Formateur and hes groupes
 
@@ -192,39 +192,38 @@ class FileExcel extends Controller
     }
 
     // assigne  for eash formateur hes models
-  function assigneModuleForEashFormateur($rows){
-    try{
-        $establishment_id = session()->get('establishment_id');
-        foreach($rows as $row){
-            // Check if module exists before creating the record
-                 $group = group::where('id', $establishment_id.$row[8])->first();
-            $module = Module::where('id', $establishment_id . $row[16])->first();
-            if($module) {
+    function assigneModuleAndGroupForEashFormateur($rows) {
+        try {
+            $establishment_id = session()->get('establishment_id');
 
-                module_has_formateur::create([
-                    'establishment_id' => $establishment_id,
-                    'module_id' => $establishment_id . $row[16],
-                    'formateur_id' => $row[19],
-                ]);
+            foreach ($rows as $row) {
+                // Check if module exists before creating the record
+                $module = Module::where('id', $establishment_id . $row[16])->first();
+                $group = Group::where('id', $establishment_id . $row[8])->first();
+                $formateur_id = $row[19];
 
-            }elseif($group)
-                formateur_has_group::create([
-                    'establishment_id' => $establishment_id,
-                    'group_id' => $establishment_id.$row[8],
-                    'formateur_id' => $row[19],
-                ]);
-         }
-                // $this->assigneGroupsForEashFormateur($rows);
-                // Handle the case where the module doesn't exist
-                // You can log an error, skip this record, or handle it in a way that fits your application's logic
-                // For example:
-                // Log::error('Module with ID ' . $establishment_id . $row[16] . ' does not exist.');
+                if ($module && !module_has_formateur::where('module_id', $module->id)->where('formateur_id', $formateur_id)->exists()) {
+                    module_has_formateur::create([
+                        'establishment_id' => $establishment_id,
+                        'module_id' => $module->id,
+                        'formateur_id' => $formateur_id,
+                    ]);
+                }
 
-
-    }catch(\Exception $e){
-        // dd($e);
+                if ($group && !formateur_has_group::where('group_id', $group->id)->where('formateur_id', $formateur_id)->exists()) {
+                    formateur_has_group::create([
+                        'establishment_id' => $establishment_id,
+                        'group_id' => $group->id,
+                        'formateur_id' => $formateur_id,
+                    ]);
+                }
+            }
+        } catch(\Exception $e) {
+            // Handle the exception
+            // dd($e);
+        }
     }
-    }
+
 
     // function assigneGroupsForEashFormateur($rows){
     //    try{

@@ -18,21 +18,24 @@
                     <div class="modal-body">
                         <div style="display: flex">
                             {{-- module  content --}}
+                            @if (!$checkValues[0]->module)
                             <select wire:model="module" class="form-select "
-                                aria-label="Default select example">
-                                <option selected>Modules</option>
-                                @if ($modules)
-                                    @foreach ($modules as $module)
-                                        <option value="{{ $module->id }}">
-                                            {{ $module->module_name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
+                            aria-label="Default select example">
+                            <option selected>Modules</option>
+                            @if ($modules)
+                                @foreach ($modules as $module)
+                                    <option value="{{ $module->id }}">
+                                        {{ $module->module_name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                            @endif
+
 
                         </div>
                         <div style="display: flex">
                             {{-- Formateur --}}
-                            @if ($formateurs)
+                            @if (!$checkValues[0]->formateur)
                             <select wire:model='formateur' class="form-select"
                                 aria-label="Default select example">
                                 <option selected>Formateurs</option>
@@ -45,6 +48,7 @@
                             </select>
                             @endif
                             {{-- salle --}}
+                            @if (!$checkValues[0]->salle)
                             <select wire:model="salle" class="form-select"
                                 aria-label="Default select example">
                                 <option selected>les salles</option>
@@ -55,9 +59,11 @@
                                     @endforeach
                                 @endif
                             </select>
+                            @endIf
                         </div>
                         {{-- tyope session --}}
                         <div style="display: flex;justify-content: space-between">
+                            @if (!$checkValues[0]->typeSalle)
                             <select wire:model="salleclassTyp" class="form-select"
                                 aria-label="Default select example">
                                 <option selected>les Types</option>
@@ -68,13 +74,14 @@
                                     @endforeach
                                 @endif
                             </select>
+                            @endif
 
                             {{-- id case --}}
                             <input type="hidden"   value="{{$receivedVariable}}" >
                         </div>
                         {{-- day part && type sission --}}
                         <div style="display: flex">
-
+                            @if (!$checkValues[0]->typeSession)
                             <select wire:model="TypeSesion" class="form-select"
                                 aria-label="Default select example">
                                 <option selected>Types</option>
@@ -82,6 +89,7 @@
                                 <option value="teams">Teams</option>
                                 <option value="EFM">EFM</option>
                             </select>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">

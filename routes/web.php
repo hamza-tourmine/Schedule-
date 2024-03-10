@@ -13,8 +13,10 @@ use App\Http\Controllers\ScheduleChaqueFormateur ;
 use App\Http\Controllers\forgotPassword;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\FormateurRequestController;
+use App\Http\Controllers\modelSetting;
 use App\Http\Controllers\FileExcel;
 use App\Http\Controllers\MailController;
+
 use App\Http\Controllers\Schedule;
 use App\Models\group;
 
@@ -49,11 +51,20 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 
 // for admin
 Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
+    // Model Setting
+    Route::get('/modele-seting',[modelSetting::class,'index'])->name('modelSetting');
+    Route::post('/Model-setting', [modelSetting::class, 'createOrUpdate']);
+    Route::get('/Model-values', [modelSetting::class, 'getCheckedValue']);
+    // end Model Setting
     // For Accueil page
     Route::get('dashboardAdmin',function (){return view('adminDashboard.Main.Accueil'); })->name('dashboardAdmin');
     //Schedule
-    Route::get('/CreateEmpoi' , [Schedule::class , 'index'])->name('CreateEmploi');
     Route::get('/ChaqueFormateur' ,[ScheduleChaqueFormateur::class , 'index'])->name('ChaqueFormateur');
+    Route::get('/formateur-Selected/{id}', [ScheduleChaqueFormateur::class , 'SessionsForEashFormateur']);
+
+
+
+    Route::get('/CreateEmpoi' , [Schedule::class , 'index'])->name('CreateEmploi');
     Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');
     Route::get('/createNewSchedule' , [Schedule::class , 'createNewSchedule'])->name('createNewSchedule');
     Route::get('/toutlesEmploi',[Schedule::class , 'toutlesEmploi'])->name('toutlesEmploi');

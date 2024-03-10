@@ -363,8 +363,24 @@
                                         <span class="mdi mdi-account-multiple"></span>
                                         <span> Uploed  </span>
                                     </a>
-                                    <li><a  href="{{route('UploedFileExcelView')}}">Uploed Excel</a></li>
-                                    <!-- Ahmed Add new item for Formateur Module -->
+                                    <ul>
+                                        <li><a  href="{{route('UploedFileExcelView')}}">Uploed Excel</a></li>
+                                        <!-- Ahmed Add new item for Formateur Module -->
+
+                                    </ul>
+
+                                </li>
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <span class="mdi mdi-account-multiple"></span>
+                                        <span> Model Paramtere  </span>
+                                    </a>
+                                    <ul>
+                                        <li><a  href="{{route('modelSetting')}}">Model</a></li>
+                                        <!-- Ahmed Add new item for Formateur Module -->
+
+                                    </ul>
+
                                 </li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
