@@ -136,6 +136,7 @@ Route::middleware(['auth','RoutesForFormateur'])->group(function(){
         // request Emploi
         Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
         Route::post('submitAllData', [FormateurRequestController::class, 'submitAllData'])->name('submitAllData');
+        Route::post('createRequestEmploi', [FormateurRequestController::class, 'createRequestEmploi'])->name('createRequestEmploi');
         //
         Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
         Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);

@@ -7,6 +7,7 @@ use App\Models\establishment;
 use App\Models\formateur_has_group;
 use App\Models\main_emploi;
 use App\Models\module_has_formateur;
+use App\Models\RequestEmploi;
 use App\Models\sission;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -72,4 +73,32 @@ public function submitAllData(Request $request)
 
     return response()->json(['message' => 'All data submitted successfully.']);
 }
+public function createRequestEmploi(Request $request)
+{
+    $data = $request->all();
+    $user_id = Auth::id();
+    $main_emplois = main_emploi::find($data['mainEmploiId']);
+    $existingRequest = RequestEmploi::join('main_emploi', 'request_emplois.formateur_id', '=', 'main_emploi.id')
+    ->where('request_emplois.formateur_id', $user_id)
+    ->where('main_emploi.id', $main_emplois)
+    ->get();
+
+    
+    if ($existingRequest) {
+        // Formateur already has a request emploi for this emploi
+        return response()->json(['message' => 'You have already created a request emploi for this emploi.'], 422);
+    }
+
+    // Create a new request emploi
+    $requestEmploi = new RequestEmploi([
+        'date_request' => now(),
+        'comment' => $request->input('comment'), // Adjust according to your form fields
+        'formateur_id' => $user_id,
+    ]);
+
+    $requestEmploi->save();
+
+    return response()->json(['message' => 'Request emploi created successfully.']);
+}
+
 }
