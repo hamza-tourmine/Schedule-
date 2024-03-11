@@ -13,23 +13,20 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('request_emplois', function (Blueprint $table) {
+    Schema::create('request_emploi', function (Blueprint $table) {
         $table->id();
         $table->date('date_request');
         $table->string('comment', 450);
-        $table->unsignedBigInteger('formateur_id');
-        $table->foreign('formateur_id')
+
+
+
+        $table->string('user_id')->nullable();
+        $table->foreign('user_id')
             ->references('id')
             ->on('users')
             ->onDelete('cascade')
             ->onUpdate('cascade');
-        $table->unsignedBigInteger('emploi_id');
-        $table->foreign('emploi_id')
-            ->references('id')
-            ->on('main_emploi')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-        $table->timestamps(); // Add timestamps for created_at and updated_at
+
     });
 }
 
@@ -41,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('request_emplois');
+        Schema::dropIfExists('request_emploi');
     }
 };
