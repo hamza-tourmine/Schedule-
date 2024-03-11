@@ -142,12 +142,12 @@
                                     <div style="display: flex">
                                         {{-- module  content --}}
                                         @if (!$checkValues[0]->module)
-                                        <select wire:model="module" class="form-select "
+                                        <select wire:model="moduleID" class="form-select "
                                             aria-label="Default select example">
                                             <option selected>Modules</option>
                                             @if ($modules)
                                                 @foreach ($modules as $module)
-                                                    <option value="{{ $module->id }}">
+                                                <option value="{{ $module->id }}">
                                                         {{ $module->module_name }}</option>
                                                 @endforeach
                                             @endif
@@ -158,7 +158,7 @@
                                     <div style="display: flex">
                                         {{-- Formateur --}}
 
-                                        <select wire:model='formateur' class="form-select"
+                                        <select wire:model='groupID' class="form-select"
                                         aria-label="Default select example">
                                         <option selected>Groupes</option>
                                         @if ($groups)
@@ -262,7 +262,7 @@
   {{-- end Modal for delete  --}}
 
 
-<script  >
+  <script  >
 
 
     document.addEventListener('livewire:load', function () {
@@ -270,9 +270,7 @@
             elements.forEach(element => {
                 element.addEventListener('click', function() {
                     Livewire.emit('receiveVariable', element.id);
-                   
                     console.log(element.id)
-
                 });
             });
         });

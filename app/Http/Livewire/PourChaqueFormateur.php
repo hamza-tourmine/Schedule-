@@ -12,6 +12,7 @@ use App\Models\module;
 use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\Setting;
+use App\Models\sission ;
 use Illuminate\Support\Facades\Auth;
 use App\Models\formateur_has_group;
 use App\Models\user;
@@ -19,7 +20,11 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class PourChaqueFormateur extends Component
 {
+    use LivewireAlert;
     public $modulee;
+    public $module;
+    public $salleclassTyp;
+    public $TypeSesion;
     public $group;
     public $formateur;
     public $salle ;
@@ -38,6 +43,8 @@ class PourChaqueFormateur extends Component
     public $salles ;
     public $checkValues;
     public $receivedVariable;
+    public $groupID;
+    public $moduleID ;
 
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
 
@@ -45,6 +52,89 @@ class PourChaqueFormateur extends Component
     {
         $this->receivedVariable = $variable;
     }
+
+    protected $rules = [
+        'group' => 'required',
+    ];
+
+
+    public function createSession()
+    {
+        // dd($this);
+
+        try{
+            $idcase = $this->receivedVariable;
+            $sission = sission::create([
+                'day'=>substr($idcase,0,3),
+                'day_part'=>substr($idcase,3,5),
+                'dure_sission'=>substr($idcase,8,2),
+                'module_id'=> $this->moduleID,
+                'group_id'=> $this->groupID,
+                'establishment_id'=>session()->get('establishment_id'),
+                'user_id'=>$this->formateurId,
+                'class_room_id'=>$this->salle,
+                'validate_date'=>null,
+                'main_emploi_id'=>session()->get('id_main_emploi'),
+                "demand_emploi_id"=>null,
+                'message'=>null,
+                'sission_type'=>$this->TypeSesion,
+                'status_sission'=>null,
+            ]);
+            if($sission){
+                $this->alert('success', 'Vous créez une nouvelle session',[
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,]);
+                // return redirect()->route('ChaqueFormateur');
+            }
+         }catch (\Illuminate\Database\QueryException $e) {
+            if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            }elseif(strpos($e->getMessage(), "Column 'user_id' cannot be null") !==false){
+                $this->alert('error', 'Vous devriez sélectionner le formateur.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            }
+            elseif(strpos($e->getMessage(),"Column 'class_room_id' cannot be null") !==false){
+                $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            }
+            else {
+                $this->alert('error', $e->errorInfo[2], [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+                // return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+            }
+        }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function render()
@@ -55,18 +145,20 @@ class PourChaqueFormateur extends Component
                                 ->where('role', 'formateur')
                                 ->where('status', 'active')
                                 ->get();
-    // Load modules, groups, and sessions based on the selected formateur
+
+
+
     if ($this->formateurId) {
 
         // $this->modules = module::where('formateur_id', $this->formateurId)->get();
         $this->modules = module::join('module_has_formateur as  M' , 'M.module_id' , '=' , 'modules.id')
         ->where('modules.establishment_id', $establishment_id)
         ->where('M.formateur_id', $this->formateurId)
-        ->select('modules.module_name')
+        ->select('modules.*')
         ->get();
-        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-        $this->salles = class_room::where('id_establishment', $establishment_id)->get();
 
+        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
+        $salles = class_room::where('id_establishment', $establishment_id)->get();
 
         $sessions = DB::table('sissions')
         ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'class_rooms.class_name')
@@ -74,7 +166,6 @@ class PourChaqueFormateur extends Component
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
         ->where('sissions.establishment_id', $establishment_id)
-        ->where('sissions.user_id', $this->formateurId)
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
         ->get();
 
@@ -84,27 +175,45 @@ class PourChaqueFormateur extends Component
         ->select('groups.id', 'groups.group_name') // Select ID along with group_name
         ->get();
 
-    $groupsToRemove = [];
-    foreach ($sessions as $session) {
-        $combinedValue = $session->day . $session->day_part . $session->dure_sission;
-        if ($combinedValue === $this->receivedVariable) {
-            $groupsToRemove[] = $session->group_id;
-        }
-    }
+        $groupsToRemove = [];
+        $salleShouldRemove = [];
 
-    $newGroups = [];
-    foreach ($groups as $group) {
-        // Check if the group ID exists in $groupsToRemove
-        if (!in_array($group->id, $groupsToRemove)) {
-            $newGroups[] = $group;
+        foreach ($sessions as $session) {
+            $combinedValue = $session->day . $session->day_part . $session->dure_sission;
+            if (strtolower($combinedValue) === strtolower($this->receivedVariable)) {
+                $groupsToRemove[] = $session->group_id;
+                $salleShouldRemove[] = $session->class_room_id;
+            }
         }
-    }
 
-    $this->groups = $newGroups;
-    $this->sissions = $sessions;
+
+        $newGroups = [];
+        foreach ($groups as $group) {
+            if (!in_array($group->id, $groupsToRemove)) {
+                $newGroups[] = $group;
+            }
+        }
+
+        $newSalles = [];
+        foreach ($salles as $salle) {
+            if (!in_array($salle->id, $salleShouldRemove)) {
+                $newSalles[] = $salle;
+            }
+        }
+
+        $this->groups = $newGroups;
+        $this->salles = $newSalles;
+        $newSession = [];
+
+        foreach($sessions as $session ){
+            if($session->user_id === $this->formateurId){
+                $newSession[] = $session ;
+            };
+        }
+        $this->sissions = $newSession;
+
 
     } else {
-        // If no formateur is selected, clear the modules, groups, and sessions
         $this->modules =   [];
         $this->groups =    [];
         $this->salles =    [];

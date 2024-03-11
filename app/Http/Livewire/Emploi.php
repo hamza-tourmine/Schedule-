@@ -36,7 +36,7 @@ class Emploi extends Component
     public $classType;
     // for catche date from  form Module
     public $salleclassTyp;
-    public $sissions;
+    public $sissions = [];
     public $module ;
     public $idCase;
     public $TypeSesion;
@@ -55,7 +55,6 @@ class Emploi extends Component
     public function createSession()
 {
     try{
-        // dd($this);
         $idcase = $this->receivedVariable;
         $sission = sission::create([
             'day'=>substr($idcase,0,3),
@@ -115,6 +114,11 @@ class Emploi extends Component
 
 
 
+
+
+
+
+
     public function AddAutherEmploi(){
         Session::forget('id_main_emploi');
         Session::forget('datestart');
@@ -148,25 +152,24 @@ class Emploi extends Component
     public function render()
     {
          // data for  model form
-        $establishment_id = session()->get('establishment_id');
+         $establishment_id = session()->get('establishment_id');
+        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
         $this->groups = group::where('establishment_id', $establishment_id)->get();
         // $this->modules = module::where('establishment_id', $establishment_id)->get();
-        $this->salles = class_room::where('id_establishment', $establishment_id)->get();
+        $salles = class_room::where('id_establishment', $establishment_id)->get();
 
      $this->modules = Module::join('module_has_formateur as mhf', 'modules.id', '=', 'mhf.module_id')
      ->where('mhf.formateur_id', $this->formateur)
      ->get();
-     
-        $this->formateurs =  user::select('users.*')
+
+        $formateurs =  user::select('users.*')
         ->join('formateur_has_groups as f', 'f.formateur_id', '=', 'users.id')
         ->where('f.establishment_id' , '=' , $establishment_id)
+        ->where('users.status' , '=' , 'active')
         ->where('f.group_id', substr($this->receivedVariable,10)) // Select ID along with group_name
         ->get();
 
-
-        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-
-        $this->sissions = DB::table('sissions')
+        $sissions = DB::table('sissions')
         ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
         ->join('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
@@ -175,6 +178,31 @@ class Emploi extends Component
         ->where('sissions.establishment_id', $establishment_id)
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
         ->get();
+
+
+        $formateurShouldRemove = [];
+        $salleShouldRemove = [];
+
+        foreach ($sissions as $session) {
+            $combinedValue = $session->day . $session->day_part . $session->dure_sission;
+            if ($combinedValue === substr($this->receivedVariable, 0, 10)) {
+                $formateurShouldRemove[] = $session->user_id;
+                $salleShouldRemove[] = $session->class_room_id;
+            }
+        }
+
+        $newFormateurs = $formateurs->reject(function ($formateur) use ($formateurShouldRemove) {
+            return in_array($formateur->id, $formateurShouldRemove);
+        });
+
+        $newSalles = $salles->reject(function ($salle) use ($salleShouldRemove) {
+            return in_array($salle->id, $salleShouldRemove);
+        });
+
+        $this->formateurs = $newFormateurs;
+        $this->sissions = $sissions;
+        $this->salles = $newSalles;
+
 
         return view('livewire.emploi');
     }
