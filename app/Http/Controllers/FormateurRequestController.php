@@ -75,8 +75,14 @@ public function submitAllData(Request $request)
 }
 public function createRequestEmploi(Request $request)
 {
+    $data = $request->all();
     $user_id = Auth::id();
-    $existingRequest = RequestEmploi::where('formateur_id', $user_id)->first();
+    $main_emplois = main_emploi::find($data['mainEmploiId']);
+    $existingRequest = RequestEmploi::join('main_emploi', 'request_emplois.formateur_id', '=', 'main_emploi.id')
+    ->where('request_emplois.formateur_id', $user_id)
+    ->where('main_emploi.id', $main_emplois)
+    ->get();
+
     
     if ($existingRequest) {
         // Formateur already has a request emploi for this emploi

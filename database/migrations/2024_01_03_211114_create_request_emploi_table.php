@@ -23,6 +23,12 @@ return new class extends Migration
             ->on('users')
             ->onDelete('cascade')
             ->onUpdate('cascade');
+        $table->unsignedBigInteger('emploi_id');
+        $table->foreign('emploi_id')
+            ->references('id')
+            ->on('main_emploi')
+            ->onDelete('cascade')
+            ->onUpdate('cascade');
         $table->timestamps(); // Add timestamps for created_at and updated_at
     });
 }

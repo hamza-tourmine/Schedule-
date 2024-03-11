@@ -316,6 +316,17 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            var cells = document.querySelectorAll("tbody tr.dtdynamic td");
+            var daysOfWeek = @json($days_of_week);
+            var daysPart = @json($days_part);
+            var seancesPart = @json($seances_part);
+            var casesPerDay = 4;
+            var casesPerPartOfDay = 2;
+
+            var clickedCell;
+            var mainEmploiId;
+
+            var selectedData = [];
             $(document).ready(function() {
                 // Function to handle form submission
                 $('#createRequestForm').submit(function(event) {
@@ -325,12 +336,16 @@
                     $.ajax({
                         type: 'POST',
                         url: '{{ route('createRequestEmploi') }}',
-                        data: $(this).serialize(), // Serialize form data
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            'mainEmploiId': mainEmploiId, // Add main emploi variable
+                            formData: $(this).serialize() // Serialize form data
+                        },
                         success: function(response) {
                             console.log('Request emploi created:', response);
                             // Optionally, you can redirect or show a success message here
                             $('#createRequestModal').modal(
-                                'hide'); // Hide modal after successful submission
+                            'hide'); // Hide modal after successful submission
                         },
                         error: function(error) {
                             console.error('Error creating request emploi:', error
@@ -345,17 +360,7 @@
                     $('#createRequestModal').modal('show');
                 });
             });
-            var cells = document.querySelectorAll("tbody tr.dtdynamic td");
-            var daysOfWeek = @json($days_of_week);
-            var daysPart = @json($days_part);
-            var seancesPart = @json($seances_part);
-            var casesPerDay = 4;
-            var casesPerPartOfDay = 2;
 
-            var clickedCell;
-            var mainEmploiId;
-
-            var selectedData = [];
 
             cells.forEach(function(cell) {
                 cell.addEventListener("click", function() {
