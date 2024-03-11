@@ -215,7 +215,7 @@
                                         </select>
                                         @endif
                                     </div>
-                                    
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
@@ -263,44 +263,6 @@
 
 
 <script  >
-// insert  session in  table
-// let formateurSelect = document.getElementById('formateurSelected');
-// let tdClass = document.getElementsByClassName('tdClass');
-
-// formateurSelect.addEventListener('change', function() {
-//     let formateurId = this.value;
-//     // wire:model="selectedOption";
-//     // this->emit("selectedOption");
-//     // Livewire.emit('optionSelected',formateurId );
-//     fetch('/formateur-Selected/' + formateurId)
-//         .then(response => {
-//             if (!response.ok){
-//                 console.log(response);
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             // Clear existing content of all tdClass elements
-//             for (let i = 0; i < tdClass.length; i++) {
-//                 tdClass[i].innerHTML = '';
-//             }
-
-//             // Insert new data into corresponding tdClass elements
-//             data.forEach(item => {
-//                 let id = item.day + item.day_part + item.dure_sission;
-//                 let element = document.getElementById(id);
-//                 if (element) {
-//                     element.innerHTML = item.group_name + ' ' + item.sission_type + ' ' + item.class_name;
-//                 }
-//             });
-
-//             // Update UI with fetched data
-//         })
-//         .catch(error => {
-//             console.error('Error fetching data:', error);
-//         });
-// });
 
 
     document.addEventListener('livewire:load', function () {
@@ -308,7 +270,9 @@
             elements.forEach(element => {
                 element.addEventListener('click', function() {
                     Livewire.emit('receiveVariable', element.id);
+                   
                     console.log(element.id)
+
                 });
             });
         });

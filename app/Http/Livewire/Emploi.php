@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\sission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use App\Models\module;
 use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
+use App\Models\formateur_has_group;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Emploi extends Component
@@ -24,6 +26,94 @@ class Emploi extends Component
     public $dure ;
     public $dayPart;
     public $TypeSession;
+    public $receivedVariable;
+
+
+    public $groups;
+    public $modules ;
+    public $formateurs ;
+    public $salles;
+    public $classType;
+    // for catche date from  form Module
+    public $salleclassTyp;
+    public $sissions;
+    public $module ;
+    public $idCase;
+    public $TypeSesion;
+
+
+
+    protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
+    public function receiveVariable($variable)
+    {
+        $this->receivedVariable = $variable;
+    }
+
+    protected $rules = [
+        'group' => 'required',
+    ];
+    public function createSession()
+{
+    try{
+        // dd($this);
+        $idcase = $this->receivedVariable;
+        $sission = sission::create([
+            'day'=>substr($idcase,0,3),
+            'day_part'=>substr($idcase,3,5),
+            'dure_sission'=>substr($idcase,8,2),
+            'module_id'=>$this->module,
+            'group_id'=>substr($idcase,10),
+        	'establishment_id'=>session()->get('establishment_id'),
+            'user_id'=>$this->formateur,
+            'class_room_id'=>$this->salle,
+            'validate_date'=>null,
+            'main_emploi_id'=>session()->get('id_main_emploi'),
+            "demand_emploi_id"=>null,
+            'message'=>null,
+            'sission_type'=>$this->TypeSesion,
+        	'status_sission'=>null,
+        ]);
+        if($sission){
+            $this->alert('success', 'Vous créez une nouvelle session',[
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,]);
+            return redirect()->route('CreateEmploi');
+        }
+     }catch (\Illuminate\Database\QueryException $e) {
+        if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
+            $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }elseif(strpos($e->getMessage(), "Column 'user_id' cannot be null") !==false){
+            $this->alert('error', 'Vous devriez sélectionner le formateur.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }
+        elseif(strpos($e->getMessage(),"Column 'class_room_id' cannot be null") !==false){
+            $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }
+        else {
+            $this->alert('error', $e->errorInfo[2], [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+            return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+        }
+    }
+
+    }
+
+
 
     public function AddAutherEmploi(){
         Session::forget('id_main_emploi');
@@ -59,15 +149,24 @@ class Emploi extends Component
     {
          // data for  model form
         $establishment_id = session()->get('establishment_id');
-        $groups = group::where('establishment_id', $establishment_id)->get();
-        $modules = module::where('establishment_id', $establishment_id)->get();
-        $salles = class_room::where('id_establishment', $establishment_id)->get();
-        $formateurs = user::where('establishment_id', $establishment_id)
-                          ->where('role', 'formateur')
-                          ->where('status', 'active')->get();
-        $classType = class_room_type::where('establishment_id', $establishment_id)->get();
+        $this->groups = group::where('establishment_id', $establishment_id)->get();
+        // $this->modules = module::where('establishment_id', $establishment_id)->get();
+        $this->salles = class_room::where('id_establishment', $establishment_id)->get();
 
-        $sissions = DB::table('sissions')
+     $this->modules = Module::join('module_has_formateur as mhf', 'modules.id', '=', 'mhf.module_id')
+     ->where('mhf.formateur_id', $this->formateur)
+     ->get();
+     
+        $this->formateurs =  user::select('users.*')
+        ->join('formateur_has_groups as f', 'f.formateur_id', '=', 'users.id')
+        ->where('f.establishment_id' , '=' , $establishment_id)
+        ->where('f.group_id', substr($this->receivedVariable,10)) // Select ID along with group_name
+        ->get();
+
+
+        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
+
+        $this->sissions = DB::table('sissions')
         ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
         ->join('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
@@ -77,13 +176,6 @@ class Emploi extends Component
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
         ->get();
 
-        return view('livewire.emploi', [
-            'sissions'=>$sissions,
-            'formateurs' => $formateurs,
-            'groups' => $groups,
-            'modules' => $modules,
-            'salles' => $salles,
-            'classType' => $classType,
-        ]);
+        return view('livewire.emploi');
     }
 }

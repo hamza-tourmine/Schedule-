@@ -37,6 +37,14 @@ class PourChaqueFormateur extends Component
     public $classType ;
     public $salles ;
     public $checkValues;
+    public $receivedVariable;
+
+    protected $listeners = ['receiveVariable' => 'receiveVariable'];
+
+    public function receiveVariable($variable)
+    {
+        $this->receivedVariable = $variable;
+    }
 
 
     public function render()
@@ -58,22 +66,42 @@ class PourChaqueFormateur extends Component
         ->get();
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
         $this->salles = class_room::where('id_establishment', $establishment_id)->get();
-        $this->groups = group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
-        ->where('groups.establishment_id', $establishment_id)
-        ->where('f.formateur_id', $this->formateurId)
-        ->select('groups.group_name')
+
+
+        $sessions = DB::table('sissions')
+        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'class_rooms.class_name')
+        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
+        ->where('sissions.establishment_id', $establishment_id)
+        ->where('sissions.user_id', $this->formateurId)
+        ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
         ->get();
 
+    $groups = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
+        ->where('groups.establishment_id', $establishment_id)
+        ->where('f.formateur_id', $this->formateurId)
+        ->select('groups.id', 'groups.group_name') // Select ID along with group_name
+        ->get();
 
-        $this->sissions = DB::table('sissions')
-                            ->select('sissions.*', 'modules.module_name', 'groups.group_name','class_rooms.class_name')
-                            ->join('modules', 'modules.id', '=', 'sissions.module_id')
-                            ->join('groups', 'groups.id', '=', 'sissions.group_id')
-                            ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
-                            ->where('sissions.establishment_id', $establishment_id)
-                            ->where('sissions.user_id', $this->formateurId)
-                            ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
-                            ->get();
+    $groupsToRemove = [];
+    foreach ($sessions as $session) {
+        $combinedValue = $session->day . $session->day_part . $session->dure_sission;
+        if ($combinedValue === $this->receivedVariable) {
+            $groupsToRemove[] = $session->group_id;
+        }
+    }
+
+    $newGroups = [];
+    foreach ($groups as $group) {
+        // Check if the group ID exists in $groupsToRemove
+        if (!in_array($group->id, $groupsToRemove)) {
+            $newGroups[] = $group;
+        }
+    }
+
+    $this->groups = $newGroups;
+    $this->sissions = $sessions;
 
     } else {
         // If no formateur is selected, clear the modules, groups, and sessions

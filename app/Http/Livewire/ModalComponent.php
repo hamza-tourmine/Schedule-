@@ -2,8 +2,6 @@
 namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\sission;
-use App\Models\Setting;
-use Illuminate\Support\Facades\Auth;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 class ModalComponent extends Component
 {
@@ -25,8 +23,6 @@ class ModalComponent extends Component
     public $TypeSesion;
     public $group;
     public $receivedVariable;
-    public $checkValues;
-
 
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
 
@@ -109,10 +105,6 @@ class ModalComponent extends Component
     }
     public function render()
     {
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
-        ->where('userId', Auth::id())->get() ;
-        // dd($checkValues):
-        // return $this->checkValues;
         return view('livewire.modal-component');
     }
 }
