@@ -294,7 +294,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="createRequestModalLabel">Create Request Emploi</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -305,7 +305,8 @@
                             <label for="comment">Comment:</label>
                             <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                         </div>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            id="cancelRequest">Fermer</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
@@ -338,14 +339,14 @@
                         url: '{{ route('createRequestEmploi') }}',
                         data: {
                             '_token': '{{ csrf_token() }}',
-                            'mainEmploiId': mainEmploiId, // Add main emploi variable
+                            mainEmploiId: mainEmploiId, // Add main emploi variable
                             formData: $(this).serialize() // Serialize form data
                         },
                         success: function(response) {
                             console.log('Request emploi created:', response);
                             // Optionally, you can redirect or show a success message here
                             $('#createRequestModal').modal(
-                            'hide'); // Hide modal after successful submission
+                                'hide'); // Hide modal after successful submission
                         },
                         error: function(error) {
                             console.error('Error creating request emploi:', error
@@ -359,7 +360,16 @@
                 $('#createRequestBtn').click(function() {
                     $('#createRequestModal').modal('show');
                 });
+
+                // Function to hide modal when cancel button is clicked
+                $('#cancelRequest').click(function() {
+                    $('#createRequestModal').modal('hide');
+                });
+                $('#createRequestModal').on('click', '.btn-danger', function() {
+                    $('#createRequestModal').modal('hide');
+                });
             });
+
 
 
             cells.forEach(function(cell) {

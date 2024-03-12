@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('day');
-            $table->enum('day_part', ['matin', 'Amidi']);
-            $table->enum('dure_sission', ['S1', 'S2','S3',"S4"]);
+            $table->enum('day_part', ['Matin', 'A.Midi']);
+            $table->enum('dure_sission', ['SE1', 'SE2','SE3',"SE4"]);
             $table->string('module_id')->nullable();
             $table->foreign('module_id')
                 ->references('id')
@@ -66,12 +66,12 @@ return new class extends Migration
             $table->unsignedBigInteger('demand_emploi_id')->nullable();
             $table->foreign('demand_emploi_id')
                 ->references('id')
-                ->on('request_emploi')
+                ->on('request_emplois')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
             $table->string('message')->nullable();
-            $table->enum('sission_type', ['teams', 'presentielle','EFM'])->nullable();
+            $table->enum('sission_type', ['TEAMS', 'PRESENTIELLE','EFM'])->nullable();
             $table->enum('status_sission', ["Pending", "Accepted", "Cancelled"])->nullable();
 
         });

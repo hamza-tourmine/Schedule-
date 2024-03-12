@@ -48,6 +48,8 @@ public function submitAllData(Request $request)
     $data = $request->all();
     $selectedData = $data['selectedData'];
     $data = $request->all();
+    $requestEmploiId = RequestEmploi::where('main_emploi_id	
+    ',$selectedData['mainEmploiId']);
     $user_id = Auth::id();
     $establishment = session()->get('establishment_id');
     foreach ($selectedData as $item) {
@@ -62,7 +64,7 @@ public function submitAllData(Request $request)
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
         'main_emploi_id'=>$item['mainEmploiId'],
-        "demand_emploi_id"=>1,
+        "demand_emploi_id"=>$requestEmploiId,
         'message'=>$item['message'],
         'status_sission'=>"Pending",
     ]);
@@ -77,11 +79,8 @@ public function createRequestEmploi(Request $request)
 {
     $data = $request->all();
     $user_id = Auth::id();
-    $main_emplois = main_emploi::find($data['mainEmploiId']);
-    $existingRequest = RequestEmploi::join('main_emploi', 'request_emplois.formateur_id', '=', 'main_emploi.id')
-    ->where('request_emplois.formateur_id', $user_id)
-    ->where('main_emploi.id', $main_emplois)
-    ->get();
+    $existingRequest = RequestEmploi::all()->where('request_emplois.user_id', $user_id)->where('main_emploi.id', $data['mainEmploiId'])
+    ->first();
 
     
     if ($existingRequest) {
@@ -93,7 +92,7 @@ public function createRequestEmploi(Request $request)
     $requestEmploi = new RequestEmploi([
         'date_request' => now(),
         'comment' => $request->input('comment'), // Adjust according to your form fields
-        'formateur_id' => $user_id,
+        'user_id' => $user_id,
     ]);
 
     $requestEmploi->save();
