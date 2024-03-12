@@ -73,6 +73,7 @@ class formateurController extends Controller
         $password = generatePassword();
         try{
                 $formateur = formateur::create([
+                    'id'=>$request->id,
                 'email'=>$email,
                 'passwordClone'=>$password,
                 'password'=>bcrypt($password),

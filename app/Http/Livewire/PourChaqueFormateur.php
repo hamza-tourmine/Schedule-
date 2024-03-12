@@ -60,7 +60,7 @@ class PourChaqueFormateur extends Component
 
     public function createSession()
     {
-        // dd($this);
+
 
         try{
             $idcase = $this->receivedVariable;
@@ -161,8 +161,8 @@ class PourChaqueFormateur extends Component
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 
         $sessions = DB::table('sissions')
-        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'class_rooms.class_name')
-        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->select('sissions.*', 'modules.module_name as module_name', 'groups.group_name', 'class_rooms.class_name')
+        ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
         ->where('sissions.establishment_id', $establishment_id)

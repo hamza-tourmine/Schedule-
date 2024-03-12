@@ -13,6 +13,9 @@ use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
 use App\Models\formateur_has_group;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
+
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Emploi extends Component
@@ -40,6 +43,8 @@ class Emploi extends Component
     public $module ;
     public $idCase;
     public $TypeSesion;
+    public $checkValues ;
+
 
 
 
@@ -60,7 +65,7 @@ class Emploi extends Component
             'day'=>substr($idcase,0,3),
             'day_part'=>substr($idcase,3,5),
             'dure_sission'=>substr($idcase,8,2),
-            'module_id'=>$this->module,
+            'module_id'=>$this->module ,
             'group_id'=>substr($idcase,10),
         	'establishment_id'=>session()->get('establishment_id'),
             'user_id'=>$this->formateur,
@@ -77,7 +82,7 @@ class Emploi extends Component
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,]);
-            return redirect()->route('CreateEmploi');
+            // return redirect()->route('CreateEmploi');
         }
      }catch (\Illuminate\Database\QueryException $e) {
         if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
@@ -171,7 +176,7 @@ class Emploi extends Component
 
         $sissions = DB::table('sissions')
         ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
-        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('users', 'users.id', '=', 'sissions.user_id')
         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
@@ -202,6 +207,9 @@ class Emploi extends Component
         $this->formateurs = $newFormateurs;
         $this->sissions = $sissions;
         $this->salles = $newSalles;
+
+        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+        ->where('userId', Auth::id())->get() ;
 
 
         return view('livewire.emploi');

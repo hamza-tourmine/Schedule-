@@ -110,7 +110,7 @@
                         <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}}
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/>{{$sission->module_name}}
                                     @endif
                                 @endforeach
                             </td>

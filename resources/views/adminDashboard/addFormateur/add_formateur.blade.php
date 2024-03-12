@@ -25,7 +25,7 @@
             </div>
             <div class="mb-3 col-3">
                 <label for="exampleInputEmail1" class="form-label">Matricule formateur  </label>
-                <input type="text"name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input type="text" name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
               </div>
             <button type="submit" class="btn btn-success">save</button>
         </form>

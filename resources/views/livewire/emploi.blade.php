@@ -101,7 +101,7 @@
                         <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
                                     @endif
                                 @endforeach
                             </td>
@@ -149,6 +149,7 @@
                                     </div>
                                     <div style="display: flex">
                                          {{-- module  content --}}
+                                         @if (!$checkValues[0]->module)
                                          <select wire:model="module" class="form-select "
                                          aria-label="Default select example">
                                          <option selected>Modules</option>
@@ -159,7 +160,9 @@
                                              @endforeach
                                          @endif
                                      </select>
+                                     @endif
                                         {{-- salle --}}
+                                        @if (!$checkValues[0]->salle)
                                         <select wire:model="salle" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>les salles</option>
@@ -170,9 +173,12 @@
                                                 @endforeach
                                             @endif
                                         </select>
+                                        @endif
                                     </div>
                                     {{-- tyope session --}}
                                     <div style="display: flex;justify-content: space-between">
+
+                                        @if (!$checkValues[0]->typeSalle)
                                         <select wire:model="salleclassTyp" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>les Types</option>
@@ -183,13 +189,14 @@
                                                 @endforeach
                                             @endif
                                         </select>
+                                        @endif
 
                                         {{-- id case --}}
                                         <input type="hidden"   value="{{$receivedVariable}}" >
                                     </div>
                                     {{-- day part && type sission --}}
                                     <div style="display: flex">
-
+                                        @if (!$checkValues[0]->typeSession)
                                         <select wire:model="TypeSesion" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>Types</option>
@@ -197,6 +204,7 @@
                                             <option value="teams">Teams</option>
                                             <option value="EFM">EFM</option>
                                         </select>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="modal-footer">
