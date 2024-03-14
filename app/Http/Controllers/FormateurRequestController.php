@@ -96,7 +96,8 @@ public function createRequestEmploi(Request $request)
 
     return response()->json([
         'message' => 'Request emploi created successfully.',
-        'requestEmploi' => $createdRequestEmploi,]);
+        'requestEmploi' => $createdRequestEmploi,
+        'user_id'=>$user_id]);
 }
 
 }
