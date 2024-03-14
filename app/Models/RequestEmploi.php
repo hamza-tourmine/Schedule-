@@ -20,4 +20,8 @@ class RequestEmploi extends Model
     {
         return $this->belongsTo(User::class, 'formateur_id');
     }
+    public function mainEmploi()
+    {
+        return $this->belongsTo(main_emploi::class, 'main_emploi_id');
+    }
 }

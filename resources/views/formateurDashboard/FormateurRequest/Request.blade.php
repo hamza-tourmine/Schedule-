@@ -325,9 +325,43 @@
             var casesPerPartOfDay = 2;
 
             var clickedCell;
-            var mainEmploiId;
+
 
             var selectedData = [];
+
+            var mainEmplois = @json($main_emplois);
+            var currentIndex = 0;
+
+
+            document.getElementById('previous').addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
+                displayItem(currentIndex);
+
+
+
+            });
+
+            document.getElementById('next').addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % mainEmplois.length;
+                displayItem(currentIndex);
+            });
+
+            function displayItem(index) {
+                if (mainEmplois.length == 0) {
+                    document.getElementById('dateStart').innerText =
+                        "veuillez attendre jusqu'a le directeur creer l'emploi";
+
+                } else {
+                    mainEmploiId = mainEmplois[index].id;
+                    document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
+                    document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+
+                }
+            }
+
+            displayItem(currentIndex);
+            var mainEmploiId = mainEmplois[currentIndex].id;
+
             $(document).ready(function() {
                 // Function to handle form submission
                 $('#createRequestForm').submit(function(event) {
@@ -487,36 +521,7 @@
             });
 
 
-            var mainEmplois = @json($main_emplois);
-            var currentIndex = 0;
 
-
-            document.getElementById('previous').addEventListener('click', function() {
-                currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
-                displayItem(currentIndex);
-
-
-            });
-
-            document.getElementById('next').addEventListener('click', function() {
-                currentIndex = (currentIndex + 1) % mainEmplois.length;
-                displayItem(currentIndex);
-            });
-
-            function displayItem(index) {
-                if (mainEmplois.length == 0) {
-                    document.getElementById('dateStart').innerText =
-                        "veuillez attendre jusqu'a le directeur creer l'emploi";
-
-                } else {
-                    mainEmploiId = mainEmplois[index].id;
-                    document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
-                    document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
-
-                }
-            }
-
-            displayItem(currentIndex);
 
         });
     </script>
