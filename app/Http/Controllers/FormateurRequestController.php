@@ -80,24 +80,38 @@ public function createRequestEmploi(Request $request)
     $data = $request->all();
     $mainEmploiId = $data['mainEmploiId'];
     $user_id = Auth::id();
+    $existingRequest = RequestEmploi::where('user_id', $user_id)
+    ->where('main_emploi_id', $mainEmploiId)
+    ->first();
 
-    // Create a new request emploi
-    $requestEmploi = new RequestEmploi([
-        'date_request' => now(),
-        'comment' => 'test comment', // Adjust according to your form fields
-        'user_id' => $user_id,
-        'main_emploi_id' => $mainEmploiId,
-    ]);
+    if ($existingRequest) {
+        // If a request already exists, update it instead of creating a new one
+        $existingRequest->update([
+            'date_request' => now(),
+            'comment' => 'test comment', // Adjust according to your form fields
+            // You can update other fields here as needed
+        ]);
 
-    $requestEmploi->save();
+        // Fetch the updated RequestEmploi along with its related mainEmploi data
+        $updatedRequestEmploi = RequestEmploi::with('mainEmploi')->find($existingRequest->id);
 
-    // Fetch the created request emploi with its related data
-    $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
+        return response()->json(['message' => 'Request emploi updated successfully.', 'requestEmploi' => $updatedRequestEmploi]);
+    } else {
+        // If no request exists, create a new one
+        $requestEmploi = new RequestEmploi([
+            'date_request' => now(),
+            'comment' => 'test comment', // Adjust according to your form fields
+            'user_id' => $user_id,
+            'main_emploi_id' => $mainEmploiId,
+        ]);
 
-    return response()->json([
-        'message' => 'Request emploi created successfully.',
-        'requestEmploi' => $createdRequestEmploi,
-        'user_id'=>$user_id]);
+        $requestEmploi->save();
+
+        // Fetch the created RequestEmploi along with its related mainEmploi data
+        $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
+
+        return response()->json(['message' => 'Request emploi created successfully.', 'requestEmploi' => $createdRequestEmploi]);
+    }
 }
 
 }
