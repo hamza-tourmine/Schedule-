@@ -525,7 +525,7 @@
             document.getElementById('submitAll').addEventListener('click', function() {
                 if (selectedData.length === 0) {
                     FlashMsg.innerHTML = `<br><div class="alert alert-danger">
-                            {{ session()->get('error') }}
+                                vous devez selectionner au moins une seance.
                             </div>`
                     document.getElementById('infoContainer').innerHTML = '';
                     document.getElementById('infoContainer').appendChild(FlashMsg);
@@ -550,16 +550,9 @@
                             document.getElementById('infoContainer').appendChild(FlashMsg);
                         }
                     },
-                    error: function(response) {
+                    error: function(xhr, status, error) {
 
-                        if (response.status = 400) {
-                            console.log(response);
-                            FlashMsg.innerHTML = `<br><div class="alert alert-danger">
-                                       ${response.error}
-                                    </div>`
-                            document.getElementById('infoContainer').innerHTML = '';
-                            document.getElementById('infoContainer').appendChild(FlashMsg);
-                        }
+
                     }
                 });
             });
