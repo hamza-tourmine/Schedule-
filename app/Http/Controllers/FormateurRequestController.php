@@ -71,9 +71,13 @@ public function submitAllData(Request $request)
     $sission->save();
         Log::info('Sission created:', ['data' => $item]);
     }
-    $createdsission = sission::find($sission->id);
-    Session::flash('success', 'Toutes les données ont été soumises avec succès.');
-    return response()->json(['message' => 'La session a été créée avec succès']);
+    if ($sission) {
+        return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
+        
+    }else{
+        return response()->json(['error', 'vous devez selectionner au moins une seance.', 'status' => 400]);
+    }
+    
 }
 public function createRequestEmploi(Request $request)
 {

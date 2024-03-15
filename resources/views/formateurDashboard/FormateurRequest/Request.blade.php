@@ -148,10 +148,19 @@
 
 
     </div>
-    <div class="alert alert-success" role="alert">
-        La seance bien crees
-    </div>
+    {{-- <div id="flash-messages">
+        @if (session()->has('success'))
+            <div class="alert alert-success">
+                {{ session()->get('success') }}
+            </div>
+        @endif
 
+        @if (session()->has('error'))
+            <div class="alert alert-danger">
+                {{ session()->get('error') }}
+            </div>
+        @endif
+    </div> --}}
 
 
 
@@ -324,27 +333,6 @@
     {{-- end modal --}}
 
     <script>
-        // Function to show flash message with a fade-out effect and auto-hide after 3 seconds
-        function showFlashMessage(message) {
-            var flashMessage = '<div class="alert alert-success" role="alert">' + message + '</div>';
-            $('#flash-messages').html(flashMessage);
-            $('#flash-messages').fadeIn().delay(3000).fadeOut();
-        }
-
-        // Function to show flash messages after page reload
-        function showFlashMessages() {
-            var flashMessages = document.getElementById('flash-messages');
-            if (flashMessages) {
-                flashMessages.style.display = 'block';
-                $('#flash-messages').fadeIn().delay(3000).fadeOut();
-            }
-        }
-
-        // Call the function to show flash messages on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            showFlashMessages();
-        });
-
         document.addEventListener("DOMContentLoaded", function() {
             var cells = document.querySelectorAll("tbody tr.dtdynamic td");
             var daysOfWeek = @json($days_of_week);
@@ -354,6 +342,8 @@
             var casesPerPartOfDay = 2;
 
             var clickedCell;
+            var FlashMsg = document.createElement("div");
+
 
 
             var selectedData = [];
@@ -534,7 +524,11 @@
             // sending all data code
             document.getElementById('submitAll').addEventListener('click', function() {
                 if (selectedData.length === 0) {
-                    alert('No data selected. Please select at least one cell.');
+                    FlashMsg.innerHTML = `<br><div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                            </div>`
+                    document.getElementById('infoContainer').innerHTML = '';
+                    document.getElementById('infoContainer').appendChild(FlashMsg);
                     return;
                 }
 
@@ -546,29 +540,30 @@
                         '_token': '{{ csrf_token() }}',
                         'selectedData': selectedData
                     },
+
                     success: function(response) {
-                        $('#messageContent').text(response
-                            .message); // Met à jour le contenu de la modal avec le message
-                        $('#messageModal').modal('show'); // Affiche la modal
+                        if (response.status = 200) {
+                            FlashMsg.innerHTML = `<br><div class="alert alert-success">
+                                       ${response.sucess}
+                                    </div>`
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(FlashMsg);
+                        }
                     },
-                    error: function(xhr, status, error) {
-                        // Gérer les erreurs
+                    error: function(response) {
+
+                        if (response.status = 400) {
+                            console.log(response);
+                            FlashMsg.innerHTML = `<br><div class="alert alert-danger">
+                                       ${response.error}
+                                    </div>`
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(FlashMsg);
+                        }
                     }
                 });
             });
 
-            // Fonction pour afficher les messages flash
-            function showFlashMessages() {
-                var flashMessages = document.getElementById('flash-messages');
-                if (flashMessages) {
-                    flashMessages.style.display = 'block';
-                }
-            }
-
-            // Appel de la fonction pour afficher les messages flash dès que la page est chargée
-            document.addEventListener('DOMContentLoaded', function() {
-                showFlashMessages();
-            });
 
 
         });
