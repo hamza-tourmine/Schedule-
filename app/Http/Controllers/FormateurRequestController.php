@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Session;
 
 class FormateurRequestController extends Controller
 {
@@ -63,7 +63,7 @@ public function submitAllData(Request $request)
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
         'main_emploi_id'=>$item['mainEmploiId'],
-        "demand_emploi_id"=>17,
+        "demand_emploi_id"=>32,
         'message'=>$item['message'],
         'status_sission'=>"Pending",
     ]);
@@ -72,8 +72,8 @@ public function submitAllData(Request $request)
         Log::info('Sission created:', ['data' => $item]);
     }
     $createdsission = sission::find($sission->id);
-
-    return response()->json(['message' => 'All data submitted successfully.',$createdsission]);
+    Session::flash('success', 'Toutes les données ont été soumises avec succès.');
+    return response()->json(['message' => 'La session a été créée avec succès']);
 }
 public function createRequestEmploi(Request $request)
 {
@@ -95,6 +95,8 @@ public function createRequestEmploi(Request $request)
         // Fetch the updated RequestEmploi along with its related mainEmploi data
         $updatedRequestEmploi = RequestEmploi::with('mainEmploi')->find($existingRequest->id);
 
+        Session::flash('success', 'La demande d\'emploi a été créée avec succès.');
+
         return response()->json(['message' => 'Request emploi updated successfully.', 'requestEmploi' => $updatedRequestEmploi]);
     } else {
         // If no request exists, create a new one
@@ -109,7 +111,7 @@ public function createRequestEmploi(Request $request)
 
         // Fetch the created RequestEmploi along with its related mainEmploi data
         $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
-
+        Session::flash('success', 'Request emploi ' . ($existingRequest ? 'updated' : 'created') . ' successfully.');
         return response()->json(['message' => 'Request emploi created successfully.', 'requestEmploi' => $createdRequestEmploi]);
     }
 }

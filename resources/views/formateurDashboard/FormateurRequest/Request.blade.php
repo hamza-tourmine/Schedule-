@@ -146,7 +146,13 @@
         <button id="next" onclick="next()">&#8250;</button>
         <button id="createRequestBtn" type="button">Create Request Emploi</button>
 
+
     </div>
+    <div class="alert alert-success" role="alert">
+        La seance bien crees
+    </div>
+
+
 
 
 
@@ -313,9 +319,32 @@
             </div>
         </div>
     </div>
+    {{-- flash pop uo --}}
+
     {{-- end modal --}}
 
     <script>
+        // Function to show flash message with a fade-out effect and auto-hide after 3 seconds
+        function showFlashMessage(message) {
+            var flashMessage = '<div class="alert alert-success" role="alert">' + message + '</div>';
+            $('#flash-messages').html(flashMessage);
+            $('#flash-messages').fadeIn().delay(3000).fadeOut();
+        }
+
+        // Function to show flash messages after page reload
+        function showFlashMessages() {
+            var flashMessages = document.getElementById('flash-messages');
+            if (flashMessages) {
+                flashMessages.style.display = 'block';
+                $('#flash-messages').fadeIn().delay(3000).fadeOut();
+            }
+        }
+
+        // Call the function to show flash messages on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showFlashMessages();
+        });
+
         document.addEventListener("DOMContentLoaded", function() {
             var cells = document.querySelectorAll("tbody tr.dtdynamic td");
             var daysOfWeek = @json($days_of_week);
@@ -361,6 +390,7 @@
 
             displayItem(currentIndex);
             var mainEmploiId = mainEmplois[currentIndex].id;
+            // Function to open the pop-up form and display the flash message
 
             $(document).ready(function() {
                 // Function to handle form submission
@@ -380,10 +410,12 @@
                             console.log('Request emploi created:', response);
                             // Optionally, you can redirect or show a success message here
                             $('#createRequestModal').modal(
-                                'hide'); // Hide modal after successful submission
+                                'hide'
+                            ); // Hide modal after successful submission
                         },
                         error: function(error) {
-                            console.error('Error creating request emploi:', error
+                            console.error('Error creating request emploi:',
+                                error
                                 .responseText);
                             // Handle error and display appropriate message to the user
                         }
@@ -421,21 +453,25 @@
                         var selectedType = $('#type option:selected').val();
                         var selectedClass = $('#class option:selected').val();
                         var ShowselectedGroup = $('#group option:selected').text();
-                        var ShowselectedModule = $('#module option:selected').text();
+                        var ShowselectedModule = $('#module option:selected')
+                            .text();
                         var ShowselectedType = $('#type option:selected').text();
                         var ShowselectedClass = $('#class option:selected').text();
                         var ShowselectedMsg = document.getElementById("msg").value;
 
                         // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
                         var totalCases = casesPerDay * daysOfWeek.length;
-                        var clickedIndex = Array.from(clickedCell.parentNode.children)
+                        var clickedIndex = Array.from(clickedCell.parentNode
+                                .children)
                             .indexOf(clickedCell);
 
-                        var dayOfWeekIndex = Math.floor(clickedIndex / casesPerDay) %
+                        var dayOfWeekIndex = Math.floor(clickedIndex /
+                                casesPerDay) %
                             daysOfWeek.length;
                         var dayPartIndex = Math.floor((clickedIndex % totalCases) /
                             casesPerPartOfDay) % daysPart.length;
-                        var seancePartIndex = (clickedIndex % totalCases) % seancesPart
+                        var seancePartIndex = (clickedIndex % totalCases) %
+                            seancesPart
                             .length;
 
                         var dayOfWeek = daysOfWeek[dayOfWeekIndex];
@@ -461,7 +497,8 @@
 
                         // Create a new div to display the selected information
                         var infoDiv = document.createElement("div");
-                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek + '</h3>' +
+                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
+                            '</h3>' +
                             '<h3>Day Part: ' + dayPart + '</h3>' +
                             '<h3>Seance Part: ' + seancePart + '</h3>' +
                             '<h3>Module: ' + ShowselectedModule + '</h3>' +
@@ -472,7 +509,8 @@
 
                         // Append the new div to the "infoContainer"
                         document.getElementById('infoContainer').innerHTML = '';
-                        document.getElementById('infoContainer').appendChild(infoDiv);
+                        document.getElementById('infoContainer').appendChild(
+                            infoDiv);
 
                         $('#groupModuleClassModal').modal('hide');
                     });
@@ -509,18 +547,28 @@
                         'selectedData': selectedData
                     },
                     success: function(response) {
-                        console.log('All data submitted successfully:', response);
-                        // Optionally, you can reset the selectedData array after submission
-                        selectedData = [];
+                        $('#messageContent').text(response
+                            .message); // Met à jour le contenu de la modal avec le message
+                        $('#messageModal').modal('show'); // Affiche la modal
                     },
-                    error: function(error) {
-                        console.error('Error submitting data:', error.responseText);
-                        alert('Error submitting data. Please try again.');
+                    error: function(xhr, status, error) {
+                        // Gérer les erreurs
                     }
                 });
             });
 
+            // Fonction pour afficher les messages flash
+            function showFlashMessages() {
+                var flashMessages = document.getElementById('flash-messages');
+                if (flashMessages) {
+                    flashMessages.style.display = 'block';
+                }
+            }
 
+            // Appel de la fonction pour afficher les messages flash dès que la page est chargée
+            document.addEventListener('DOMContentLoaded', function() {
+                showFlashMessages();
+            });
 
 
         });
