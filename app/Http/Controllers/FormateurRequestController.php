@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 class FormateurRequestController extends Controller
 {
     function show(){
-        $user_id = Auth::id(); 
+        $user_id = Auth::id();
         $AllSeance = sission::where('user_id',$user_id)->get();
         $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
@@ -42,7 +42,7 @@ class FormateurRequestController extends Controller
         ]
     );
     }
-    
+
 public function submitAllData(Request $request)
 {
     $data = $request->all();
@@ -61,7 +61,7 @@ public function submitAllData(Request $request)
         'establishment_id' => $establishment,
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
-        'main_emploi_id'=>$item['mainEmploiId'],
+        'main_emploi_id'=>1,
         "demand_emploi_id"=>1,
         'message'=>$item['message'],
         'status_sission'=>"Pending",
@@ -83,7 +83,7 @@ public function createRequestEmploi(Request $request)
     ->where('main_emploi.id', $main_emplois)
     ->get();
 
-    
+
     if ($existingRequest) {
         // Formateur already has a request emploi for this emploi
         return response()->json(['message' => 'You have already created a request emploi for this emploi.'], 422);

@@ -16,6 +16,8 @@ use App\Models\sission ;
 use Illuminate\Support\Facades\Auth;
 use App\Models\formateur_has_group;
 use App\Models\user;
+use App\Models\branch;
+use App\Models\formateur_has_branche;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class PourChaqueFormateur extends Component
@@ -45,6 +47,8 @@ class PourChaqueFormateur extends Component
     public $receivedVariable;
     public $groupID;
     public $moduleID ;
+    public $baranches = [] ;
+    public $brancheId;
 
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
 
@@ -60,6 +64,7 @@ class PourChaqueFormateur extends Component
 
     public function createSession()
     {
+
 
 
         try{
@@ -120,23 +125,6 @@ class PourChaqueFormateur extends Component
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function render()
 {
     $establishment_id = session()->get('establishment_id');
@@ -157,6 +145,9 @@ class PourChaqueFormateur extends Component
         ->select('modules.*')
         ->get();
 
+        // ->join('groupe_has_modules as ghm' , 'ghm.module_id' , '=' ,'modules.id')
+        // ->where('ghm.module_id' , $this->groupID)
+
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 
@@ -169,11 +160,25 @@ class PourChaqueFormateur extends Component
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
         ->get();
 
-    $groups = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
+
+        $this->baranches = DB::table('branches')
+        ->select('branches.*')
+        ->join('formateur_has_filier', 'formateur_has_filier.barnch_id', '=', 'branches.id')
+        ->where('formateur_has_filier.formateur_id', $this->formateurId)
+        ->get();
+
+        $groupsQuery = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
         ->where('groups.establishment_id', $establishment_id)
         ->where('f.formateur_id', $this->formateurId)
-        ->select('groups.id', 'groups.group_name') // Select ID along with group_name
-        ->get();
+        ->select('groups.id', 'groups.group_name'); // Select ID along with group_name
+
+    // Check if $this->brancheId is set and add the condition if it is
+    if ($this->brancheId) {
+        $groupsQuery->where('groups.barnch_id', $this->brancheId);
+    }
+
+    $groups = $groupsQuery->get();
+
 
         $groupsToRemove = [];
         $salleShouldRemove = [];
@@ -295,104 +300,4 @@ class PourChaqueFormateur extends Component
 
 
 
-    // public function render()
-    // {
-    //     // Load modules, groups, and sessions based on the selected formateur
-    //     if ($this->formateurId) {
-    //         $establishment_id = session()->get('establishment_id');
-    //         // $this->modules = module::where('formateur_id', $this->formateurId)->get();
-    //         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-    //         $this->salles = class_room::where('id_establishment', $establishment_id)->get();
-
-    //         $this->formateurs = user::where('establishment_id', $establishment_id)
-    //                                       ->where('role', 'formateur')
-    //                                       ->where('status', 'active')->get();
-    //         $this->modules=[];
-
-    //         $this->groups =  DB::table('groups')
-    //                             ->select('groups.group_name')
-    //                             ->join('formateur_has_groups', 'formateur_has_groups.formateur_id', '=', $this->formateurId)
-    //                             ->where('formateur_has_groups.establishment_id', $establishment_id)
-    //                             ->get();
-
-    //         $this->sissions = DB::table('sissions')
-    //                             ->select('sissions.*', 'modules.module_name', 'groups.group_name','class_rooms.class_name')
-    //                             ->join('modules', 'modules.id', '=', 'sissions.module_id')
-    //                             ->join('groups', 'groups.id', '=', 'sissions.group_id')
-    //                             ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
-    //                             ->where('sissions.establishment_id', $establishment_id)
-    //                             ->where('sissions.user_id',$this->formateurId)
-    //                             ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
-    //                             ->get();
-    //     } else {
-    //         // If no formateur is selected, clear the modules, groups, and sessions
-    //         $this->modules = [];
-    //         $this->groups = [];
-    //         $this->sissions = [];
-    //     }
-
-    //     return view('livewire.pour-chaque-formateur' );
-    // }
-
-
-
-
-
-
-
-// //    public function optionSelected($id)
-// //     {
-// //         dd($id);
-// //         return  $this->selectedOption ;
-// //         // Handle the event triggered by the select input
-// //         // You can access the selected option using $this->selectedOption
-// //     }
-
-// public function optionSelected($formateurId)
-// {
-//     $this->selectedOption = $formateurId;
-//     // dd($formateurId);
-
-// }
-//     public function render()
-//     {
-//             // data for  model form
-//             $establishment_id = session()->get('establishment_id');
-//             $groups = group::where('establishment_id', $establishment_id)->get();
-//             // $groups = [];
-
-//             // if ($this->selectedOption) {
-//             //     $establishment_id = session()->get('establishment_id');
-//             //     $groups = DB::table('groups')
-//             //         ->select('groups.group_name')
-//             //         ->join('formateur_has_groups', 'formateur_has_groups.formateur_id', '=', $this->selectedOption)
-//             //         ->where('formateur_has_groups.establishment_id', $establishment_id)
-//             //         ->get();
-//             // }
-
-//             $modules = module::where('establishment_id', $establishment_id)->get();
-//             $salles = class_room::where('id_establishment', $establishment_id)->get();
-//             $formateurs = user::where('establishment_id', $establishment_id)
-//                               ->where('role', 'formateur')
-//                               ->where('status', 'active')->get();
-//             $classType = class_room_type::where('establishment_id', $establishment_id)->get();
-
-//             $sessions = DB::table('sissions')
-//             ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
-//             ->join('modules', 'modules.id', '=', 'sissions.module_id')
-//             ->join('groups', 'groups.id', '=', 'sissions.group_id')
-//             ->join('users', 'users.id', '=', 'sissions.user_id')
-//             ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
-//             ->where('sissions.establishment_id', $establishment_id)
-//             ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
-//             ->get();
-//         return view('livewire.pour-chaque-formateur' ,[
-//         'sissions'=>$sessions,
-//         'formateurs' => $formateurs,
-//         'groups' => $groups,  // groupes for eash for mateur
-//         'modules' => $modules, //should return models for eash formateur
-//         'salles' => $salles,
-//         'classType' => $classType,
-//     ]);
-
-//     }
+   

@@ -320,13 +320,15 @@
                                 </li>
 
 
+
                                 <li>
                                     <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-grain"></span>
-                                        <span>Ajouter les groupes</span>
+                                        <span class="mdi mdi-home-group"></span>
+                                        <span> Ajouter les Filières</span>
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addGroups')}}">Ajouter des groupes</a></li>
+                                        <li><a href="{{route('addbranch')}}">Ajouter les Filières</a></li>
+
 
                                     </ul>
                                 </li>
@@ -342,6 +344,19 @@
 
                                     </ul>
                                 </li>
+
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <span class="mdi mdi-grain"></span>
+                                        <span>Ajouter les groupes</span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="{{route('addGroups')}}">Ajouter des groupes</a></li>
+
+                                    </ul>
+                                </li>
+
+
 
 
                                 <li>

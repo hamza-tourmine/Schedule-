@@ -7,7 +7,8 @@ use App\Models\formateur;
 use App\Models\establishment;
 use App\Models\group;
 use App\Models\module;
-
+use App\Models\branch;
+use App\Models\formateur_has_branche;
 class formateurController extends Controller
 {
     /**
@@ -20,7 +21,10 @@ class formateurController extends Controller
 
     public function index()
     {
+
         $establishment_id = session()->get('establishment_id');
+        $branches = branch::where('establishment_id',$establishment_id)->get();
+
         // $formateurs = formateur::all()->where('id', $establishment_id);
         $formateurs = formateur::select(['id','email', 'password', 'status', 'user_name','establishment_id','passwordClone'])
         ->where('role','formateur')
@@ -28,7 +32,7 @@ class formateurController extends Controller
         ->get();
         // $formateurs = formateur::all()->where('establishment_id',$establishment_id);
         // dd($formateurs);
-        return view('adminDashboard.addFormateur.add_formateur',['formateurs'=>$formateurs]);
+        return view('adminDashboard.addFormateur.add_formateur',['formateurs'=>$formateurs , 'branches'=>$branches]);
     }
 
     /**
@@ -38,10 +42,12 @@ class formateurController extends Controller
      */
     public function create(Request $request)
     {
+
+
+
         $establishment_id = session()->get('establishment_id');
         $establishment = establishment::select(['name_establishment'])->where('id',$establishment_id)->get();
         // remove spaces and  cut name if have length biger then 5
-
         function removeSpaces($Name){
 
             $lastestaname ="";
@@ -59,7 +65,6 @@ class formateurController extends Controller
         };
         // email = formateur name + esta name + esta id + randum number
         $email = removeSpaces($request->formateur_name).removeSpaces($establishment[0]->name_establishment ).rand(1,100).$establishment_id.'@ofppt.ma';
-
         // generate password
         function generatePassword($length = 8) {
             $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -71,29 +76,48 @@ class formateurController extends Controller
             return $randomPassword;
         }
         $password = generatePassword();
-        try{
-                $formateur = formateur::create([
-                    'id'=>$request->id,
-                'email'=>$email,
-                'passwordClone'=>$password,
-                'password'=>bcrypt($password),
-                'role'=>'formateur',
-                'status'=>'active',
-                'user_name'=>$request->formateur_name,
-                'establishment_id'=>$establishment_id
-                ]);
+        try {
+            // Create formateur
+            $formateur = formateur::create([
+                'id' => $request->id,
+                'email' => $email,
+                'passwordClone' => $password,
+                'password' => bcrypt($password),
+                'role' => 'formateur',
+                'status' => 'active',
+                'user_name' => $request->formateur_name,
+                'establishment_id' => $establishment_id
+            ]);
+            $branches = $request->branches;
+            if ($formateur && !empty($branches)) {
+
+                foreach ($branches as $branche) {
+                    // Check if the association already exists
+                    $existingAssociation = formateur_has_branche::where('formateur_id', $request->id)
+                        ->where('barnch_id', $branche)
+                        ->first();
+
+                    // If the association doesn't exist, create it
+                    if (!$existingAssociation) {
+                        formateur_has_branche::create([
+                            'formateur_id' => $request->id,
+                            'barnch_id' => $branche
+                        ]);
+                    }
+                }
+
+                return redirect()->back()->with(['success' => "Vous avez ajouté un nouveau formateur"]);
+            } else {
                 if($formateur){
-                return redirect()->back()->with(['succes'=>'you are add a new formateur']);
-
+                    return redirect()->back()->with(['success' => "Vous avez ajouté un nouveau formateur"]);
                 }
-                else{
-                    return redirect()->back()->withErrors(['errors'=>'something wrang']);
-                }
-    }catch(\Illuminate\Database\QueryException $e){
-        return  redirect()->back()->withErrors(['insertion_error'=>$e->errorInfo[2]]);
+                return redirect()->back()->withErrors(['errors' => 'Something went wrong']);
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+        }
     }
 
-    }
     public function showHomepage(){
         $id_formateur = session()->get('user_id');
      // Assuming the model name is 'Formateur' and you're looking for a single record.

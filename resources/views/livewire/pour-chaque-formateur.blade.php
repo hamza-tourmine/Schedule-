@@ -139,11 +139,23 @@
                             </div>
                             <form wire:submit.prevent="createSession">
                                 <div class="modal-body">
+
                                     <div style="display: flex">
+
+
+                                        <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
+                                        <option > Filiére</option>
+                                        @if ($baranches)
+                                        @foreach ($baranches as $baranche)
+                                        <option value="{{ $baranche->id }}">{{ $baranche->name }}</option>
+                                        @endforeach
+                                        @endif
+                                        </select>
+
                                         {{-- module  content --}}
                                         @if (!$checkValues[0]->module)
-                                        <select wire:model="moduleID" class="form-select "
-                                            aria-label="Default select example">
+                                        <select wire:model="moduleID"   class="form-select"
+                                        aria-label="Default select example">
                                             <option selected>Modules</option>
                                             @if ($modules)
                                                 @foreach ($modules as $module)

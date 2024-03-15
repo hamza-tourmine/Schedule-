@@ -228,7 +228,7 @@
        <td>{{$group->group_name}}</td>
        @foreach ($dayWeek as $day)
            @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
-           <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
+           <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
                    @foreach ($sissions as $sission)
                        @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
@@ -239,26 +239,27 @@
        @endforeach
    </tr>
    @endforeach
-   @endif
        </div>
        {{-- FOR FORMATEUR --}}
-       @if($selectedType === 'Formateur')
-           @forEach ($formateurs as $formateur)
-           <tr>
-               <td>{{$formateur->user_name}}</td>
-               @foreach ( ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
-                   @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
-                       <td  data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day . $sessionType . $formateur->id }}">
-                           @foreach ($sissions as $sission)
-                               @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                   {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
-                               @endif
-                           @endforeach
-                       </td>
-                   @endforeach
-               @endforeach
-           </tr>
-           @endforeach
+       @else
+       @foreach ($formateurs as $formateur)
+    <tr>
+        <td>{{$formateur->user_name}}</td>
+        @foreach (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
+            @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
+                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day . $sessionType . $formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">
+                    @foreach ($sissions->where('user_id', $formateur->id) as $sission)
+                        @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) &&
+                        $sission->dure_sission === substr($sessionType, -2))
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
+                        @endif
+                    @endforeach
+                </td>
+            @endforeach
+        @endforeach
+    </tr>
+@endforeach
+
            @endif
 
 
@@ -304,9 +305,9 @@
 
     document.addEventListener('livewire:load', function () {
     const selectElement = document.getElementById('date-select');
-    selectElement.addEventListener('change', function() {
-        Livewire.emit('receiveidEmploiid', selectElement.value);
-    });
+    // selectElement.addEventListener('change', function() {
+        // Livewire.emit('receiveidEmploiid', selectElement.value);
+    // });
 
     let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
     elements.forEach(element => {

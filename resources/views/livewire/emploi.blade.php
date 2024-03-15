@@ -136,7 +136,6 @@
                                            <select wire:model='formateur' class="form-select"
                                                aria-label="Default select example">
                                                <option selected>Formateurs</option>
-
                                                    @foreach ($formateurs as $formateur)
                                                        <option value="{{ $formateur->id }}">
                                                            {{ $formateur->user_name }}</option>

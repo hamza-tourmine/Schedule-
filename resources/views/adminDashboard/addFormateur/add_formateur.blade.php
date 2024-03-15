@@ -1,7 +1,28 @@
 <x-HeaderMenuAdmin>
 
 
+    <style>
+        .checkboxContainer {
+            background-color: white;
+            border-radius: 7px;
+            border: 1.5px solid #eee;
+            max-height: 150px;
+            overflow-y: scroll;
+        }
 
+        .checkboxContainer span {
+            margin: 4px;
+            display: block;
+        }
+        .checkboxContainer span:hover {
+            background-color: #eee
+        }
+
+        .checkboxContainer span input{
+            width:35px;
+
+        }
+    </style>
 
     <div style="width:70%;margin-x:auto">
         <form method='POST' action="{{route('insertFormateur')}}">
@@ -18,11 +39,30 @@
       @endforeach
       @endif
         {{-- i will add  error alert --}}
+
             @csrf
             <div class="mb-3 col-3">
               <label for="exampleInputEmail1" class="form-label">formateur Name </label>
               <input type="text"name='formateur_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
+
+
+
+
+        <h6>Filiéres</h6>
+        <div class="checkboxContainer">
+
+            @foreach ( $branches as $branche)
+            <span>
+                <input  type="checkbox" id="branch{{ $branche->id }}" name="branches[]" value="{{$branche->id}}">
+                <label for="branch{{ $branche->id }}">{{$branche->name}}</label>
+            </span>
+
+            @endforeach
+
+        </div>
+
+
             <div class="mb-3 col-3">
                 <label for="exampleInputEmail1" class="form-label">Matricule formateur  </label>
                 <input type="text" name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">

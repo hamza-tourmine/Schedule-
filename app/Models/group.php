@@ -13,8 +13,7 @@ class group extends Model
     protected $keyType = 'string';
     public $timestamps = false ;
 
-    
-    public $fillable =['id','group_name','establishment_id','year','branch'];
+    public $fillable =['id','group_name','establishment_id','year','barnch_id'];
     use HasFactory;
 
 }

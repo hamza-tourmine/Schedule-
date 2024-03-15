@@ -22,7 +22,8 @@ class modelSetting extends Controller
                     'module'      => $request->input('Module'),
                     'formateur'   => $request->input('Formateur'),
                     'salle'       => $request->input('Salle'),
-                    'typeSalle'   => $request->input('TypeSalle')
+                    'typeSalle'   => $request->input('TypeSalle'),
+                    'branch'=>$request->input('branch')
                 ]);
             } else {
                 Setting::create([
@@ -31,7 +32,8 @@ class modelSetting extends Controller
                     'module'      => $request->input('Module'),
                     'formateur'   => $request->input('Formateur'),
                     'salle'       => $request->input('Salle'),
-                    'typeSalle'   => $request->input('TypeSalle')
+                    'typeSalle'   => $request->input('TypeSalle'),
+                    'branch'=>$request->input('branch')
                 ]);
             }
 

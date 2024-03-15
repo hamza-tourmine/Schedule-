@@ -13,6 +13,7 @@ use App\Http\Controllers\ScheduleChaqueFormateur ;
 use App\Http\Controllers\forgotPassword;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\FormateurRequestController;
+use App\Http\Controllers\branchController;
 use App\Http\Controllers\modelSetting;
 use App\Http\Controllers\FileExcel;
 use App\Http\Controllers\MailController;
@@ -51,6 +52,15 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 
 // for admin
 Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
+// brache routes
+    Route::controller(branchController::class)->group(function(){
+        Route::get('/add-Branch','index')->name('addbranch');
+        Route::post('/create-Branch','create')->name('createBranch');
+        Route::get('/update-branch/{id}','updateView')->name('updateBranch');
+        Route::get('/delate-branch/{id}', 'delateBranch')->name('delateBranch');
+        Route::post('update-branch/{id}' , 'updateBarnch')->name('updateBarnch');
+    });
+// end branch routes
     // Model Setting
     Route::get('/modele-seting',[modelSetting::class,'index'])->name('modelSetting');
     Route::post('/Model-setting', [modelSetting::class, 'createOrUpdate']);
@@ -93,6 +103,7 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
     Route::get('/delate-group','delate_group')->name('delateGrope');
     Route::get('/update-group/{id}','display_update_page');
     Route::post('/updateGroups/{id}','update')->name('updateGroups');
+
 });
 
 // modules

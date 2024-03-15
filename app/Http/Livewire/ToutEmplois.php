@@ -28,12 +28,13 @@ class ToutEmplois extends Component
     public $module;
     public $salleclassTyp;
     public $idCase;
+    public $group;
     public $FormateurOrgroup;
     // Model
     public $idMainEmploi;
     public $sissions  = [];
     public $formateurs;
-    public $selectedValue ;//i will sit default value here
+    public $selectedValue;//i will sit default value here
     public $selectedType;
     public $groups;
     public $receivedVariable;
@@ -41,99 +42,96 @@ class ToutEmplois extends Component
     public $checkValues ;
 
 
-    protected $listeners = ['receiveVariable' => 'receiveVariable','receiveidEmploiid'=>'receiveidEmploiid', 'fresh'=>'$refresh'];
+    protected $listeners = [
+        'receiveidEmploiid'=>'receiveidEmploiid',
+        'fresh'=>'$refresh'];
 
-    // receive  id case
-    public function receiveVariable($variable)
-    {
-     //    dd($variable);
-        // session(['idCase'=>$variable]);
+
+    public function getidCase($variable){
         $this->receivedVariable = $variable;
     }
 
 public function receiveidEmploiid($variable){
-     // $receivedValue = $variable;
      session(['idEmploiSelected' => $variable]);
 }
 
 
 public function UpdateSession()
 {
- // dd($this);
-  $idcase = $this->receivedVariable;
- // $idcase =  session('idCase');
- try{
+    try {
+        $idcase = $this->receivedVariable;
+        $day = substr($idcase, 0, 3);
+        $day_part = substr($idcase, 3, 5);
+        $group_id = substr($idcase, 10);
+        $user_id = substr($idcase, 10);
+        $dure_sission = substr($idcase, 8, 2);
 
-     dd($idcase);
-     $day = substr( $idcase , 0, 3);
-     $day_part = substr( $idcase, 3, 5);
-     // if($FormateurOrgroup==='Group'){
-         $group_id = substr($idcase, 10);
-     // }
+        $sessionData = [
+            'day' => $day,
+            'day_part' => $day_part,
+            'dure_sission' => $dure_sission,
+            'module_id' => $this->module,
+            'establishment_id' => session()->get('establishment_id'),
+            'class_room_id' => $this->salle,
+            'main_emploi_id' => session()->get('idEmploiSelected'),
+            'demand_emploi_id' => null,
+            'message' => null,
+            'sission_type' => $this->TypeSesion,
+            'status_sission' => null,
+        ];
 
-     // dd($group_id);
-     $dure_sission = substr($idcase, 8, 2);
-     $session = sission::where([
-         'main_emploi_id' => session()->get('idEmploiSelected'),
-         'day' => $day,
-         'day_part' => $day_part,
-         'group_id' => $group_id,
-         'dure_sission' => $dure_sission,
-     ])->first();
-     // dd($session);
-     if($session){
-             $session->day = $day;
-             $session->day_part = $day_part;
-             $session->group_id = $group_id || $this->group;
-             $session->dure_sission = $dure_sission;
-             $session->module_id = $this->module;
-             $session->establishment_id = session()->get('establishment_id');
-             $session->user_id = $this->formateur;
-             $session->class_room_id = $this->salle;
-             $session->main_emploi_id = session()->get('idEmploiSelected');
-             $session->demand_emploi_id = null;
-             $session->message = null;
-             $session->sission_type = $this->TypeSesion;
-             $session->status_sission = null;
-             $session->validate_date = null;
-             $session->save(); //
-             $this->emit('fresh');
-     }else{
-         // dd(substr($idcase,3,5));
-         // $idcase =  session()->get('idCase');
-          sission::create([
-             'day'=>substr($idcase,0,3),
-             'day_part'=>substr($idcase,3,5),
-             'dure_sission'=>substr($idcase,8,2),
-             'module_id'=>$this->module,
-             'group_id'=>substr($idcase,10),
-             'establishment_id'=>session()->get('establishment_id'),
-             'user_id'=>$this->formateur,
-             'class_room_id'=>$this->salle,
-             'validate_date'=>null,
-             'main_emploi_id'=>session()->get('idEmploiSelected'),
-             "demand_emploi_id"=>null,
-             'message'=>null,
-             'sission_type'=>$this->TypeSesion,
-             'status_sission'=>null,]);
-     }
-             // dd($session);
- }catch(\Exception $e){
-     dd( $e->getMessage());
+        if ($this->selectedType === "Group") {
+            // for group side
+            $sessionData['group_id'] = $group_id;
+            $sessionData['user_id'] = $this->formateur;
 
- }
+            $session = sission::where([
+                'main_emploi_id' => session()->get('idEmploiSelected'),
+                'day' => $day,
+                'day_part' => $day_part,
+                'group_id' => $group_id,
+                'dure_sission' => $dure_sission,
+            ])->first();
 
+        } else {
+            // for formateur group side
+            $sessionData['group_id'] = $this->group;
+            $sessionData['user_id'] = $user_id;
 
+            $session = sission::where([
+                'main_emploi_id' => session()->get('idEmploiSelected'),
+                'day' => $day,
+                'day_part' => $day_part,
+                'user_id' => $user_id,
+                'dure_sission' => $dure_sission,
+            ])->first();
+        }
+
+        if ($session) {
+            $session->update($sessionData);
+        } else {
+            sission::create($sessionData);
+        }
+
+        $this->emit('fresh');
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+    }
 }
+
+
+
+
 public function DeleteSession()
 {
+    $idcase = $this->receivedVariable;
+    $day = substr($idcase, 0, 3);
+    $day_part = substr($idcase, 3, 5);
+    $group_id = substr($idcase, 10);
+    $user_id = substr($idcase, 10);
+    $dure_sission = substr($idcase, 8, 2);
 
- // $idcase =  session()->get('idCase');
- $idcase = $this->receivedVariable;
-     $day = substr( $idcase , 0, 3);
-     $day_part = substr( $idcase, 3, 5);
-     $group_id = substr($idcase, 10);
-     $dure_sission = substr($idcase, 8, 2);
+     if ($this->selectedType === "Group") {
   sission::where([
      'main_emploi_id' => Session::get('idEmploiSelected'),
      'day' => $day,
@@ -141,20 +139,17 @@ public function DeleteSession()
      'group_id' => $group_id,
      'dure_sission' => $dure_sission
  ])->delete();
- return redirect()->route('toutlesEmploi');
+  }else{
+    sission::where([
+        'main_emploi_id' => Session::get('idEmploiSelected'),
+        'day' => $day,
+        'day_part' => $day_part,
+        'user_id' => $user_id,
+        'dure_sission' => $dure_sission
+    ])->delete();
+  }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // Method to update selected type emploi group or formateur
@@ -187,13 +182,9 @@ public function DeleteSession()
 
     public function render()
     {
-        // dd($this);
         $establishment_id = session()->get('establishment_id');
-
         $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
         ->where('userId', Auth::id())->get() ;
-
-
 
         $this->Main_emplois = DB::table('main_emploi')
             ->where('establishment_id', $establishment_id) ->orderBy('datestart')->get();
@@ -202,8 +193,8 @@ public function DeleteSession()
         $this->salles = Class_room::where('id_establishment', $establishment_id)->get();
         $this->classType = Class_room_type::where('establishment_id', $establishment_id)->get();
 
-        $sissions = DB::table('sissions')
-        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+        $this->sissions = DB::table('sissions')
+        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.*', 'class_rooms.class_name')
         ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('users', 'users.id', '=', 'sissions.user_id')
@@ -211,12 +202,6 @@ public function DeleteSession()
         ->where('sissions.establishment_id', $establishment_id)
         ->where('sissions.main_emploi_id',  $this->selectedValue)
         ->get();
-        if($this->selectedType === "Group"){
-            $this->sissions ;
-        }else{
-            $this->sissions ;
-        }
-        // dd($sissions);
         $this->groups = group::where('establishment_id', $establishment_id)->get();
         $this->formateurs = user::where(['establishment_id'=> $establishment_id,'role'=>'formateur'])->get();
         return view('livewire.tout-emplois');
