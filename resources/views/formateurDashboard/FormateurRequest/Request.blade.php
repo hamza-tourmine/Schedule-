@@ -398,10 +398,21 @@
                         },
                         success: function(response) {
                             console.log('Request emploi created:', response);
-                            // Optionally, you can redirect or show a success message here
-                            $('#createRequestModal').modal(
-                                'hide'
-                            ); // Hide modal after successful submission
+
+                            if (response.status == 400) {
+                                FlashMsg.innerHTML = `<br><div class="alert alert-warning">
+                                           ${response.message}
+                                      </div>`;
+                            } else if (response.status == 300) {
+                                FlashMsg.innerHTML = `<br><div class="alert alert-success">
+                                           ${response.message}
+                                      </div>`;
+                            }
+
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(
+                                FlashMsg);
+                            $('#createRequestModal').modal('hide');
                         },
                         error: function(error) {
                             console.error('Error creating request emploi:',
@@ -532,7 +543,10 @@
                     return;
                 }
 
-                // Send all selected data to the server
+
+
+
+
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('submitAllData') }}',
@@ -540,19 +554,21 @@
                         '_token': '{{ csrf_token() }}',
                         'selectedData': selectedData
                     },
-
                     success: function(response) {
                         if (response.status = 200) {
                             FlashMsg.innerHTML = `<br><div class="alert alert-success">
-                                       ${response.sucess}
-                                    </div>`
+                                                               ${response.sucess}
+                                                            </div>`
                             document.getElementById('infoContainer').innerHTML = '';
                             document.getElementById('infoContainer').appendChild(FlashMsg);
                         }
+
                     },
-                    error: function(xhr, status, error) {
-
-
+                    error: function(error) {
+                        console.error('Error creating sission emploi:',
+                            error
+                            .responseText);
+                        // Handle error and display appropriate message to the user
                     }
                 });
             });

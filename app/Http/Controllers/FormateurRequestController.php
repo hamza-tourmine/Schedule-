@@ -63,7 +63,7 @@ public function submitAllData(Request $request)
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
         'main_emploi_id'=>$item['mainEmploiId'],
-        "demand_emploi_id"=>32,
+        "demand_emploi_id"=>44,
         'message'=>$item['message'],
         'status_sission'=>"Pending",
     ]);
@@ -97,7 +97,7 @@ public function createRequestEmploi(Request $request)
 
         Session::flash('success', 'La demande d\'emploi a été créée avec succès.');
 
-        return response()->json(['message' => 'Request emploi updated successfully.', 'requestEmploi' => $updatedRequestEmploi]);
+        return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400]);
     } else {
         // If no request exists, create a new one
         $requestEmploi = new RequestEmploi([
@@ -112,7 +112,7 @@ public function createRequestEmploi(Request $request)
         // Fetch the created RequestEmploi along with its related mainEmploi data
         $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
         Session::flash('success', 'Request emploi ' . ($existingRequest ? 'updated' : 'created') . ' successfully.');
-        return response()->json(['message' => 'Request emploi created successfully.', 'requestEmploi' => $createdRequestEmploi]);
+        return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300]);
     }
 }
 
