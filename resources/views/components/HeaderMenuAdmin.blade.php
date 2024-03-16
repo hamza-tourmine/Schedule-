@@ -266,9 +266,9 @@
                                     </a>
                                     <ul class="sub-menu" aria-expanded="false">
                                         <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les groupes</a></li>
-                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les Formateurs</a></li>
+                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> tout les Formateurs</a></li>
                                         <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> chaque formateur</a></li>
-                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> chaque group</a></li>
+                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> chaque group</a></li>
 
 
                                     </ul>

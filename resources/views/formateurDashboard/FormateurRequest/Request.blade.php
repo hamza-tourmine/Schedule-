@@ -146,7 +146,22 @@
         <button id="next" onclick="next()">&#8250;</button>
         <button id="createRequestBtn" type="button">Create Request Emploi</button>
 
+
     </div>
+    {{-- <div id="flash-messages">
+        @if (session()->has('success'))
+            <div class="alert alert-success">
+                {{ session()->get('success') }}
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="alert alert-danger">
+                {{ session()->get('error') }}
+            </div>
+        @endif
+    </div> --}}
+
 
 
 
@@ -294,7 +309,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="createRequestModalLabel">Create Request Emploi</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -305,13 +320,16 @@
                             <label for="comment">Comment:</label>
                             <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                         </div>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            id="cancelRequest">Fermer</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    {{-- flash pop uo --}}
+
     {{-- end modal --}}
 
     <script>
@@ -324,9 +342,46 @@
             var casesPerPartOfDay = 2;
 
             var clickedCell;
-            var mainEmploiId;
+            var FlashMsg = document.createElement("div");
+
+
 
             var selectedData = [];
+
+            var mainEmplois = @json($main_emplois);
+            var currentIndex = 0;
+
+
+            document.getElementById('previous').addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
+                displayItem(currentIndex);
+
+
+
+            });
+
+            document.getElementById('next').addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % mainEmplois.length;
+                displayItem(currentIndex);
+            });
+
+            function displayItem(index) {
+                if (mainEmplois.length == 0) {
+                    document.getElementById('dateStart').innerText =
+                        "veuillez attendre jusqu'a le directeur creer l'emploi";
+
+                } else {
+                    mainEmploiId = mainEmplois[index].id;
+                    document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
+                    document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+
+                }
+            }
+
+            displayItem(currentIndex);
+            var mainEmploiId = mainEmplois[currentIndex].id;
+            // Function to open the pop-up form and display the flash message
+
             $(document).ready(function() {
                 // Function to handle form submission
                 $('#createRequestForm').submit(function(event) {
@@ -338,17 +393,19 @@
                         url: '{{ route('createRequestEmploi') }}',
                         data: {
                             '_token': '{{ csrf_token() }}',
-                            'mainEmploiId': mainEmploiId, // Add main emploi variable
+                            mainEmploiId: mainEmploiId, // Add main emploi variable
                             formData: $(this).serialize() // Serialize form data
                         },
                         success: function(response) {
                             console.log('Request emploi created:', response);
                             // Optionally, you can redirect or show a success message here
                             $('#createRequestModal').modal(
-                            'hide'); // Hide modal after successful submission
+                                'hide'
+                            ); // Hide modal after successful submission
                         },
                         error: function(error) {
-                            console.error('Error creating request emploi:', error
+                            console.error('Error creating request emploi:',
+                                error
                                 .responseText);
                             // Handle error and display appropriate message to the user
                         }
@@ -359,7 +416,16 @@
                 $('#createRequestBtn').click(function() {
                     $('#createRequestModal').modal('show');
                 });
+
+                // Function to hide modal when cancel button is clicked
+                $('#cancelRequest').click(function() {
+                    $('#createRequestModal').modal('hide');
+                });
+                $('#createRequestModal').on('click', '.btn-danger', function() {
+                    $('#createRequestModal').modal('hide');
+                });
             });
+
 
 
             cells.forEach(function(cell) {
@@ -377,21 +443,25 @@
                         var selectedType = $('#type option:selected').val();
                         var selectedClass = $('#class option:selected').val();
                         var ShowselectedGroup = $('#group option:selected').text();
-                        var ShowselectedModule = $('#module option:selected').text();
+                        var ShowselectedModule = $('#module option:selected')
+                            .text();
                         var ShowselectedType = $('#type option:selected').text();
                         var ShowselectedClass = $('#class option:selected').text();
                         var ShowselectedMsg = document.getElementById("msg").value;
 
                         // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
                         var totalCases = casesPerDay * daysOfWeek.length;
-                        var clickedIndex = Array.from(clickedCell.parentNode.children)
+                        var clickedIndex = Array.from(clickedCell.parentNode
+                                .children)
                             .indexOf(clickedCell);
 
-                        var dayOfWeekIndex = Math.floor(clickedIndex / casesPerDay) %
+                        var dayOfWeekIndex = Math.floor(clickedIndex /
+                                casesPerDay) %
                             daysOfWeek.length;
                         var dayPartIndex = Math.floor((clickedIndex % totalCases) /
                             casesPerPartOfDay) % daysPart.length;
-                        var seancePartIndex = (clickedIndex % totalCases) % seancesPart
+                        var seancePartIndex = (clickedIndex % totalCases) %
+                            seancesPart
                             .length;
 
                         var dayOfWeek = daysOfWeek[dayOfWeekIndex];
@@ -417,7 +487,8 @@
 
                         // Create a new div to display the selected information
                         var infoDiv = document.createElement("div");
-                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek + '</h3>' +
+                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
+                            '</h3>' +
                             '<h3>Day Part: ' + dayPart + '</h3>' +
                             '<h3>Seance Part: ' + seancePart + '</h3>' +
                             '<h3>Module: ' + ShowselectedModule + '</h3>' +
@@ -428,7 +499,8 @@
 
                         // Append the new div to the "infoContainer"
                         document.getElementById('infoContainer').innerHTML = '';
-                        document.getElementById('infoContainer').appendChild(infoDiv);
+                        document.getElementById('infoContainer').appendChild(
+                            infoDiv);
 
                         $('#groupModuleClassModal').modal('hide');
                     });
@@ -452,7 +524,11 @@
             // sending all data code
             document.getElementById('submitAll').addEventListener('click', function() {
                 if (selectedData.length === 0) {
-                    alert('No data selected. Please select at least one cell.');
+                    FlashMsg.innerHTML = `<br><div class="alert alert-danger">
+                                vous devez selectionner au moins une seance.
+                            </div>`
+                    document.getElementById('infoContainer').innerHTML = '';
+                    document.getElementById('infoContainer').appendChild(FlashMsg);
                     return;
                 }
 
@@ -464,49 +540,24 @@
                         '_token': '{{ csrf_token() }}',
                         'selectedData': selectedData
                     },
+
                     success: function(response) {
-                        console.log('All data submitted successfully:', response);
-                        // Optionally, you can reset the selectedData array after submission
-                        selectedData = [];
+                        if (response.status = 200) {
+                            FlashMsg.innerHTML = `<br><div class="alert alert-success">
+                                       ${response.sucess}
+                                    </div>`
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(FlashMsg);
+                        }
                     },
-                    error: function(error) {
-                        console.error('Error submitting data:', error.responseText);
-                        alert('Error submitting data. Please try again.');
+                    error: function(xhr, status, error) {
+
+
                     }
                 });
             });
 
 
-            var mainEmplois = @json($main_emplois);
-            var currentIndex = 0;
-
-
-            document.getElementById('previous').addEventListener('click', function() {
-                currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
-                displayItem(currentIndex);
-
-
-            });
-
-            document.getElementById('next').addEventListener('click', function() {
-                currentIndex = (currentIndex + 1) % mainEmplois.length;
-                displayItem(currentIndex);
-            });
-
-            function displayItem(index) {
-                if (mainEmplois.length == 0) {
-                    document.getElementById('dateStart').innerText =
-                        "veuillez attendre jusqu'a le directeur creer l'emploi";
-
-                } else {
-                    mainEmploiId = mainEmplois[index].id;
-                    document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
-                    document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
-
-                }
-            }
-
-            displayItem(currentIndex);
 
         });
     </script>

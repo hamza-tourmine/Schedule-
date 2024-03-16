@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('request_emploi', function(Blueprint $table){
+        Schema::table('request_emplois', function(Blueprint $table){
             $table->unsignedBigInteger('main_emploi_id');
             $table->foreign('main_emploi_id')
                 ->references('id')
@@ -30,7 +30,7 @@ return new class extends Migration
      */
         public function down()
         {
-            Schema::table('request_emploi', function (Blueprint $table) {
+            Schema::table('request_emplois', function (Blueprint $table) {
                 // Drop the new column if needed
                 $table->dropColumn('main_emploi_id');
             });

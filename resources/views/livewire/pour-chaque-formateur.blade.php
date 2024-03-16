@@ -22,7 +22,7 @@
         @csrf
         <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
             class="btn btn-primary">
-            Create New Schadule
+            Créer un nouveau  emploi
         </button>
         <br>
         <label >date start</label>

@@ -17,8 +17,9 @@ use App\Http\Controllers\branchController;
 use App\Http\Controllers\modelSetting;
 use App\Http\Controllers\FileExcel;
 use App\Http\Controllers\MailController;
-
+use App\Http\Controllers\ScheduleFormateurs;
 use App\Http\Controllers\Schedule;
+use App\Http\Controllers\ScheduleChaqueGroup;
 use App\Models\group;
 
 // use App\Http\Middleware\Authenticate;
@@ -52,6 +53,10 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 
 // for admin
 Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
+    //emploi pour tout les formateur
+    Route::get('/emploi-for-formateurs' ,[ScheduleFormateurs::class , 'index'])->name('emploiForFormateurs');
+    //emploi pour chaque group
+    Route::get('/Schedule-for-Group' , [ScheduleChaqueGroup::class, 'index'])->name('emploiForGroup');
 // brache routes
     Route::controller(branchController::class)->group(function(){
         Route::get('/add-Branch','index')->name('addbranch');

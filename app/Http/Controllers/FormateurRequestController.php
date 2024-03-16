@@ -13,7 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Session;
 
 class FormateurRequestController extends Controller
 {
@@ -48,6 +48,7 @@ public function submitAllData(Request $request)
     $data = $request->all();
     $selectedData = $data['selectedData'];
     $data = $request->all();
+
     $user_id = Auth::id();
     $establishment = session()->get('establishment_id');
     foreach ($selectedData as $item) {
@@ -61,7 +62,7 @@ public function submitAllData(Request $request)
         'establishment_id' => $establishment,
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
-        'main_emploi_id'=>1,
+        'main_emploi_id'=>$item['mainEmploiId'],
         "demand_emploi_id"=>1,
         'message'=>$item['message'],
         'status_sission'=>"Pending",
@@ -70,35 +71,49 @@ public function submitAllData(Request $request)
     $sission->save();
         Log::info('Sission created:', ['data' => $item]);
     }
+        return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
 
-    return response()->json(['message' => 'All data submitted successfully.']);
+
 }
 public function createRequestEmploi(Request $request)
 {
     $data = $request->all();
+    $mainEmploiId = $data['mainEmploiId'];
     $user_id = Auth::id();
-    $main_emplois = main_emploi::find($data['mainEmploiId']);
-    $existingRequest = RequestEmploi::join('main_emploi', 'request_emplois.formateur_id', '=', 'main_emploi.id')
-    ->where('request_emplois.formateur_id', $user_id)
-    ->where('main_emploi.id', $main_emplois)
-    ->get();
-
+    $existingRequest = RequestEmploi::where('user_id', $user_id)
+    ->where('main_emploi_id', $mainEmploiId)
+    ->first();
 
     if ($existingRequest) {
-        // Formateur already has a request emploi for this emploi
-        return response()->json(['message' => 'You have already created a request emploi for this emploi.'], 422);
+        // If a request already exists, update it instead of creating a new one
+        $existingRequest->update([
+            'date_request' => now(),
+            'comment' => 'test comment', // Adjust according to your form fields
+            // You can update other fields here as needed
+        ]);
+
+        // Fetch the updated RequestEmploi along with its related mainEmploi data
+        $updatedRequestEmploi = RequestEmploi::with('mainEmploi')->find($existingRequest->id);
+
+        Session::flash('success', 'La demande d\'emploi a été créée avec succès.');
+
+        return response()->json(['message' => 'Request emploi updated successfully.', 'requestEmploi' => $updatedRequestEmploi]);
+    } else {
+        // If no request exists, create a new one
+        $requestEmploi = new RequestEmploi([
+            'date_request' => now(),
+            'comment' => 'test comment', // Adjust according to your form fields
+            'user_id' => $user_id,
+            'main_emploi_id' => $mainEmploiId,
+        ]);
+
+        $requestEmploi->save();
+
+        // Fetch the created RequestEmploi along with its related mainEmploi data
+        $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
+        Session::flash('success', 'Request emploi ' . ($existingRequest ? 'updated' : 'created') . ' successfully.');
+        return response()->json(['message' => 'Request emploi created successfully.', 'requestEmploi' => $createdRequestEmploi]);
     }
-
-    // Create a new request emploi
-    $requestEmploi = new RequestEmploi([
-        'date_request' => now(),
-        'comment' => $request->input('comment'), // Adjust according to your form fields
-        'formateur_id' => $user_id,
-    ]);
-
-    $requestEmploi->save();
-
-    return response()->json(['message' => 'Request emploi created successfully.']);
 }
 
 }

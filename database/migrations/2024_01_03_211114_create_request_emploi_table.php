@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('request_emploi', function (Blueprint $table) {
+    Schema::create('request_emplois', function (Blueprint $table) {
         $table->id();
         $table->date('date_request');
         $table->string('comment', 450);
+        $table->timestamp('created_at')->nullable();
+        $table->timestamp('updated_at')->nullable();
 
 
 
@@ -38,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('request_emploi');
+        Schema::dropIfExists('request_emplois');
     }
 };

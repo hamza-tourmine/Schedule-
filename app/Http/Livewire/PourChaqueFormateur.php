@@ -139,9 +139,11 @@ class PourChaqueFormateur extends Component
     if ($this->formateurId) {
 
         // $this->modules = module::where('formateur_id', $this->formateurId)->get();
-        $this->modules = module::join('module_has_formateur as  M' , 'M.module_id' , '=' , 'modules.id')
+        $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
+        ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
         ->where('modules.establishment_id', $establishment_id)
-        ->where('M.formateur_id', $this->formateurId)
+        ->where('MHF.formateur_id', $this->formateurId)
+        ->where('GHM.group_id', $this->groupID)
         ->select('modules.*')
         ->get();
 
@@ -300,4 +302,3 @@ class PourChaqueFormateur extends Component
 
 
 
-   

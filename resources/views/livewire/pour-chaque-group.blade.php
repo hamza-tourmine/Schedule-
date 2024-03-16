@@ -1,4 +1,5 @@
 <div>
+    
     @php
 
 @endphp
@@ -16,6 +17,8 @@
             </ul>
         </div>
     @endif
+  <div style="display: flex;">
+    <div style=" width :300px">
     <form method="get" action="{{ route('createNewSchedule') }}">
         @csrf
         <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
@@ -26,17 +29,27 @@
         <label >date start</label>
         <div class="col-6">
             <input name="dateStart" id="dateStart" type="date" class="form-control col-6" placeholder="mm/dd/yyyy"
-                value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
+            value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
         </div>
     </form>
+</div>
+    <div style="width:200px ;  display:flex; flex-direction :column-reverse">
+
+        <select wire:model="groupID" id="formateurSelected" class="form-control col-3" name="">
+            <option > les Groupes</option>
+            @foreach ($groups as $group)
+               <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
+            @endforeach
+        </select>
+        <label for="" style="font-size: 19px"> les Groupes</label>
+    </div>
+  </div>
 
     <div class="table-responsive">
         <table  style="overflow:scroll" class="col-md-12 ">
-
-
             <thead>
                 <tr class="day">
-                    <th rowspan="3">Groups Name</th>
+
                     <th colspan="4">Lundi</th>
                     <th colspan="4">Mardi</th>
                     <th colspan="4">Mercredi</th>
@@ -85,30 +98,27 @@
                     <th>SE2</th>
                     <th>SE1</th>
                     <th>SE2</th>
-
                 </tr>
               </thead>
             <tbody>
-                @if ($groups)
                 @php
-                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
                 @endphp
-                @foreach ($groups as $group)
                 <tr>
-                    <td>{{$group->group_name}}</td>
+
                     @foreach ($dayWeek as $day)
                         @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
+                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
+                                    @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{ $sission->user_name }} <br/>{{$sission->module_name}}
                                     @endif
                                 @endforeach
                             </td>
                         @endforeach
                     @endforeach
                 </tr>
-                @endforeach
+
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
                      aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -130,36 +140,45 @@
                             </div>
                             <form wire:submit.prevent="createSession">
                                 <div class="modal-body">
+
                                     <div style="display: flex">
+
+
                                            {{-- Formateur --}}
+
+                                           <select wire:model='formateurId' class="form-select"
+                                           aria-label="Default select example">
+                                           <option selected>Les Formateur</option>
                                            @if ($formateurs)
-                                           <select wire:model='formateur' class="form-select"
-                                               aria-label="Default select example">
-                                               <option selected>Formateurs</option>
-                                                   @foreach ($formateurs as $formateur)
-                                                       <option value="{{ $formateur->id }}">
-                                                           {{ $formateur->user_name }}</option>
-                                                   @endforeach
 
-                                           </select>
-                                           @endif
+                                               @foreach ($formateurs as $formateur)
+                                                   <option value="{{ $formateur->id }}">
+                                                       {{ $formateur->user_name  }}</option>
+                                               @endforeach
+                                               @endif
 
+                                       </select>
+
+
+                                        {{-- module  content --}}
+                                        @if (!$checkValues[0]->module)
+                                        <select wire:model="moduleID"   class="form-select"
+                                        aria-label="Default select example">
+                                            <option selected>Modules</option>
+                                            @if ($modules)
+                                                @foreach ($modules as $module)
+                                                <option value="{{ $module->id }}">
+                                                        {{ $module->module_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @endif
 
                                     </div>
                                     <div style="display: flex">
-                                         {{-- module  content --}}
-                                         @if (!$checkValues[0]->module)
-                                         <select wire:model="module" class="form-select "
-                                         aria-label="Default select example">
-                                         <option selected>Modules</option>
-                                         @if ($modules)
-                                             @foreach ($modules as $module)
-                                                 <option value="{{ $module->id }}">
-                                                     {{ $module->module_name }}</option>
-                                             @endforeach
-                                         @endif
-                                     </select>
-                                     @endif
+
+
+
                                         {{-- salle --}}
                                         @if (!$checkValues[0]->salle)
                                         <select wire:model="salle" class="form-select"
@@ -175,8 +194,8 @@
                                         @endif
                                     </div>
                                     {{-- tyope session --}}
-                                    <div style="display: flex;justify-content: space-between">
 
+                                    <div style="display: flex;justify-content: space-between">
                                         @if (!$checkValues[0]->typeSalle)
                                         <select wire:model="salleclassTyp" class="form-select"
                                             aria-label="Default select example">
@@ -190,10 +209,8 @@
                                         </select>
                                         @endif
 
-                                        {{-- id case --}}
-                                        <input type="hidden"   value="{{$receivedVariable}}" >
+
                                     </div>
-                                    {{-- day part && type sission --}}
                                     <div style="display: flex">
                                         @if (!$checkValues[0]->typeSession)
                                         <select wire:model="TypeSesion" class="form-select"
@@ -205,6 +222,7 @@
                                         </select>
                                         @endif
                                     </div>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
@@ -214,16 +232,14 @@
                                 </div>
                             </form>
 
-
-
-
-            </div>
-
-                     {{-- @livewire('modal-component', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>$formateurs,'groups'=>$groups,'group' => $group, 'modules'=>$modules]) --}}
+                    </div>
                  </div>
-                @endif
+
             </tbody>
+
+
         </table>
+
     </div>
 
 
@@ -250,9 +266,10 @@
       </div>
     </div>
   </div>
+  {{-- end Modal for delete  --}}
 
 
-<script  >
+  <script  >
 
 
     document.addEventListener('livewire:load', function () {

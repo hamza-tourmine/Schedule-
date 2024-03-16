@@ -89,19 +89,19 @@
                 </tr>
               </thead>
             <tbody>
-                @if ($groups)
+                @if ($formateurs)
                 @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
-                @foreach ($groups as $group)
+                @foreach ($formateurs as $formateur)
                 <tr>
-                    <td>{{$group->group_name}}</td>
+                    <td>{{$formateur->user_name}}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$formateur->id }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
+                                    @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
+                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/>{{$sission->module_name}}
                                     @endif
                                 @endforeach
                             </td>
@@ -131,23 +131,18 @@
                             <form wire:submit.prevent="createSession">
                                 <div class="modal-body">
                                     <div style="display: flex">
-                                           {{-- Formateur --}}
-                                           @if ($formateurs)
-                                           <select wire:model='formateur' class="form-select"
-                                               aria-label="Default select example">
-                                               <option selected>Formateurs</option>
-                                                   @foreach ($formateurs as $formateur)
-                                                       <option value="{{ $formateur->id }}">
-                                                           {{ $formateur->user_name }}</option>
-                                                   @endforeach
-
-                                           </select>
-                                           @endif
+                                        {{-- branches --}}
+                                        <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
+                                            <option > Filiére</option>
+                                            @if ($baranches)
+                                            @foreach ($baranches as $baranche)
+                                            <option value="{{ $baranche->id }}">{{ $baranche->name }}</option>
+                                            @endforeach
+                                            @endif
+                                            </select>
 
 
-                                    </div>
-                                    <div style="display: flex">
-                                         {{-- module  content --}}
+                                               {{-- module  content --}}
                                          @if (!$checkValues[0]->module)
                                          <select wire:model="module" class="form-select "
                                          aria-label="Default select example">
@@ -160,6 +155,26 @@
                                          @endif
                                      </select>
                                      @endif
+
+
+
+
+                                    </div>
+                                    <div style="display: flex">
+
+
+                                      {{-- Groupes --}}
+                                      @if ($groups)
+                                      <select wire:model='groupId' class="form-select"
+                                          aria-label="Default select example">
+                                          <option selected>Groupes</option>
+                                              @foreach ($groups as $group)
+                                                  <option value="{{ $group->id }}">
+                                                      {{ $group->group_name }}</option>
+                                              @endforeach
+
+                                      </select>
+                                      @endif
                                         {{-- salle --}}
                                         @if (!$checkValues[0]->salle)
                                         <select wire:model="salle" class="form-select"

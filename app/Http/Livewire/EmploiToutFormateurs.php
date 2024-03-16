@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
-class Emploi extends Component
+class EmploiToutFormateurs extends Component
 {
     use LivewireAlert;
     public $modulee;
@@ -34,7 +34,7 @@ class Emploi extends Component
 
     public $groups;
     public $modules ;
-    public $formateurs ;
+    public $formateurs =[];
     public $salles;
     public $classType;
     // for catche date from  form Module
@@ -44,7 +44,10 @@ class Emploi extends Component
     public $idCase;
     public $TypeSesion;
     public $checkValues ;
-    public $groupID;
+    public $baranches;
+    public $formateurId;
+    public $brancheId ;
+    public $groupId ;
 
 
 
@@ -52,15 +55,14 @@ class Emploi extends Component
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
     public function receiveVariable($variable)
     {
-        $this->groupID = substr($variable,10);
+        $this->formateurId =substr($variable , 10);
         $this->receivedVariable = $variable;
     }
 
     protected $rules = [
         'group' => 'required',
     ];
-    public function createSession()
-{
+    public function createSession(){
     try{
         $idcase = $this->receivedVariable;
         $sission = sission::create([
@@ -68,9 +70,9 @@ class Emploi extends Component
             'day_part'=>substr($idcase,3,5),
             'dure_sission'=>substr($idcase,8,2),
             'module_id'=>$this->module ,
-            'group_id'=>substr($idcase,10),
+            'group_id'=>$this->groupId,
         	'establishment_id'=>session()->get('establishment_id'),
-            'user_id'=>$this->formateur,
+            'user_id'=>$this->formateurId,
             'class_room_id'=>$this->salle,
             'validate_date'=>null,
             'main_emploi_id'=>session()->get('id_main_emploi'),
@@ -156,29 +158,49 @@ class Emploi extends Component
         return redirect()->route('CreateEmploi');
 
     }
+
+
     public function render()
     {
+        $establishment_id = session()->get('establishment_id');
+        // branches
+        $this->baranches = DB::table('branches')
+        ->select('branches.*')
+        ->join('formateur_has_filier', 'formateur_has_filier.barnch_id', '=', 'branches.id')
+        ->where('formateur_has_filier.formateur_id', $this->formateurId)
+        ->get();
+        // groupes
+        $groupsQuery = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
+        ->where('groups.establishment_id', $establishment_id)
+        ->where('f.formateur_id', $this->formateurId)
+        ->select('groups.id', 'groups.group_name'); // Select ID along with group_name
+
+    // Check if $this->brancheId is set and add the condition if it is
+    if ($this->brancheId) {
+        $groupsQuery->where('groups.barnch_id', $this->brancheId);
+    }
+
+    $groups = $groupsQuery->get();
          // data for  model form
-         $establishment_id = session()->get('establishment_id');
+
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-        $this->groups = group::where('establishment_id', $establishment_id)->get();
+
         // $this->modules = module::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 
-     $this->modules =   Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
-     ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
-     ->where('modules.establishment_id', $establishment_id)
-     ->where('MHF.formateur_id', $this->formateur)
-     ->where('GHM.group_id', $this->groupID)
-     ->select('modules.*')
-     ->get();
 
-        $formateurs =  user::select('users.*')
-        ->join('formateur_has_groups as f', 'f.formateur_id', '=', 'users.id')
-        ->where('f.establishment_id' , '=' , $establishment_id)
-        ->where('users.status' , '=' , 'active')
-        ->where('f.group_id', substr($this->receivedVariable,10)) // Select ID along with group_name
+        $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
+        ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
+        ->where('modules.establishment_id', $establishment_id)
+        ->where('MHF.formateur_id', $this->formateurId)
+        ->where('GHM.group_id', $this->groupId)
+        ->select('modules.*')
         ->get();
+
+
+        $this->formateurs  =  user::where(['establishment_id'=> $establishment_id ,
+        'status'=>'active' ,
+        'role'=>'formateur'])->get();
 
         $sissions = DB::table('sissions')
         ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
@@ -191,33 +213,40 @@ class Emploi extends Component
         ->get();
 
 
-        $formateurShouldRemove = [];
+        $groupsToRemove = [];
         $salleShouldRemove = [];
 
         foreach ($sissions as $session) {
             $combinedValue = $session->day . $session->day_part . $session->dure_sission;
             if ($combinedValue === substr($this->receivedVariable, 0, 10)) {
-                $formateurShouldRemove[] = $session->user_id;
+                $groupsToRemove[] = $session->group_id;
                 $salleShouldRemove[] = $session->class_room_id;
             }
         }
 
-        $newFormateurs = $formateurs->reject(function ($formateur) use ($formateurShouldRemove) {
-            return in_array($formateur->id, $formateurShouldRemove);
-        });
+
 
         $newSalles = $salles->reject(function ($salle) use ($salleShouldRemove) {
             return in_array($salle->id, $salleShouldRemove);
         });
 
-        $this->formateurs = $newFormateurs;
+        $newGroups = [];
+        foreach ($groups as $group) {
+            if (!in_array($group->id, $groupsToRemove)) {
+                $newGroups[] = $group;
+            }
+        }
+
+
+        $this->groups = $newGroups;
         $this->sissions = $sissions;
         $this->salles = $newSalles;
+
 
         $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
         ->where('userId', Auth::id())->get() ;
 
 
-        return view('livewire.emploi');
+        return view('livewire.emploi-tout-formateurs');
     }
 }

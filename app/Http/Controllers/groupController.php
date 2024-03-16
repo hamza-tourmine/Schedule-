@@ -17,10 +17,10 @@ class groupController extends Controller
         $establishment = session()->get('establishment_id');
 
         $branches = branch::where('establishment_id',$establishment)->get();
-        $groups = Group::select('groups.*', 'branches.*')
-        ->join('branches', 'branches.id', '=', 'groups.barnch_id')
-        ->where('groups.establishment_id', $establishment)
-        ->get();
+        // $groups = Group::select('groups.*', 'branches.*')
+        // ->join('branches', 'branches.id', '=', 'groups.barnch_id')
+        // ->where('groups.establishment_id', $establishment)
+        // ->get();
 
         $groupesModules = DB::table('groups')
             ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
@@ -31,13 +31,30 @@ class groupController extends Controller
 
         $modules = module::where('establishment_id',$establishment)->get();
 
-        $dataGroup = DB::table('groups')
+        $dataGroups = DB::table('groups')
         ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
-        ->join('modules as m', 'm.id' , '=', 'ghm.module_id')
-        ->select('m.*', 'groups.*')
+        ->join('modules as m', 'm.id', '=', 'ghm.module_id')
+        ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
         ->where('groups.establishment_id', $establishment)
         ->get();
-        dd($dataGroup);
+
+    // Group modules by group_id
+    $groups = $dataGroups->groupBy('group_id')->map(function ($group) {
+        // Merge all modules into one array for each group
+        $modules = $group->pluck( 'module_name' )->toArray();
+        return [
+            'group_id' => $group[0]->group_id,
+            'group_name' => $group[0]->group_name,
+            'year' => $group[0]->year,
+            'branch_id' => $group[0]->barnch_id,
+            'modules' => $modules,
+        ];
+    })->values()->all();
+
+    // $groupedModules now contains all groups with their associated modules in one array for each group
+
+
+        // dd($groups);
 
         return view('adminDashboard.addGroups.add_groups',
         ['groups'=>$groups ,
