@@ -17,14 +17,19 @@ use Illuminate\Support\Facades\Session;
 
 class FormateurRequestController extends Controller
 {
-    function show(){
+    function show(Request $request){
         $user_id = Auth::id(); 
-        $AllSeance = sission::where('user_id',$user_id)->get();
+        $data = $request->all();
+        dd($data);
+        $mainEmploiId = $data['mainEmploiId'] ?? null;
+        $AllSeance = sission::where('user_id',$user_id)
+        ->where('main_emploi_id', $mainEmploiId)
+        ->get();
         $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
         $classRooms = class_room::all()->where('id_establishment',session()->get('establishment_id'));
         $main_emplois = main_emploi::all();
-        $seancesType = ["Présentielle","Teams","EFM"];
+        $seancesType = ["PRESENTIELLE","TEAMS","EFM"];
         $daysOfWeek = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
         $daysPart = ["Matin","A.Midi"];
         $seancesPart =["SE1","SE2","SE3","SE4"];
@@ -63,7 +68,7 @@ public function submitAllData(Request $request)
         'dure_sission' => $item['seancePart'],
         'user_id' => $user_id,
         'main_emploi_id'=>$item['mainEmploiId'],
-        "demand_emploi_id"=>44,
+        "demand_emploi_id"=>50,
         'message'=>$item['message'],
         'status_sission'=>"Pending",
     ]);
