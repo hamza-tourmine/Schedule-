@@ -397,7 +397,6 @@
                             formData: $(this).serialize() // Serialize form data
                         },
                         success: function(response) {
-                            console.log('Request emploi created:', response);
 
                             if (response.status == 400) {
                                 FlashMsg.innerHTML = `<br><div class="alert alert-warning">
