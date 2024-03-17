@@ -18,12 +18,11 @@ use Illuminate\Support\Facades\Session;
 class FormateurRequestController extends Controller
 {
     function show(Request $request){
-        $user_id = Auth::id(); 
         $data = $request->all();
-        dd($data);
-        $mainEmploiId = $data['mainEmploiId'] ?? null;
+        // dd($data);
+        $user_id = Auth::id(); 
+        // dd($requestEmploiId);
         $AllSeance = sission::where('user_id',$user_id)
-        ->where('main_emploi_id', $mainEmploiId)
         ->get();
         $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
@@ -52,32 +51,38 @@ public function submitAllData(Request $request)
 {
     $data = $request->all();
     $selectedData = $data['selectedData'];
+    $mainEmploiId = $data['mainEmploiId'];
     $data = $request->all();
-   
     $user_id = Auth::id();
+    $requestEmploiId = RequestEmploi::where('user_id', $user_id)->where('main_emploi_id',$mainEmploiId)->value('id');
     $establishment = session()->get('establishment_id');
-    foreach ($selectedData as $item) {
-    $sission = new sission([
-        'day' => $item['day'],
-        'day_part' => $item['dayPart'],
-        'sission_type' => $item['type'],
-        'group_id' => $item['group'],
-        'module_id' => $item['module'],
-        'class_room_id' => $item['class'],
-        'establishment_id' => $establishment,
-        'dure_sission' => $item['seancePart'],
-        'user_id' => $user_id,
-        'main_emploi_id'=>$item['mainEmploiId'],
-        "demand_emploi_id"=>50,
-        'message'=>$item['message'],
-        'status_sission'=>"Pending",
-    ]);
-
-    $sission->save();
-        Log::info('Sission created:', ['data' => $item]);
-    }
-        return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
+    if (!$requestEmploiId) {
+        return response()->json(['msg' => 'Tu dois créer une demande d\'emploi pour cet emploi d\'abord.', 'status' => 599]);
+    }else {
+        foreach ($selectedData as $item) {
+            $sission = new sission([
+                'day' => $item['day'],
+                'day_part' => $item['dayPart'],
+                'sission_type' => $item['type'],
+                'group_id' => $item['group'],
+                'module_id' => $item['module'],
+                'class_room_id' => $item['class'],
+                'establishment_id' => $establishment,
+                'dure_sission' => $item['seancePart'],
+                'user_id' => $user_id,
+                'main_emploi_id'=>$mainEmploiId,
+                "demand_emploi_id"=>$requestEmploiId,
+                'message'=>$item['message'],
+                'status_sission'=>"Pending",
+            ]);
         
+            $sission->save();
+                Log::info('Sission created:', ['data' => $item]);
+            }
+                return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
+                
+    }
+    
     
 }
 public function createRequestEmploi(Request $request)
@@ -102,7 +107,7 @@ public function createRequestEmploi(Request $request)
 
         Session::flash('success', 'La demande d\'emploi a été créée avec succès.');
 
-        return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400]);
+        return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400 ,'mainEmploi'=>$mainEmploiId]);
     } else {
         // If no request exists, create a new one
         $requestEmploi = new RequestEmploi([
@@ -117,7 +122,7 @@ public function createRequestEmploi(Request $request)
         // Fetch the created RequestEmploi along with its related mainEmploi data
         $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
         Session::flash('success', 'Request emploi ' . ($existingRequest ? 'updated' : 'created') . ' successfully.');
-        return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300]);
+        return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300,'mainEmploi'=>$mainEmploiId]);
     }
 }
 

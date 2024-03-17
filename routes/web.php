@@ -135,6 +135,7 @@ Route::middleware(['auth','RoutesForFormateur'])->group(function(){
         Route::get('/dashboardFormateur',[formateurController::class , 'showHomepage'])->name('dashboard_formateur');
         // request Emploi
         Route::get('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
+        // Route::post('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
         Route::post('submitAllData', [FormateurRequestController::class, 'submitAllData'])->name('submitAllData');
         Route::post('createRequestEmploi', [FormateurRequestController::class, 'createRequestEmploi'])->name('createRequestEmploi');
         //

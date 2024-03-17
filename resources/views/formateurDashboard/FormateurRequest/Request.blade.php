@@ -412,6 +412,26 @@
 
                 displayItem(currentIndex);
                 var mainEmploiId = mainEmplois[currentIndex].id;
+                console.log('testtttt', mainEmploiId);
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('DemanderEmploi') }}',
+                    data: {
+
+                        mainEmploiId: mainEmploiId,
+
+                    },
+                    success: function(response) {
+
+                        console.log('OK');
+                    },
+                    error: function(error) {
+                        console.error('Error creating sission emploi:',
+                            error
+                            .responseText);
+                        // Handle error and display appropriate message to the user
+                    }
+                });
                 // Function to open the pop-up form and display the flash message
 
                 $(document).ready(function() {
@@ -420,6 +440,7 @@
                         event.preventDefault();
 
                         // Send AJAX request to create request emploi
+                        console.log('Request', mainEmploiId);
                         $.ajax({
                             type: 'POST',
                             url: '{{ route('createRequestEmploi') }}',
@@ -445,6 +466,7 @@
                                 document.getElementById('infoContainer').appendChild(
                                     FlashMsg);
                                 $('#createRequestModal').modal('hide');
+                                console.log('ajaxREQUEST', response);
                             },
                             error: function(error) {
                                 console.error('Error creating request emploi:',
@@ -574,31 +596,32 @@
                         document.getElementById('infoContainer').appendChild(FlashMsg);
                         return;
                     }
-
-
-
-
-
                     $.ajax({
                         type: 'POST',
                         url: '{{ route('submitAllData') }}',
                         data: {
 
                             '_token': '{{ csrf_token() }}',
-                            'selectedData': selectedData
+                            'selectedData': selectedData,
+                            'mainEmploiId': mainEmploiId,
 
                         },
                         success: function(response) {
-                            if (response.status = 200) {
+
+                            if (response.status == 200) {
                                 FlashMsg.innerHTML = `<br><div class="alert alert-success">
                                                                 ${response.sucess}
                                                                 </div>`
-                                document.getElementById('infoContainer').innerHTML = '';
-                                document.getElementById('infoContainer').appendChild(FlashMsg);
-                                selectedData = [];
-
+                            } else if (response.status == 599) {
+                                FlashMsg.innerHTML = `<br><div class="alert alert-warning">
+                                                                ${response.msg}
+                                                                </div>`
                             }
 
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(FlashMsg);
+                            console.log(response);
+                            selectedData = [];
                         },
                         error: function(error) {
                             console.error('Error creating sission emploi:',
@@ -608,6 +631,7 @@
                         }
                     });
                 });
+
 
 
             });
