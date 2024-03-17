@@ -30,9 +30,15 @@ class formateurController extends Controller
         ->where('role','formateur')
         ->where('establishment_id',$establishment_id)
         ->get();
+
+        $groupes = group::where('establishment_id',$establishment_id)->get();
+        $modules = module::where('establishment_id' , $establishment_id)->get();
         // $formateurs = formateur::all()->where('establishment_id',$establishment_id);
         // dd($formateurs);
-        return view('adminDashboard.addFormateur.add_formateur',['formateurs'=>$formateurs , 'branches'=>$branches]);
+        return view('adminDashboard.addFormateur.add_formateur',['formateurs'=>$formateurs ,
+        'branches'=>$branches ,
+         'groupes'=>$groupes,
+        'modules' =>$modules]);
     }
 
     /**
@@ -44,6 +50,9 @@ class formateurController extends Controller
     {
 
 
+
+
+        dd($request);
 
         $establishment_id = session()->get('establishment_id');
         $establishment = establishment::select(['name_establishment'])->where('id',$establishment_id)->get();

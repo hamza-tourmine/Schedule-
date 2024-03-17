@@ -85,7 +85,7 @@
                         <tr>
                             <th scope="row">{{ $key + 1 }}</th>
                             <td>{{ $group['group_name'] }}</td>
-                            <td>{{ substr($group['branch_id'], 7) }}</td>
+                            <td>{{ substr($group['branch_id'], 7)}}</td>
                             <td>{{ $group['group_name'] }}</td>
                             <td>{{ $group['year'] }}</td>
                             <td colspan="">
