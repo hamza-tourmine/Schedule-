@@ -123,7 +123,7 @@ Route::controller(moduleController::class)->group(function(){
 // Formateru Part
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
-    Route::post('/insert-formateur','create')->name('insertFormateur');
+   
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
     Route::post('/update-formateur/{id}','update');
