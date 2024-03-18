@@ -150,19 +150,6 @@
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="table-responsive">
             <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
                 <thead>
@@ -209,35 +196,35 @@
 
         </div>
 
-        {{-- <div class="table-responsive">
-            <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
+
+        <div class="table-responsive">
+            <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
                 <thead>
                     <!-- Header row for seance parts -->
                     <tr>
                         <th>Days/Seance</th> <!-- Empty cell for spacing -->
                         @foreach ($seances_part as $seance_part)
-                            <th colspan="{{ count($days_of_week) }}">{{ $seance_part }}</th>
+                            <th>{{ $seance_part }}</th>
                         @endforeach
                     </tr>
-                    <!-- Header row for days -->
-
                 </thead>
                 <tbody>
-                    <!-- Loop through each part of seance -->
                     <!-- Loop through each day -->
                     @foreach ($days_of_week as $day_of_week)
-                        <tr>
-                            <!-- Display the seance part -->
+                        <tr class="dtdynamic bg-light-gray">
+                            <!-- Display the day -->
                             <td>{{ $day_of_week }}</td>
-                            <!-- Display the schedule data for each day and seance part -->
-                            @foreach ($AllSeances as $AllSeance)
+                            <!-- Loop through each seance part -->
+                            @foreach ($seances_part as $seance_part)
+                                <!-- Display the schedule data for each day and seance part -->
                                 <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
-                                    <!-- Your schedule data here -->
-                                    @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
-                                        {{ $AllSeance->sission_type }} <br>
-                                        {{ $AllSeance->group->group_name }} <br>
-                                        {{ $AllSeance->class_room->class_name }}
-                                    @endif
+                                    @foreach ($AllSeances as $AllSeance)
+                                        @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
+                                            {{ $AllSeance->sission_type }} <br>
+                                            {{ $AllSeance->group->group_name }} <br>
+                                            {{ $AllSeance->class_room->class_name }}
+                                        @endif
+                                    @endforeach
                                 </td>
                             @endforeach
                         </tr>
@@ -246,7 +233,10 @@
             </table>
             <br>
             <button id="submitAll">Submit All</button>
-        </div> --}}
+        </div>
+
+
+
 
 
         <div id="infoContainer"></div>
@@ -364,7 +354,7 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                var cells = document.querySelectorAll("tbody tr.dtdynamic td");
+                var cells = document.querySelectorAll("td.Cases");
                 var daysOfWeek = @json($days_of_week);
                 var daysPart = @json($days_part);
                 var seancesPart = @json($seances_part);
@@ -377,6 +367,7 @@
 
 
                 var selectedData = [];
+                var selectedDataV2 = [];
 
                 var mainEmplois = @json($main_emplois);
                 var currentIndex = 0;
@@ -545,6 +536,7 @@
                                 'mainEmploiId': mainEmploiId,
                                 'message': ShowselectedMsg
                             });
+                            
 
 
                             clickedCell.innerText = ShowselectedType + '\n ' +
@@ -618,10 +610,9 @@
                                                                 </div>`
                             }
 
+                            selectedData = [];
                             document.getElementById('infoContainer').innerHTML = '';
                             document.getElementById('infoContainer').appendChild(FlashMsg);
-                            console.log(response);
-                            selectedData = [];
                         },
                         error: function(error) {
                             console.error('Error creating sission emploi:',

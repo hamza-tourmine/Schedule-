@@ -18,7 +18,6 @@ class FormateurHasModuleController extends Controller
         foreach ($request->module as $moduleId) {
             // Assuming you have the formateur_id in the request, adjust accordingly
             module_has_formateur::create([
-                'establishment_id' => $establishment_id,
                 'module_id' => $moduleId,
                 'formateur_id' => $request->formateur,
             ]);
