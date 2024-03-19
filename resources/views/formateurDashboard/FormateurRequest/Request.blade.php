@@ -149,9 +149,9 @@
 
         </div>
 
-
+       
         <div class="table-responsive">
-            <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
+            <table id="tbl_exporttable_to_xls_1" style="overflow:scroll" class="col-md-12  active">
                 <thead>
                     <tr class="day">
                         @foreach ($days_of_week as $day_of_week)
@@ -198,8 +198,8 @@
         </div>
 
 
-        {{-- <div class="table-responsive">
-            <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
+        <div class="table-responsive">
+            <table id="tbl_exporttable_to_xls_2" style="overflow: scroll" class="col-md-12">
                 <thead>
                     <!-- Header row for seance parts -->
                     <tr>
@@ -235,7 +235,7 @@
             </table>
             <br>
             <button id="submitAll">Submit All</button>
-        </div> --}}
+        </div>
 
 
 
@@ -355,6 +355,7 @@
         {{-- end modal --}}
 
         <script>
+           
             document.addEventListener("DOMContentLoaded", function() {
                 var cells = document.querySelectorAll("td.Cases");
                 var daysOfWeek = @json($days_of_week);
@@ -526,6 +527,15 @@
                             var seancePart = seancesPart[seancePartIndex];
 
                             // 
+                            const table = document.getElementById('tbl_exporttable_to_xls');
+
+                            table.addEventListener('click', function(event) {
+                                if (event.target.classList.contains('Cases')) {
+                                    const day = event.target.dataset.day;
+                                    const seance = event.target.dataset.seance;
+                                    console.log(`You clicked on ${day}, ${seance}`);
+                                }
+                            });
                             // all data in once
                             selectedData.push({
                                 'group': selectedGroup,
@@ -624,7 +634,7 @@
                         }
                     });
                 });
-            
+
 
 
                 console.log('demander', mainEmploiId);
@@ -643,7 +653,6 @@
                     }
                 });
             });
-            
         </script>
 
 

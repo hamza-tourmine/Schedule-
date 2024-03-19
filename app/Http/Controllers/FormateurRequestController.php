@@ -28,7 +28,7 @@ class FormateurRequestController extends Controller
         // dd($main_emploi_id);
         // Fetch all seances related to the user and main emploi
         $allSeances = Sission::where('user_id', $user_id)
-                             ->where('main_emploi_id', $main_emploi_id)
+                            //  ->where('main_emploi_id', $main_emploi_id)
                              ->get();
 
         // Fetch groups list associated with the formateur
@@ -143,7 +143,7 @@ public function createRequestEmploi(Request $request)
             ]);
             $requestEmploi->save();
 
-            return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300, 'mainEmploi' => $mainEmploiId]);
+            return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300,]);
         }
     } catch (\Exception $e) {
         // Return error response in case of any exceptions
