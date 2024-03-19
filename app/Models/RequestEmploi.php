@@ -11,7 +11,7 @@ class RequestEmploi extends Model
         'date_request',
         'comment',
         'user_id',
-        'emploi_id'
+        'main_emploi_id'
     ];
     use HasFactory;
 

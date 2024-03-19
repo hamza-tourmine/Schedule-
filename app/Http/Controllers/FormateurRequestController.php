@@ -17,35 +17,54 @@ use Illuminate\Support\Facades\Session;
 
 class FormateurRequestController extends Controller
 {
-    function show(Request $request){
-        $data = $request->all();
-        // dd($data);
+    public function show(Request $request)
+{
+    try {
+        // Retrieve the authenticated user's ID
         $user_id = Auth::id(); 
-        // dd($requestEmploiId);
-        $AllSeance = sission::where('user_id',$user_id)
-        ->get();
-        $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
+        
+        // Retrieve main emploi ID from the request data
+        $main_emploi_id = $request['main_emploi_id'];
+        // dd($main_emploi_id);
+        // Fetch all seances related to the user and main emploi
+        $allSeances = Sission::where('user_id', $user_id)
+                             ->where('main_emploi_id', $main_emploi_id)
+                             ->get();
+
+        // Fetch groups list associated with the formateur
+        $groupsList = formateur_has_group::where('formateur_id', $user_id)->get();
+
+        // Fetch modules list associated with the formateur
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
-        $classRooms = class_room::all()->where('id_establishment',session()->get('establishment_id'));
-        $main_emplois = main_emploi::all();
-        $seancesType = ["PRESENTIELLE","TEAMS","EFM"];
-        $daysOfWeek = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"];
-        $daysPart = ["Matin","A.Midi"];
-        $seancesPart =["SE1","SE2","SE3","SE4"];
-        return view('formateurDashboard.FormateurRequest.Request',
-        [
-            'main_emplois' => $main_emplois,
-            'days_of_week'=>$daysOfWeek,
-            'days_part'=>$daysPart,
-            'seances_part'=>$seancesPart,
-            'GroupsList'=> $GroupsList,
+
+        // Fetch all classrooms associated with the establishment
+        $classRooms = class_room::where('id_establishment', session()->get('establishment_id'))->get();
+
+        // Fetch all main emplois
+        $mainEmplois = main_emploi::all();
+
+        // Define lists of seances types, days of week, days part, and seances part
+        $seancesType = ["PRESENTIELLE", "TEAMS", "EFM"];
+        $daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        $daysPart = ["Matin", "A.Midi"];
+        $seancesPart = ["SE1", "SE2", "SE3", "SE4"];
+
+        return view('formateurDashboard.FormateurRequest.Request', [
+            'main_emplois' => $mainEmplois,
+            'days_of_week' => $daysOfWeek,
+            'days_part' => $daysPart,
+            'seances_part' => $seancesPart,
+            'GroupsList' => $groupsList,
             'modulesList' => $modulesList,
             'class_rooms' => $classRooms,
             'seances_type' => $seancesType,
-            'AllSeances' => $AllSeance
-        ]
-    );
+            'AllSeances' => $allSeances
+        ]);
+    } catch (\Exception $e) {
+        // Handle any exceptions
+        return response()->json(['message' => 'Error occurred while processing request.', 'status' => 500, 'error' => $e->getMessage()]);
     }
+}
     
 public function submitAllData(Request $request)
 {
@@ -87,43 +106,48 @@ public function submitAllData(Request $request)
 }
 public function createRequestEmploi(Request $request)
 {
-    $data = $request->all();
-    $mainEmploiId = $data['mainEmploiId'];
-    $user_id = Auth::id();
-    $existingRequest = RequestEmploi::where('user_id', $user_id)
-    ->where('main_emploi_id', $mainEmploiId)
-    ->first();
-
-    if ($existingRequest) {
-        // If a request already exists, update it instead of creating a new one
-        $existingRequest->update([
-            'date_request' => now(),
-            'comment' => 'test comment', // Adjust according to your form fields
-            // You can update other fields here as needed
+    try {
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'mainEmploiId' => 'required|integer', // Assuming mainEmploiId is required and should be an integer
+            // Add more validation rules as needed for other fields
         ]);
 
-        // Fetch the updated RequestEmploi along with its related mainEmploi data
-        $updatedRequestEmploi = RequestEmploi::with('mainEmploi')->find($existingRequest->id);
+        // Retrieve the validated mainEmploiId from the request data
+        $mainEmploiId = $validatedData['mainEmploiId'];
+        
 
-        Session::flash('success', 'La demande d\'emploi a été créée avec succès.');
+        // Get the authenticated user's ID
+        $user_id = Auth::id();
 
-        return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400 ,'mainEmploi'=>$mainEmploiId]);
-    } else {
-        // If no request exists, create a new one
-        $requestEmploi = new RequestEmploi([
-            'date_request' => now(),
-            'comment' => 'test comment', // Adjust according to your form fields
-            'user_id' => $user_id,
-            'main_emploi_id' => $mainEmploiId,
-        ]);
+        // Check if a request already exists for the user and mainEmploiId
+        $existingRequest = RequestEmploi::where('user_id', $user_id)
+            ->where('main_emploi_id', $mainEmploiId)
+            ->first();
 
-        $requestEmploi->save();
+        if ($existingRequest) {
+            // If a request already exists, update it
+            $existingRequest->update([
+                'date_request' => now(),
+                'comment' => 'test comment',
+            ]);
 
-        // Fetch the created RequestEmploi along with its related mainEmploi data
-        $createdRequestEmploi = RequestEmploi::with('mainEmploi')->find($requestEmploi->id);
-        Session::flash('success', 'Request emploi ' . ($existingRequest ? 'updated' : 'created') . ' successfully.');
-        return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300,'mainEmploi'=>$mainEmploiId]);
+            return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400]);
+        } else {
+            // If no request exists, create a new one
+            $requestEmploi = new RequestEmploi([
+                'date_request' => now(),
+                'comment' => 'test comment',
+                'user_id' => $user_id,
+                'main_emploi_id' => $mainEmploiId,
+            ]);
+            $requestEmploi->save();
+
+            return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300, 'mainEmploi' => $mainEmploiId]);
+        }
+    } catch (\Exception $e) {
+        // Return error response in case of any exceptions
+        return response()->json(['message' => 'Error creating or updating request emploi.', 'status' => 500, 'error' => $e->getMessage()]);
     }
 }
-
 }

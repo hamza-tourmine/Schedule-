@@ -177,7 +177,8 @@
                     <tr class="dtdynamic bg-light-gray">
                         @foreach ($days_of_week as $day_of_week)
                             @foreach ($seances_part as $seance_part)
-                                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
+                                <td data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
                                     @foreach ($AllSeances as $AllSeance)
                                         @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
                                             {{ $AllSeance->sission_type }} <br>
@@ -197,7 +198,7 @@
         </div>
 
 
-        <div class="table-responsive">
+        {{-- <div class="table-responsive">
             <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
                 <thead>
                     <!-- Header row for seance parts -->
@@ -217,7 +218,8 @@
                             <!-- Loop through each seance part -->
                             @foreach ($seances_part as $seance_part)
                                 <!-- Display the schedule data for each day and seance part -->
-                                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
+                                <td data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
                                     @foreach ($AllSeances as $AllSeance)
                                         @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
                                             {{ $AllSeance->sission_type }} <br>
@@ -233,7 +235,7 @@
             </table>
             <br>
             <button id="submitAll">Submit All</button>
-        </div>
+        </div> --}}
 
 
 
@@ -367,7 +369,6 @@
 
 
                 var selectedData = [];
-                var selectedDataV2 = [];
 
                 var mainEmplois = @json($main_emplois);
                 var currentIndex = 0;
@@ -403,7 +404,6 @@
 
                 displayItem(currentIndex);
                 var mainEmploiId = mainEmplois[currentIndex].id;
-                console.log('testtttt', mainEmploiId);
                 $.ajax({
                     type: 'GET',
                     url: '{{ route('DemanderEmploi') }}',
@@ -414,7 +414,6 @@
                     },
                     success: function(response) {
 
-                        console.log('OK');
                     },
                     error: function(error) {
                         console.error('Error creating sission emploi:',
@@ -486,8 +485,9 @@
 
                 cells.forEach(function(cell) {
                     cell.addEventListener("click", function() {
-                        clickedCell = this; // Assign the clicked cell to clickedCell
 
+                        clickedCell = this; // Assign the clicked cell to clickedCell
+                        console.log(clickedCell);
 
                         $('#groupModuleClassModal').modal('show');
 
@@ -524,6 +524,8 @@
 
                             var dayPart = daysPart[dayPartIndex];
                             var seancePart = seancesPart[seancePartIndex];
+
+                            // 
                             // all data in once
                             selectedData.push({
                                 'group': selectedGroup,
@@ -536,7 +538,7 @@
                                 'mainEmploiId': mainEmploiId,
                                 'message': ShowselectedMsg
                             });
-                            
+
 
 
                             clickedCell.innerText = ShowselectedType + '\n ' +
@@ -622,10 +624,26 @@
                         }
                     });
                 });
+            
 
 
-
+                console.log('demander', mainEmploiId);
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('DemanderEmploi') }}',
+                    data: {
+                        'main_emploi_id': mainEmploiId, // Correct parameter name
+                    },
+                    success: function(response) {
+                        console.log("c bon pour l'affiachge de l'emploi");
+                    },
+                    error: function(error) {
+                        console.error('Error creating session emploi:', error.responseText);
+                        // Handle error and display appropriate message to the user
+                    }
+                });
             });
+            
         </script>
 
 
