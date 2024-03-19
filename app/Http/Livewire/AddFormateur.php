@@ -25,11 +25,9 @@ class AddFormateur extends Component
     // form var
     public $formateur_name;
     public $idFormateur;
-
     public $selectedBranches = [];
     public $selectedGroupes = [];
     public $selectedModules = [];
-
 
     // show alert
     public $addFormateur = false;
@@ -166,6 +164,50 @@ class AddFormateur extends Component
     }
 
 
+
+    // public function showHomepage(){
+    //     $id_formateur = session()->get('user_id');
+    //  // Assuming the model name is 'Formateur' and you're looking for a single record.
+    //       $formateur = formateur::select('user_name')->where('id', $id_formateur)->first();
+
+    //     return view('formateurDashboard.Home.formateur',['formateur'=>$formateur]);
+    //     // return $formateur->user_name ;
+    // }
+
+    // public function show_update_page($id)
+    // {
+    //     $formateur = formateur::find($id);
+    //    return view('adminDashboard.addFormateur.update_formateur',['formateur'=>$formateur]);
+
+    // }
+
+    // public function update(Request $request , $id)
+    // {
+    //     $formateur  = formateur::find($id);
+    //     $formateur->user_name =$request->name;
+    //     $formateur->email  =$request->email;
+    //     $formateur->passwordClone =$request->password;
+    //     $formateur->password =bcrypt($request->password);
+    //     $formateur->status =$request->status;
+    //     $formateur->save();
+    //     if($formateur){
+    //         return redirect()->route('addFormateur')->with(['success'=>'you modified  a  formateur']) ;
+    //     }else{
+    //         return redirect()->back()->withErrors(['errors'=>'some thing wrang']);
+    //     }
+
+    // }
+
+    // public function destroy($id)
+    // {
+    //     $formateur = formateur::destroy($id);
+    //     if($formateur){
+    //         return redirect()->route('addFormateur')->with(['success'=>'you delete a formateur']) ;
+    //     }
+
+    // }
+
+
     public function render()
     {
         $establishment_id = session()->get('establishment_id');
@@ -180,20 +222,3 @@ class AddFormateur extends Component
         return view('livewire.add-formateur');
     }
 }
-
-
-
-
-
-
-
-
-//     } else {
-//         if($formateur){
-//             return redirect()->back()->with(['success' => "Vous avez ajouté un nouveau formateur"]);
-//         }
-//         return redirect()->back()->withErrors(['errors' => 'Something went wrong']);
-//     }
-// } catch (\Illuminate\Database\QueryException $e) {
-//     return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
-// }

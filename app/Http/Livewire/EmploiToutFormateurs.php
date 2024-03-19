@@ -31,12 +31,12 @@ class EmploiToutFormateurs extends Component
     public $TypeSession;
     public $receivedVariable;
 
-
     public $groups;
     public $modules ;
     public $formateurs =[];
     public $salles;
     public $classType;
+
     // for catche date from  form Module
     public $salleclassTyp;
     public $sissions = [];
@@ -55,7 +55,8 @@ class EmploiToutFormateurs extends Component
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
     public function receiveVariable($variable)
     {
-        $this->formateurId =substr($variable , 10);
+        
+        $this->formateurId =substr($variable , 11);
         $this->receivedVariable = $variable;
     }
 
@@ -64,11 +65,12 @@ class EmploiToutFormateurs extends Component
     ];
     public function createSession(){
     try{
+
         $idcase = $this->receivedVariable;
         $sission = sission::create([
             'day'=>substr($idcase,0,3),
             'day_part'=>substr($idcase,3,5),
-            'dure_sission'=>substr($idcase,8,2),
+            'dure_sission'=>substr($idcase,8,3),
             'module_id'=>$this->module ,
             'group_id'=>$this->groupId,
         	'establishment_id'=>session()->get('establishment_id'),
@@ -120,12 +122,6 @@ class EmploiToutFormateurs extends Component
     }
 
     }
-
-
-
-
-
-
 
 
     public function AddAutherEmploi(){
@@ -218,7 +214,7 @@ class EmploiToutFormateurs extends Component
 
         foreach ($sissions as $session) {
             $combinedValue = $session->day . $session->day_part . $session->dure_sission;
-            if ($combinedValue === substr($this->receivedVariable, 0, 10)) {
+            if ($combinedValue === substr($this->receivedVariable, 0, 11)) {
                 $groupsToRemove[] = $session->group_id;
                 $salleShouldRemove[] = $session->class_room_id;
             }

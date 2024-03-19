@@ -64,15 +64,12 @@ class PourChaqueGroup extends Component
 
     public function createSession()
     {
-
-
-
         try{
             $idcase = $this->receivedVariable;
             $sission = sission::create([
                 'day'=>substr($idcase,0,3),
                 'day_part'=>substr($idcase,3,5),
-                'dure_sission'=>substr($idcase,8,2),
+                'dure_sission'=>substr($idcase,8,3),
                 'module_id'=> $this->moduleID,
                 'group_id'=> $this->groupID,
                 'establishment_id'=>session()->get('establishment_id'),
@@ -119,7 +116,6 @@ class PourChaqueGroup extends Component
                     'timer' => 3000,
                     'toast' => true,
                 ]);
-                // return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
             }
         }
 
@@ -128,9 +124,7 @@ class PourChaqueGroup extends Component
         public function render()
         {
             $establishment_id = session()->get('establishment_id');
-
             $this->groups = group::where('establishment_id', $establishment_id)->get();
-
             $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
                 ->where('userId', Auth::id())->get();
 
@@ -141,6 +135,7 @@ class PourChaqueGroup extends Component
                     ->select('users.*')
                     ->get();
 
+
                 // Load modules for the selected group and formateur
                 $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
                     ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
@@ -150,20 +145,39 @@ class PourChaqueGroup extends Component
                     ->select('modules.*')
                     ->get();
 
-                // Load class room types and available rooms for the establishment
-                $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-                $this->salles = class_room::where('id_establishment', $establishment_id)->get();
-
-                // Fetch all sessions for the selected group
-                $this->sissions = sission::select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
-                    ->join('modules', 'modules.id', '=', 'sissions.module_id')
+                    // Fetch all sessions for the selected group
+                    $sessions = Sission::select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+                    ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
                     ->join('groups', 'groups.id', '=', 'sissions.group_id')
                     ->join('users', 'users.id', '=', 'sissions.user_id')
                     ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
                     ->where('sissions.establishment_id', $establishment_id)
-                    ->where('sissions.group_id', $this->groupID)
                     ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
                     ->get();
+
+                    // Load class room types and available rooms for the establishment
+                    $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
+                    $salles = class_room::where('id_establishment', $establishment_id)->get();
+
+                    // Prepare an array of room IDs that should be removed based on session criteria
+                    $salleShouldRemove = [];
+                    foreach ($sessions as $session) {
+                    $combinedValue = $session->day . $session->day_part . $session->dure_sission;
+
+                    if ($combinedValue === substr($this->receivedVariable, 0, 11)) {
+                        $salleShouldRemove[] = $session->class_room_id;
+                    }
+                    }
+
+                    // Filter the available rooms to exclude those that should be removed
+                    $newSalles = $salles->reject(function ($salle) use ($salleShouldRemove) {
+                    return in_array($salle->id, $salleShouldRemove);
+                    });
+
+                    // Assign the filtered rooms to the component property
+                    $this->salles = $newSalles;
+                    $this->sissions = $sessions;
+
             } else {
                 // If no group is selected, reset data
                 $this->modules = [];

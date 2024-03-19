@@ -64,7 +64,7 @@ public function UpdateSession()
         $day_part = substr($idcase, 3, 5);
         $group_id = substr($idcase, 10);
         $user_id = substr($idcase, 10);
-        $dure_sission = substr($idcase, 8, 2);
+        $dure_sission = substr($idcase, 8, 3);
 
         $sessionData = [
             'day' => $day,

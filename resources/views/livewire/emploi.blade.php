@@ -32,8 +32,6 @@
 
     <div class="table-responsive">
         <table  style="overflow:scroll" class="col-md-12 ">
-
-
             <thead>
                 <tr class="day">
                     <th rowspan="3">Groups Name</th>
@@ -97,10 +95,10 @@
                 <tr>
                     <td>{{$group->group_name}}</td>
                     @foreach ($dayWeek as $day)
-                        @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
+                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                         <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
+                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
                                         {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
                                     @endif
                                 @endforeach
@@ -109,9 +107,11 @@
                     @endforeach
                 </tr>
                 @endforeach
+
+
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                     aria-labelledby="exampleModalLabel" aria-hidden="true" >
                      <div class="modal-dialog  modal-lg  ">
                         <div class="modal-content  col-9">
                             <div class="modal-header">
@@ -143,8 +143,6 @@
 
                                            </select>
                                            @endif
-
-
                                     </div>
                                     <div style="display: flex">
                                          {{-- module  content --}}

@@ -65,6 +65,7 @@ class PourChaqueFormateur extends Component
     public function createSession()
     {
 
+ 
 
 
         try{
@@ -72,7 +73,7 @@ class PourChaqueFormateur extends Component
             $sission = sission::create([
                 'day'=>substr($idcase,0,3),
                 'day_part'=>substr($idcase,3,5),
-                'dure_sission'=>substr($idcase,8,2),
+                'dure_sission'=>substr($idcase,8,3),
                 'module_id'=> $this->moduleID,
                 'group_id'=> $this->groupID,
                 'establishment_id'=>session()->get('establishment_id'),
@@ -147,8 +148,6 @@ class PourChaqueFormateur extends Component
         ->select('modules.*')
         ->get();
 
-        // ->join('groupe_has_modules as ghm' , 'ghm.module_id' , '=' ,'modules.id')
-        // ->where('ghm.module_id' , $this->groupID)
 
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();

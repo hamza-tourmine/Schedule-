@@ -104,9 +104,9 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
 // groups
     Route::controller(groupController::class)->group(function () {
     Route::get('/add-groups', 'index')->name('addGroups');
-    Route::post('/insert-groups', 'insert_group')->name('insertGroups');
+
     Route::get('/delate-group','delate_group')->name('delateGrope');
-    Route::get('/update-group/{id}','display_update_page');
+    Route::get('/update-group/{id}','displayPageUpdate');
     Route::post('/updateGroups/{id}','update')->name('updateGroups');
 
 });
@@ -123,7 +123,7 @@ Route::controller(moduleController::class)->group(function(){
 // Formateru Part
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
-   
+
     // update formateur data from admin
     Route::get('/update-formateur/{id}','show_update_page');
     Route::post('/update-formateur/{id}','update');

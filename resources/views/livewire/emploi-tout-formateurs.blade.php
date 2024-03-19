@@ -61,7 +61,7 @@
                 </tr>
                 <tr class="se-row">
 
-                    <th >SE1</th>
+                    <th>SE1</th>
                     <th>SE2</th>
                     <th>SE1</th>
                     <th>SE2</th>
@@ -97,11 +97,11 @@
                 <tr>
                     <td>{{$formateur->user_name}}</td>
                     @foreach ($dayWeek as $day)
-                        @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
+                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                         <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$formateur->id }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                    {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/>{{$sission->module_name}}
+                                    @if ($sission->day === $day  && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/> {{$sission->module_name}}
                                     @endif
                                 @endforeach
                             </td>
@@ -110,13 +110,12 @@
                 </tr>
                 @endforeach
                      {{-- Model --}}
-                     <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                     <div wire:ignore.self  class="modal fade col-9"  id="exampleModal"
+                      tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                      <div class="modal-dialog  modal-lg  ">
                         <div class="modal-content  col-9">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" >
-                                    Create session</h1>
+                                <h1 class="modal-title fs-5" >Create session</h1>
                                     @if ($errors->any())
                                     @foreach ( $errors->all() as $error)
                                     <div id="liveAlertPlaceholder" class="alert alert-danger">
@@ -124,7 +123,6 @@
                                     </div>
                               @endforeach
                               @endif
-
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -139,9 +137,7 @@
                                             <option value="{{ $baranche->id }}">{{ $baranche->name }}</option>
                                             @endforeach
                                             @endif
-                                            </select>
-
-
+                                            </select >
                                                {{-- module  content --}}
                                          @if (!$checkValues[0]->module)
                                          <select wire:model="module" class="form-select "
@@ -156,12 +152,8 @@
                                      </select>
                                      @endif
 
-
-
-
                                     </div>
                                     <div style="display: flex">
-
 
                                       {{-- Groupes --}}
                                       @if ($groups)
@@ -191,7 +183,6 @@
                                     </div>
                                     {{-- tyope session --}}
                                     <div style="display: flex;justify-content: space-between">
-
                                         @if (!$checkValues[0]->typeSalle)
                                         <select wire:model="salleclassTyp" class="form-select"
                                             aria-label="Default select example">
