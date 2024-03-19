@@ -20,7 +20,6 @@ class FormateurHasGroup extends Controller
         foreach ($request->group as $groupId) {
             // Assuming you have the formateur_id in the request, adjust accordingly
             formateur_has_group::create([
-                'establishment_id' => $establishment_id,
                 'group_id' => $groupId,
                 'formateur_id' => $request->formateur,
             ]);

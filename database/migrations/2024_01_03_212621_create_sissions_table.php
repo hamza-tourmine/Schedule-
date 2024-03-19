@@ -72,7 +72,7 @@ return new class extends Migration
 
             $table->string('message')->nullable();
             $table->enum('sission_type', ['TEAMS', 'PRESENTIELLE','EFM'])->nullable();
-            $table->enum('status_sission', ["Pending", "Accepted", "Cancelled"])->nullable();
+            $table->enum('status_sission', ["Pending", "Accepted", "Cancelled"])->default("Pending");
 
         });
     }

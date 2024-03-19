@@ -1,410 +1,633 @@
-<x-HeaderMenuFormateur>
-    <style>
-        .wrapper {
-            margin: 15px auto;
-            max-width: 100%;
-            overflow-x: auto;
-        }
+    <x-HeaderMenuFormateur>
+        <style>
+            .wrapper {
+                margin: 15px auto;
+                max-width: 100%;
+                overflow-x: auto;
+            }
 
 
-        .button-container-calendar button {
-            cursor: pointer;
-            display: inline-block;
-            zoom: 1;
-            background: #00a2b7;
-            color: #fff;
-            border: 1px solid #0aa2b5;
-            border-radius: 4px;
-            padding: 5px 10px;
-        }
+            .button-container-calendar button {
+                cursor: pointer;
+                display: inline-block;
+                zoom: 1;
+                background: #00a2b7;
+                color: #fff;
+                border: 1px solid #0aa2b5;
+                border-radius: 4px;
+                padding: 5px 10px;
+            }
 
-        #submitAll {
-            cursor: pointer;
-            display: inline-block;
-            zoom: 1;
-            background: #00a2b7;
-            color: #fff;
-            border: 1px solid #0aa2b5;
-            border-radius: 4px;
-            padding: 5px 10px;
-        }
+            #submitAll {
+                cursor: pointer;
+                display: inline-block;
+                zoom: 1;
+                background: #00a2b7;
+                color: #fff;
+                border: 1px solid #0aa2b5;
+                border-radius: 4px;
+                padding: 5px 10px;
+            }
 
-        #previous {
-            float: left;
-        }
+            #previous {
+                float: left;
+            }
 
-        #next {
-            float: right;
-        }
+            #next {
+                float: right;
+            }
 
-        .button-container-calendar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+            .button-container-calendar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-        .date-container {
-            text-align: center;
-            flex-grow: 1;
-        }
+            .date-container {
+                text-align: center;
+                flex-grow: 1;
+            }
 
-        .date-info {
-            display: flex;
-            align-items: center;
-        }
+            .date-info {
+                display: flex;
+                align-items: center;
+            }
 
-        .date-info span {
-            margin-right: 10px;
-        }
+            .date-info span {
+                margin-right: 10px;
+            }
 
-        body {
-            font-family: Arial, sans-serif;
-        }
+            body {
+                font-family: Arial, sans-serif;
+            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
 
-        th,
-        td {
-            height: 40px;
-            width: 60px !important;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
+            th,
+            td {
+                height: 40px;
+                width: 60px !important;
+                border: 1px solid #ddd;
+                text-align: center;
+            }
 
-        th {
-            background-color: #f2f2f2;
-        }
+            th {
+                background-color: #f2f2f2;
+            }
 
-        thead tr.day {
-            font-size: 18px;
-            /* font-weight: bold; */
-            padding: 30px
-        }
+            thead tr.day {
+                font-size: 18px;
+                /* font-weight: bold; */
+                padding: 30px
+            }
 
-        thead tr.se-row {
-            height: 30px !important;
-            width: 30px;
-            margin: 0px;
-            padding: 0px;
-            font-size: 16px
-        }
+            thead tr.se-row {
+                height: 30px !important;
+                width: 30px;
+                margin: 0px;
+                padding: 0px;
+                font-size: 16px
+            }
 
-        /* table {
-            table-layout: fixed;
-            word-wrap: break-word;
-            } */
-        .idemploi {
-            font-weight: bold
-        }
+            /* table {
+                table-layout: fixed;
+                word-wrap: break-word;
+                } */
+            .idemploi {
+                font-weight: bold
+            }
 
-        .st {
-            color: tomato
-        }
+            .st {
+                color: tomato
+            }
 
-        .ed {
-            color: teal
-        }
+            .ed {
+                color: teal
+            }
 
-            {
-            text-decoration: none;
-            color: white
-        }
+                {
+                text-decoration: none;
+                color: white
+            }
 
-            {
-            text-decoration: none;
-            color: white
-        }
+                {
+                text-decoration: none;
+                color: white
+            }
 
-        button .nextprevious {
-            cursor: pointer;
-            background: #00a2b7;
-            color: #fff;
-            border: 1px solid #0aa2b5;
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin: 5px;
-        }
+            button .nextprevious {
+                cursor: pointer;
+                background: #00a2b7;
+                color: #fff;
+                border: 1px solid #0aa2b5;
+                border-radius: 4px;
+                padding: 5px 10px;
+                margin: 5px;
+            }
 
-        button:disabled {
-            background: #ddd;
-            color: #666;
-            cursor: not-allowed;
-        }
-    </style>
+            button:disabled {
+                background: #ddd;
+                color: #666;
+                cursor: not-allowed;
+            }
+        </style>
 
 
-    <div class="button-container-calendar">
-        <button id="previous" onclick="previous()">&#8249;</button>
-        <div class="date-info">
-            <h2> Start:<span id="dateStart" class="idemploi st"></span></h2>
-            <h2> End: <span id="dateEnd" class="idemploi ed"></span></h2>
+        <div class="button-container-calendar">
+            <button id="previous" onclick="previous()">&#8249;</button>
+            <div class="date-info">
+                <h2> Start:<span id="dateStart" class="idemploi st"></span></h2>
+                <h2> End: <span id="dateEnd" class="idemploi ed"></span></h2>
+            </div>
+            <button id="next" onclick="next()">&#8250;</button>
+            <button id="createRequestBtn" type="button">Create Request Emploi</button>
+
+
         </div>
-        <button id="next" onclick="next()">&#8250;</button>
-        <button id="createRequestBtn" type="button">Create Request Emploi</button>
 
-
-    </div>
-    {{-- <div id="flash-messages">
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
-
-        @if (session()->has('error'))
-            <div class="alert alert-danger">
-                {{ session()->get('error') }}
-            </div>
-        @endif
-    </div> --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="table-responsive">
-        <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
-            <thead>
-                <tr class="day">
-                    @foreach ($days_of_week as $day_of_week)
-                        <th class="text-uppercase" colspan="4">{{ $day_of_week }}</th>
-                    @endforeach
-                </tr>
-                <tr class="dPart bg-light-gray">
-                    @foreach ($days_of_week as $day_of_week)
-                        @foreach ($days_part as $day_part)
-                            <th class="text-uppercase" colspan="2">{{ $day_part }}</th>
+       
+        <div class="table-responsive">
+            <table id="tbl_exporttable_to_xls_1" style="overflow:scroll" class="col-md-12  active">
+                <thead>
+                    <tr class="day">
+                        @foreach ($days_of_week as $day_of_week)
+                            <th class="text-uppercase" colspan="4">{{ $day_of_week }}</th>
                         @endforeach
-                    @endforeach
-                </tr>
-                <tr class="se-row">
-                    @foreach ($days_of_week as $day_of_week)
+                    </tr>
+                    <tr class="dPart bg-light-gray">
+                        @foreach ($days_of_week as $day_of_week)
+                            @foreach ($days_part as $day_part)
+                                <th class="text-uppercase" colspan="2">{{ $day_part }}</th>
+                            @endforeach
+                        @endforeach
+                    </tr>
+                    <tr class="se-row">
+                        @foreach ($days_of_week as $day_of_week)
+                            @foreach ($seances_part as $seance_part)
+                                <th>{{ $seance_part }}</th>
+                            @endforeach
+                        @endforeach
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="dtdynamic bg-light-gray">
+                        @foreach ($days_of_week as $day_of_week)
+                            @foreach ($seances_part as $seance_part)
+                                <td data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
+                                    @foreach ($AllSeances as $AllSeance)
+                                        @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
+                                            {{ $AllSeance->sission_type }} <br>
+                                            {{ $AllSeance->group->group_name }} <br>
+                                            {{ $AllSeance->class_room->class_name }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                            @endforeach
+                        @endforeach
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <button id="submitAll">Submit All</button>
+
+        </div>
+
+
+        <div class="table-responsive">
+            <table id="tbl_exporttable_to_xls_2" style="overflow: scroll" class="col-md-12">
+                <thead>
+                    <!-- Header row for seance parts -->
+                    <tr>
+                        <th>Days/Seance</th> <!-- Empty cell for spacing -->
                         @foreach ($seances_part as $seance_part)
                             <th>{{ $seance_part }}</th>
                         @endforeach
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="dtdynamic bg-light-gray">
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through each day -->
                     @foreach ($days_of_week as $day_of_week)
-                        @foreach ($seances_part as $seance_part)
-                            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
-                                @foreach ($AllSeances as $AllSeance)
-                                    @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
-                                        {{ $AllSeance->sission_type }} <br>
-                                        {{ $AllSeance->group->group_name }} <br>
-                                        {{ $AllSeance->class_room->class_name }}
-                                    @endif
-                                @endforeach
-                            </td>
-                        @endforeach
+                        <tr class="dtdynamic bg-light-gray">
+                            <!-- Display the day -->
+                            <td>{{ $day_of_week }}</td>
+                            <!-- Loop through each seance part -->
+                            @foreach ($seances_part as $seance_part)
+                                <!-- Display the schedule data for each day and seance part -->
+                                <td data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
+                                    @foreach ($AllSeances as $AllSeance)
+                                        @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
+                                            {{ $AllSeance->sission_type }} <br>
+                                            {{ $AllSeance->group->group_name }} <br>
+                                            {{ $AllSeance->class_room->class_name }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                            @endforeach
+                        </tr>
                     @endforeach
-                </tr>
-            </tbody>
-        </table>
-        <br>
-        <button id="submitAll">Submit All</button>
-
-    </div>
-
-    <div id="infoContainer"></div>
-    </div>
-
-    </div>
-
-
-    {{-- start modal --}}
-    <!-- Modal -->
-    <div class="modal fade" id="groupModuleClassModal" tabindex="-1" role="dialog"
-        aria-labelledby="groupModuleClassModalLabel" aria-hidden="true">
-        <div class="test modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="groupModuleClassModalLabel">Sélectionner des données</h5>
-                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="groupModuleClassForm" method="POST" action="{{ url('reciveData') }}">
-                        @csrf
-                        <div class="form-group">
-                            <label for="group">Group:</label>
-                            <select class="form-control" id="group" name="group" required>
-                                @foreach ($GroupsList as $GroupList)
-                                    @php
-                                        $groupId = \App\Models\Group::find($GroupList['group_id'])->id;
-                                        $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
-                                    @endphp
-                                    <option value="{{ $groupId }}">{{ $groupName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="module">Module:</label>
-                            <select class="form-control" id="module" name="module" required>
-                                @foreach ($modulesList as $moduleList)
-                                    @php
-                                        $ModuleId = \App\Models\module::find($moduleList['module_id'])->id;
-                                        $ModuleName = \App\Models\module::find($moduleList['module_id'])->module_name;
-                                    @endphp
-                                    <option value="{{ $ModuleId }}">{{ $ModuleName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="type">Seance Type</label>
-                            <select class="form-control" id="type" name="type" required>
-                                @foreach ($seances_type as $index => $seance_type)
-                                    <option value="{{ $index }}">{{ $seance_type }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="class">Class:</label>
-                            <select class="form-control" id="class" name="class" required>
-                                @foreach ($class_rooms as $class_room)
-                                    @php
-                                        $RoomName = \App\Models\class_room::find($class_room['id'])->class_name;
-                                        $RoomId = \App\Models\class_room::find($class_room['id'])->id;
-
-                                    @endphp
-                                    <option value="{{ $RoomId }}">{{ $RoomName }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="class">Type your msg:</label>
-                            <input type="text" id="msg">
-                        </div>
-                        <br />
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Soumettre</button>
-
-                    </form>
-
-                </div>
-
-
-            </div>
+                </tbody>
+            </table>
+            <br>
+            <button id="submitAll">Submit All</button>
         </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="createRequestModal" tabindex="-1" role="dialog"
-        aria-labelledby="createRequestModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createRequestModalLabel">Create Request Emploi</h5>
-                    <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="createRequestForm">
-                        @csrf
-                        <div class="form-group">
-                            <label for="comment">Comment:</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-                        </div>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"
-                            id="cancelRequest">Fermer</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+
+
+
+
+
+        <div id="infoContainer"></div>
+        </div>
+
+        </div>
+
+
+        {{-- start modal --}}
+        <!-- Modal -->
+        <div class="modal fade" id="groupModuleClassModal" tabindex="-1" role="dialog"
+            aria-labelledby="groupModuleClassModalLabel" aria-hidden="true">
+            <div class="test modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="groupModuleClassModalLabel">Sélectionner des données</h5>
+                        <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="groupModuleClassForm" method="POST" action="{{ url('reciveData') }}">
+                            @csrf
+                            <div class="form-group">
+                                <label for="group">Group:</label>
+                                <select class="form-control" id="group" name="group" required>
+                                    @foreach ($GroupsList as $GroupList)
+                                        @php
+                                            $groupId = \App\Models\Group::find($GroupList['group_id'])->id;
+                                            $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
+                                        @endphp
+                                        <option value="{{ $groupId }}">{{ $groupName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="module">Module:</label>
+                                <select class="form-control" id="module" name="module" required>
+                                    @foreach ($modulesList as $moduleList)
+                                        @php
+                                            $ModuleId = \App\Models\module::find($moduleList['module_id'])->id;
+                                            $ModuleName = \App\Models\module::find($moduleList['module_id'])
+                                                ->module_name;
+                                        @endphp
+                                        <option value="{{ $ModuleId }}">{{ $ModuleName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Seance Type</label>
+                                <select class="form-control" id="type" name="type" required>
+                                    @foreach ($seances_type as $index => $seance_type)
+                                        <option value="{{ $index }}">{{ $seance_type }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="class">Class:</label>
+                                <select class="form-control" id="class" name="class" required>
+                                    @foreach ($class_rooms as $class_room)
+                                        @php
+                                            $RoomName = \App\Models\class_room::find($class_room['id'])->class_name;
+                                            $RoomId = \App\Models\class_room::find($class_room['id'])->id;
+
+                                        @endphp
+                                        <option value="{{ $RoomId }}">{{ $RoomName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="class">Type your msg:</label>
+                                <input type="text" id="msg">
+                            </div>
+                            <br />
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Soumettre</button>
+
+                        </form>
+
+                    </div>
+
+
                 </div>
             </div>
         </div>
-    </div>
-    {{-- flash pop uo --}}
+        <!-- Modal -->
+        <div class="modal fade" id="createRequestModal" tabindex="-1" role="dialog"
+            aria-labelledby="createRequestModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createRequestModalLabel">Create Request Emploi</h5>
+                        <button type="button" class="close btn btn-danger" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createRequestForm">
+                            @csrf
+                            <div class="form-group">
+                                <label for="comment">Comment:</label>
+                                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                id="cancelRequest">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- flash pop uo --}}
 
-    {{-- end modal --}}
+        {{-- end modal --}}
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var cells = document.querySelectorAll("tbody tr.dtdynamic td");
-            var daysOfWeek = @json($days_of_week);
-            var daysPart = @json($days_part);
-            var seancesPart = @json($seances_part);
-            var casesPerDay = 4;
-            var casesPerPartOfDay = 2;
+        <script>
+           
+            document.addEventListener("DOMContentLoaded", function() {
+                var cells = document.querySelectorAll("td.Cases");
+                var daysOfWeek = @json($days_of_week);
+                var daysPart = @json($days_part);
+                var seancesPart = @json($seances_part);
+                var casesPerDay = 4;
+                var casesPerPartOfDay = 2;
 
-            var clickedCell;
-            var FlashMsg = document.createElement("div");
-
-
-
-            var selectedData = [];
-
-            var mainEmplois = @json($main_emplois);
-            var currentIndex = 0;
-
-
-            document.getElementById('previous').addEventListener('click', function() {
-                currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
-                displayItem(currentIndex);
+                var clickedCell;
+                var FlashMsg = document.createElement("div");
 
 
 
-            });
+                var selectedData = [];
 
-            document.getElementById('next').addEventListener('click', function() {
-                currentIndex = (currentIndex + 1) % mainEmplois.length;
-                displayItem(currentIndex);
-            });
+                var mainEmplois = @json($main_emplois);
+                var currentIndex = 0;
 
-            function displayItem(index) {
-                if (mainEmplois.length == 0) {
-                    document.getElementById('dateStart').innerText =
-                        "veuillez attendre jusqu'a le directeur creer l'emploi";
 
-                } else {
-                    mainEmploiId = mainEmplois[index].id;
-                    document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
-                    document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+                document.getElementById('previous').addEventListener('click', function() {
+                    currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
+                    displayItem(currentIndex);
+                    console.log(mainEmploiId);
 
+
+                });
+
+                document.getElementById('next').addEventListener('click', function() {
+                    currentIndex = (currentIndex + 1) % mainEmplois.length;
+                    displayItem(currentIndex);
+                    console.log(mainEmploiId);
+
+                });
+
+                function displayItem(index) {
+                    if (mainEmplois.length == 0) {
+                        document.getElementById('dateStart').innerText =
+                            "veuillez attendre jusqu'a le directeur creer l'emploi";
+
+                    } else {
+                        mainEmploiId = mainEmplois[index].id;
+                        document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
+                        document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
+
+                    }
                 }
-            }
 
-            displayItem(currentIndex);
-            var mainEmploiId = mainEmplois[currentIndex].id;
-            // Function to open the pop-up form and display the flash message
+                displayItem(currentIndex);
+                var mainEmploiId = mainEmplois[currentIndex].id;
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('DemanderEmploi') }}',
+                    data: {
 
-            $(document).ready(function() {
-                // Function to handle form submission
-                $('#createRequestForm').submit(function(event) {
+                        mainEmploiId: mainEmploiId,
+
+                    },
+                    success: function(response) {
+
+                    },
+                    error: function(error) {
+                        console.error('Error creating sission emploi:',
+                            error
+                            .responseText);
+                        // Handle error and display appropriate message to the user
+                    }
+                });
+                // Function to open the pop-up form and display the flash message
+
+                $(document).ready(function() {
+                    // Function to handle form submission
+                    $('#createRequestForm').submit(function(event) {
+                        event.preventDefault();
+
+                        // Send AJAX request to create request emploi
+                        console.log('Request', mainEmploiId);
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('createRequestEmploi') }}',
+                            data: {
+                                '_token': '{{ csrf_token() }}',
+                                mainEmploiId: mainEmploiId, // Add main emploi variable
+                                formData: $(this).serialize() // Serialize form data
+
+                            },
+                            success: function(response) {
+
+                                if (response.status == 400) {
+                                    FlashMsg.innerHTML = `<br><div class="alert alert-warning">
+                                            ${response.message}
+                                        </div>`;
+                                } else if (response.status == 300) {
+                                    FlashMsg.innerHTML = `<br><div class="alert alert-success">
+                                            ${response.message}
+                                        </div>`;
+                                }
+
+                                document.getElementById('infoContainer').innerHTML = '';
+                                document.getElementById('infoContainer').appendChild(
+                                    FlashMsg);
+                                $('#createRequestModal').modal('hide');
+                                console.log('ajaxREQUEST', response);
+                            },
+                            error: function(error) {
+                                console.error('Error creating request emploi:',
+                                    error
+                                    .responseText);
+                                // Handle error and display appropriate message to the user
+                            }
+                        });
+                    });
+
+                    // Function to show modal when button is clicked
+                    $('#createRequestBtn').click(function() {
+                        $('#createRequestModal').modal('show');
+                    });
+
+                    // Function to hide modal when cancel button is clicked
+                    $('#cancelRequest').click(function() {
+                        $('#createRequestModal').modal('hide');
+                    });
+                    $('#createRequestModal').on('click', '.btn-danger', function() {
+                        $('#createRequestModal').modal('hide');
+                    });
+                });
+
+
+
+                cells.forEach(function(cell) {
+                    cell.addEventListener("click", function() {
+
+                        clickedCell = this; // Assign the clicked cell to clickedCell
+                        console.log(clickedCell);
+
+                        $('#groupModuleClassModal').modal('show');
+
+                        $('#groupModuleClassForm').off('submit').on('submit', function(event) {
+                            event.preventDefault();
+
+                            var selectedGroup = $('#group option:selected').val();
+                            var selectedModule = $('#module option:selected').val();
+                            var selectedType = $('#type option:selected').val();
+                            var selectedClass = $('#class option:selected').val();
+                            var ShowselectedGroup = $('#group option:selected').text();
+                            var ShowselectedModule = $('#module option:selected')
+                                .text();
+                            var ShowselectedType = $('#type option:selected').text();
+                            var ShowselectedClass = $('#class option:selected').text();
+                            var ShowselectedMsg = document.getElementById("msg").value;
+
+                            // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
+                            var totalCases = casesPerDay * daysOfWeek.length;
+                            var clickedIndex = Array.from(clickedCell.parentNode
+                                    .children)
+                                .indexOf(clickedCell);
+
+                            var dayOfWeekIndex = Math.floor(clickedIndex /
+                                    casesPerDay) %
+                                daysOfWeek.length;
+                            var dayPartIndex = Math.floor((clickedIndex % totalCases) /
+                                casesPerPartOfDay) % daysPart.length;
+                            var seancePartIndex = (clickedIndex % totalCases) %
+                                seancesPart
+                                .length;
+
+                            var dayOfWeek = daysOfWeek[dayOfWeekIndex];
+
+                            var dayPart = daysPart[dayPartIndex];
+                            var seancePart = seancesPart[seancePartIndex];
+
+                            // 
+                            const table = document.getElementById('tbl_exporttable_to_xls');
+
+                            table.addEventListener('click', function(event) {
+                                if (event.target.classList.contains('Cases')) {
+                                    const day = event.target.dataset.day;
+                                    const seance = event.target.dataset.seance;
+                                    console.log(`You clicked on ${day}, ${seance}`);
+                                }
+                            });
+                            // all data in once
+                            selectedData.push({
+                                'group': selectedGroup,
+                                'module': selectedModule,
+                                'type': ShowselectedType,
+                                'class': selectedClass,
+                                'day': dayOfWeek,
+                                'dayPart': dayPart,
+                                'seancePart': seancePart,
+                                'mainEmploiId': mainEmploiId,
+                                'message': ShowselectedMsg
+                            });
+
+
+
+                            clickedCell.innerText = ShowselectedType + '\n ' +
+                                ShowselectedGroup + '\n' + ShowselectedClass;
+
+                            // Create a new div to display the selected information
+                            var infoDiv = document.createElement("div");
+                            infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
+                                '</h3>' +
+                                '<h3>Day Part: ' + dayPart + '</h3>' +
+                                '<h3>Seance Part: ' + seancePart + '</h3>' +
+                                '<h3>Module: ' + ShowselectedModule + '</h3>' +
+                                '<h3>Group: ' + ShowselectedGroup + '</h3>' +
+                                '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
+                                '<h3>Seance MSG: ' + ShowselectedMsg + '</h3>' +
+                                '<h3>class :' + ShowselectedClass + ' </h3>';
+
+                            // Append the new div to the "infoContainer"
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(
+                                infoDiv);
+
+                            $('#groupModuleClassModal').modal('hide');
+                        });
+                    });
+                });
+
+                $('#groupModuleClassModal').on('click', '.btn-danger', function() {
+                    $('#groupModuleClassModal').modal('hide');
+                });
+
+                $('#cancelButton').click(function() {
+                    $('#groupModuleClassForm')[0].reset();
+                    $('#groupModuleClassModal').modal('hide');
+                });
+
+                $('#groupModuleClassForm').on('submit', function(event) {
                     event.preventDefault();
+                });
 
-                    // Send AJAX request to create request emploi
+
+                // sending all data code
+                document.getElementById('submitAll').addEventListener('click', function() {
+                    if (selectedData.length === 0) {
+                        FlashMsg.innerHTML = `<br><div class="alert alert-danger">
+                                    vous devez selectionner au moins une seance.
+                                </div>`
+                        document.getElementById('infoContainer').innerHTML = '';
+                        document.getElementById('infoContainer').appendChild(FlashMsg);
+                        return;
+                    }
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('createRequestEmploi') }}',
+                        url: '{{ route('submitAllData') }}',
                         data: {
+
                             '_token': '{{ csrf_token() }}',
-                            mainEmploiId: mainEmploiId, // Add main emploi variable
-                            formData: $(this).serialize() // Serialize form data
+                            'selectedData': selectedData,
+                            'mainEmploiId': mainEmploiId,
+
                         },
                         success: function(response) {
-                            console.log('Request emploi created:', response);
-                            // Optionally, you can redirect or show a success message here
-                            $('#createRequestModal').modal(
-                                'hide'
-                            ); // Hide modal after successful submission
+
+                            if (response.status == 200) {
+                                FlashMsg.innerHTML = `<br><div class="alert alert-success">
+                                                                ${response.sucess}
+                                                                </div>`
+                            } else if (response.status == 599) {
+                                FlashMsg.innerHTML = `<br><div class="alert alert-warning">
+                                                                ${response.msg}
+                                                                </div>`
+                            }
+
+                            selectedData = [];
+                            document.getElementById('infoContainer').innerHTML = '';
+                            document.getElementById('infoContainer').appendChild(FlashMsg);
                         },
                         error: function(error) {
-                            console.error('Error creating request emploi:',
+                            console.error('Error creating sission emploi:',
                                 error
                                 .responseText);
                             // Handle error and display appropriate message to the user
@@ -412,155 +635,25 @@
                     });
                 });
 
-                // Function to show modal when button is clicked
-                $('#createRequestBtn').click(function() {
-                    $('#createRequestModal').modal('show');
-                });
-
-                // Function to hide modal when cancel button is clicked
-                $('#cancelRequest').click(function() {
-                    $('#createRequestModal').modal('hide');
-                });
-                $('#createRequestModal').on('click', '.btn-danger', function() {
-                    $('#createRequestModal').modal('hide');
-                });
-            });
 
 
-
-            cells.forEach(function(cell) {
-                cell.addEventListener("click", function() {
-                    clickedCell = this; // Assign the clicked cell to clickedCell
-
-
-                    $('#groupModuleClassModal').modal('show');
-
-                    $('#groupModuleClassForm').off('submit').on('submit', function(event) {
-                        event.preventDefault();
-
-                        var selectedGroup = $('#group option:selected').val();
-                        var selectedModule = $('#module option:selected').val();
-                        var selectedType = $('#type option:selected').val();
-                        var selectedClass = $('#class option:selected').val();
-                        var ShowselectedGroup = $('#group option:selected').text();
-                        var ShowselectedModule = $('#module option:selected')
-                            .text();
-                        var ShowselectedType = $('#type option:selected').text();
-                        var ShowselectedClass = $('#class option:selected').text();
-                        var ShowselectedMsg = document.getElementById("msg").value;
-
-                        // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
-                        var totalCases = casesPerDay * daysOfWeek.length;
-                        var clickedIndex = Array.from(clickedCell.parentNode
-                                .children)
-                            .indexOf(clickedCell);
-
-                        var dayOfWeekIndex = Math.floor(clickedIndex /
-                                casesPerDay) %
-                            daysOfWeek.length;
-                        var dayPartIndex = Math.floor((clickedIndex % totalCases) /
-                            casesPerPartOfDay) % daysPart.length;
-                        var seancePartIndex = (clickedIndex % totalCases) %
-                            seancesPart
-                            .length;
-
-                        var dayOfWeek = daysOfWeek[dayOfWeekIndex];
-
-                        var dayPart = daysPart[dayPartIndex];
-                        var seancePart = seancesPart[seancePartIndex];
-                        // all data in once
-                        selectedData.push({
-                            'group': selectedGroup,
-                            'module': selectedModule,
-                            'type': ShowselectedType,
-                            'class': selectedClass,
-                            'day': dayOfWeek,
-                            'dayPart': dayPart,
-                            'seancePart': seancePart,
-                            'mainEmploiId': mainEmploiId,
-                            'message': ShowselectedMsg
-                        });
-
-
-                        clickedCell.innerText = ShowselectedType + '\n ' +
-                            ShowselectedGroup + '\n' + ShowselectedClass;
-
-                        // Create a new div to display the selected information
-                        var infoDiv = document.createElement("div");
-                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
-                            '</h3>' +
-                            '<h3>Day Part: ' + dayPart + '</h3>' +
-                            '<h3>Seance Part: ' + seancePart + '</h3>' +
-                            '<h3>Module: ' + ShowselectedModule + '</h3>' +
-                            '<h3>Group: ' + ShowselectedGroup + '</h3>' +
-                            '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
-                            '<h3>Seance MSG: ' + ShowselectedMsg + '</h3>' +
-                            '<h3>class :' + ShowselectedClass + ' </h3>';
-
-                        // Append the new div to the "infoContainer"
-                        document.getElementById('infoContainer').innerHTML = '';
-                        document.getElementById('infoContainer').appendChild(
-                            infoDiv);
-
-                        $('#groupModuleClassModal').modal('hide');
-                    });
-                });
-            });
-
-            $('#groupModuleClassModal').on('click', '.btn-danger', function() {
-                $('#groupModuleClassModal').modal('hide');
-            });
-
-            $('#cancelButton').click(function() {
-                $('#groupModuleClassForm')[0].reset();
-                $('#groupModuleClassModal').modal('hide');
-            });
-
-            $('#groupModuleClassForm').on('submit', function(event) {
-                event.preventDefault();
-            });
-
-
-            // sending all data code
-            document.getElementById('submitAll').addEventListener('click', function() {
-                if (selectedData.length === 0) {
-                    FlashMsg.innerHTML = `<br><div class="alert alert-danger">
-                                vous devez selectionner au moins une seance.
-                            </div>`
-                    document.getElementById('infoContainer').innerHTML = '';
-                    document.getElementById('infoContainer').appendChild(FlashMsg);
-                    return;
-                }
-
-                // Send all selected data to the server
+                console.log('demander', mainEmploiId);
                 $.ajax({
-                    type: 'POST',
-                    url: '{{ route('submitAllData') }}',
+                    type: 'GET',
+                    url: '{{ route('DemanderEmploi') }}',
                     data: {
-                        '_token': '{{ csrf_token() }}',
-                        'selectedData': selectedData
+                        'main_emploi_id': mainEmploiId, // Correct parameter name
                     },
-
                     success: function(response) {
-                        if (response.status = 200) {
-                            FlashMsg.innerHTML = `<br><div class="alert alert-success">
-                                       ${response.sucess}
-                                    </div>`
-                            document.getElementById('infoContainer').innerHTML = '';
-                            document.getElementById('infoContainer').appendChild(FlashMsg);
-                        }
+                        console.log("c bon pour l'affiachge de l'emploi");
                     },
-                    error: function(xhr, status, error) {
-
-
+                    error: function(error) {
+                        console.error('Error creating session emploi:', error.responseText);
+                        // Handle error and display appropriate message to the user
                     }
                 });
             });
+        </script>
 
 
-
-        });
-    </script>
-
-
-</x-HeaderMenuFormateur>
+    </x-HeaderMenuFormateur>
