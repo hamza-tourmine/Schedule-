@@ -62,8 +62,8 @@ public function UpdateSession()
         $idcase = $this->receivedVariable;
         $day = substr($idcase, 0, 3);
         $day_part = substr($idcase, 3, 5);
-        $group_id = substr($idcase, 10);
-        $user_id = substr($idcase, 10);
+        $group_id = substr($idcase, 11);
+        $user_id = substr($idcase, 11);
         $dure_sission = substr($idcase, 8, 3);
 
         $sessionData = [
@@ -115,7 +115,11 @@ public function UpdateSession()
 
         $this->emit('fresh');
     } catch (\Exception $e) {
-        dd($e->getMessage());
+        $this->alert('error', 'La salle  que vous avez sélectionnée a été réservée', [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => true,
+        ]);
     }
 }
 
@@ -127,8 +131,8 @@ public function DeleteSession()
     $idcase = $this->receivedVariable;
     $day = substr($idcase, 0, 3);
     $day_part = substr($idcase, 3, 5);
-    $group_id = substr($idcase, 10);
-    $user_id = substr($idcase, 10);
+    $group_id = substr($idcase, 11);
+    $user_id = substr($idcase, 11);
     $dure_sission = substr($idcase, 8, 2);
 
      if ($this->selectedType === "Group") {

@@ -104,9 +104,6 @@
                     </tr>
                   </thead>
                 <tbody>
-
-
-
                     @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
@@ -227,10 +224,10 @@
    <tr>
        <td>{{$group->group_name}}</td>
        @foreach ($dayWeek as $day)
-           @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
+           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
                    @foreach ($sissions as $sission)
-                       @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
+                       @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
                        @endif
                    @endforeach
@@ -246,11 +243,11 @@
     <tr>
         <td>{{$formateur->user_name}}</td>
         @foreach (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
-            @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
+            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
                 <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day . $sessionType . $formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">
                     @foreach ($sissions->where('user_id', $formateur->id) as $sission)
                         @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) &&
-                        $sission->dure_sission === substr($sessionType, -2))
+                        $sission->dure_sission === substr($sessionType, 5))
                             {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
                         @endif
                     @endforeach

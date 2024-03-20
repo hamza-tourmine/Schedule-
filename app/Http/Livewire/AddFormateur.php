@@ -35,6 +35,10 @@ class AddFormateur extends Component
     public $addGroupe =    false;
     public $addModule  =   false;
 
+    public function goToPage($page , $queryParams)
+    {
+        return redirect()->route($page , $queryParams);
+    }
 
     public function create()
     {

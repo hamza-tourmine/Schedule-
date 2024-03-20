@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\formateur;
+use App\Models\branch;
+use App\Models\group;
+use App\Models\module;
+
 class formateurController extends Controller
 {
 
@@ -14,17 +18,18 @@ class formateurController extends Controller
 
     public function showHomepage(){
         $id_formateur = session()->get('user_id');
-     // Assuming the model name is 'Formateur' and you're looking for a single record.
-          $formateur = formateur::select('user_name')->where('id', $id_formateur)->first();
-
+        //Assuming the model name is 'Formateur' and you're looking for a single record.
+        $formateur = formateur::select('user_name')->where('id', $id_formateur)->first();
+        
         return view('formateurDashboard.Home.formateur',['formateur'=>$formateur]);
-        // return $formateur->user_name ;
+        //return $formateur->user_name ;
     }
 
     public function show_update_page($id)
     {
-        $formateur = formateur::find($id);
-       return view('adminDashboard.addFormateur.update_formateur',['formateur'=>$formateur]);
+
+
+        return view('adminDashboard.addFormateur.update_formateur');
 
     }
 
