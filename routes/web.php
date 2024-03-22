@@ -21,7 +21,7 @@ use App\Http\Controllers\ScheduleFormateurs;
 use App\Http\Controllers\Schedule;
 use App\Http\Controllers\ScheduleChaqueGroup;
 use App\Models\group;
-use App\http\Livewire\UpdateFormateur;
+
 
 // use App\Http\Middleware\Authenticate;
 /*
@@ -124,13 +124,10 @@ Route::controller(moduleController::class)->group(function(){
 // Formateru Part
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
-
     // update formateur data from admin
-
-    Route::post('/update-formateur/{id}','update');
     Route::get('/delete-formateur/{id}','destroy');
 });
-Route::get('/update-formateur/{id}', UpdateFormateur::class);
+
 // Formateur has Groups
 Route::controller(FormateurHasGroup::class)->group(function(){
     Route::match(['get', 'post'], '/formateurGroupe', [FormateurHasGroup::class, 'displaygroups'])->name('formateurGroupe');
