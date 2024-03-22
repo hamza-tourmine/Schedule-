@@ -246,7 +246,7 @@
                     @foreach ($days_of_week as $day_of_week)
                         <tr class="dtdynamic bg-light-gray">
                             <!-- Display the day -->
-                            <td>{{ $day_of_week }}</td>
+                            <th>{{ $day_of_week }}</th>
                             <!-- Loop through each seance part -->
                             @foreach ($seances_part as $seance_part)
                                 <!-- Display the schedule data for each day and seance part -->
