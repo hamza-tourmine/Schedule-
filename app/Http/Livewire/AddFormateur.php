@@ -55,22 +55,17 @@ class AddFormateur extends Component
     public function render()
     {
         $establishment_id = session()->get('establishment_id');
-
-
         if($this->New_idFormateur){
             $formateur = Formateur::find($this->New_idFormateur);
             $this->New_formateur_name = $formateur->user_name;
             $this->New_Password = $formateur->passwordClone;
-            $formateurBranches = Branch::select('branches.*')
+            $this->formateurBranches = Branch::select('branches.*')
             ->join('formateur_has_filier as FHF', 'FHF.barnch_id', '=', 'branches.id')
             ->where('FHF.formateur_id', $this->New_idFormateur)
             ->where('establishment_id', $establishment_id)
             ->get();
             $this->branches = Branch::where('establishment_id', $establishment_id)->get();
             // dd($formateurBranches);
-
-
-
         }
 
 

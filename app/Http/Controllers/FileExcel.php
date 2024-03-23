@@ -16,86 +16,139 @@ use App\Models\user;
 use App\Models\main_emploi;
 use App\Models\formateur_has_group;
 use App\Models\module_has_formateur;
+// use PHPExcel_IOFactory;
+// use PhpOffice\PhpSpreadsheet\IOFactory;
+
+
+// use Maatwebsite\Excel\Facades\Excel;
+// Path to Composer autoload file
+
+// use PhpOffice\PhpSpreadsheet\Spreadsheet;
+// use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 
 class FileExcel extends Controller
 {
+
+
     public function index(){
         return view('adminDashboard.Excel.Uploed');
     }
+    public function upload(Request $request)
+    {
+        // Validate the uploaded file
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
 
-    // uploed  file and  inserd data into db
-    public function upload(Request $req){
-        $filePath = $req->file('file')->path();
-        $data = file_get_contents($filePath);
-        $rows = array_map('str_getcsv', explode("\n", $data));
+        // try {
+            // require_once 'vendor/autoload.php';
+            // Get the path of the uploaded file
+            // $filePath = $request->file('file')->path();
+            // $uploadFile = basename($_FILES['file']['name']);
 
-        $rows = array_slice($rows , 1);
-        $Formateurs = [];
-        $Groups = []    ;
-        $Modules = []   ;
-        $ModulesForEashFormateur = [];
-        try{
-        // Filter Formateur
-        foreach ($rows as $row) {
-            $found = false;
-            foreach ($Formateurs as $item) {
-                // Ensure both $row and $item have key '20'
-                if (isset($row[20]) && isset($item[20]) && $row[20] === $item[20]) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $Formateurs[] = $row;
-            }
-        }
-        // Filter groups
-        foreach($rows as $row){
-            $found = false;
-            foreach ($Groups as $item) {
-                // Ensure both $row and $item have key '20'
-                if (isset($row[8]) && isset($item[8]) && $row[8] === $item[8]) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $Groups[] = $row;
-            }
-        }
-        // Filter Modules
-        foreach($rows as $row){
-            $found = false;
-            foreach ($Modules as $item) {
-                // Ensure both $row and $item have key '20'
-                if (isset($row[17]) && isset($item[17]) && $row[17] === $item[17]) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $Modules[] = $row;
-            }
-        }
+            // dd($uploadFile);
+
+            // Load the Excel file
+            // $spreadsheet = IOFactory::createReaderForFile($uploadFile);
+
+            // Get the active worksheet
+            // $reader = $spreadsheet->setReadDataOnly(true);
+            // $worksheet = $spreadsheet->load($uploadFile);
+            // $worksheet = $worksheet->getSheetByName('A1')->getCellCollection();
+            // dd($worksheet);
 
 
-        // dd($rows);
 
-       if(!empty($Groups) && !empty($Formateurs) && !empty($Modules)){
-         $this->createModuls($Modules);
-         $this->createGroup($Groups);
-         $this->createFormateur($Formateurs);
-         $this->assigneModuleAndGroupForEashFormateur($rows);
 
-            // Filter Formateur and hes groupes
 
-       }
-    }catch(\Exception $e){
-        return redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->getMessage()]);
+        // } catch (\Exception $e) {
+        //     // Handle exceptions
+        //     return back()->with('error', $e->getMessage());
+        // }
     }
-    }
+
+    // public function upload(Request $req){
+
+    //     try{
+    //         // $inputFileName = "C:\Users\HT\Downloads\AvancementProgramme2023_ECD0_05_03_2024_12_58_21 (1).xlsx";
+    //         /** Load $inputFileName to a Spreadsheet Object  **/
+    //         // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+    //         // dd($spreadsheet);
+    //         $filePath = $req->file('file')->path()  ;
+    //         $spreadsheet = IOFactory::load($filePath);
+    //         $worksheet = $spreadsheet->getActiveSheet();
+    //         dd($worksheet);
+    //         // $reader = PHPExcel_IOFactory::createReaderForFile($filePath);
+    //         // dd($reader);
+    //         $data = file_get_contents($filePath);
+    //         $rows = array_map('str_getcsv', explode("\n", $data));
+
+    //         $rows = array_slice($rows , 1);
+    //         $Formateurs = [];
+    //         $Groups = []    ;
+    //         $Modules = []   ;
+    //         $ModulesForEashFormateur = [];
+    //     // Filter Formateur
+    //     foreach ($rows as $row) {
+    //         $found = false;
+    //         foreach ($Formateurs as $item) {
+    //             // Ensure both $row and $item have key '20'
+    //             if (isset($row[20]) && isset($item[20]) && $row[20] === $item[20]) {
+    //                 $found = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!$found) {
+    //             $Formateurs[] = $row;
+    //         }
+    //     }
+    //     // Filter groups
+    //     foreach($rows as $row){
+    //         $found = false;
+    //         foreach ($Groups as $item) {
+    //             // Ensure both $row and $item have key '20'
+    //             if (isset($row[8]) && isset($item[8]) && $row[8] === $item[8]) {
+    //                 $found = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!$found) {
+    //             $Groups[] = $row;
+    //         }
+    //     }
+    //     // Filter Modules
+    //     foreach($rows as $row){
+    //         $found = false;
+    //         foreach ($Modules as $item) {
+    //             // Ensure both $row and $item have key '20'
+    //             if (isset($row[17]) && isset($item[17]) && $row[17] === $item[17]) {
+    //                 $found = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!$found) {
+    //             $Modules[] = $row;
+    //         }
+    //     }
+
+
+    //     // dd($rows);
+
+    //    if(!empty($Groups) && !empty($Formateurs) && !empty($Modules)){
+    //      $this->createModuls($Modules);
+    //      $this->createGroup($Groups);
+    //      $this->createFormateur($Formateurs);
+    //      $this->assigneModuleAndGroupForEashFormateur($rows);
+
+    //         // Filter Formateur and hes groupes
+
+    //    }
+    // }catch(\Exception $e){
+    //     return redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->getMessage()]);
+    // }
+    // }
 
 
     // create account  Formateur

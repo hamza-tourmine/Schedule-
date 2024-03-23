@@ -105,7 +105,7 @@
             <div for="images" class="drop-container" id="dropcontainer">
                 <span class="drop-title">Drop files here</span>
                 or
-                <input type="file" id="images" name="file" />
+                <input type="file" name="file" accept=".xlsx" />
             </div>
             <button type="submit">Upload ..</button>
         </form>
