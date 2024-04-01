@@ -52,32 +52,41 @@ class auth_controller extends Controller
     }
 // login
 public function login(Request $request){
+    // Validate request data
     $credentials = $request->validate([
-        'email' => ['required', 'email'],
+        'id' => ['required'],
         'password' => ['required'],
     ]);
 
-    if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'admin'])) {
+    // Remove extra spaces from 'id' key to ensure consistency
+    $credentials['id'] = trim($credentials['id']);
+
+    // Attempt authentication for admin role
+    if (Auth::attempt(['id' => $credentials['id'], 'password' => $credentials['password'], 'role' => 'admin'])) {
         $request->session()->regenerate();
-         // store id in session
+        // store id in session
         $user = auth::user();
-        session(['user_name'=>$user->user_name,'user_id'=>$user->id,'establishment_id'=>$user->establishment_id]);
+        session(['user_name' => $user->user_name, 'user_id' => $user->id, 'establishment_id' => $user->establishment_id]);
         return redirect()->route('dashboardAdmin');
-    } elseif (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'role' => 'formateur'])) {
+    }
+    // Attempt authentication for formateur role
+    elseif (Auth::attempt(['id' => $credentials['id'], 'password' => $credentials['password'], 'role' => 'formateur'])) {
         $user = Auth::user();
         if ($user->status == 'active'){
             $request->session()->regenerate();
             // store id in session
-            $user = auth::user();
-            session(['user_id'=>$user->id,'establishment_id'=>$user->establishment_id]);
+            session(['user_id' => $user->id, 'establishment_id' => $user->establishment_id]);
             return redirect()->route('dashboard_formateur');
-        }else {
-            return redirect()->back()->withErrors(['errors'=>'Votre compte est suspendu, veuillez contacter le directeur']);
+        } else {
+            return redirect()->back()->withErrors(['errors' => 'Votre compte est suspendu, veuillez contacter le directeur']);
         }
-    } else {
-          return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+    }
+    // Authentication failed
+    else {
+        return back()->withErrors([
+            'id' => 'The provided credentials do not match our records.',
+        ])->onlyInput('id');
     }
 }
+
 }

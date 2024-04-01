@@ -53,7 +53,7 @@ Route::post('/insert',[auth_controller::class,'create_account'])->name('insert')
 Route::post('/login',[auth_controller::class ,'login'])->name('login_into_account');
 
 // for admin
-Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
+Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function(){
     //emploi pour tout les formateur
     Route::get('/emploi-for-formateurs' ,[ScheduleFormateurs::class , 'index'])->name('emploiForFormateurs');
     //emploi pour chaque group
@@ -105,10 +105,7 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
 // groups
     Route::controller(groupController::class)->group(function () {
     Route::get('/add-groups', 'index')->name('addGroups');
-
-    Route::get('/delate-group','delate_group')->name('delateGrope');
-    Route::get('/update-group/{id}','displayPageUpdate');
-    Route::post('/updateGroups/{id}','update')->name('updateGroups');
+    Route::get('/GetdataGroupe/{id}','GetdataGroupe')->name('updateGroups');
 
 });
 
@@ -116,26 +113,24 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
 Route::controller(moduleController::class)->group(function(){
     Route::get('/add-model','index')->name('addModule');
     Route::post('/create-model','create')->name('insertmodule');
-    Route::get('/delatemodule/{id}','destroy');
-    Route::get('/update-module/{id}','display_update_page');
-    Route::post('/update-module/{id}','update');
+    Route::get('/delate-module/{id}','destroy')->name('delateModule');
+    Route::get('/update-module/{id}','display_update_page')->name('display_update_page');
+    Route::post('/update-module/{id}','update')->name('update-module');
 });
 
 // Formateru Part
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
+    Route::get('reserve/{di}' , 'reserved');
+    Route::post('update/{id}','update')->name('updateFormateur');
     // update formateur data from admin
     Route::get('/delete-formateur/{id}','destroy');
 });
 
-// Formateur has Groups
-Route::controller(FormateurHasGroup::class)->group(function(){
-    Route::match(['get', 'post'], '/formateurGroupe', [FormateurHasGroup::class, 'displaygroups'])->name('formateurGroupe');
-});
-// Formateur has Module
-    Route::match(['get', 'post'], '/formateurModule', [FormateurHasModuleController::class, 'displaymodules'])->name('formateurModule');
+
+
     // Files excel
-    Route::get('admin/uploed', [FileExcel::class, 'index'])->name('UploedFileExcelView');
+    Route::get('uploed', [FileExcel::class, 'index'])->name('UploedFileExcelView');
     Route::post('uploed', [FileExcel::class, 'upload'])->name('UploedFileExcel');
 });
 

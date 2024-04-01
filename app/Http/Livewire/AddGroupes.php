@@ -25,20 +25,37 @@ class AddGroupes extends Component
     public $selectedModules ;
     public $year;
 
+    // Edit Groupe
+    public $Idgroup ;
+    public $oldIdGroup ;
+    public $oldGroupName ;
+    public $oldyear ;
+    public $oldBranch ;
 
 
 
-    protected $listeners = ['componentRefreshed' => '$refresh'];
 
 
+
+    protected $listeners = ['componentRefreshed' => 'FNrefresh' , 'GetIdGroupe' => 'GetIdGroupe'];
+    public function FNrefresh(){
+        $this->reset();
+    }
+
+    public function GetIdGroupe($idGroup){
+        $this->Idgroup =$idGroup ;
+    }
  // insert groups
 public function create()
 {
-
     $establishment = session()->get('establishment_id');
+
     try {
+        $groupNameWithoutSpaces = str_replace(' ', '', $this->group_name);
+
+        // dd($this);
         $group = Group::create([
-            'id' => $establishment . $this->group_name,
+            'id' => $establishment . $groupNameWithoutSpaces,
             'group_name' => $this->group_name,
             'year' => $this->year,
             'barnch_id' => $this->branch,
@@ -51,15 +68,15 @@ public function create()
                 // Check if the group has already been assigned this module
                 $isExist = group_has_module::where([
                     'module_id' => $module,
-                    'group_id' => $establishment . $this->group_name, // Use the newly created group's ID here
+                    'group_id' => $establishment . $groupNameWithoutSpaces, // Use the newly created group's ID here
                 ])->exists();
 
                 if (!$isExist) {
                     group_has_module::create([
                         'module_id' => $module,
-                        'group_id' => $establishment . $this->group_name, // Use the newly created group's ID here
+                        'group_id' => $establishment . $groupNameWithoutSpaces, // Use the newly created group's ID here
                     ]);
-                    $this->emit('componentRefreshed');
+
                 }
             }
 
@@ -69,7 +86,10 @@ public function create()
                 'toast' => true,
             ]);
 
-            $this->resetForm();
+
+            $this->emitSelf('componentRefreshed');
+                        $this->resetForm();
+
 
         } else {
             if ($group) {
@@ -78,8 +98,8 @@ public function create()
                     'timer' => 3000,
                     'toast' => true,
                 ]);
-                // return redirect()->route('addGroups') ;
-                $this->emit('componentRefreshed');
+
+                $this->emitSelf('componentRefreshed');
                 $this->resetForm();
 
             } else {
@@ -96,6 +116,7 @@ public function create()
             'timer' => 3000,
             'toast' => true,
         ]);
+        // dd($e->getMessage());
     }
 }
 
@@ -109,15 +130,31 @@ public function create()
         $this->year = '';
     }
 
+    public function delete($id)
+    {
+        $group = Group::find($id);
 
-
+        if ($group) {
+            $group->delete();
+            $this->alert('success', 'Vous avez supprimé un groupe', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        } else {
+            $this->alert('error', 'Le groupe que vous essayez de supprimer n\'existe pas.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }
+    }
 
     public function render()
     {
+
         $establishment = session()->get('establishment_id');
-
         $this->branches = branch::where('establishment_id',$establishment)->get();
-
 
         $this->groupesModules = DB::table('groups')
             ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
@@ -128,28 +165,46 @@ public function create()
 
         $this->modules = module::where('establishment_id',$establishment)->get();
 
-        $dataGroups = DB::table('groups')
-        ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
-        ->join('modules as m', 'm.id', '=', 'ghm.module_id')
-        ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
-        ->where('groups.establishment_id', $establishment)
-        ->get();
+            // Query to fetch groups with branches and modules
+            $dataGroupsWithBranchAndModules = DB::table('groups')
+            ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
+            ->join('modules as m', 'm.id', '=', 'ghm.module_id')
+            ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
+            ->where('groups.establishment_id', $establishment);
+            // Query to fetch groups without any branches or modules
+            $dataGroupsWithoutBranchAndModules = DB::table('groups')
+            ->leftJoin('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
+            ->leftJoin('modules as m', 'm.id', '=', 'ghm.module_id')
+            ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
+            ->where('groups.establishment_id', $establishment)
+            ->whereNull('groups.barnch_id')
+            ->orwhereNull('m.id');
+            // Combine both queries using union
+            $dataGroups = $dataGroupsWithBranchAndModules->union($dataGroupsWithoutBranchAndModules)->get();
+            // Group modules by group_id
+            $this->groups = $dataGroups->groupBy('group_id')->map(function ($group) {
+            // Merge all modules into one array for each group
+            $modules = $group->pluck('module_name')->toArray();
+            return [
+                'group_id' => $group[0]->group_id,
+                'group_name' => $group[0]->group_name,
+                'year' => $group[0]->year,
+                'branch_id' => $group[0]->barnch_id,
+                'modules' => $modules,
+            ];
+            })->values()->all();
 
-    // Group modules by group_id
-    $this->groups = $dataGroups->groupBy('group_id')->map(function ($group) {
-        // Merge all modules into one array for each group
-        $modules = $group->pluck( 'module_name' )->toArray();
-        return [
-            'group_id' => $group[0]->group_id,
-            'group_name' => $group[0]->group_name,
-            'year' => $group[0]->year,
-            'branch_id' => $group[0]->barnch_id,
-            'modules' => $modules,
-        ];
-    })->values()->all();
 
-
-
+             // set data on Edit Mudule
+        if(!empty($this->Idgroup)){
+             $group = group::find($this->Idgroup);
+            //  dd($group->barnch_id)  ;
+             //  $oldIdGroup ;
+             $this->oldBranch = $group->barnch_id;
+             $this->oldGroupName = $group->group_name;
+             $this->oldyear = $group->year;
+        }
+        // end set data on Edit Modules
         return view('livewire.add-groupes');
     }
 }

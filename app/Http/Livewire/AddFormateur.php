@@ -7,13 +7,15 @@ use App\Models\Formateur;
 use App\Models\Branch;
 use App\Models\Module;
 use App\Models\Group;
-use App\Models\module_has_formateur;
-use App\Models\formateur_has_group ;
 use App\Models\formateur_has_branche;
+use App\Models\formateur_has_group;
+use App\Models\module_has_formateur;
 use App\Models\Establishment;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class AddFormateur extends Component
 {
+    use LivewireAlert ;
     public $formateurs = [];
     public $branches = [];
     public $groupes = [];
@@ -26,9 +28,9 @@ class AddFormateur extends Component
     public $New_formateur_name;
     public $New_idFormateur;
     public $New_selectedBranches = [];
-    public $New_selectedGroupes =  [];
-    public $New_selectedModules =  [];
-    public $formateurBranches=[];
+    public $New_selectedGroupes = [];
+    public $New_selectedModules = [];
+    public $formateurBranches = [];
     public $desactive;
     public $active;
     public $New_Password;
@@ -37,52 +39,43 @@ class AddFormateur extends Component
     public $addGroupe = false;
     public $addModule = false;
 
-    protected $listeners = ['postAdded' => 'incrementPostCount'];
+    public $branchesForEashFormateur = [];
 
+
+    protected $listeners = ['postAdded' => 'incrementPostCount'];
     public function incrementPostCount($id)
     {
-        $this->New_idFormateur = $id ;
+        $this->New_idFormateur = $id;
     }
 
-    public function update()
-    {
-        $formateur = Formateur::find($this->New_idFormateur);
-        $formateur->user_name = $this->New_formateur_name;
-        $formateur->passwordClone = $this->New_Password;
-        $formateur->save();
-    }
+
 
     public function render()
     {
         $establishment_id = session()->get('establishment_id');
-        if($this->New_idFormateur){
-            $formateur = Formateur::find($this->New_idFormateur);
-            $this->New_formateur_name = $formateur->user_name;
-            $this->New_Password = $formateur->passwordClone;
-            $this->formateurBranches = Branch::select('branches.*')
-            ->join('formateur_has_filier as FHF', 'FHF.barnch_id', '=', 'branches.id')
-            ->where('FHF.formateur_id', $this->New_idFormateur)
-            ->where('establishment_id', $establishment_id)
-            ->get();
-            $this->branches = Branch::where('establishment_id', $establishment_id)->get();
-            // dd($formateurBranches);
-        }
-
-
-
-
 
         $this->groupes = Group::where('establishment_id', $establishment_id)->get();
+
         $this->formateurs = Formateur::where('role', 'formateur')
             ->where('establishment_id', $establishment_id)
             ->get();
 
+        $this->branchesForEashFormateur = Branch::select('branches.*')
+        ->join('formateur_has_filier as FHF', 'FHF.barnch_id', '=', 'branches.id')
+        ->where('FHF.formateur_id', )
+        ->where('establishment_id', $establishment_id)
+        ->get(); ;
+            $this->branches = Branch::where('establishment_id', $establishment_id)->get();
+           $this->modules = Module::where('establishment_id', $establishment_id)->get();
+        if($this->New_idFormateur){
+            $formateur = Formateur::find($this->New_idFormateur);
+            $this->New_formateur_name = $formateur->user_name;
+            $this->New_Password = $formateur->passwordClone;
 
-        $this->modules = Module::where('establishment_id', $establishment_id)->get();
+        }
 
         return view('livewire.add-formateur');
     }
-
 
       // create a new formateur
       public function create()
@@ -156,6 +149,7 @@ class AddFormateur extends Component
                           ]);
                           $this->addGroupe = true ;
                       }
+
                       else{
                           // if already  association exist  should tell  user  about it
                           $this->alert('error', 'Certains groupes sont déjà associés à ce formateur.', [
@@ -200,7 +194,6 @@ class AddFormateur extends Component
                   ]);
               }
           }
-
       }catch ( \Illuminate\Database\QueryException $e) {
           $this->alert('error', "Ce formateur existe déjà.", [
               'position' => 'center',
@@ -211,8 +204,27 @@ class AddFormateur extends Component
       }
 
 
+      public function destroy($id)
+      {
+          $formateur = formateur::destroy($id);
+          if($formateur){
+              $this->alert('success', "Vous avez supprimé ce formateur.", [
+                  'position' => 'center',
+                  'timer' => 3000,
+                  'toast' => true,
+              ]);
+          }
+          $this->alert('error', "Il y a un problème.", [
+              'position' => 'center',
+              'timer' => 3000,
+              'toast' => true,
+          ]);
 
-       // public function update(Request $request , $id)
+      }
+
+
+
+    // public function update(Request $request , $id)
     // {
     //     $formateur  = formateur::find($id);
     //     $formateur->user_name =$request->name;
@@ -226,8 +238,9 @@ class AddFormateur extends Component
     //     }else{
     //         return redirect()->back()->withErrors(['errors'=>'some thing wrang']);
     //     }
-
     // }
+
+
 
     // public function destroy($id)
     // {
@@ -235,7 +248,6 @@ class AddFormateur extends Component
     //     if($formateur){
     //         return redirect()->route('addFormateur')->with(['success'=>'you delete a formateur']) ;
     //     }
-
     // }
 
 }

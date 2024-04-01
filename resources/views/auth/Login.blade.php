@@ -52,14 +52,14 @@
                                 </div>
                             @endif
                                     <div class="mb-3">
-                                        <label class="form-label" for="username">Email</label>
-                                        <input type="email" name="email" class="form-control" id="username" placeholder="Enter username">
+                                        <label class="form-label" for="username">Matricule</label>
+                                        <input type="test" name="id" class="form-control" id="username" placeholder="Enter Matricule ">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label" for="userpassword">Mot de passe</label>
                                         <div class="input-group">
-                                            <input type="password" name="password" class="form-control" id="userpassword" placeholder="Enter password">
+                                            <input type="password" name="password" class="form-control" id="userpassword" placeholder="Enter Mot de passe">
                                             <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                                                 <i class="mdi mdi-eye"></i>
                                             </button>
@@ -91,7 +91,7 @@
                                 class="fw-medium text-primary"> Signup now </a> </p>
                         <p>©
                             <script>document.write(new Date().getFullYear())</script> OFPPT<i
-                                class="mdi mdi-heart text-danger"></i> by ISTA BEN M'SIK 
+                                class="mdi mdi-heart text-danger"></i> by ISTA BEN M'SIK
                         </p>
                     </div>
 
@@ -115,7 +115,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             const togglePassword = document.querySelector("#togglePassword");
             const password = document.querySelector("#userpassword");
-    
+
             togglePassword.addEventListener("click", function() {
                 const type = password.getAttribute("type") === "password" ? "text" : "password";
                 password.setAttribute("type", type);
@@ -123,7 +123,7 @@
             });
         });
     </script>
-    
+
 </body>
 
 </html>

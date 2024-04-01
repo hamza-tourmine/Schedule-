@@ -182,7 +182,7 @@ class Emploi extends Component
 
         $formateurShouldRemove = [];
         $salleShouldRemove = [];
-        
+
         foreach ($sissions as $session) {
             $combinedValue = $session->day . $session->day_part . $session->dure_sission;
             if ($combinedValue === substr($this->receivedVariable, 0, 11)) {
@@ -205,8 +205,6 @@ class Emploi extends Component
 
         $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
         ->where('userId', Auth::id())->get() ;
-
-
         return view('livewire.emploi');
     }
 }

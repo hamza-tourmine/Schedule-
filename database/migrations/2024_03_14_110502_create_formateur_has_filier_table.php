@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('formateur_has_filier', function (Blueprint $table) {
-            $table->id();
+           
             $table->string('barnch_id')->nullable() ;
             $table->foreign('barnch_id')
             ->references('id')

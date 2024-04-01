@@ -34,7 +34,7 @@
     @foreach ( $branches as $branche )
     <tr>
 
-        <td>{{substr($branche->id , 7)}}</td>
+        <td>{{ preg_replace("/^\d+/", '', $branche->id) }}</td>
         <td style="Width: 520px">{{$branche->name}}</td>
 
         <td style="width: 220px">

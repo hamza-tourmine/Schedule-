@@ -6,6 +6,10 @@ use App\Models\formateur;
 use App\Models\branch;
 use App\Models\group;
 use App\Models\module;
+use App\Models\formateur_has_group;
+use App\Models\module_has_formateur;
+use App\Models\group_has_module;
+use App\Models\formateur_has_branche;
 
 class formateurController extends Controller
 {
@@ -20,35 +24,83 @@ class formateurController extends Controller
         $id_formateur = session()->get('user_id');
         //Assuming the model name is 'Formateur' and you're looking for a single record.
         $formateur = formateur::select('user_name')->where('id', $id_formateur)->first();
-        
+
         return view('formateurDashboard.Home.formateur',['formateur'=>$formateur]);
         //return $formateur->user_name ;
     }
 
     public function show_update_page($id)
     {
-
-
         return view('adminDashboard.addFormateur.update_formateur');
-
     }
 
-    // public function update(Request $request , $id)
-    // {
-    //     $formateur  = formateur::find($id);
-    //     $formateur->user_name =$request->name;
-    //     $formateur->email  =$request->email;
-    //     $formateur->passwordClone =$request->password;
-    //     $formateur->password =bcrypt($request->password);
-    //     $formateur->status =$request->status;
-    //     $formateur->save();
-    //     if($formateur){
-    //         return redirect()->route('addFormateur')->with(['success'=>'you modified  a  formateur']) ;
-    //     }else{
-    //         return redirect()->back()->withErrors(['errors'=>'some thing wrang']);
-    //     }
 
-    // }
+    // return data  to module edit
+    public function reserved($id ){
+           $establishment_id = session()->get('establishment_id');
+            $branches = Branch::select('branches.*')
+            ->join('formateur_has_filier as FHF', 'FHF.barnch_id', '=', 'branches.id')
+            ->where('FHF.formateur_id', $id)
+            ->where('establishment_id', $establishment_id)
+            ->get();
+
+            $modules = module::select('modules.*')
+            ->join('module_has_formateur as FHM', 'FHM.module_id', '=', 'modules.id')
+            ->where('FHM.formateur_id', $id)
+            ->where('establishment_id', $establishment_id)
+            ->get();
+
+            $groupes = group::select('groups.*')
+            ->join('formateur_has_groups as FHG', 'FHG.group_id', '=', 'groups.id')
+            ->where('FHG.formateur_id', $id)
+            ->where('establishment_id', $establishment_id)
+            ->get();
+
+            $formateur = Formateur::find($id);
+            if($formateur ||  $groupes || $modules || $branches)
+            {
+                return response()->json(['branches'=>$branches , 'status'=> 200 , 'formateur'=>$formateur , 'modules' => $modules , 'Groupes'=>$groupes ] ) ;
+
+            }
+            else{
+                return response()->json(['error' => 'Il y a quelque chose qui ne va pas.' , 'status '=>400]);
+            }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $formateur = Formateur::findOrFail($id);
+
+            // Update formateur attributes
+            $formateur->update([
+                'user_name' => $request->name,
+                'passwordClone' => $request->password,
+                'password' => bcrypt($request->password),
+                'status' => $request->status,
+            ]);
+
+            // Synchronize branches
+            $formateur->branches()->sync($request->branches);
+
+            // Synchronize modules
+            $formateur->modules()->sync($request->modules);
+
+            // Synchronize groups
+            $formateur->groups()->sync($request->groupes);
+
+            return response()->json(['success' => 'You modified a formateur']);
+        } catch (\Exception $e) {
+            
+            return response()->json(['error' => 'Failed to update formateur'], 500);
+        }
+    }
+
+
+
+
+
+
 
     // public function destroy($id)
     // {
@@ -56,6 +108,5 @@ class formateurController extends Controller
     //     if($formateur){
     //         return redirect()->route('addFormateur')->with(['success'=>'you delete a formateur']) ;
     //     }
-
     // }
 }
