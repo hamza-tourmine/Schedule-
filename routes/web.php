@@ -84,6 +84,9 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
     Route::get('/delateClassWithType',[classRoomsController::class , 'deleteClassWithTypes'])->name('delateClassWithType');
     Route::get('/UpdateClasses/{id}',[classRoomsController::class , 'EditClass']);
     Route::post('/UpdateClasses',[classRoomsController::class , 'updateClass'])->name('UpdateClasses');
+    Route::get('/pusher',function(){
+        return view('pusher');
+    });
 
 
 // groups
@@ -141,6 +144,8 @@ Route::middleware(['auth','RoutesForFormateur'])->group(function(){
         //
         Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
         Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
+       
+        
 
 
 });

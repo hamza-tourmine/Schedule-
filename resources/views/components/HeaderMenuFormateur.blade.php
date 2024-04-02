@@ -385,6 +385,9 @@
 
 
 
+    
+    <script src="{{ asset('assets/js/pusherNotifications.js') }}"></script>
+
 
 
 </body>

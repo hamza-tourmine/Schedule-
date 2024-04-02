@@ -385,6 +385,9 @@
         {{-- flash pop uo --}}
 
         {{-- end modal --}}
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 
         <script>
             function toggleTables() {
@@ -694,7 +697,20 @@
                     }
                 });
             });
+
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('69820da6887a3d9f8088', {
+                cluster: 'mt1'
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                alert(JSON.stringify(data));
+            });
         </script>
+        <script src="{{ asset('js/pusherNotifications.js') }}"></script>
 
 
     </x-HeaderMenuFormateur>
