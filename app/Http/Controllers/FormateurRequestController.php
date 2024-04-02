@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Pusher\Pusher;
-use App\Events\NewNotification;
 use App\Models\class_room;
 use App\Models\establishment;
 use App\Models\formateur_has_group;
@@ -100,7 +98,6 @@ public function submitAllData(Request $request)
             $sission->save();
                 Log::info('Sission created:', ['data' => $item]);
             }
-           
                 return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
                 
     }
@@ -130,15 +127,11 @@ public function createRequestEmploi(Request $request)
 
         if ($existingRequest) {
             // If a request already exists, update it
-            $info =[
-                'user_id' => $user_id,
-                'comment' =>'comment',
-                'main_emploi_id'=>$mainEmploiId,
-            ];
             $existingRequest->update([
                 'date_request' => now(),
                 'comment' => 'test comment',
             ]);
+
             return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400]);
         } else {
             // If no request exists, create a new one
@@ -149,18 +142,12 @@ public function createRequestEmploi(Request $request)
                 'main_emploi_id' => $mainEmploiId,
             ]);
             $requestEmploi->save();
-            $info =[
-                'user_id' => $user_id,
-                'comment' =>'comment',
-                'main_emploi_id'=>$mainEmploiId,
-            ];
-            event(new NewNotification($info));
+
             return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300,]);
         }
     } catch (\Exception $e) {
         // Return error response in case of any exceptions
         return response()->json(['message' => 'Error creating or updating request emploi.', 'status' => 500, 'error' => $e->getMessage()]);
     }
-    
 }
 }
