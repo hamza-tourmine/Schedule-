@@ -13,7 +13,7 @@ class Group extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     public $timestamps = false;
-    protected $fillable = ['id', 'group_name', 'establishment_id', 'year', 'branch_id'];
+    protected $fillable = ['id', 'group_name', 'establishment_id', 'year', 'barnch_id'];
     public function modules()
     {
         return $this->belongsToMany(Module::class, 'groupe_has_modules', 'group_id', 'module_id');

@@ -22,6 +22,22 @@
 
     <style>
        /* CSS for the arrow button and sidebar toggle */
+       .vertical-menu {
+    min-width: 100px;
+    max-width: var(--bs-sidebar-width);
+    width:100px ;
+    z-index: 1001;
+    background: var(--bs-sidebar-bg);
+    bottom: 0;
+    margin-top: 0;
+    position: fixed;
+    top: var(--bs-header-height);
+    -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+    box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+    margin-bottom: 55px;
+}
+
+
 .arow {
 
 
@@ -260,18 +276,7 @@
                                 </li>
 
 
-                                <li class="hidentext">
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-book-plus"></span>
-                                        <span>Creae un emploi </span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les groupes</a></li>
-                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> tout les Formateurs</a></li>
-                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> chaque formateur</a></li>
-                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> chaque group</a></li>
-                                    </ul>
-                                </li>
+
 
                                 <div id="emploi12">
                                         <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les groupes" class="mdi mdi-lightbulb-group-outline" style="font-weight: 400 ; font-size:25PX"></span></a></li>
@@ -283,7 +288,7 @@
                                 <li>
                                     <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
                                         <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history" data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
-                                        {{-- <span>tous les emplois</span> --}}
+
                                     </a>
                                 </li>
 
@@ -291,14 +296,14 @@
                                 <li>
                                     <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
                                         <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-message-text-clock-outline" data-toggle="tooltip" data-placement="right" title="tous les demandes"></span>
-                                        {{-- <span class="hidentext"> tous les demandes</span> --}}
+
                                     </a>
                                 </li>
 
                                   <li>
                                     <a href="{{route('AllSetting')}}" class=" waves-effect">
                                         <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-settings-transfer-outline" data-toggle="tooltip" data-placement="right" title="les paramteres "></span>
-                                        {{-- <span class="hidentext"> les paramteres </span> --}}
+
                                     </a>
                                  </li>
 
@@ -308,8 +313,9 @@
 
                                 <li>
                                     <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
-                                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger" data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
-                                        {{-- Logout --}}
+                                        <i style="font-weight: 400 ; font-size:25PX" class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
+                                         data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
+
                                     </a>
                                 </li>
 
