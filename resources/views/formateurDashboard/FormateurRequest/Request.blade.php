@@ -1,5 +1,34 @@
     <x-HeaderMenuFormateur>
         <style>
+            label {
+                font-weight: bold;
+                font-size: 30px;
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+
+            /* CSS for the fixed fly button */
+            .fixed-button {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 1000;
+            }
+
+            .fixed-button button {
+                padding: 10px 20px;
+                background-color: #00a2b7;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                outline: none;
+            }
+
+            .fixed-button button:hover {
+                background-color: #0088a2;
+            }
+
             .wrapper {
                 margin: 15px auto;
                 max-width: 100%;
@@ -138,20 +167,24 @@
 
 
         <div class="button-container-calendar">
-            <button id="previous" onclick="previous()">&#8249;</button>
+            <label id="previous" onclick="previous()">&#8249;</label>
             <div class="date-info">
-                <h2> Start:<span id="dateStart" class="idemploi st"></span></h2>
-                <h2> End: <span id="dateEnd" class="idemploi ed"></span></h2>
+                <h4> Start:<span id="dateStart" class="idemploi st"></span></h4>
+                <h4> End: <span id="dateEnd" class="idemploi ed"></span></h4>
             </div>
-            <button id="next" onclick="next()">&#8250;</button>
-            <button id="createRequestBtn" type="button">Create Request Emploi</button>
+            <label id="next" onclick="next()">&#8250;</label>
+            <div class="fixed-button">
+                <button id="createRequestBtn" type="button">Create Request Emploi</button>
+
+                <button id="toggleTablesBtn" onclick="toggleTables()">Toggle Tables</button>
+            </div>
 
 
         </div>
 
-       
-        <div class="table-responsive">
-            <table id="tbl_exporttable_to_xls_1" style="overflow:scroll" class="col-md-12  active">
+
+        <div id="tbl_exporttable_to_xls_1" class="table-responsive">
+            <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12  active">
                 <thead>
                     <tr class="day">
                         @foreach ($days_of_week as $day_of_week)
@@ -193,13 +226,12 @@
                 </tbody>
             </table>
             <br>
-            <button id="submitAll">Submit All</button>
 
         </div>
 
 
-        <div class="table-responsive">
-            <table id="tbl_exporttable_to_xls_2" style="overflow: scroll" class="col-md-12">
+        <div id="tbl_exporttable_to_xls_2" class="table-responsive" style="display: none">
+            <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
                 <thead>
                     <!-- Header row for seance parts -->
                     <tr>
@@ -214,7 +246,7 @@
                     @foreach ($days_of_week as $day_of_week)
                         <tr class="dtdynamic bg-light-gray">
                             <!-- Display the day -->
-                            <td>{{ $day_of_week }}</td>
+                            <th>{{ $day_of_week }}</th>
                             <!-- Loop through each seance part -->
                             @foreach ($seances_part as $seance_part)
                                 <!-- Display the schedule data for each day and seance part -->
@@ -234,8 +266,8 @@
                 </tbody>
             </table>
             <br>
-            <button id="submitAll">Submit All</button>
         </div>
+        <button id="submitAll">Submit All</button>
 
 
 
@@ -355,7 +387,19 @@
         {{-- end modal --}}
 
         <script>
-           
+            function toggleTables() {
+                var table1 = document.getElementById("tbl_exporttable_to_xls_1");
+                var table2 = document.getElementById("tbl_exporttable_to_xls_2");
+
+                // If table1 is currently visible, hide it and show table2
+                if (table1.style.display === "block") {
+                    table1.style.display = "none";
+                    table2.style.display = "block";
+                } else { // If table1 is currently hidden, show it and hide table2
+                    table1.style.display = "block";
+                    table2.style.display = "none";
+                }
+            }
             document.addEventListener("DOMContentLoaded", function() {
                 var cells = document.querySelectorAll("td.Cases");
                 var daysOfWeek = @json($days_of_week);
@@ -507,35 +551,32 @@
                             var ShowselectedMsg = document.getElementById("msg").value;
 
                             // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
-                            var totalCases = casesPerDay * daysOfWeek.length;
-                            var clickedIndex = Array.from(clickedCell.parentNode
-                                    .children)
-                                .indexOf(clickedCell);
 
-                            var dayOfWeekIndex = Math.floor(clickedIndex /
-                                    casesPerDay) %
-                                daysOfWeek.length;
-                            var dayPartIndex = Math.floor((clickedIndex % totalCases) /
-                                casesPerPartOfDay) % daysPart.length;
-                            var seancePartIndex = (clickedIndex % totalCases) %
-                                seancesPart
-                                .length;
+                            // var totalCases = casesPerDay * daysOfWeek.length;
+                            // var clickedIndex = Array.from(clickedCell.parentNode
+                            //         .children)
+                            //     .indexOf(clickedCell);
 
-                            var dayOfWeek = daysOfWeek[dayOfWeekIndex];
+                            // var dayOfWeekIndex = Math.floor(clickedIndex /
+                            //         casesPerDay) %
+                            //     daysOfWeek.length;
+                            // var dayPartIndex = Math.floor((clickedIndex % totalCases) /
+                            //     casesPerPartOfDay) % daysPart.length;
+                            // var seancePartIndex = (clickedIndex % totalCases) %
+                            //     seancesPart
+                            //     .length;
 
-                            var dayPart = daysPart[dayPartIndex];
-                            var seancePart = seancesPart[seancePartIndex];
+                            // var dayOfWeek = daysOfWeek[dayOfWeekIndex];
+
+                            var dayOfWeek = clickedCell.dataset.day;
+                            var seancePart = clickedCell.dataset.seance;
+                            var dayPart = (seancePart == "SE1" || seancePart == "SE2") ?
+                                "Matin" : "A.midi";
+
+                            // var seancePart = seancesPart[seancePartIndex];
 
                             // 
-                            const table = document.getElementById('tbl_exporttable_to_xls');
 
-                            table.addEventListener('click', function(event) {
-                                if (event.target.classList.contains('Cases')) {
-                                    const day = event.target.dataset.day;
-                                    const seance = event.target.dataset.seance;
-                                    console.log(`You clicked on ${day}, ${seance}`);
-                                }
-                            });
                             // all data in once
                             selectedData.push({
                                 'group': selectedGroup,
