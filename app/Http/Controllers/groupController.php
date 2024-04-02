@@ -51,35 +51,51 @@ class groupController extends Controller
 
 
 
+    public function updateGroupes(Request $req , $id)
+    {
+        $group = Group::find($id);
+
+        if(!$group) {
+            return response()->json(['status' => 400, 'message' => 'Group not found']);
+        }
+
+        try {
+            $data = $req->json()->all();
+            $modules = $data['modules_id'];
+
+            $group->modules()->sync($modules);
+
+            return response()->json(['status' => 200, 'message' => 'Group updated successfully']);
+        } catch (\Exception $e) {
+            // Log the error or return an error response
+            return response()->json(['status' => 500, 'message' => 'Error updating group: ' . $e->getMessage()]);
+        }
+    }
+
+
+
     // public function displayPageUpdate(){
     //     $establishment = session()->get('establishment_id');
-
     //     $branches = branch::where('establishment_id',$establishment)->get();
-
-
     //     $groupesModules = DB::table('groups')
     //         ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
     //         ->join('modules as m', 'm.id' , '=', 'ghm.module_id')
     //         ->select('m.*', 'groups.*')
     //         ->where('groups.establishment_id', $establishment)
     //         ->get();
-
     //     $modules = module::where('establishment_id',$establishment)->get();
-
     //     $dataGroups = DB::table('groups')
     //     ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
     //     ->join('modules as m', 'm.id', '=', 'ghm.module_id')
     //     ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
     //     ->where('groups.establishment_id', $establishment)
     //     ->get();
-
     // // Group modules by group_id
     // $groups = $dataGroups->groupBy('group_id')->map(function ($group) {
     //     return view('adminDashboard.addGroups.add_groups') ;
     // });
     //     return view('adminDashboard.addGroups.update_group' , ['group'=>$groups ,'modules'=>$modules , 'groupesModules'=>$groupesModules , 'branches'=>$branches]);
     // }
-
     // public function showGroupeWithModules(){
     //     $establishment = session()->get('establishment_id');
     //     $groupesModules = DB::table('groups')
@@ -92,5 +108,13 @@ class groupController extends Controller
     //     return view('adminDashboard.addGroups.group_has_models' , ['groupesModules'=>$groupesModules]);
     // }
 
+
+
+
+
+    //display page setting
+    public function settingView(){
+        return view('adminDashboard.setting.setting');
+    }
 
 }

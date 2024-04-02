@@ -106,6 +106,8 @@ Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function()
     Route::controller(groupController::class)->group(function () {
     Route::get('/add-groups', 'index')->name('addGroups');
     Route::get('/GetdataGroupe/{id}','GetdataGroupe')->name('updateGroups');
+    Route::post('updateGroupe/{id}' , 'updateGroupes');
+    Route::get('/setting' , 'settingView')->name('AllSetting');
 
 });
 

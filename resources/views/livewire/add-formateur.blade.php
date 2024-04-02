@@ -282,6 +282,7 @@
                 </div>
             </div>
         </div>
+
     @endforeach
     <Script>
 
@@ -295,7 +296,7 @@
         let desactive = document.getElementById('desactive') ;
         let active =document.getElementById('active') ;
         let updateButton = document.getElementById('updateButton');
-        let formUpdateFrmateur = document.getElementById('formUpdateFrmateur');
+        let formUpdateFrmateur = document.getElementById('formUpdateFrmateur'); 
         let moreDetailes = document.querySelectorAll('.moreDetailes');
 
         let  IdFormateur = '' ;

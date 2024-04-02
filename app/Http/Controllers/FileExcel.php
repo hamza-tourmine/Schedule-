@@ -54,6 +54,8 @@ class FileExcel extends Controller
             $brancheName = $worksheet->getCell('F' . $row)->getValue();
 
             if ($Formateur !== '' && $Matricule !== '' && $Groupe !== '' && $Branches !== '' && $Modules !== "") {
+                // dd($Formateur.' '. $Matricule .' '.$Groupe.' '. $Branches.' '.$Modules.' '.$neveau.' '.$codeModules );
+                
                 // Check if the formateur already exists in FormateursInfo
                 $foundFormateurIndex = null;
                 foreach ($FormateursInfo as $index => $formateurInfo) {

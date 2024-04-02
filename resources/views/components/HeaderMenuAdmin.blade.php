@@ -19,14 +19,44 @@
     <!-- App Css-->
     <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
+    <style>
+       /* CSS for the arrow button and sidebar toggle */
+.arow {
+
+
+    position: fixed;
+    top: 100px ;
+    left: 10px;
+
+    z-index: 100;
+    padding: 10px;
+
+}
+
+.toggle-sidebar {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+
+.collapsed .widthSideBare {
+    width: 220px !important;
+    background-color: #ffffff ;
+}
+
+.vertical-menu.collapsed .arow .toggle-sidebar {
+    left: auto;
+    right: 0;
+}
+    </style>
 </head>
 
+
+
     <body data-layout="detached" data-topbar="colored">
-
-
-
         <!-- <body data-layout="horizontal" data-topbar="dark"> -->
-
         <div class="container-fluid">
             <!-- Begin page -->
             <div id="layout-wrapper">
@@ -189,23 +219,20 @@
                                 </button>
 
                                 <!-- App Search-->
-                                {{-- <form class="app-search d-none d-lg-inline-block">
-                                    <div class="position-relative">
-                                        <input type="text" class="form-control" placeholder="Search...">
-                                        <span class="bx bx-search-alt"></span>
-                                    </div>
-                                </form> --}}
+
 <!-- Mega menu -->
 
                             </div>
-
                         </div>
                     </div>
                 </header>
                 <!-- ENd header  -->
  <!-- ========== Left Sidebar Start ========== -->
-                 <div class="vertical-menu" style="height: 100%;">
-                    <div class="h-100">
+ <div class="vertical-menu" style="">
+                    {{-- <div class="arow">
+                        <button class="btn btn-primary toggle-sidebar"><i class="mdi mdi-chevron-left"></i></button>
+                    </div> --}}
+                    <div class="widthSideBare ">
                         <div class="user-wid text-center py-4">
                             <div class="user-img">
                                 <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
@@ -220,21 +247,19 @@
                         </div>
 
                         <!--- Sidemenu -->
-                        <div id="sidebar-menu">
+                        <div id="sidebar-menu"  style="" >
                             <!-- Left Menu Start -->
                             <ul class="metismenu list-unstyled" id="side-menu">
                                 <li class="menu-title">Menu</li>
-
-
                                 <li>
                                     <a  href="{{route('dashboardAdmin')}}" class=" waves-effect">
-                                        <i class="mdi mdi-airplay"></i>
-                                        <span>Accueil</span>
+                                        <i style="font-weight: 400 ; font-size:25PX" class="mdi mdi-home-lightbulb-outline"></i>
+                                        <span class="hidentext" >Accueil</span>
                                     </a>
                                 </li>
 
 
-                                <li>
+                                <li class="hidentext">
                                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                                         <span class="mdi mdi-book-plus"></span>
                                         <span>Creae un emploi </span>
@@ -244,134 +269,46 @@
                                         <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> tout les Formateurs</a></li>
                                         <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> chaque formateur</a></li>
                                         <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> chaque group</a></li>
-
-
                                     </ul>
                                 </li>
 
+                                <div id="emploi12">
+                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les groupes" class="mdi mdi-lightbulb-group-outline" style="font-weight: 400 ; font-size:25PX"></span></a></li>
+                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les Formateurs" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-supervisor-outline"></span></a></li>
+                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="chaque formateur" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-tie-outline"></span></a></li>
+                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="chaque group" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
+                                </div>
 
-
-
-
+                                <li>
+                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
+                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history" data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
+                                        {{-- <span>tous les emplois</span> --}}
+                                    </a>
+                                </li>
 
 
                                 <li>
                                     <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
-                                        <span class="mdi mdi-border-all"></span>
-                                        <span> tous les emplois</span>
+                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-message-text-clock-outline" data-toggle="tooltip" data-placement="right" title="tous les demandes"></span>
+                                        {{-- <span class="hidentext"> tous les demandes</span> --}}
                                     </a>
                                 </li>
 
-
-                                <li>
-                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
-                                        <span class="mdi mdi-border-all"></span>
-                                        <span> tous les demandes</span>
+                                  <li>
+                                    <a href="{{route('AllSetting')}}" class=" waves-effect">
+                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-settings-transfer-outline" data-toggle="tooltip" data-placement="right" title="les paramteres "></span>
+                                        {{-- <span class="hidentext"> les paramteres </span> --}}
                                     </a>
-                                </li>
-
-
-
-                                <li>
-                                    <a href="calendar.html" class=" waves-effect">
-                                        <i class="mdi mdi-calendar-text"></i>
-                                        <span>Calendar</span>
-                                    </a>
-                                </li>
-
-
-                                <li class="menu-title">LES COMPOSANTS</li>
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-home-group"></span>
-                                        <span>Ajouter les salles</span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('add-class-rooms')}}">Ajouter les salles</a></li>
-                                        <li><a  href="{{route('add-class-type')}}">Ajouter les types</a></li>
-                                        <li><a  href="{{route('determine-type-class-room')}}">Afictaion des types</a></li>
-                                    </ul>
-                                </li>
-
-
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-home-group"></span>
-                                        <span> Ajouter les Filières</span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addbranch')}}">Ajouter les Filières</a></li>
-
-
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-book-plus"></span>
-                                        <span>Ajouter les modules </span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addModule')}}" >Ajouter des Modules</a></li>
-
-
-                                    </ul>
-                                </li>
-
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-grain"></span>
-                                        <span>Ajouter les groupes</span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('addGroups')}}">Ajouter des groupes</a></li>
-
-                                    </ul>
-                                </li>
+                                 </li>
 
 
 
 
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-account-multiple"></span>
-                                        <span>Ajouter les formateurs </span>
-                                    </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a  href="{{route('addFormateur')}}">Ajouter formateur</a></li>
 
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-account-multiple"></span>
-                                        <span> Uploed  </span>
-                                    </a>
-                                    <ul>
-                                        <li><a  href="{{route('UploedFileExcelView')}}">Uploed Excel</a></li>
-                                        <!-- Ahmed Add new item for Formateur Module -->
-
-                                    </ul>
-
-                                </li>
-                                <li>
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-account-multiple"></span>
-                                        <span> Model Paramtere  </span>
-                                    </a>
-                                    <ul>
-                                        <li><a  href="{{route('modelSetting')}}">Model</a></li>
-                                        <!-- Ahmed Add new item for Formateur Module -->
-
-                                    </ul>
-
-                                </li>
                                 <li>
                                     <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
-                                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
-                                        Logout
+                                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger" data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
+                                        {{-- Logout --}}
                                     </a>
                                 </li>
 
@@ -425,9 +362,40 @@
         <script src="{{ asset('assets/libs/moment/min/moment.min.js') }}"></script>
         <script src="{{ asset('assets/libs/jquery-ui-dist/jquery-ui.min.js') }}"></script>
         <!-- Calendar init -->
-       
+
         <!-- App js -->
         <script src="{{ asset('assets/js/app.js') }}"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let sidebarMenu = document.querySelector('.vertical-menu');
+                let hidenTexts = document.querySelectorAll('.hidentext');
+                let lesEmploi = document.querySelector('#emploi12')
+
+                function hideHidentext() {
+                    if (!sidebarMenu.classList.contains('collapsed')) {
+                        hidenTexts.forEach(function(element) {
+                            element.style.display = 'none';
+                            lesEmploi.style.display ='block'
+                        });
+                    } else {
+                        hidenTexts.forEach(function(element) {
+                            element.style.display = ' inline-block';
+                            lesEmploi.style.display ='none'
+                        });
+                    }
+                }
+
+                hideHidentext(); // Initial call to hide hidentext elements
+
+                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                    sidebarMenu.classList.toggle('collapsed');
+                    hideHidentext(); // Call hideHidentext when the sidebar is toggled
+                });
+            });
+        </script>
+
+
 
     </body>
 

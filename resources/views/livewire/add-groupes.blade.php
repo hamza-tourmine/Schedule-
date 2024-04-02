@@ -110,7 +110,7 @@
                             <!-- Modal trigger button -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop_{{ $group['group_id'] }}">Voir plus</button>
                             <td>
-                                <button type="button" id="{{$group['group_id']}}"  class="btn btn-primary EditButton" data-bs-toggle="modal" data-bs-target="#exampleModal99">
+                                <button type="button" id="{{$group['group_id']}}"  class="btn btn-primary EditButton" data-bs-toggle="modal" data-bs-target="#exampleModal99{{$group['group_id']}}">
                                     Modifier
                                 </button>
                             </td>
@@ -122,8 +122,9 @@
             </table>
 
             {{--start Edit Model  --}}
+            @foreach ($groups as $group)
             <!-- Modal -->
-            <div wire:ignore.self  class="modal fade" id="exampleModal99" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div wire:ignore.self  class="modal fade" id="exampleModal99{{$group['group_id']}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -135,11 +136,11 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1" class="form-label">group Name </label>
-                                    <input id="groupName" type="text" name='group_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                    <input id="groupName{{$group['group_id']}}" type="text" name='group_name' class="form-control group_name" id="exampleInputEmail1" aria-describedby="emailHelp">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">les Filiéres</label>
-                                    <select name="branch" class="form-control select2">
+                                    <select id="branch{{$group['group_id']}}" name="branch" class="form-control select2 branch">
                                          <option>Filiére</option>
                                          @foreach ($branches as $branche)
                                              <option class="branchOption" value="{{$branche->id}}">{{$branche->name}}</option>
@@ -149,20 +150,22 @@
                                         <h6 style="margin:10px"> Modules </h6>
                                         <div style="width: 100%" class="checkboxContainer  col-lg-9">
                                             @foreach ($modules as $module)
-                                            <span >
-                                                <input class="modulesoption" type="checkbox" id="{{ $module->id }}"  value="{{ $module->id }}">
-                                                <label for="module{{ $module->id }}">{{ $module->module_name }}</label>
-                                            </span>
+                                                    <span >
+                                                        <input class="modulesoption" type="checkbox"   value="{{ $module->id }}">
+                                                        <label for="module{{$group['group_id']}}_{{ $module->id }}">{{ $module->module_name }}</label>
+                                                    </span>
                                             @endforeach
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="year" class="form-label">Année</label>
-                                        <input id="year"  type="text" name="year" class="form-control" >
+                                        <input id="year{{$group['group_id']}}"  type="text" name="year" class="form-control yearupdate" >
                                     </div>
 
-                                    <button type="submit" class="btn btn-success">Update ...</button>
+                                    <button  data-group-id="{{$group['group_id']}}"  type="submit" id="{{$group['group_id']}}" class="btn btn-success updateButtons">update</button>
+
+
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -177,7 +180,7 @@
 
 
             <!-- Modals for detailed group information -->
-            @foreach ($groups as $group)
+
             <div class="modal fade" id="staticBackdrop_{{ $group['group_id'] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel_{{ $group['group_id'] }}" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
@@ -222,67 +225,105 @@
         </div>
     </div>
     <script>
-        let EditButton = document.querySelectorAll('.EditButton');
-        let groupName = document.getElementById('groupName');
-        let branchOptions =  document.querySelectorAll('.branchOption');
-        let modulesoption = document.querySelectorAll('.modulesoption');
-        let year = document.getElementById('year');
-        console.log(year)
+       document.addEventListener("DOMContentLoaded", function () {
+    let EditButton = document.querySelectorAll('.EditButton');
 
-        EditButton.forEach(button => {
-    button.addEventListener('click', function () {
-        const IdGroup = button.id;
-        let GroupDate = 'dataGrop test';
-        fetch('GetdataGroupe/' + IdGroup, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return res.json();
-        })
-        .then(data => {
-            if (data.status === 200) {
-                // Assuming groupName and branchOption are defined elsewhere
-                groupName.value = data.data.group_name;
-                year.value = data.data.year
-                branchOptions.forEach(branch => {
-                    if (branch.value === data.data.branch_id) {
-                        branch.selected = true;
-                    }
-                });
+    EditButton.forEach(button => {
+        button.addEventListener('click', function () {
+            const groupId = button.id;
+            fetch('GetdataGroupe/' + groupId, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data.status === 200) {
 
+                    let modulesoption = document.querySelectorAll('.modulesoption');
+                    // let modulesoption = document.getElementsByClassName('modulesoption')
+                    document.getElementById('groupName' + groupId).value = data.data.group_name;
+                    document.getElementById('year' + groupId).value = data.data.year;
+                    document.getElementById('branch' + groupId).value = data.data.branch_id
 
+                    let groupModules = data.data.modules;
                     Array.from(modulesoption).forEach(module => {
-                    let isChecked = false;
-                    data.data.modules.forEach(item => {
-                if (module.value.toLowerCase() === item.toLowerCase()) {
-                    isChecked = true;
-                    return;
-                    }
-                });
-                module.checked = isChecked;
-        });
+                                    let isChecked = false;
+                                    data.data.modules.forEach(item => {
+                                if (module.value.toLowerCase() === item.toLowerCase()) {
+                                    isChecked = true;
+                                    return;
+                                    }
+                                });
+                                module.checked = isChecked;
+                        })
 
-
-
-
-                console.log(data);
-            } else {
-                console.error('Error: Unexpected status code received from server');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
+                    console.log(data);
+                } else {
+                    console.error('Error: Unexpected status code received from server');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
         });
     });
+
+    let updateButtons = document.querySelectorAll('.updateButtons');
+    Array.from(updateButtons).forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const groupId = button.dataset.groupId;
+            let modulesId = [];
+            let modulesoption = document.querySelectorAll('.modulesoption:checked');
+            Array.from(modulesoption).forEach(module => {
+                if(!modulesId.includes(module.value)){
+                    modulesId.push(module.value);
+                }
+            });
+
+            let data = {
+                modules_id: modulesId,
+                groupName: document.getElementById('groupName' + groupId).value,
+                year: document.getElementById('year' + groupId).value,
+                branch: document.getElementById('branch' + groupId).value
+            };
+            console.log(data);
+            fetch('updateGroupe/' + groupId, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(resp => {
+                if (!resp.ok) {
+                    console.log('the response does not work right');
+                    throw new Error('Network response was not ok');
+                }
+                return resp.json();
+            })
+            .then(responseData => {
+                console.log(responseData);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
 });
 
 
     </script>
+
+
 </div>
