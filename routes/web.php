@@ -100,9 +100,6 @@ Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function()
     Route::get('/delateClassWithType',[classRoomsController::class , 'deleteClassWithTypes'])->name('delateClassWithType');
     Route::get('/UpdateClasses/{id}',[classRoomsController::class , 'EditClass']);
     Route::post('/UpdateClasses',[classRoomsController::class , 'updateClass'])->name('UpdateClasses');
-    Route::get('/pusher',function(){
-        return view('pusher');
-    });
 
 
 // groups
@@ -138,8 +135,6 @@ Route::controller(formateurController::class )->group(function(){
     Route::get('uploed', [FileExcel::class, 'index'])->name('UploedFileExcelView');
     Route::post('uploed', [FileExcel::class, 'upload'])->name('UploedFileExcel');
 });
-
-
 
 
 
