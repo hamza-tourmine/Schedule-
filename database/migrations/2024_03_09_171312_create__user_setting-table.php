@@ -22,6 +22,7 @@ class CreateUserSettingTable extends Migration
             $table->boolean('typeSalle')->default(false);
             $table->boolean('salle')->default(false);
             $table->boolean('formateur')->default(false);
+            $table->boolean('branch')->default(false);
         });
     }
 

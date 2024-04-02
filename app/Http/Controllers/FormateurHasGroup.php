@@ -34,21 +34,21 @@ class FormateurHasGroup extends Controller
     // If it's a GET request, display the form
     $establishment_id = session()->get('establishment_id');
     $groups = group::all()->where('establishment_id', $establishment_id);
-    $formateurs = User::where('role', 'formateur')->get();
+    $formateurs = User::where(['role'=>'formateur' , 'establishment_id'=>$establishment_id])->get();
 
     return view('adminDashboard.affectation.GroupList', ['groups' => $groups, 'formateurs' => $formateurs]);
 }
 
 
 
-    
 
-    
+
+
     //insert groups that selected by formateur
     public function insertMygroups(Request $request){
-       
 
-        
+
+
     }
 
     public function insertgroups_modules(Request $request){

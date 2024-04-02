@@ -37,6 +37,13 @@
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
                     supprimer Type Séance input</label>
             </div>
+
+
+            <div style="margin: 10px" class="form-check form-switch">
+                <input class="checkbox" name="branch" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
+                    supprimer les filiéres filter</label>
+            </div>
         </form>
         </div>
         <script>
@@ -78,7 +85,12 @@
                     } else {
                         item.setAttribute('checked', 'checked');
                     }
-                }
+                } else if (item.name === 'branch') {
+                    if (data[0].branch === 0) {
+                        item.removeAttribute('checked');
+                    } else {
+                        item.setAttribute('checked', 'checked');
+                    }
             });
             // localStorage.setItem('ModelSetting', JSON.stringify(data[0]));
         })

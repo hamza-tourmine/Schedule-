@@ -22,7 +22,7 @@ return new class extends Migration
 
                        SELECT COUNT(*) INTO modulesCount
                        FROM modules
-                       WHERE module_name =NEW.module_name AND	establishment_id = NEW.establishment_id ;
+                       WHERE id =NEW.id AND	establishment_id = NEW.establishment_id ;
                        IF modulesCount> 0 THEN
                        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT ='thes model has already been inserted';
                        END IF ;

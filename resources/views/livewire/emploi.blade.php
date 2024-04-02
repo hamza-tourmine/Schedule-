@@ -20,7 +20,7 @@
         @csrf
         <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
             class="btn btn-primary">
-            Create New Schadule
+            Créer un nouveau  emploi
         </button>
         <br>
         <label >date start</label>
@@ -32,8 +32,6 @@
 
     <div class="table-responsive">
         <table  style="overflow:scroll" class="col-md-12 ">
-
-
             <thead>
                 <tr class="day">
                     <th rowspan="3">Groups Name</th>
@@ -93,15 +91,15 @@
                 @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
-                @foreach ($groups as $group)
+                @foreach ($groups as $group) 
                 <tr>
                     <td>{{$group->group_name}}</td>
                     @foreach ($dayWeek as $day)
-                        @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
+                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                         <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
                                     @endif
                                 @endforeach
                             </td>
@@ -109,9 +107,11 @@
                     @endforeach
                 </tr>
                 @endforeach
+
+
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
-                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                     aria-labelledby="exampleModalLabel" aria-hidden="true" >
                      <div class="modal-dialog  modal-lg  ">
                         <div class="modal-content  col-9">
                             <div class="modal-header">
@@ -136,7 +136,6 @@
                                            <select wire:model='formateur' class="form-select"
                                                aria-label="Default select example">
                                                <option selected>Formateurs</option>
-
                                                    @foreach ($formateurs as $formateur)
                                                        <option value="{{ $formateur->id }}">
                                                            {{ $formateur->user_name }}</option>
@@ -144,11 +143,10 @@
 
                                            </select>
                                            @endif
-
-
                                     </div>
                                     <div style="display: flex">
                                          {{-- module  content --}}
+                                         @if (!$checkValues[0]->module)
                                          <select wire:model="module" class="form-select "
                                          aria-label="Default select example">
                                          <option selected>Modules</option>
@@ -159,7 +157,9 @@
                                              @endforeach
                                          @endif
                                      </select>
+                                     @endif
                                         {{-- salle --}}
+                                        @if (!$checkValues[0]->salle)
                                         <select wire:model="salle" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>les salles</option>
@@ -170,9 +170,12 @@
                                                 @endforeach
                                             @endif
                                         </select>
+                                        @endif
                                     </div>
                                     {{-- tyope session --}}
                                     <div style="display: flex;justify-content: space-between">
+
+                                        @if (!$checkValues[0]->typeSalle)
                                         <select wire:model="salleclassTyp" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>les Types</option>
@@ -183,13 +186,14 @@
                                                 @endforeach
                                             @endif
                                         </select>
+                                        @endif
 
                                         {{-- id case --}}
                                         <input type="hidden"   value="{{$receivedVariable}}" >
                                     </div>
                                     {{-- day part && type sission --}}
                                     <div style="display: flex">
-
+                                        @if (!$checkValues[0]->typeSession)
                                         <select wire:model="TypeSesion" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>Types</option>
@@ -197,6 +201,7 @@
                                             <option value="teams">Teams</option>
                                             <option value="EFM">EFM</option>
                                         </select>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="modal-footer">

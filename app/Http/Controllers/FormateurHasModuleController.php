@@ -32,13 +32,13 @@ class FormateurHasModuleController extends Controller
     // If it's a GET request, display the form
     $establishment_id = session()->get('establishment_id');
     $modules = module::all()->where('establishment_id', $establishment_id);
-    $formateurs = User::where('role', 'formateur')->get();
+    $formateurs = User::where(['role'=>'formateur' , 'establishment_id'=>$establishment_id])->get();
 
     return view('adminDashboard.affectation.ModuleList', ['modules' => $modules, 'formateurs' => $formateurs]);
 }
 
     public function insertMyModules(Request $request){
         return $request ;
-        
+
     }
 }

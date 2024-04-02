@@ -17,7 +17,6 @@ class ModelUpdateGroupEmploi extends Component
     public $formateurs;
     public $salles;
     public $classType;
-
     public $formateur;
     public $salle;
     public $TypeSesion;

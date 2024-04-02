@@ -16,117 +16,243 @@ use App\Models\user;
 use App\Models\main_emploi;
 use App\Models\formateur_has_group;
 use App\Models\module_has_formateur;
-
-
-
+use App\Models\group_has_module;
+use App\Models\branch;
+use App\Models\formateur_has_branche;
 class FileExcel extends Controller
 {
     public function index(){
         return view('adminDashboard.Excel.Uploed');
     }
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
 
-    // uploed  file and  inserd data into db
-    public function upload(Request $req){
-        $filePath = $req->file('file')->path();
-        $data = file_get_contents($filePath);
-        $rows = array_map('str_getcsv', explode("\n", $data));
+        $uploaddir = 'excel/';
+        $uploadFile = $uploaddir . basename($_FILES['file']['name']);
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile);
+        $inputFileName = '../public/'.$uploadFile;
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $spreadsheet = $reader->load($inputFileName);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
+        $FormateursInfo = [];
+        $ModulesInfo = [];
+        $GroupsInfo = [];
+        $BranchesInfo = [];
 
-        $rows = array_slice($rows , 1);
-        $Formateurs = [];
-        $Groups = []    ;
-        $Modules = []   ;
-        $ModulesForEashFormateur = [];
-        try{
-        // Filter Formateur
-        foreach ($rows as $row) {
-            $found = false;
-            foreach ($Formateurs as $item) {
-                // Ensure both $row and $item have key '20'
-                if (isset($row[20]) && isset($item[20]) && $row[20] === $item[20]) {
-                    $found = true;
-                    break;
+        for ($row = 1; $row <= $highestRow; $row++) {
+            $Formateur   = $worksheet->getCell('U' . $row)->getValue();
+            $Matricule   = $worksheet->getCell('T' . $row)->getValue();
+            $Groupe      = $worksheet->getCell('I' . $row)->getValue();
+            $Branches    = $worksheet->getCell('E' . $row)->getValue();
+            $Modules     = $worksheet->getCell('Q' . $row)->getValue();
+            $neveau      = $worksheet->getCell('C' . $row)->getValue();
+            $codeModules = $worksheet->getCell('R' . $row)->getValue();
+            $brancheName = $worksheet->getCell('F' . $row)->getValue();
+
+            if ($Formateur !== '' && $Matricule !== '' && $Groupe !== '' && $Branches !== '' && $Modules !== "") {
+                // dd($Formateur.' '. $Matricule .' '.$Groupe.' '. $Branches.' '.$Modules.' '.$neveau.' '.$codeModules );
+                
+                // Check if the formateur already exists in FormateursInfo
+                $foundFormateurIndex = null;
+                foreach ($FormateursInfo as $index => $formateurInfo) {
+                    if ($formateurInfo['matricule'] === $Matricule) {
+                        $foundFormateurIndex = $index;
+                        break;
+                    }
+                }
+
+                // If formateur doesn't exist, add a new entry
+                if ($foundFormateurIndex === null) {
+                    $FormateursInfo[] = [
+                        'name' => $Formateur,
+                        'matricule' => $Matricule,
+                        'groupes' => [$Groupe],
+                        'branches' => [$Branches],
+                        'modules' => [$Modules],
+                    ];
+                } else {
+                    // Check if the group already exists for this formateur
+                    $groupExists = in_array($Groupe, $FormateursInfo[$foundFormateurIndex]['groupes']);
+                    $branchExists = in_array($Branches, $FormateursInfo[$foundFormateurIndex]['branches']);
+                    $modulesExists = in_array($Modules, $FormateursInfo[$foundFormateurIndex]['modules']);
+
+                    // If the group doesn't exist, add it to the existing formateur entry
+                    if (!$groupExists) {
+                        $FormateursInfo[$foundFormateurIndex]['groupes'][] = $Groupe;
+                    }
+                    if (!$branchExists) {
+                        $FormateursInfo[$foundFormateurIndex]['branches'][] = $Branches;
+                    }
+                    if (!$modulesExists) {
+                        $FormateursInfo[$foundFormateurIndex]['modules'][] = $Modules;
+                    }
+                }
+
+                // Add group name to GroupsInfo if it doesn't exist
+                $GroupIndex = null;
+                foreach ($GroupsInfo as $index => $groupe) {
+                    if ($groupe['code'] === $Groupe) {
+                        $GroupIndex = $index;
+                        break;
+                    }
+                }
+
+                if ($GroupIndex === null) {
+                    $GroupsInfo[] = [
+                        'code' => $Groupe,
+                        'neveau' => $neveau,
+                        'branch' => $Branches,
+                        'modules' => [$Modules]
+                    ];
+                } else {
+                    $GroupsInfo[$GroupIndex]['modules'][] = $Modules;
+                }
+
+                // Add module name to ModulesInfo if it doesn't exist
+                $ModulesIndex = null;
+                foreach ($ModulesInfo as $index => $module) {
+                    if ($module['code'] === $Modules) {
+                        $ModulesIndex = $index;
+                        break;
+                    }
+                }
+
+                if ($ModulesIndex === null) {
+                    $ModulesInfo[] = ['name' => $codeModules, 'code' => $Modules];
+                }
+
+                // Add Branches name to BranchesInfo if it doesn't exist
+                $BranchesIndex = null;
+                foreach ($BranchesInfo as $index => $branche) {
+                    if ($branche['code'] === $Branches) {
+                        $BranchesIndex = $index;
+                        break;
+                    }
+                }
+
+                if ($BranchesIndex === null) {
+                    $BranchesInfo[] = ['code' => $Branches, 'name' => $brancheName];
                 }
             }
-            if (!$found) {
-                $Formateurs[] = $row;
-            }
-        }
-        // Filter groups
-        foreach($rows as $row){
-            $found = false;
-            foreach ($Groups as $item) {
-                // Ensure both $row and $item have key '20'
-                if (isset($row[8]) && isset($item[8]) && $row[8] === $item[8]) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $Groups[] = $row;
-            }
-        }
-        // Filter Modules
-        foreach($rows as $row){
-            $found = false;
-            foreach ($Modules as $item) {
-                // Ensure both $row and $item have key '20'
-                if (isset($row[17]) && isset($item[17]) && $row[17] === $item[17]) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $Modules[] = $row;
-            }
         }
 
+        // Now remove the first element from each array if they are not empty
+        if (!empty($FormateursInfo)) {
+            array_shift($FormateursInfo);
+        }
 
-        // dd($rows);
+        if (!empty($GroupsInfo)) {
+            array_shift($GroupsInfo);
+        }
 
-       if(!empty($Groups) && !empty($Formateurs) && !empty($Modules)){
-         $this->createModuls($Modules);
-         $this->createGroup($Groups);
-         $this->createFormateur($Formateurs);
-         $this->assigneModuleAndGroupForEashFormateur($rows);
+        if (!empty($ModulesInfo)) {
+            array_shift($ModulesInfo);
+        }
 
-            // Filter Formateur and hes groupes
+        if (!empty($BranchesInfo)) {
+            array_shift($BranchesInfo);
+        }
 
+        // dd($FormateursInfo, $GroupsInfo, $ModulesInfo, $BranchesInfo);
+
+
+      try {
+
+          // inserting data into DB
+          $establishment_id = session()->get('establishment_id');
+          if(!empty($BranchesInfo)){
+            foreach($BranchesInfo as $branch){
+                branch::create([
+               'id' => $establishment_id.$branch['code'],
+               'name'=>$branch['name'],
+               'establishment_id'=>$establishment_id
+                ]);
+             }
+          }
+          if(!empty($ModulesInfo)){
+            foreach($ModulesInfo as $modul){
+                module::create([
+               'id' => $establishment_id.$modul['code'],
+               'module_name'=>$modul['name'],
+               'establishment_id'=>$establishment_id
+                ]);
        }
-    }catch(\Exception $e){
-        return redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->getMessage()]);
-    }
-    }
+          }
+          if(!empty($GroupsInfo)){
 
+            foreach($GroupsInfo as $group){
+                group::create(
+                   [   'id'=>$establishment_id.$group['code'],
+                       'group_name' => $group['code'],
+                       'barnch_id'=>$establishment_id.$group['branch'],
+                       'year'=>$group['neveau'],
+                       'establishment_id'=>$establishment_id
+                   ]
+                );
 
-    // create account  Formateur
-    function createFormateur($data){
-        try{
-        $establishment_id = session()->get('establishment_id');
-        $establishment = establishment::select(['name_establishment'])->where('id',$establishment_id)->get();
-            foreach($data as $item){
+             foreach($group['modules'] as $modul){
+               group_has_module::create([
+                   'group_id'=>$establishment_id.$group['code'],
+                   'module_id'=>$establishment_id.$modul
+                ]);
+             }
+               }
+
+          }
+
+          if(!empty($FormateursInfo)){
+            foreach($FormateursInfo as $formateur){
                 $password = $this->generatePassword();
-                $email = $this->removeSpaces($item[20]).$this->removeSpaces($establishment[0]->name_establishment ).rand(1,100).$establishment_id.'@ofppt.ma';
-             formateur::create([
+                formateur::create([
+                        'passwordClone'=>$password,
+                        'password'=>bcrypt($password),
+                        'role'=>'formateur',
+                        'status'=>'active',
+                        'user_name'=> $formateur['name'],
+                        'establishment_id'=>$establishment_id,
+                        'id'=>$formateur['matricule']
+                    ]);
 
-                    'email'=>$email,
-                    'passwordClone'=>$password,
-                    'password'=>bcrypt($password),
-                    'role'=>'formateur',
-                    'status'=>'active',
-                    'user_name'=> $item[20],
-                    'establishment_id'=>$establishment_id,
-                    'id'=>$item[19]
+                    // assigne branch
+                    foreach( $formateur['branches'] as $branch){
+                        formateur_has_branche::create([
+                            'barnch_id'=> $establishment_id.$branch ,
+                            'formateur_id'=>  $formateur['matricule'],
+                        ]);
+                    }
 
-            ]);
+                    foreach ($formateur['modules'] as $modul){
+                        module_has_formateur::create([
+                            'module_id' =>$establishment_id.$modul,
+                            'formateur_id' => $formateur['matricule'],
+                        ]);
+                    }
+
+                    foreach($formateur['groupes'] as $group){
+                        formateur_has_group::create([
+                            'group_id' => $establishment_id.$group,
+                            'formateur_id' =>$formateur['matricule'],
+                        ]);
+                    };
+
+            }
+          }
+        unlink($inputFileName);
+        return redirect()->route('UploedFileExcelView')->with(['success'=>'Vous avez configuré les paramètres de votre compte avec succès.']);
+    }
+      catch(\Illuminate\database\QueryException $e){
+            unlink($inputFileName);
+            return  redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->errorInfo[2]]);
         }
-        return redirect()->route('UploedFileExcelView')->with(['succes'=>'you are add a new formateur']);
-    }catch(\Illuminate\database\QueryException $e){
-        return  redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->errorInfo[2]]);
-    }
 
-    }
-     // generate password
-     function generatePassword($length = 8) {
+
+}
+
+    function generatePassword($length = 8) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomPassword = '';
@@ -135,119 +261,5 @@ class FileExcel extends Controller
         }
         return $randomPassword;
     }
-    // Generate email
-    function removeSpaces($Name){
-
-        $lastestaname ="";
-        for($i=0 ;$i<strlen($Name) ;$i++){
-            if($Name[$i]!=' '){
-                $lastestaname .= $Name[$i] ;
-            };
-        };
-        if(strlen($lastestaname)>15){
-            return substr($lastestaname ,0,10);
-        }else{
-            return $lastestaname ;
-        }
-
-    }
-    // insert groups
-    function createGroup($group){
-        $establishment = session()->get('establishment_id');
-        try{
-            foreach($group as $item){
-            $group = group::create(
-                [   'id'=>$establishment.$item[8],
-                    'group_name' => $item[8],
-                    'branch'=>$item[5],
-                    'year'=>$item[2],
-                    'establishment_id'=>$establishment
-                ]
-             );
-            }
-             if($group){
-                  return redirect()->route('UploedFileExcelView')->with(['success'=>'vous ete ajoute un nouveux group']);
-             }else{
-                 return redirect()->route('UploedFileExcelView')->withErrors(['errors'=>'there are some thing wrang']); ;
-             }
-           }catch(\Illuminate\Database\QueryException $e){
-            return  redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->errorInfo[2]]);
-           }
-    }
-    // insert Models
-    function createModuls($moduls){
-        $establishment  = session()->get('establishment_id');
-        try{
-            foreach($moduls as $modul){
-                 module::create([
-                'id' => $establishment.$modul[16],
-                'module_name'=>$modul[17],
-                'establishment_id'=>$establishment
-                 ]);
-        }
-            return  redirect()->route('UploedFileExcelView')->with(['success'=>'you createa new module']) ;
-        }catch(\Illuminate\database\QueryException $e){
-             return redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->errorInfo[2]]);
-        }
-    }
-
-    // assigne  for eash formateur hes models
-    function assigneModuleAndGroupForEashFormateur($rows) {
-        try {
-            $establishment_id = session()->get('establishment_id');
-
-            foreach ($rows as $row) {
-                // Check if module exists before creating the record
-                $module = Module::where('id', $establishment_id . $row[16])->first();
-                $group = Group::where('id', $establishment_id . $row[8])->first();
-                $formateur_id = $row[19];
-
-                if ($module && !module_has_formateur::where('module_id', $module->id)->where('formateur_id', $formateur_id)->exists()) {
-                    module_has_formateur::create([
-                        'establishment_id' => $establishment_id,
-                        'module_id' => $module->id,
-                        'formateur_id' => $formateur_id,
-                    ]);
-                }
-
-                if ($group && !formateur_has_group::where('group_id', $group->id)->where('formateur_id', $formateur_id)->exists()) {
-                    formateur_has_group::create([
-                        'establishment_id' => $establishment_id,
-                        'group_id' => $group->id,
-                        'formateur_id' => $formateur_id,
-                    ]);
-                }
-            }
-        } catch(\Exception $e) {
-            // Handle the exception
-            // dd($e);
-        }
-    }
-
-
-    // function assigneGroupsForEashFormateur($rows){
-    //    try{
-    //     $establishment_id = session()->get('establishment_id');
-    //     foreach($rows as $row){
-    //         $group = group::where('id', $establishment_id.$row[8])->first();
-    //         if($group) {
-    //             formateur_has_group::create([
-    //                 'establishment_id' => $establishment_id,
-    //                 'group_id' => $establishment_id.$row[8],
-    //                 'formateur_id' => $row[19],
-    //             ]);
-    //         } else {
-    //             // dd('from  assgine groups  to eash formateur ');
-    //             // Handle the case where the group doesn't exist
-    //             // You can log an error, skip this record, or handle it in a way that fits your application's logic
-    //             // For example:
-    //             // Log::error('Group with ID ' . $establishment_id . $row[8] . ' does not exist.');
-    //         }
-    //     }
-    //    }catch(\Exception $e){
-    //     dd($e->getMessage());
-    //    }
-    // }
-
 
 }

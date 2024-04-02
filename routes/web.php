@@ -13,12 +13,15 @@ use App\Http\Controllers\ScheduleChaqueFormateur ;
 use App\Http\Controllers\forgotPassword;
 use App\Http\Controllers\FormateurHasModuleController;
 use App\Http\Controllers\FormateurRequestController;
+use App\Http\Controllers\branchController;
 use App\Http\Controllers\modelSetting;
 use App\Http\Controllers\FileExcel;
 use App\Http\Controllers\MailController;
-
+use App\Http\Controllers\ScheduleFormateurs;
 use App\Http\Controllers\Schedule;
+use App\Http\Controllers\ScheduleChaqueGroup;
 use App\Models\group;
+
 
 // use App\Http\Middleware\Authenticate;
 /*
@@ -50,7 +53,20 @@ Route::post('/insert',[auth_controller::class,'create_account'])->name('insert')
 Route::post('/login',[auth_controller::class ,'login'])->name('login_into_account');
 
 // for admin
-Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
+Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function(){
+    //emploi pour tout les formateur
+    Route::get('/emploi-for-formateurs' ,[ScheduleFormateurs::class , 'index'])->name('emploiForFormateurs');
+    //emploi pour chaque group
+    Route::get('/Schedule-for-Group' , [ScheduleChaqueGroup::class, 'index'])->name('emploiForGroup');
+// brache routes
+    Route::controller(branchController::class)->group(function(){
+        Route::get('/add-Branch','index')->name('addbranch');
+        Route::post('/create-Branch','create')->name('createBranch');
+        Route::get('/update-branch/{id}','updateView')->name('updateBranch');
+        Route::get('/delate-branch/{id}', 'delateBranch')->name('delateBranch');
+        Route::post('update-branch/{id}' , 'updateBarnch')->name('updateBarnch');
+    });
+// end branch routes
     // Model Setting
     Route::get('/modele-seting',[modelSetting::class,'index'])->name('modelSetting');
     Route::post('/Model-setting', [modelSetting::class, 'createOrUpdate']);
@@ -92,39 +108,34 @@ Route::middleware(['auth' , 'RoutesForAdmin'])->group(function(){
 // groups
     Route::controller(groupController::class)->group(function () {
     Route::get('/add-groups', 'index')->name('addGroups');
-    Route::post('/insert-groups', 'insert_group')->name('insertGroups');
-    Route::get('/delate-group','delate_group')->name('delateGrope');
-    Route::get('/update-group/{id}','display_update_page');
-    Route::post('/updateGroups/{id}','update')->name('updateGroups');
+    Route::get('/GetdataGroupe/{id}','GetdataGroupe')->name('updateGroups');
+    Route::post('updateGroupe/{id}' , 'updateGroupes');
+    Route::get('/setting' , 'settingView')->name('AllSetting');
+
 });
 
 // modules
 Route::controller(moduleController::class)->group(function(){
     Route::get('/add-model','index')->name('addModule');
     Route::post('/create-model','create')->name('insertmodule');
-    Route::get('/delatemodule/{id}','destroy');
-    Route::get('/update-module/{id}','display_update_page');
-    Route::post('/update-module/{id}','update');
+    Route::get('/delate-module/{id}','destroy')->name('delateModule');
+    Route::get('/update-module/{id}','display_update_page')->name('display_update_page');
+    Route::post('/update-module/{id}','update')->name('update-module');
 });
 
 // Formateru Part
 Route::controller(formateurController::class )->group(function(){
     Route::get('/add-formateur','index')->name('addFormateur');
-    Route::post('/insert-formateur','create')->name('insertFormateur');
+    Route::get('reserve/{di}' , 'reserved');
+    Route::post('update/{id}','update')->name('updateFormateur');
     // update formateur data from admin
-    Route::get('/update-formateur/{id}','show_update_page');
-    Route::post('/update-formateur/{id}','update');
     Route::get('/delete-formateur/{id}','destroy');
 });
 
-// Formateur has Groups
-Route::controller(FormateurHasGroup::class)->group(function(){
-    Route::match(['get', 'post'], '/formateurGroupe', [FormateurHasGroup::class, 'displaygroups'])->name('formateurGroupe');
-});
-// Formateur has Module
-    Route::match(['get', 'post'], '/formateurModule', [FormateurHasModuleController::class, 'displaymodules'])->name('formateurModule');
+
+
     // Files excel
-    Route::get('admin/uploed', [FileExcel::class, 'index'])->name('UploedFileExcelView');
+    Route::get('uploed', [FileExcel::class, 'index'])->name('UploedFileExcelView');
     Route::post('uploed', [FileExcel::class, 'upload'])->name('UploedFileExcel');
 });
 

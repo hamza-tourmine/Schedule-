@@ -77,7 +77,11 @@
             <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 "  >
                 <thead>
                     <tr class="day">
-                        <th rowspan="3">Groups Name</th>
+                        <th rowspan="3">@if ($selectedType ==="Formateur")
+                           Nome  formateurs
+                        @else
+                        Nome Groupes
+                        @endif</th>
                         <th colspan="4">Lundi</th>
                         <th colspan="4">Mardi</th>
                         <th colspan="4">Mercredi</th>
@@ -100,72 +104,162 @@
                     </tr>
                   </thead>
                 <tbody>
-
-
-                    @if ($selectedType === 'Group')
                     @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
+                {{-- Model start --}}
                       <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
                       aria-labelledby="exampleModalLabel" aria-hidden="true">
                       {{-- live wire  for diplay  new model update model  --}}
-                      @livewire('model-update-group-emploi',
-                      ['classType'=>$classType,
-                      'salles'=>$salles ,
-                      'formateurs'=>$formateurs,
-                      'FormateurOrgroup'=>'Group',
-                      'modules'=>$modules,
 
-                      ]);
-                      {{-- 'receivedVariable'=>$receivedVariable --}}
-                  </div>
-                @foreach ($groups as $group)
-                <tr>
-                    <td>{{$group->group_name}}</td>
-                    @foreach ($dayWeek as $day)
-                        @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
-                                @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
-                                    @endif
-                                @endforeach
-                            </td>
-                        @endforeach
-                    @endforeach
-                </tr>
-                @endforeach
-                        {{-- For formateur emploi --}}
-                        @else
-                        <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
-                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        {{-- live wire  for diplay  new model update model  --}}
-                        @livewire('model-update-group-emploi',
-                        ['classType'=>$classType,
-                        'salles'=>$salles ,
-                        'FormateurOrgroup'=>'formateur',
-                        'groups'=>$groups,
-                        'modules'=>$modules,
-                        ]);
-                        {{-- 'receivedVariable'=>$receivedVariable --}}
-                    </div>
-                        @forEach ($formateurs as $formateur)
-                        <tr>
-                            <td>{{$formateur->user_name}}</td>
-                            @foreach ( ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
-                                @foreach (['matinS1', 'matinS2', 'AmidiS1', 'AmidiS2'] as $sessionType)
-                                    <td  data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day . $sessionType . $formateur->id }}">
-                                        @foreach ($sissions as $sission)
-                                            @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                                {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
+                      <div class="modal-dialog  modal-lg  ">
+                        <div class="modal-content  col-9">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" >Create session</h1>
+                                    @if ($errors->any())
+                                    @foreach ( $errors->all() as $error)
+                                    <div id="liveAlertPlaceholder" class="alert alert-danger">
+                                        {{$error}}
+                                    </div>
+                              @endforeach
+                              @endif
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form wire:submit.prevent="UpdateSession">
+                                <div class="modal-body">
+                                    <div style="display: flex">
+                                        {{-- module  content --}}
+                                        @if (!$checkValues[0]->module)
+                                        <select wire:model="module" class="form-select "
+                                            aria-label="Default select example">
+                                            <option selected>Modules</option>
+                                            @if ($modules)
+                                                @foreach ($modules as $module)
+                                                    <option value="{{ $module->id }}">
+                                                        {{ $module->module_name }}</option>
+                                                @endforeach
                                             @endif
-                                        @endforeach
-                                    </td>
-                                @endforeach
-                            @endforeach
-                        </tr>
-                        @endforeach
-                    @endif
+                                        </select>
+                                        @endif
+                                    </div>
+                                    <div style="display: flex">
+                                        {{-- Formateur --}}
+                                        @if($selectedType==='Group')
+                                        <select wire:model='formateur' class="form-select"
+                                            aria-label="Default select example">
+
+                                                <option selected>Formateurs</option>
+                                                    @foreach ($formateurs as $formateur)
+                                                        <option value="{{ $formateur->id }}">
+                                                            {{ $formateur->user_name }}</option>
+                                                    @endforeach
+                                        </select>
+                                        @else
+                                        <select wire:model='group' class="form-select"
+                                        aria-label="Default select example">
+                                        <option selected>Groups</option>
+                                                @foreach ($groups as $group)
+                                                    <option value="{{ $group->id }}">
+                                                        {{ $group->group_name }}</option>
+                                                @endforeach
+                                        </select>
+                                            @endif
+
+                                        {{-- salle --}}
+                                        @if (!$checkValues[0]->salle)
+                                        <select wire:model="salle" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>les salles</option>
+                                            @if ($salles)
+                                                @foreach ($salles as $salle)
+                                                    <option value="{{ $salle->id }}">
+                                                        {{ $salle->class_name }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @endif
+                                    </div>
+                                    {{-- tyope session --}}
+                                    <div style="display: flex;justify-content: space-between">
+                                        @if (!$checkValues[0]->typeSalle)
+                                        <select wire:model="salleclassTyp" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>les Types</option>
+                                            @if ($classType)
+                                                @foreach ($classType as $classTyp)
+                                                    <option value="{{ $classTyp->id }}">
+                                                        {{ $classTyp->class_room_types }}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        @endif
+                                        {{-- id case --}}
+                                        <input type="hidden"   value="{{$receivedVariable}}" >
+                                    </div>
+                                    {{-- day part && type sission --}}
+                                    <div style="display: flex">
+                                        @if (!$checkValues[0]->typeSession)
+                                        <select wire:model="TypeSesion" class="form-select"
+                                            aria-label="Default select example">
+                                            <option selected>Types</option>
+                                            <option value="presentielle">Presentielle</option>
+                                            <option value="teams">Teams</option>
+                                        </select>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="button"  class="btn btn-danger">supprimer</button>
+                                    <button data-bs-dismiss="modal" wire:click="UpdateSession" aria-label="Close" type="submit"  class="btn btn-success">Updare</button>
+                                </div>
+                            </form>
+                </div>
+                </div>
+                  </div>
+
+   {{-- FOR GROUPES  --}}
+   @if($selectedType === 'Group')
+   @foreach ($groups as $group)
+   <tr>
+       <td>{{$group->group_name}}</td>
+       @foreach ($dayWeek as $day)
+           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
+           <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
+                   @foreach ($sissions as $sission)
+                       @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                           {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                       @endif
+                   @endforeach
+               </td>
+           @endforeach
+       @endforeach
+   </tr>
+   @endforeach
+       </div>
+       {{-- FOR FORMATEUR --}}
+       @else
+       @foreach ($formateurs as $formateur)
+    <tr>
+        <td>{{$formateur->user_name}}</td>
+        @foreach (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
+            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
+                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day . $sessionType . $formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">
+                    @foreach ($sissions->where('user_id', $formateur->id) as $sission)
+                        @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) &&
+                        $sission->dure_sission === substr($sessionType, 5))
+                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
+                        @endif
+                    @endforeach
+                </td>
+            @endforeach
+        @endforeach
+    </tr>
+@endforeach
+
+           @endif
+
+
                 </tbody>
             </table>
         </div>
@@ -208,9 +302,9 @@
 
     document.addEventListener('livewire:load', function () {
     const selectElement = document.getElementById('date-select');
-    selectElement.addEventListener('change', function() {
-        Livewire.emit('receiveidEmploiid', selectElement.value);
-    });
+    // selectElement.addEventListener('change', function() {
+        // Livewire.emit('receiveidEmploiid', selectElement.value);
+    // });
 
     let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
     elements.forEach(element => {

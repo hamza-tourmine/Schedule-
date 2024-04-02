@@ -13,6 +13,9 @@ use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
 use App\Models\formateur_has_group;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Auth;
+
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Emploi extends Component
@@ -28,7 +31,6 @@ class Emploi extends Component
     public $TypeSession;
     public $receivedVariable;
 
-
     public $groups;
     public $modules ;
     public $formateurs ;
@@ -36,16 +38,17 @@ class Emploi extends Component
     public $classType;
     // for catche date from  form Module
     public $salleclassTyp;
-    public $sissions;
+    public $sissions = [];
     public $module ;
     public $idCase;
     public $TypeSesion;
-
-
+    public $checkValues ;
+    public $groupID;
 
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
     public function receiveVariable($variable)
     {
+        $this->groupID = substr($variable,11);
         $this->receivedVariable = $variable;
     }
 
@@ -54,15 +57,15 @@ class Emploi extends Component
     ];
     public function createSession()
 {
+    // dd(session()->get('id_main_emploi'));
     try{
-        // dd($this);
         $idcase = $this->receivedVariable;
         $sission = sission::create([
             'day'=>substr($idcase,0,3),
             'day_part'=>substr($idcase,3,5),
-            'dure_sission'=>substr($idcase,8,2),
-            'module_id'=>$this->module,
-            'group_id'=>substr($idcase,10),
+            'dure_sission'=>substr($idcase,8,3),
+            'module_id'=>$this->module ,
+            'group_id'=>substr($idcase,11),
         	'establishment_id'=>session()->get('establishment_id'),
             'user_id'=>$this->formateur,
             'class_room_id'=>$this->salle,
@@ -78,7 +81,7 @@ class Emploi extends Component
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,]);
-            return redirect()->route('CreateEmploi');
+
         }
      }catch (\Illuminate\Database\QueryException $e) {
         if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
@@ -113,8 +116,6 @@ class Emploi extends Component
 
     }
 
-
-
     public function AddAutherEmploi(){
         Session::forget('id_main_emploi');
         Session::forget('datestart');
@@ -147,28 +148,30 @@ class Emploi extends Component
     }
     public function render()
     {
-         // data for  model form
+        // data for  model form
         $establishment_id = session()->get('establishment_id');
+        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
         $this->groups = group::where('establishment_id', $establishment_id)->get();
         // $this->modules = module::where('establishment_id', $establishment_id)->get();
-        $this->salles = class_room::where('id_establishment', $establishment_id)->get();
+        $salles = class_room::where('id_establishment', $establishment_id)->get();
 
-     $this->modules = Module::join('module_has_formateur as mhf', 'modules.id', '=', 'mhf.module_id')
-     ->where('mhf.formateur_id', $this->formateur)
-     ->get();
-     
-        $this->formateurs =  user::select('users.*')
-        ->join('formateur_has_groups as f', 'f.formateur_id', '=', 'users.id')
-        ->where('f.establishment_id' , '=' , $establishment_id)
-        ->where('f.group_id', substr($this->receivedVariable,10)) // Select ID along with group_name
+        $this->modules =   Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
+        ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
+        ->where('modules.establishment_id', $establishment_id)
+        ->where('MHF.formateur_id', $this->formateur)
+        ->where('GHM.group_id', $this->groupID)
+        ->select('modules.*')
         ->get();
 
+        $formateurs =  user::select('users.*')
+        ->join('formateur_has_groups as f', 'f.formateur_id', '=', 'users.id')
+        ->where('users.status' , '=' , 'active')
+        ->where('f.group_id', substr($this->receivedVariable,11)) // Select ID along with group_name
+        ->get();
 
-        $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-
-        $this->sissions = DB::table('sissions')
+        $sissions = DB::table('sissions')
         ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
-        ->join('modules', 'modules.id', '=', 'sissions.module_id')
+        ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('users', 'users.id', '=', 'sissions.user_id')
         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
@@ -176,6 +179,32 @@ class Emploi extends Component
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
         ->get();
 
+
+        $formateurShouldRemove = [];
+        $salleShouldRemove = [];
+
+        foreach ($sissions as $session) {
+            $combinedValue = $session->day . $session->day_part . $session->dure_sission;
+            if ($combinedValue === substr($this->receivedVariable, 0, 11)) {
+                $formateurShouldRemove[] = $session->user_id;
+                $salleShouldRemove[] = $session->class_room_id;
+            }
+        }
+
+        $newFormateurs = $formateurs->reject(function ($formateur) use ($formateurShouldRemove) {
+            return in_array($formateur->id, $formateurShouldRemove);
+        });
+
+        $newSalles = $salles->reject(function ($salle) use ($salleShouldRemove) {
+            return in_array($salle->id, $salleShouldRemove);
+        });
+
+        $this->formateurs = $newFormateurs;
+        $this->sissions = $sissions;
+        $this->salles = $newSalles;
+
+        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+        ->where('userId', Auth::id())->get() ;
         return view('livewire.emploi');
     }
 }

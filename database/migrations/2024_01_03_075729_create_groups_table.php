@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('group_name');
-            $table->string('branch')->nullable();
+          
             $table->string('year')->nullable();
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')
@@ -24,6 +24,7 @@ return new class extends Migration
                 ->on('establishment')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
+
         });
     }
 

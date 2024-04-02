@@ -1,7 +1,7 @@
 <x-HeaderMenuAdmin>
 
 
-    <div style="width:50%;margin-x:auto">
+    <div style="width:80%;margin-x:auto">
 
         @if ($errors->any())
         @foreach ($errors->all() as $error )
@@ -16,11 +16,11 @@
       @endif
 
             @csrf
-            <div class="mb-3 col-3">
+            <div class="mb-3 col-9">
               <label for="exampleInputEmail1" class="form-label">Module Name </label>
               <input type="text"name='module_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             </div>
-            <div class="mb-3 col-3">
+            <div class="mb-3 col-9">
                 <label for="exampleInputEmail1" class="form-label">Code Module  </label>
                 <input type="text"name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
               </div>
@@ -44,14 +44,14 @@
    @foreach ($modules as $key => $module )
    <tr>
     <th scope="row">{{$key +1}}</th>
-    <th>fffffff</th>
+    <th>{{preg_replace('/^\d+/' , '' , $module->id) }}</th>
     <td colspan="">{{$module->module_name}}</td>
     <td colspan="2">
       <button type="button" class="btn  btn-primary">
-        <a style="text-decoration: none ;color:black" href="{{url("update-module/{$module->id}")}}">Edit</a>
+        <a style="text-decoration: none ;color:black" href="{{route("display_update_page" ,["id"=>$module->id])}}">Edit</a>
     </button>
       <button type="button" class="btn btn-danger">
-        <a href="{{url("delatemodule/{$module->id}")}}">Delete</a>
+        <a href="{{route("delateModule",['id'=>$module->id])}}">Delete</a>
     </button>
     </td>
   </tr>

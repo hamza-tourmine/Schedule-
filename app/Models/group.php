@@ -5,16 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class group extends Model
+class Group extends Model
 {
-    public $table = 'groups' ;
+    use HasFactory;
+    protected $table = 'groups';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
-    public $timestamps = false ;
-
-    
-    public $fillable =['id','group_name','establishment_id','year','branch'];
-    use HasFactory;
-
+    public $timestamps = false;
+    protected $fillable = ['id', 'group_name', 'establishment_id', 'year', 'branch_id'];
+    public function modules()
+    {
+        return $this->belongsToMany(Module::class, 'groupe_has_modules', 'group_id', 'module_id');
+    }
 }
+

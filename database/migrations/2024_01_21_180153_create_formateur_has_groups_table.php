@@ -15,19 +15,15 @@ return new class extends Migration
     {
         Schema::create('formateur_has_groups', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('establishment_id');
-            $table->foreign('establishment_id')
-                ->references('id')
-                ->on('establishment')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+
 
 
                 $table->string('group_id');
                 $table->foreign('group_id')
                     ->references('id')
                     ->on('groups')
-                    ->onDelete('cascade');
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
 
                     $table->string('formateur_id');
                     $table->foreign('formateur_id')

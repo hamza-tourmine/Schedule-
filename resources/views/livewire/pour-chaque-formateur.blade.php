@@ -22,7 +22,7 @@
         @csrf
         <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
             class="btn btn-primary">
-            Create New Schadule
+            Créer un nouveau  emploi
         </button>
         <br>
         <label >date start</label>
@@ -106,11 +106,11 @@
                 <tr>
 
                     @foreach ($dayWeek as $day)
-                        @foreach (['matinS1', 'matinS2', 'AmidiS3', 'AmidiS4'] as $sessionType)
+                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                         <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, -2))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}}
+                                    @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/>{{$sission->module_name}}
                                     @endif
                                 @endforeach
                             </td>
@@ -139,15 +139,27 @@
                             </div>
                             <form wire:submit.prevent="createSession">
                                 <div class="modal-body">
+
                                     <div style="display: flex">
+
+
+                                        <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
+                                        <option > Filiére</option>
+                                        @if ($baranches)
+                                        @foreach ($baranches as $baranche)
+                                        <option value="{{ $baranche->id }}">{{ $baranche->name }}</option>
+                                        @endforeach
+                                        @endif
+                                        </select>
+
                                         {{-- module  content --}}
                                         @if (!$checkValues[0]->module)
-                                        <select wire:model="module" class="form-select "
-                                            aria-label="Default select example">
+                                        <select wire:model="moduleID"   class="form-select"
+                                        aria-label="Default select example">
                                             <option selected>Modules</option>
                                             @if ($modules)
                                                 @foreach ($modules as $module)
-                                                    <option value="{{ $module->id }}">
+                                                <option value="{{ $module->id }}">
                                                         {{ $module->module_name }}</option>
                                                 @endforeach
                                             @endif
@@ -158,7 +170,7 @@
                                     <div style="display: flex">
                                         {{-- Formateur --}}
 
-                                        <select wire:model='formateur' class="form-select"
+                                        <select wire:model='groupID' class="form-select"
                                         aria-label="Default select example">
                                         <option selected>Groupes</option>
                                         @if ($groups)
@@ -262,7 +274,7 @@
   {{-- end Modal for delete  --}}
 
 
-<script  >
+  <script  >
 
 
     document.addEventListener('livewire:load', function () {
@@ -270,9 +282,7 @@
             elements.forEach(element => {
                 element.addEventListener('click', function() {
                     Livewire.emit('receiveVariable', element.id);
-                   
                     console.log(element.id)
-
                 });
             });
         });

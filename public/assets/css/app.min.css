@@ -458,6 +458,7 @@ body[data-layout="horizontal"] .footer {
 .vertical-menu {
     min-width: var(--bs-sidebar-width);
     max-width: var(--bs-sidebar-width);
+    width:100px ;
     z-index: 1001;
     background: var(--bs-sidebar-bg);
     bottom: 0;
@@ -1460,10 +1461,10 @@ body[data-layout="detached"] .page-title-box .breadcrumb-item.active {
     }
 } /*!
  * Waves v0.7.6
- * http://fian.my.id/Waves 
- * 
- * Copyright 2014-2018 Alfiana E. Sibuea and other contributors 
- * Released under the MIT license 
+ * http://fian.my.id/Waves
+ *
+ * Copyright 2014-2018 Alfiana E. Sibuea and other contributors
+ * Released under the MIT license
  * https://github.com/fians/Waves/blob/master/LICENSE */
 .waves-effect {
     position: relative;
