@@ -74,7 +74,7 @@ class Emploi extends Component
             "demand_emploi_id"=>null,
             'message'=>null,
             'sission_type'=>$this->TypeSesion,
-        	'status_sission'=>null,
+        	'status_sission'=>'Accepted',
         ]);
         if($sission){
             $this->alert('success', 'Vous créez une nouvelle session',[

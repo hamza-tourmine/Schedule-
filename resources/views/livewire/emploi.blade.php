@@ -91,7 +91,7 @@
                 @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
-                @foreach ($groups as $group) 
+                @foreach ($groups as $group)
                 <tr>
                     <td>{{$group->group_name}}</td>
                     @foreach ($dayWeek as $day)
