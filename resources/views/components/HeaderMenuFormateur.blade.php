@@ -11,7 +11,7 @@
 
 
     <!-- Plugin css -->
-    
+
     <!-- Bootstrap Css -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -19,6 +19,19 @@
     <!-- App Css-->
     <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <style>
+        .row {
+            margin-left: 0px;
+        }
+
+        .hide-menu {
+            display: none;
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+    </style>
 
 </head>
 
@@ -64,12 +77,14 @@
 
 
 
+
                             <div class="dropdown d-none d-lg-inline-block ms-1">
                                 <button type="button" class="btn header-item noti-icon waves-effect"
                                     data-toggle="fullscreen">
                                     <i class="mdi mdi-fullscreen"></i>
                                 </button>
                             </div>
+
 
                             <div class="dropdown d-inline-block">
                                 <button type="button" class="btn header-item noti-icon waves-effect"
@@ -110,7 +125,7 @@
                                         </a>
                                         <a href="" class="text-reset notification-item">
                                             <div class="d-flex align-items-start">
-                                                <img src="assets/images/users/avatar-3.jpg"
+                                                <img src="assets/images/users/avatar-2.jpg"
                                                     class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-1">
                                                     <h6 class="mt-0 mb-1">James Lemire</h6>
@@ -142,7 +157,7 @@
 
                                         <a href="" class="text-reset notification-item">
                                             <div class="d-flex align-items-start">
-                                                <img src="assets/images/users/avatar-4.jpg"
+                                                <img src="assets/images/users/avatar-2.jpg"
                                                     class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                                 <div class="flex-1">
                                                     <h6 class="mt-0 mb-1">Salena Layfield</h6>
@@ -164,13 +179,15 @@
                                 </div>
                             </div>
 
+
                             <div class="dropdown d-inline-block">
                                 <button type="button" class="btn header-item waves-effect"
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     <img class="rounded-circle header-profile-user"
                                         src="assets/images/users/avatar-2.jpg" alt="Header Avatar">
-                                    <span class="d-none d-xl-inline-block ms-1"></span>
+                                    <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
+
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
@@ -213,6 +230,11 @@
                                         <img src="assets/images/logo-light.png" alt="" height="19">
                                     </span>
                                 </a>
+                            </div>
+                            <div class="dropdown d-none d-lg-inline-block ms-1">
+                                <button class="btn btn-sm px-3 font-size-16 header-item " id="vertical-menu-toggle">
+                                    <i class="fa fa-fw fa-bars"></i>
+                                </button>
                             </div>
 
                             <button type="button"
@@ -258,6 +280,7 @@
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
                         <!-- Left Menu Start -->
+
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title">Menu</li>
 
@@ -368,42 +391,23 @@
     <!-- plugin js -->
     <script src="{{ asset('/assets/libs/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('/assets/libs/jquery-ui-dist/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('/assets/libs/@fullcalendar/core/main.min.js') }}"></script>
-    <script src="{{ asset('/assets/libs/@fullcalendar/bootstrap/main.min.js') }}"></script>
-    <script src="{{ asset('/assets/libs/@fullcalendar/daygrid/main.min.js') }}"></script>
-    <script src="{{ asset('/assets/libs/@fullcalendar/timegrid/main.min.js') }}"></script>
-    <script src="{{ asset('/assets/libs/@fullcalendar/interaction/main.min.js') }}"></script>
 
-    <!-- Calendar init -->
-    <script src="{{ asset('/assets/js/pages/calendar.init.js') }}"></script>
 
     <!-- App js -->
     <script src="{{ asset('/assets/js/app.js') }}"></script>
 
-    <script src="{{ asset('assets/js/pusherNotifications.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
     <script>
-        Pusher.logToConsole = true;
-        var pusher = new Pusher('69820da6887a3d9f8088', {
-            cluster: 'mt1'
-        });
-        var channel = pusher.subscribe('my-channel');
-        channel.bind('request-submitted', function(data) {
-            if (data && data.user_id && data.comment) {
-                toastr.success('New Request Created', 'Formateur: ' + data.user_id + '<br>MainEmploiId: ' + data
-                    .main_emploi_id + '<br>Commentaire: ' + data
-                    .comment, {
-                        timeOut: 0,
-                        extendedTimeOut: 0,
-                    });
-            } else {
-                console.error('Invalid data structure received:', data);
-            }
+        $(document).ready(function() {
+            $('#vertical-menu-toggle').click(function() {
+                $('.vertical-menu').toggleClass('hide-menu');
+                $('.main-content').toggleClass('expanded');
+            });
         });
     </script>
-
-
 
 </body>
 

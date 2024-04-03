@@ -54,8 +54,6 @@ class FileExcel extends Controller
             $brancheName = $worksheet->getCell('F' . $row)->getValue();
 
             if ($Formateur !== '' && $Matricule !== '' && $Groupe !== '' && $Branches !== '' && $Modules !== "") {
-                // dd($Formateur.' '. $Matricule .' '.$Groupe.' '. $Branches.' '.$Modules.' '.$neveau.' '.$codeModules );
-                
                 // Check if the formateur already exists in FormateursInfo
                 $foundFormateurIndex = null;
                 foreach ($FormateursInfo as $index => $formateurInfo) {
@@ -84,9 +82,11 @@ class FileExcel extends Controller
                     if (!$groupExists) {
                         $FormateursInfo[$foundFormateurIndex]['groupes'][] = $Groupe;
                     }
+
                     if (!$branchExists) {
                         $FormateursInfo[$foundFormateurIndex]['branches'][] = $Branches;
                     }
+
                     if (!$modulesExists) {
                         $FormateursInfo[$foundFormateurIndex]['modules'][] = $Modules;
                     }
@@ -162,6 +162,7 @@ class FileExcel extends Controller
 
       try {
 
+        
           // inserting data into DB
           $establishment_id = session()->get('establishment_id');
           if(!empty($BranchesInfo)){
@@ -185,22 +186,22 @@ class FileExcel extends Controller
           if(!empty($GroupsInfo)){
 
             foreach($GroupsInfo as $group){
-                group::create(
-                   [   'id'=>$establishment_id.$group['code'],
-                       'group_name' => $group['code'],
-                       'barnch_id'=>$establishment_id.$group['branch'],
-                       'year'=>$group['neveau'],
-                       'establishment_id'=>$establishment_id
-                   ]
-                );
-
-             foreach($group['modules'] as $modul){
-               group_has_module::create([
-                   'group_id'=>$establishment_id.$group['code'],
-                   'module_id'=>$establishment_id.$modul
+                group::create([
+                   'id'=>$establishment_id.$group['code'],
+                   'group_name' => $group['code'],
+                   'barnch_id'=>$establishment_id.$group['branch'],
+                   'year'=>$group['neveau'],
+                   'establishment_id'=>$establishment_id
                 ]);
-             }
-               }
+
+                foreach($group['modules'] as $modul){
+                    group_has_module::create([
+                        'group_id'=>$establishment_id.$group['code'],
+                        'module_id'=>$establishment_id.$modul
+                    ]);
+                }
+            }
+
 
           }
 

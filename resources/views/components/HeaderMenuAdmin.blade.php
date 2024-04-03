@@ -21,22 +21,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
-        .vertical-menu {
-            min-width: 100px;
-            max-width: var(--bs-sidebar-width);
-            width: 100px;
-            z-index: 1001;
-            background: var(--bs-sidebar-bg);
-            bottom: 0;
-            margin-top: 0;
-            position: fixed;
-            top: var(--bs-header-height);
-            -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
-            box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
-        }
-
-        /* CSS for the arrow button and sidebar toggle */
-        .arow {
+       /* CSS for the arrow button and sidebar toggle */
+.arow {
 
 
             position: fixed;
@@ -288,22 +274,18 @@
                             </li>
 
 
-                            <li class="hidentext">
-                                <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                    <span class="mdi mdi-book-plus"></span>
-                                    <span>Creae un emploi </span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{{ route('CreateEmploi') }}" class=" waves-effect"> tout les
-                                            groupes</a></li>
-                                    <li><a href="{{ route('emploiForFormateurs') }}" class=" waves-effect"> tout les
-                                            Formateurs</a></li>
-                                    <li><a href="{{ route('ChaqueFormateur') }}" class=" waves-effect"> chaque
-                                            formateur</a></li>
-                                    <li><a href="{{ route('emploiForGroup') }}" class=" waves-effect"> chaque
-                                            group</a></li>
-                                </ul>
-                            </li>
+                                <li class="hidentext">
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <span class="mdi mdi-book-plus"></span>
+                                        <span>Creae un emploi </span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les groupes</a></li>
+                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> tout les Formateurs</a></li>
+                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> chaque formateur</a></li>
+                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> chaque group</a></li>
+                                    </ul>
+                                </li>
 
                             <div id="emploi12">
                                 <li><a href="{{ route('CreateEmploi') }}" class=" waves-effect"> <span
@@ -324,44 +306,38 @@
                                             class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
                             </div>
 
-                            <li>
-                                <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
-                                    <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history"
-                                        data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
-                                    {{-- <span>tous les emplois</span> --}}
-                                </a>
-                            </li>
+                                <li>
+                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
+                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history" data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
+                                        {{-- <span>tous les emplois</span> --}}
+                                    </a>
+                                </li>
 
 
-                            <li>
-                                <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
-                                    <span style="font-weight: 400 ; font-size:25PX"
-                                        class="mdi mdi-message-text-clock-outline" data-toggle="tooltip"
-                                        data-placement="right" title="tous les demandes"></span>
-                                    {{-- <span class="hidentext"> tous les demandes</span> --}}
-                                </a>
-                            </li>
+                                <li>
+                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
+                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-message-text-clock-outline" data-toggle="tooltip" data-placement="right" title="tous les demandes"></span>
+                                        {{-- <span class="hidentext"> tous les demandes</span> --}}
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a href="{{ route('AllSetting') }}" class=" waves-effect">
-                                    <span style="font-weight: 400 ; font-size:25PX"
-                                        class="mdi mdi-settings-transfer-outline" data-toggle="tooltip"
-                                        data-placement="right" title="les paramteres "></span>
-                                    {{-- <span class="hidentext"> les paramteres </span> --}}
-                                </a>
-                            </li>
+                                  <li>
+                                    <a href="{{route('AllSetting')}}" class=" waves-effect">
+                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-settings-transfer-outline" data-toggle="tooltip" data-placement="right" title="les paramteres "></span>
+                                        {{-- <span class="hidentext"> les paramteres </span> --}}
+                                    </a>
+                                 </li>
 
 
 
 
 
-                            <li>
-                                <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
-                                    <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
-                                        data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
-                                    {{-- Logout --}}
-                                </a>
-                            </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger" data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
+                                        {{-- Logout --}}
+                                    </a>
+                                </li>
 
 
                         </ul>
@@ -430,24 +406,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            Pusher.logToConsole = true;
-            var pusher = new Pusher('69820da6887a3d9f8088', {
-                cluster: 'mt1'
-            });
-            var channel = pusher.subscribe('my-channel');
-            channel.bind('request-submitted', function(data) {
-                if (data && data.user_id && data.comment) {
-                    toastr.success('New Request Created', 'Formateur: ' + data.user_id +
-                        '<br>MainEmploiId: ' + data
-                        .main_emploi_id + '<br>Commentaire: ' + data
-                        .comment, {
-                            timeOut: 0,
-                            extendedTimeOut: 0,
-                        });
-                } else {
-                    console.error('Invalid data structure received:', data);
-                }
-            });
+          
             let sidebarMenu = document.querySelector('.vertical-menu');
             let hidenTexts = document.querySelectorAll('.hidentext');
             let lesEmploi = document.querySelector('#emploi12')
@@ -468,13 +427,12 @@
 
             hideHidentext(); // Initial call to hide hidentext elements
 
-            document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-                sidebarMenu.classList.toggle('collapsed');
-                hideHidentext(); // Call hideHidentext when the sidebar is toggled
+                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                    sidebarMenu.classList.toggle('collapsed');
+                    hideHidentext(); // Call hideHidentext when the sidebar is toggled
+                });
             });
-            
-        });
-    </script>
+        </script>
 
 
 

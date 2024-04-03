@@ -16,7 +16,7 @@ return new class extends Migration
     Schema::create('request_emplois', function (Blueprint $table) {
         $table->id();
         $table->date('date_request');
-        $table->string('comment', 450);
+        $table->string('comment', 450)->nullable();
         $table->timestamp('created_at')->nullable();
         $table->timestamp('updated_at')->nullable();
 

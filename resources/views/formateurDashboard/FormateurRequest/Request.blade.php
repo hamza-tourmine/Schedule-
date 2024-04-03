@@ -35,7 +35,6 @@
             overflow-x: auto;
         }
 
-
         .button-container-calendar button {
             cursor: pointer;
             display: inline-block;
@@ -70,6 +69,30 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .button-container-calendar .fixed-button {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow items to wrap to the next line */
+        }
+
+        .button-container-calendar .fixed-button button {
+            padding: 8px 16px;
+            margin: 5px;
+        }
+
+        .button-container-calendar label {
+            font-size: 20px;
+        }
+
+        .button-container-calendar .date-info {
+            margin-top: 10px;
+            text-align: center;
         }
 
         .date-container {
@@ -122,10 +145,6 @@
             font-size: 16px
         }
 
-        /* table {
-            table-layout: fixed;
-            word-wrap: break-word;
-            } */
         .idemploi {
             font-weight: bold
         }
@@ -138,12 +157,7 @@
             color: teal
         }
 
-            {
-            text-decoration: none;
-            color: white
-        }
-
-            {
+        a {
             text-decoration: none;
             color: white
         }
@@ -163,27 +177,83 @@
             color: #666;
             cursor: not-allowed;
         }
+
+        label.left-arrow {
+            float: left;
+        }
+
+        label.right-arrow {
+            float: right;
+        }
+
+        @media only screen and (max-width: 600px) {
+            h4 {
+                font-size: 18px;
+            }
+
+            .button-container-calendar label {
+                font-size: 20px;
+            }
+
+        }
+
+        @media only screen and (max-width: 420px) {
+            h4 {
+                font-size: 14px;
+            }
+
+            .button-container-calendar label {
+                font-size: 16px;
+            }
+
+        }
+
+        @media only screen and (max-width: 360px) {
+            h4 {
+                font-size: 10px;
+            }
+
+            .button-container-calendar label {
+                font-size: 12px;
+            }
+
+        }
+
+        @media only screen and (max-width: 290px) {
+            h4 {
+                font-size: 8px;
+            }
+
+            .button-container-calendar label {
+                font-size: 10px;
+            }
+
+        }
     </style>
 
 
     <div class="button-container-calendar">
-        <label id="previous" onclick="previous()">&#8249;</label>
+        <label class="left-arrow" id="previous" onclick="previous()">&#8249;</label>
         <div class="date-info">
             <h4> Start:<span id="dateStart" class="idemploi st"></span></h4>
             <h4> End: <span id="dateEnd" class="idemploi ed"></span></h4>
         </div>
-        <label id="next" onclick="next()">&#8250;</label>
+        <label class="right-arrow" id="next" onclick="next()">&#8250;</label>
         <div class="fixed-button">
-            <button id="createRequestBtn" type="button">Create Request Emploi</button>
+            <button id="createRequestBtn" type="button"><i class="fa fa-exclamation-circle"
+                    style="font-size:16px;"></i>
+                Creer une demande </button>
 
-            <button id="toggleTablesBtn" onclick="toggleTables()">Toggle Tables</button>
+
+
+            <button id="toggleTablesBtn" onclick="toggleTables()"><i class="fas fa-table"></i> Changer la table</button>
         </div>
 
 
     </div>
 
 
-    <div id="tbl_exporttable_to_xls_1" class="table-responsive">
+    <div id="tbl_exporttable_to_xls_2" class="table-responsive" style="display: none">
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12  active">
             <thead>
                 <tr class="day">
@@ -230,7 +300,7 @@
     </div>
 
 
-    <div id="tbl_exporttable_to_xls_2" class="table-responsive" style="display: none">
+    <div id="tbl_exporttable_to_xls_1" class="table-responsive">
         <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
             <thead>
                 <!-- Header row for seance parts -->
@@ -371,8 +441,9 @@
                         @csrf
                         <div class="form-group">
                             <label for="comment">Comment:</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                            <textarea class="form-control" id="cmt" name="comment" rows="3"></textarea>
                         </div>
+                        <br>
                         <button type="button" class="btn btn-danger" data-dismiss="modal"
                             id="cancelRequest">Fermer</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -469,6 +540,7 @@
             // Function to open the pop-up form and display the flash message
 
             $(document).ready(function() {
+
                 // Function to handle form submission
                 $('#createRequestForm').submit(function(event) {
                     event.preventDefault();
@@ -481,6 +553,7 @@
                         data: {
                             '_token': '{{ csrf_token() }}',
                             mainEmploiId: mainEmploiId, // Add main emploi variable
+                            comment: $('#cmt').val(),
                             formData: $(this).serialize() // Serialize form data
 
                         },
@@ -495,12 +568,23 @@
                                         ${response.message}
                                     </div>`;
                             }
-
+                            if (response.requestExists) {
+                                // Si la demande existe, mettre à jour le bouton en 'Update'
+                                $('#createRequestBtn').text('Update');
+                                // Stocker l'état du bouton dans le stockage local
+                                localStorage.setItem('requestButtonState', 'Update');
+                            } else {
+                                // Si la demande n'existe pas, mettre à jour le bouton en 'Create'
+                                $('#createRequestBtn').text('Create');
+                                // Stocker l'état du bouton dans le stockage local
+                                localStorage.setItem('requestButtonState', 'Create');
+                            }
                             document.getElementById('infoContainer').innerHTML = '';
                             document.getElementById('infoContainer').appendChild(
                                 FlashMsg);
                             $('#createRequestModal').modal('hide');
                             console.log('ajaxREQUEST', response);
+                            $('#comment').val('');
                         },
                         error: function(error) {
                             console.error('Error creating request emploi:',
@@ -594,22 +678,22 @@
                         clickedCell.innerText = ShowselectedType + '\n ' +
                             ShowselectedGroup + '\n' + ShowselectedClass;
 
-                        // Create a new div to display the selected information
-                        var infoDiv = document.createElement("div");
-                        infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
-                            '</h3>' +
-                            '<h3>Day Part: ' + dayPart + '</h3>' +
-                            '<h3>Seance Part: ' + seancePart + '</h3>' +
-                            '<h3>Module: ' + ShowselectedModule + '</h3>' +
-                            '<h3>Group: ' + ShowselectedGroup + '</h3>' +
-                            '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
-                            '<h3>Seance MSG: ' + ShowselectedMsg + '</h3>' +
-                            '<h3>class :' + ShowselectedClass + ' </h3>';
+                        // // Create a new div to display the selected information
+                        // var infoDiv = document.createElement("div");
+                        // infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
+                        //     '</h3>' +
+                        //     '<h3>Day Part: ' + dayPart + '</h3>' +
+                        //     '<h3>Seance Part: ' + seancePart + '</h3>' +
+                        //     '<h3>Module: ' + ShowselectedModule + '</h3>' +
+                        //     '<h3>Group: ' + ShowselectedGroup + '</h3>' +
+                        //     '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
+                        //     '<h3>Seance MSG: ' + ShowselectedMsg + '</h3>' +
+                        //     '<h3>class :' + ShowselectedClass + ' </h3>';
 
-                        // Append the new div to the "infoContainer"
-                        document.getElementById('infoContainer').innerHTML = '';
-                        document.getElementById('infoContainer').appendChild(
-                            infoDiv);
+                        // // Append the new div to the "infoContainer"
+                        // document.getElementById('infoContainer').innerHTML = '';
+                        // document.getElementById('infoContainer').appendChild(
+                        //     infoDiv);
 
                         $('#groupModuleClassModal').modal('hide');
                     });
@@ -690,6 +774,12 @@
                 error: function(error) {
                     console.error('Error creating session emploi:', error.responseText);
                     // Handle error and display appropriate message to the user
+                }
+            });
+            $(document).ready(function() {
+                var buttonState = localStorage.getItem('requestButtonState');
+                if (buttonState) {
+                    $('#createRequestButton').text(buttonState);
                 }
             });
         });

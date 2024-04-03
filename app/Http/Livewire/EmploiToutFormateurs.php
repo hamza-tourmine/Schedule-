@@ -48,6 +48,7 @@ class EmploiToutFormateurs extends Component
     public $formateurId;
     public $brancheId ;
     public $groupId ;
+    public $selectedGroups = [];
 
 
 
@@ -55,7 +56,7 @@ class EmploiToutFormateurs extends Component
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
     public function receiveVariable($variable)
     {
-        
+
         $this->formateurId =substr($variable , 11);
         $this->receivedVariable = $variable;
     }
@@ -63,34 +64,48 @@ class EmploiToutFormateurs extends Component
     protected $rules = [
         'group' => 'required',
     ];
-    public function createSession(){
-    try{
 
-        $idcase = $this->receivedVariable;
-        $sission = sission::create([
-            'day'=>substr($idcase,0,3),
-            'day_part'=>substr($idcase,3,5),
-            'dure_sission'=>substr($idcase,8,3),
-            'module_id'=>$this->module ,
-            'group_id'=>$this->groupId,
-        	'establishment_id'=>session()->get('establishment_id'),
-            'user_id'=>$this->formateurId,
-            'class_room_id'=>$this->salle,
-            'validate_date'=>null,
-            'main_emploi_id'=>session()->get('id_main_emploi'),
-            "demand_emploi_id"=>null,
-            'message'=>null,
-            'sission_type'=>$this->TypeSesion,
-        	'status_sission'=>null,
-        ]);
-        if($sission){
-            $this->alert('success', 'Vous créez une nouvelle session',[
+    public function createSession(){
+        // dd($this->selectedGroups);
+
+        try {
+            if (!is_array($this->selectedGroups)) {
+                throw new \Exception('$this->selectedGroups must be an array.');
+            }
+            $idcase = $this->receivedVariable;
+            foreach($this->selectedGroups as $group) {
+                $sission = sission::create([
+                    'day' => substr($idcase, 0, 3),
+                    'day_part' => substr($idcase, 3, 5),
+                    'dure_sission' => substr($idcase, 8, 3),
+                    'module_id' => $this->module,
+                    'group_id' => $group,
+                    'establishment_id' => session()->get('establishment_id'),
+                    'user_id' => $this->formateurId,
+                    'class_room_id' => $this->salle,
+                    'validate_date' => null,
+                    'main_emploi_id' => session()->get('id_main_emploi'),
+                    "demand_emploi_id" => null,
+                    'message' => null,
+                    'sission_type' => $this->TypeSesion,
+                    'status_sission' => 'Accepted',
+                ]);
+
+                if (!$sission) {
+                    // Handle the case where session creation fails for a group
+                    // throw new Exception("Session creation failed for group ID: $group");
+                    dd("there are a prob");
+                }
+            }
+
+            $this->alert('success', 'Vous créez une nouvelle session', [
                 'position' => 'center',
                 'timer' => 3000,
-                'toast' => true,]);
-            // return redirect()->route('CreateEmploi');
-        }
-     }catch (\Illuminate\Database\QueryException $e) {
+                'toast' => true,
+            ]);
+            $this->selectedGroups = [];
+
+        }catch (\Illuminate\Database\QueryException $e) {
         if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
             $this->alert('error', 'Vous devriez sélectionner la date de début.', [
                 'position' => 'center',
@@ -189,7 +204,7 @@ class EmploiToutFormateurs extends Component
         ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
         ->where('modules.establishment_id', $establishment_id)
         ->where('MHF.formateur_id', $this->formateurId)
-        ->where('GHM.group_id', $this->groupId)
+        ->whereIn('GHM.group_id', $this->selectedGroups)
         ->select('modules.*')
         ->get();
 

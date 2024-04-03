@@ -109,14 +109,13 @@ public function createRequestEmploi(Request $request)
     try {
         // Validate the incoming request data
         $validatedData = $request->validate([
-            'mainEmploiId' => 'required|integer', // Assuming mainEmploiId is required and should be an integer
-            // Add more validation rules as needed for other fields
+            'mainEmploiId' => 'required|integer', 
         ]);
 
         // Retrieve the validated mainEmploiId from the request data
         $mainEmploiId = $validatedData['mainEmploiId'];
+        $comment = $request['comment'];
         
-
         // Get the authenticated user's ID
         $user_id = Auth::id();
 
@@ -124,30 +123,32 @@ public function createRequestEmploi(Request $request)
         $existingRequest = RequestEmploi::where('user_id', $user_id)
             ->where('main_emploi_id', $mainEmploiId)
             ->first();
+        $requestExists = $existingRequest ? true : false;
 
         if ($existingRequest) {
             // If a request already exists, update it
             $existingRequest->update([
                 'date_request' => now(),
-                'comment' => 'test comment',
+                'comment' => $comment,
             ]);
 
-            return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400]);
+            return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400, 'requestExists' => $requestExists]);
         } else {
             // If no request exists, create a new one
             $requestEmploi = new RequestEmploi([
                 'date_request' => now(),
-                'comment' => 'test comment',
+                'comment' => $comment,
                 'user_id' => $user_id,
                 'main_emploi_id' => $mainEmploiId,
             ]);
             $requestEmploi->save();
 
-            return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300,]);
+            return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300, 'requestExists' => $requestExists]);
         }
     } catch (\Exception $e) {
         // Return error response in case of any exceptions
         return response()->json(['message' => 'Error creating or updating request emploi.', 'status' => 500, 'error' => $e->getMessage()]);
     }
 }
+
 }
