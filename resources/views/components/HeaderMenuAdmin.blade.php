@@ -21,8 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
-       /* CSS for the arrow button and sidebar toggle */
-       .vertical-menu {
+    .vertical-menu {
     min-width: 100px;
     max-width: var(--bs-sidebar-width);
     width:100px ;
@@ -37,14 +36,10 @@
     margin-bottom: 55px;
 }
 
-
 .arow {
-
-
     position: fixed;
     top: 100px ;
     left: 10px;
-
     z-index: 100;
     padding: 10px;
 
@@ -67,6 +62,51 @@
     left: auto;
     right: 0;
 }
+
+.remove {
+    display:none ;
+}
+.container-remover{
+    margin-bottom:20px;
+    margin-left:20px;
+    width:100px !important;
+    height:100px !important
+}
+
+.icon-remove{
+    font-size: 35px ;
+    color:white ;
+    margin: 10px ;
+    margin-top: 0px !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important ;
+}
+
+.icon-remove:hover{
+    cursor: pointer;
+    border-radius: 1.4px solid black ;
+    width: 50% ;
+    height: 50%;
+    transform: 0.9s  all ;
+
+}
+
+.container, .container-fluid, .container-lg,
+ .container-md, .container-sm, .container-xl,
+  .container-xxl{
+        padding-right: 0px;
+        padding-left: 0px;
+        margin-right: 0px;
+         margin-left: 0px;
+    }
+
+    @media screen and (max-width: 990px) {
+        .container-remover{
+            display: none ;
+        }
+    }
+
+
     </style>
 </head>
 
@@ -240,15 +280,17 @@
 <!-- Mega menu -->
 
                             </div>
+
                         </div>
+
                     </div>
+                    <div class="container-remover"><span  class="mdi mdi-format-align-bottom icon-remove"></span></div>
                 </header>
                 <!-- ENd header  -->
  <!-- ========== Left Sidebar Start ========== -->
- <div class="vertical-menu" style="">
-                    {{-- <div class="arow">
-                        <button class="btn btn-primary toggle-sidebar"><i class="mdi mdi-chevron-left"></i></button>
-                    </div> --}}
+
+ <div class="vertical-menu" >
+
                     <div class="widthSideBare ">
                         <div class="user-wid text-center py-4">
                             <div class="user-img">
@@ -268,12 +310,19 @@
                             <!-- Left Menu Start -->
                             <ul class="metismenu list-unstyled" id="side-menu">
                                 <li class="menu-title">Menu</li>
+
+
                                 <li>
                                     <a  href="{{route('dashboardAdmin')}}" class=" waves-effect">
-                                        <i style="font-weight: 400 ; font-size:25PX" class="mdi mdi-home-lightbulb-outline"></i>
-                                        <span class="hidentext" >Accueil</span>
+                                        <i data-toggle="tooltip" data-placement="right" title="admin dashboard" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-home-lightbulb-outline"></i>
+
                                     </a>
                                 </li>
+
+
+
+
+
 
 
 
@@ -376,33 +425,32 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 let sidebarMenu = document.querySelector('.vertical-menu');
-                let hidenTexts = document.querySelectorAll('.hidentext');
-                let lesEmploi = document.querySelector('#emploi12')
+                let iconRemove = document.querySelector('.icon-remove');
+            iconRemove.addEventListener('click', function() {
+            sidebarMenu.classList.toggle('remove');
+            if (iconRemove.classList.contains('mdi-format-align-bottom')) {
+                sidebarMenu.style.marginLeft = '0px !important';
+                sidebarMenu.style.left = '0px !important';
+                iconRemove.classList.remove('mdi-format-align-bottom');
+                iconRemove.classList.add('mdi-format-align-top');
+            } else {
+                iconRemove.classList.add('mdi-format-align-bottom');
+                iconRemove.classList.remove('mdi-format-align-top');
 
-                function hideHidentext() {
-                    if (!sidebarMenu.classList.contains('collapsed')) {
-                        hidenTexts.forEach(function(element) {
-                            element.style.display = 'none';
-                            lesEmploi.style.display ='block'
-                        });
-                    } else {
-                        hidenTexts.forEach(function(element) {
-                            element.style.display = ' inline-block';
-                            lesEmploi.style.display ='none'
-                        });
-                    }
-                }
+            }
 
-                hideHidentext(); // Initial call to hide hidentext elements
 
-                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-                    sidebarMenu.classList.toggle('collapsed');
-                    hideHidentext(); // Call hideHidentext when the sidebar is toggled
-                });
+});
+
+
+
+
+
             });
         </script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
         <script>
             Pusher.logToConsole = true;
             var pusher = new Pusher('69820da6887a3d9f8088', {

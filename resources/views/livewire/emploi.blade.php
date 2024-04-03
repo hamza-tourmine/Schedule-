@@ -34,7 +34,7 @@
         <table  style="overflow:scroll" class="col-md-12 ">
             <thead>
                 <tr class="day">
-                    <th rowspan="3">Groups Name</th>
+                    <th style="width: 140px !important"  rowspan="3">Groups Name</th>
                     <th colspan="4">Lundi</th>
                     <th colspan="4">Mardi</th>
                     <th colspan="4">Mercredi</th>

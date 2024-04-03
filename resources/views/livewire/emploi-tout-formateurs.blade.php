@@ -67,7 +67,7 @@
 
             <thead>
                 <tr class="day">
-                    <th rowspan="3">Groups Name</th>
+                    <th style="width: 140px !important" rowspan="4">Formateur Name</th>
                     <th colspan="4">Lundi</th>
                     <th colspan="4">Mardi</th>
                     <th colspan="4">Mercredi</th>
@@ -315,7 +315,10 @@
                     console.log(element.id)
                 });
             });
+
+
         });
+
 
     </script>
 </div>

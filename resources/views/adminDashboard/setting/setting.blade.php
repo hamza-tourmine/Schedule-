@@ -75,12 +75,12 @@
         </div>
     </a>
 
-    
+
 
 <a href="{{route('determine-type-class-room')}}">
     <div class="rectungle">
         <div class="containerContent">
-            <div class="icon"> <span  class="mdi mdi-alpha-t-circle iconStyle"></span></div>
+            <div style="margin-left:5px " class="icon"> <span  class="mdi mdi-webhook iconStyle"></span></div>
             <div>
                     <span style="color: black">Afictaion des types</span>
                     <br>

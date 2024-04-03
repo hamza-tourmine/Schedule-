@@ -1,4 +1,8 @@
 <x-HeaderMenuAdmin>
+    <style>
+       
+
+    </style>
 @livewireStyles
  @livewire('tout-emplois')
  @livewireScripts

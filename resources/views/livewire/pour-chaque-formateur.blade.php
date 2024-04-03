@@ -1,4 +1,35 @@
 <div>
+    <style>
+        .checkboxContainer {
+            background-color: white;
+            border-radius: 7px;
+            display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px 15px;
+            border: 1.5px solid #eee;
+            max-height: 150px;
+            overflow-y: scroll;
+            width: 100%;
+        }
+
+        .checkboxContainer span {
+            margin: 4px;
+            display: block;
+        }
+
+        .checkboxContainer span:hover {
+            background-color: #eee
+        }
+
+        .checkboxContainer span input {
+            width: 35px;
+        }
+
+        /* Change the color of the checkbox when checked */
+        input[type="checkbox"]:checked+label {
+            background-color: #eee;
+        }
+    </style>
     @php
 
 @endphp
@@ -167,21 +198,27 @@
                                         @endif
 
                                     </div>
-                                    <div style="display: flex">
-                                        {{-- Formateur --}}
+                                    <div style="display: block">
 
-                                        <select wire:model='groupID' class="form-select"
-                                        aria-label="Default select example">
-                                        <option selected>Groupes</option>
-                                        @if ($groups)
 
-                                            @foreach ($groups as $groupe)
-                                                <option value="{{ $groupe->id }}">
-                                                    {{ $groupe->group_name }}</option>
-                                            @endforeach
-                                            @endif
+                                    @if ($groups)
+                                      {{-- Group --}}
 
-                                    </select>
+                            
+
+                                    <div class="mb-3">
+                                      <h6 style="margin: 10px;">Groupes</h6>
+                                      <div style="width: 100%;" style="" class="checkboxContainer ">
+                                          @foreach ($groups as $group)
+                                              <span style="display: block">
+                                                  <input class="modulesoption" type="checkbox" wire:model="selectedGroups.{{ $group->id }}" value="{{ $group->id }}">
+                                                  <label>{{ $group->group_name }}</label>
+                                              </span>
+                                          @endforeach
+                                      </div>
+                                  </div>
+
+                                  @endif
 
 
                                         {{-- salle --}}

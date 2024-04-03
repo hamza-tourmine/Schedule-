@@ -54,11 +54,21 @@ class EmploiToutFormateurs extends Component
 
 
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
+
+
+
     public function receiveVariable($variable)
     {
 
         $this->formateurId =substr($variable , 11);
         $this->receivedVariable = $variable;
+        // clean all variable  of modules
+        $this->brancheId = null;
+        $this->module = null;
+        $this->selectedGroups = [];
+        $this->salle = null;
+        $this->salleclassTyp = null;
+        $this->TypeSesion = null;
     }
 
     protected $rules = [
@@ -66,15 +76,22 @@ class EmploiToutFormateurs extends Component
     ];
 
     public function createSession(){
-        // dd($this->selectedGroups);
 
         try {
-            if (!is_array($this->selectedGroups)) {
-                throw new \Exception('$this->selectedGroups must be an array.');
-            }
-            $idcase = $this->receivedVariable;
+            // Validate inputs
+            if (empty($this->selectedGroups) || empty($this->salle) || empty($this->formateurId)) {
+                // throw new \Exception('Selected groups, salle, and formateurId must not be empty.');
+                $this->alert('error', 'Selected groups, salle, and formateurId must not be empty.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            }else{
+
+                $idcase = $this->receivedVariable;
             foreach($this->selectedGroups as $group) {
-                $sission = sission::create([
+                // dd($group);
+                $session = sission::create([
                     'day' => substr($idcase, 0, 3),
                     'day_part' => substr($idcase, 3, 5),
                     'dure_sission' => substr($idcase, 8, 3),
@@ -91,52 +108,63 @@ class EmploiToutFormateurs extends Component
                     'status_sission' => 'Accepted',
                 ]);
 
-                if (!$sission) {
-                    // Handle the case where session creation fails for a group
-                    // throw new Exception("Session creation failed for group ID: $group");
-                    dd("there are a prob");
+                if (!$session) {
+                    $this->alert('error', 'Session creation failed for group ID: $group', [
+                        'position' => 'center',
+                        'timer' => 3000,
+                        'toast' => true,
+                    ]);
                 }
             }
 
+            // Success alert
             $this->alert('success', 'Vous créez une nouvelle session', [
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,
-            ]);
+            ]);}
+
+            // Reset selectedGroups
             $this->selectedGroups = [];
-
-        }catch (\Illuminate\Database\QueryException $e) {
-        if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
-            $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Handle specific database errors
+            if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            } elseif (strpos($e->getMessage(), "Column 'user_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner le formateur.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            } elseif (strpos($e->getMessage(), "Column 'class_room_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            } else {
+                // Generic error handling
+                $this->alert('error', $e->errorInfo[2], [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+                return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+            }
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            $this->alert('error', $e->getMessage(), [
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,
             ]);
-        }elseif(strpos($e->getMessage(), "Column 'user_id' cannot be null") !==false){
-            $this->alert('error', 'Vous devriez sélectionner le formateur.', [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-        }
-        elseif(strpos($e->getMessage(),"Column 'class_room_id' cannot be null") !==false){
-            $this->alert('error', 'Vous devriez sélectionner la salle.', [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-        }
-        else {
-            $this->alert('error', $e->errorInfo[2], [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-            return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
         }
     }
 
-    }
 
 
     public function AddAutherEmploi(){
@@ -195,11 +223,8 @@ class EmploiToutFormateurs extends Component
          // data for  model form
 
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-
         // $this->modules = module::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();
-
-
         $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
         ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
         ->where('modules.establishment_id', $establishment_id)

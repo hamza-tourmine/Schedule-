@@ -1,39 +1,45 @@
 <div>
     <div>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-            }
+         body {
+            font-family: Arial, sans-serif;
+        }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
 
-            th,
-            td {
-                height: 40px;
-                width: 60px !important;
-                border: 1px solid #ddd;
-                text-align: center;
-            }
+        th,
+        td {
 
-            th {
-                background-color: #f2f2f2;
-            }
-            thead tr.day{
-                font-size: 18px;
-                /* font-weight: bold; */
-                padding:30px
-            }
-          thead tr.se-row {
-                height: 30px !important;
-                width: 30px;
-                margin: 0px;
-                padding: 0px;
-                font-size: 16px
-            }
+            height: 40px;
+            width: 520px !important;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        td{
+            height: 70px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        thead tr.day{
+            font-size: 18px;
+            /* font-weight: bold; */
+            padding:30px
+        }
+      thead tr.se-row {
+            height: 30px !important;
+            width: 30px;
+            margin: 0px;
+            padding: 0px;
+            font-size: 16px
+        }
 
         </style>
         @php
@@ -77,7 +83,7 @@
             <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 "  >
                 <thead>
                     <tr class="day">
-                        <th rowspan="3">@if ($selectedType ==="Formateur")
+                        <th style="width: 140px !important"  rowspan="3">@if ($selectedType ==="Formateur")
                            Nome  formateurs
                         @else
                         Nome Groupes
