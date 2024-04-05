@@ -5,6 +5,8 @@
 @endphp
     <h2>Schedule Table</h2>
 
+  <div style="display: flex;">
+    <div style=" width :300px">
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
@@ -19,17 +21,17 @@
   </div>
 
     <div class="table-responsive">
-        <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
         <table  style="overflow:scroll" class="col-md-12 ">
             <h3 style="float: right; margin: 10px;">
                 @if ($dataEmploi)
-                @foreach ( $dataEmploi as  $item)
-                Du: {{ $item->datestart}} au {{ $item->dateend}}
-                @endforeach
+                        @foreach ( $dataEmploi as  $item)
+                        Du: {{ $item->datestart}} au {{ $item->dateend}}
+                        @endforeach
                 @else
                     Il faut créer un emploi
                 @endif
             </h3>
+            
             <thead>
                 <tr class="day">
 
@@ -94,7 +96,7 @@
                         <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day && $sission->group_id === $groupID && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d+/', '', $sission->module_name) }}
                                     @endif
                                 @endforeach
                             </td>
@@ -226,7 +228,11 @@
     </div>
 
 
-
+<button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+    Supprimer tout
+  </button>
   <!-- Modal for delete-->
   <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

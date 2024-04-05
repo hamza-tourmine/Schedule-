@@ -48,7 +48,7 @@ class PourChaqueGroup extends Component
     public $groupID;
     public $moduleID ;
     public $baranches = [] ;
-    public $dataEmploi;
+    public $dataEmploi ;
 
 
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
@@ -125,7 +125,8 @@ class PourChaqueGroup extends Component
         public function render()
         {
             $this->dataEmploi =DB::table('main_emploi')
-            ->where('id', session()->get('id_main_emploi'))->get();
+        ->where('id', session()->get('id_main_emploi'))->get();
+        
             $establishment_id = session()->get('establishment_id');
             $this->groups = group::where('establishment_id', $establishment_id)->get();
             $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
@@ -149,7 +150,7 @@ class PourChaqueGroup extends Component
                     ->get();
 
                     // Fetch all sessions for the selected group
-                    $sessions = Sission::select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+                    $sessions = Sission::select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
                     ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
                     ->join('groups', 'groups.id', '=', 'sissions.group_id')
                     ->join('users', 'users.id', '=', 'sissions.user_id')

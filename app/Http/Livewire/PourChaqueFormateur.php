@@ -51,6 +51,7 @@ class PourChaqueFormateur extends Component
     public $brancheId;
     public $selectedGroups = [];
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
+    public $dataEmploi ;
 
     public function receiveVariable($variable)
     {
@@ -146,6 +147,8 @@ class PourChaqueFormateur extends Component
 
     public function render()
 {
+    $this->dataEmploi =DB::table('main_emploi')
+        ->where('id', session()->get('id_main_emploi'))->get();
     $establishment_id = session()->get('establishment_id');
     // Load all formateurs
     $this->formateurs = user::where('establishment_id', $establishment_id)

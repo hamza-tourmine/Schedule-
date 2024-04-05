@@ -56,6 +56,15 @@
 
     <div class="table-responsive">
         <table  style="overflow:scroll" class="col-md-12 ">
+            <h3 style="float: right; margin: 10px;">
+                @if ($dataEmploi)
+                        @foreach ( $dataEmploi as  $item)
+                        Du: {{ $item->datestart}} au {{ $item->dateend}}
+                        @endforeach
+                @else
+                    Il faut créer un emploi
+                @endif
+            </h3>
             <thead>
                 <tr class="day">
 
@@ -198,18 +207,7 @@
 
                                     </div>
                                     <div style="display: block">
-                                        {{-- Formateur --}}
-
-                                        {{-- <select wire:model='groupID' class="form-select"
-                                        aria-label="Default select example"> --}}
-                                        <option selected>Groupes</option>
                                         @if ($groups)
-
-                                            {{-- @foreach ($groups as $groupe)
-                                                <option value="{{ $groupe->id }}">
-                                                    {{ $groupe->group_name }}</option>
-                                            @endforeach --}}
-
 
                                             <div class="mb-3">
                                                 <h6 style="margin: 10px;">Groupes</h6>
