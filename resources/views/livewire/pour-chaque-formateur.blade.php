@@ -1,11 +1,12 @@
 <div>
+
     <style>
         .checkboxContainer {
             background-color: white;
             border-radius: 7px;
             display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 10px 15px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px 15px;
             border: 1.5px solid #eee;
             max-height: 150px;
             overflow-y: scroll;
@@ -30,10 +31,15 @@
             background-color: #eee;
         }
     </style>
+
+
     @php
 
 @endphp
     <h2>Schedule Table</h2>
+
+  <div style="display: flex;">
+    <div style=" width :300px">
 
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
@@ -49,17 +55,7 @@
   </div>
 
     <div class="table-responsive">
-        <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
         <table  style="overflow:scroll" class="col-md-12 ">
-            <h3 style="float: right; margin: 10px;">
-                @if ($dataEmploi)
-                        @foreach ( $dataEmploi as  $item)
-                        Du: {{ $item->datestart}} au {{ $item->dateend}}
-                        @endforeach
-                @else
-                    Il faut créer un emploi
-                @endif
-            </h3>
             <thead>
                 <tr class="day">
 
@@ -117,20 +113,40 @@
                 @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
                 @endphp
-                <tr>
+               <tr>
+                @foreach ($dayWeek as $day)
+                    @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}">
+                            @php
+                                $sessionWords = []; // Array to keep track of words already displayed in this cell
+                            @endphp
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                    @php
+                                        // Prepare session details
+                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . preg_replace('/^\d+/', '', $sission->module_name);
 
-                    @foreach ($dayWeek as $day)
-                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
-                                @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/>{{$sission->module_name}}
-                                    @endif
-                                @endforeach
-                            </td>
-                        @endforeach
+                                        // Remove duplicate words
+                                        $uniqueDetails = [];
+                                        foreach (explode('<br>', $details) as $word) {
+                                            if (!in_array($word, $sessionWords)) {
+                                                $uniqueDetails[] = $word;
+                                                $sessionWords[] = $word;
+                                            }
+                                        }
+                                        echo implode('<br>', $uniqueDetails);
+                                    @endphp
+                                @endif
+                            @endforeach
+                        </td>
                     @endforeach
-                </tr>
+                @endforeach
+            </tr>
+
+
+
+
+
 
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
@@ -182,26 +198,33 @@
 
                                     </div>
                                     <div style="display: block">
+                                        {{-- Formateur --}}
+
+                                        {{-- <select wire:model='groupID' class="form-select"
+                                        aria-label="Default select example"> --}}
+                                        <option selected>Groupes</option>
+                                        @if ($groups)
+
+                                            {{-- @foreach ($groups as $groupe)
+                                                <option value="{{ $groupe->id }}">
+                                                    {{ $groupe->group_name }}</option>
+                                            @endforeach --}}
 
 
-                                    @if ($groups)
-                                      {{-- Group --}}
+                                            <div class="mb-3">
+                                                <h6 style="margin: 10px;">Groupes</h6>
+                                                <div style="width: 100%;" style="" class="checkboxContainer ">
+                                                    @foreach ($groups as $group)
+                                                        <span style="display: block">
+                                                            <input class="modulesoption" type="checkbox" wire:model="selectedGroups.{{ $group->id }}" value="{{ $group->id }}">
+                                                            <label>{{ $group->group_name }}</label>
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            @endif
 
-
-
-                                    <div class="mb-3">
-                                      <h6 style="margin: 10px;">Groupes</h6>
-                                      <div style="width: 100%;" style="" class="checkboxContainer ">
-                                          @foreach ($groups as $group)
-                                              <span style="display: block">
-                                                  <input class="modulesoption" type="checkbox" wire:model="selectedGroups.{{ $group->id }}" value="{{ $group->id }}">
-                                                  <label>{{ $group->group_name }}</label>
-                                              </span>
-                                          @endforeach
-                                      </div>
-                                  </div>
-
-                                  @endif
+                                    {{-- </select> --}}
 
 
                                         {{-- salle --}}
@@ -268,7 +291,11 @@
     </div>
 
 
-
+<button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+    Supprimer tout
+  </button>
   <!-- Modal for delete-->
   <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

@@ -122,7 +122,7 @@
                             @foreach ($sissions as $sission)
                                 @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
                                     @php
-                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . $sission->module_name;
+                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' .preg_replace('/^\d+/', '', $sission->module_name) ;
                                         $uniqueDetails = [];
                                         foreach (explode('<br>', $details) as $word) {
                                             if (!in_array($word, $sessionWords)) {

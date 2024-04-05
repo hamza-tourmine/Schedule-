@@ -247,7 +247,7 @@ class EmploiToutFormateurs extends Component
         'role'=>'formateur'])->get();
 
         $sissions = DB::table('sissions')
-        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+        ->select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
         ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('users', 'users.id', '=', 'sissions.user_id')
