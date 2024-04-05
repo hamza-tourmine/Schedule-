@@ -162,6 +162,7 @@ class PourChaqueFormateur extends Component
         }
     }
 
+
         public function render()
 {
     $this->dataEmploi =DB::table('main_emploi')
@@ -173,10 +174,8 @@ class PourChaqueFormateur extends Component
                                 ->where('status', 'active')
                                 ->get();
 
-
-
     if ($this->formateurId) {
-
+        dd($this->formateurId);
         // $this->modules = module::where('formateur_id', $this->formateurId)->get();
         $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
         ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')

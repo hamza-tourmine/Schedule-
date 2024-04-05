@@ -77,7 +77,7 @@
                     @csrf
                     <button id="delete" type="submit" class="btn btn-danger" {{ session()->get('id_main_emploi') !== null ? '' : 'disabled' }}
                         data-bs-toggle="modal" data-bs-target="#exampleModal1">
-                        Supprimer tout
+                        Supprimer
                     </button>
                 </form>
             </div>
@@ -87,7 +87,7 @@
 
 
 
-<div class="card text-center " style="width: 40rem">
+    <div class="card text-center " style="width: 40rem">
 
 {{-- display formateur --}}
 @if($formateurs->isEmpty())
@@ -95,11 +95,12 @@
     Paramétre
   </div>
   <div class="card-body">
-    <div class="alert alert-danger" style="margin-top:6rem "><h5>Vous devriez configurer vos paramètres de votre compte</h5>
-    <span>Voulez-vous configurer vos paramètres à l'aide d'un fichier Excel ou manuellement ?</span>
-    <a style="margin-top: 5px" class="btn btn-primary " href="{{route('UploedFileExcelView')}}">fichier excel</a>
-    <a style="margin-top: 5px" class="btn btn-primary" href="{{route('AllSetting')}}">manuellement</a>
-</div>
+    <div class="card-body">
+        <div class="alert alert-danger" style="margin-top:6rem "><h5>Vous devriez configurer vos paramètres de votre compte</h5>
+        <span>Voulez-vous configurer vos paramètres à l'aide d'un fichier Excel ou manuellement ?</span>
+        <a style="margin-top: 5px" class="btn btn-primary " href="{{route('UploedFileExcelView')}}">fichier excel</a>
+        <a style="margin-top: 5px" class="btn btn-primary" href="{{route('AllSetting')}}">manuellement</a>
+      </div>
 
 @else
 <div class="card-header">
@@ -161,18 +162,23 @@
 
 
 
-
-
-
-
-
-
-
-
 </div>
 
 
+    <script>
+        let flexCheckDefault = document.getElementById('flexCheckDefault');
+        let dateselect = document.getElementById('date-select')
+        dateselect.style.display = 'none'
+        flexCheckDefault.addEventListener('click' , function (){
+           if(!flexCheckDefault.checked){
+            dateselect.style.display = 'none'
+           }else{
+            dateselect.style.display = 'block'
+           }
+        })
 
+
+    </script>
 
      <!-- Modal for delete-->
      <form method="post" action="{{route('deleteAllSessions')}}">
@@ -196,24 +202,4 @@
   </div>
      </form>
   {{-- end Modal for delete  --}}
-
-
-
-
-
-
-    <script>
-        let flexCheckDefault = document.getElementById('flexCheckDefault');
-        let dateselect = document.getElementById('date-select')
-        dateselect.style.display = 'none'
-        flexCheckDefault.addEventListener('click' , function (){
-           if(!flexCheckDefault.checked){
-            dateselect.style.display = 'none'
-           }else{
-            dateselect.style.display = 'block'
-           }
-        })
-
-
-    </script>
 </div>

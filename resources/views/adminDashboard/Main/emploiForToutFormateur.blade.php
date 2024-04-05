@@ -23,12 +23,13 @@
             td {
 
                 height: 40px;
-                width: 420px !important;
+                width: 430px !important;
                 border: 1px solid #ddd;
                 text-align: center;
             }
             td{
             height: 70px;
+
         }
 
             th {

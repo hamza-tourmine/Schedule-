@@ -9,12 +9,13 @@
 }
 
 .rectungle {
-    border-radius: 3.5px;
+    border-radius: 4.5px;
     padding: 20px;
     transition: all 0.5s; /* Define transition effect here */
     min-width: 250px;
     margin-left: 30px;
-    display: block
+    display: block;
+    background-color: #eee ;
 }
 
 .rectungle:hover {
@@ -46,11 +47,28 @@
 <div class="container">
 
 
+
+    <a href="{{route('showProfileAdmin')}}">
+        <div class="rectungle">
+            <div class="containerContent">
+                <div class="icon"> <span  class="bx bx-shield-quarter iconStyle"></span></div>
+                <div style="width: 70%">
+                        <span style="color: black">Admin</span>
+                        <br>
+                        <span style="color: #504f4f"></span>
+
+                </div>
+            </div>
+        </div>
+    </a>
+
+
+
     <a href="{{route('add-class-rooms')}}">
         <div class="rectungle">
             <div class="containerContent">
                 <div class="icon"> <span  class="mdi mdi-home-plus iconStyle"></span></div>
-                <div>
+                <div style="width: 70%">
                         <span style="color: black">Ajouter les salles</span>
                         <br>
                         <span style="color: #504f4f">Tout les info sur les Salles</span>
@@ -65,7 +83,7 @@
         <div class="rectungle">
             <div class="containerContent">
                 <div class="icon"> <span  class="mdi mdi-alpha-t-circle iconStyle"></span></div>
-                <div>
+                <div style="width: 70%">
                         <span style="color: black">Ajouter les types</span>
                         <br>
                         <span style="color: #504f4f">Tout les info sur les types des salles</span>
@@ -81,7 +99,7 @@
     <div class="rectungle">
         <div class="containerContent">
             <div style="margin-left:5px " class="icon"> <span  class="mdi mdi-webhook iconStyle"></span></div>
-            <div>
+            <div style="width: 70%">
                     <span style="color: black">Afictaion des types</span>
                     <br>
                     <span style="color: #504f4f">Afictation des types à sa salle</span>
@@ -105,7 +123,7 @@
     <div class="rectungle">
         <div class="containerContent">
             <div class="icon"> <span  class="mdi mdi-source-branch iconStyle"></span></div>
-            <div>
+            <div style="width: 70%">
                     <span style="color: black">Ajouter les Filières</span>
                     <br>
                     <span style="color: #504f4f">Tout les info sur les Filières</span>
@@ -124,7 +142,7 @@
     <div class="rectungle">
         <div class="containerContent">
             <div class="icon"> <span  class="mdi mdi-google-assistant iconStyle"></span></div>
-            <div>
+            <div style="width: 70%">
                     <span style="color: black">Ajouter les modules</span>
                     <br>
                     <span style="color: #504f4f">Tout les info sur les popapes</span>
@@ -142,7 +160,7 @@
 <div class="rectungle">
     <div class="containerContent">
         <div class="icon"> <span  class="mdi mdi-lightbulb-group iconStyle"></span></div>
-        <div>
+        <div style="width: 70%">
                 <span style="color: black">Ajouter les groupes</span>
                 <br>
                 <span style="color: #504f4f">Tout les info sur groupes</span>
@@ -159,7 +177,7 @@
 <div class="rectungle">
  <div class="containerContent">
     <div class="icon"> <span class=" iconStyle mdi mdi-account-plus"></span></div>
-    <div>
+    <div style="width: 70%">
 
             <span style=" color:black ">Ajouter les formateurs </span>
             <br>
@@ -179,8 +197,8 @@
 <div class="rectungle">
     <div class="containerContent">
         <div  class="icon" ><span class="mdi mdi-file-edit-outline iconStyle"></span></div>
-        <div style=" color:black ">
-            <span> Modules Paramteres  </span>
+        <div style="width: 70%" >
+            <span style=" color:black "> Modules Paramteres  </span>
             <br>
             <span style="color: #504f4f">Tout les info sur les Modules</span>
         </div>
@@ -196,8 +214,8 @@
     <div class="rectungle">
     <div class="containerContent">
             <div  class="icon" ><span class="mdi mdi-cloud-upload iconStyle"></span></div>
-            <div style=" color:black ">
-                  <span> Upload Excel </span>
+            <div style="width: 70%">
+                  <span style=" color:black "> Upload Excel </span>
                   <br>
                   <span style="color: #504f4f">Uploader un fichier Excel mettra à jour tous les paramètres.</span>
             </div>

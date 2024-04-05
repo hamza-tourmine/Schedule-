@@ -16,7 +16,9 @@ class CreateUserSettingTable extends Migration
             $table->string('userId')->primary();
             $table->foreign('userId')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade')
+               ->onUpdate('cascade');
             $table->boolean('module')->default(false);
             $table->boolean('typeSession')->default(false);
             $table->boolean('typeSalle')->default(false);

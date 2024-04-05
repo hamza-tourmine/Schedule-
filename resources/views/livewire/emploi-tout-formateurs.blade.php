@@ -4,8 +4,8 @@
             background-color: white;
             border-radius: 7px;
             display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 10px 15px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px 15px;
             border: 1.5px solid #eee;
             max-height: 150px;
             overflow-y: scroll;
@@ -114,13 +114,29 @@
                     <td>{{$formateur->user_name}}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$formateur->id }}"  >
-                                @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day  && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/> {{$sission->module_name}}
-                                    @endif
-                                @endforeach
-                            </td>
+
+                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$formateur->id }}">
+                            @php
+                                $sessionWords = [];
+                            @endphp
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                    @php
+                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . $sission->module_name;
+                                        $uniqueDetails = [];
+                                        foreach (explode('<br>', $details) as $word) {
+                                            if (!in_array($word, $sessionWords)) {
+                                                $uniqueDetails[] = $word;
+                                                $sessionWords[] = $word;
+                                            }
+                                        }
+                                        echo implode('<br>', $uniqueDetails);
+                                    @endphp
+                                @endif
+                            @endforeach
+                        </td>
+
+
                         @endforeach
                     @endforeach
                 </tr>

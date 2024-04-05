@@ -20,6 +20,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\ScheduleFormateurs;
 use App\Http\Controllers\Schedule;
 use App\Http\Controllers\ScheduleChaqueGroup;
+use App\Http\Controllers\adminProfileController;
 use App\Models\group;
 
 
@@ -54,6 +55,11 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 
 // for admin
 Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function(){
+    // profile
+    Route::controller(adminProfileController::class)->group(function(){
+        Route::get('/profile' , 'index')->name('showProfileAdmin');
+        Route::post('/profile' , 'update')->name('updateAdmindata');
+    });
     //emploi pour tout les formateur
     Route::get('/emploi-for-formateurs' ,[ScheduleFormateurs::class , 'index'])->name('emploiForFormateurs');
     //emploi pour chaque group
