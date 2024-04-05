@@ -82,7 +82,9 @@ Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function()
 
     Route::get('/CreateEmpoi' , [Schedule::class , 'index'])->name('CreateEmploi');
     Route::get('/insertSession' , [Schedule::class , 'insertSession'])->name('insertSession');
-    Route::get('/createNewSchedule' , [Schedule::class , 'createNewSchedule'])->name('createNewSchedule');
+    Route::post('/createNewSchedule' , [Schedule::class , 'createNewSchedule'])->name('createNewSchedule');
+    Route::post('/deleteSessions' , [Schedule::class , 'deleteAllSessions'])->name('deleteAllSessions');
+    Route::post('/AddAutherEmploi' , [Schedule::class , 'AddAutherEmploi'])->name('AddAutherEmploies');
     Route::get('/toutlesEmploi',[Schedule::class , 'toutlesEmploi'])->name('toutlesEmploi');
     //end Schedule routes
     Route::get('/add-class-rooms',[classRoomsController::class,'index'])->name('add-class-rooms');
@@ -132,8 +134,8 @@ Route::controller(formateurController::class )->group(function(){
 
 
     // Files excel
-    Route::get('uploed', [FileExcel::class, 'index'])->name('UploedFileExcelView');
-    Route::post('uploed', [FileExcel::class, 'upload'])->name('UploedFileExcel');
+    Route::get('upload', [FileExcel::class, 'index'])->name('UploedFileExcelView');
+    Route::post('upload', [FileExcel::class, 'upload'])->name('UploedFileExcel');
 });
 
 

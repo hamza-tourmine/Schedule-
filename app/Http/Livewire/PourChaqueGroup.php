@@ -48,6 +48,7 @@ class PourChaqueGroup extends Component
     public $groupID;
     public $moduleID ;
     public $baranches = [] ;
+    public $dataEmploi;
 
 
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
@@ -123,6 +124,8 @@ class PourChaqueGroup extends Component
 
         public function render()
         {
+            $this->dataEmploi =DB::table('main_emploi')
+            ->where('id', session()->get('id_main_emploi'))->get();
             $establishment_id = session()->get('establishment_id');
             $this->groups = group::where('establishment_id', $establishment_id)->get();
             $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')

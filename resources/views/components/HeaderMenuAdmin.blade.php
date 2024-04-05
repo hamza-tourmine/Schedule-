@@ -325,8 +325,6 @@
 
 
 
-
-
                                 <div id="emploi12">
                                         <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les groupes" class="mdi mdi-lightbulb-group-outline" style="font-weight: 400 ; font-size:25PX"></span></a></li>
                                         <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les Formateurs" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-supervisor-outline"></span></a></li>
@@ -397,12 +395,9 @@
                 <!-- end main content-->
 
             </div>
-            <!-- END layout-wrapper -->
 
         </div>
-        <!-- end container-fluid -->
 
-        <!-- Right Sidebar -->
 
 
         <div class="rightbar-overlay"></div>

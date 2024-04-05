@@ -34,38 +34,23 @@
 
 @endphp
     <h2>Schedule Table</h2>
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    <form method="get" action="{{ route('createNewSchedule') }}">
-        @csrf
-        <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
-            class="btn btn-primary">
-            Créer un nouveau  emploi
-        </button>
-        <br>
-        <label >date start</label>
-        <div class="col-6">
-            <input name="dateStart" id="dateStart" type="date" class="form-control col-6" placeholder="mm/dd/yyyy"
-                value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
-        </div>
-    </form>
 
     <div class="table-responsive">
+        <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
         <table  style="overflow:scroll" class="col-md-12 ">
+            <h3 style="float: right; margin: 10px;">
+                @if ($dataEmploi)
+                        @foreach ( $dataEmploi as  $item)
+                        Du: {{ $item->datestart}} au {{ $item->dateend}}
+                        @endforeach
+                @else
+                    Il faut créer un emploi
+                @endif
+            </h3>
 
+                        <thead>
 
-            <thead>
                 <tr class="day">
                     <th style="width: 140px !important" rowspan="4">Formateur Name</th>
                     <th colspan="4">Lundi</th>

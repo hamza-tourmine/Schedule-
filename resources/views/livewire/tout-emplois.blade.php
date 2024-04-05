@@ -49,7 +49,7 @@
         <div  style="max-width: 350px; ">
             <label for=""><h4>date de emploi :</h4></label>
             <select id='date-select' class="form-select"  wire:model="selectedValue" wire:change="updateSelectedIDEmploi($event.target.value)">
-                <option value="" disabled>Select emploi</option>
+                <option >Select emploi</option>
                 @forEach( $Main_emplois as $Main_emploi)
                     <option value="{{ $Main_emploi->id }}">{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
                 @endforeach

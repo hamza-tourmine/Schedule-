@@ -44,6 +44,7 @@ class Emploi extends Component
     public $TypeSesion;
     public $checkValues ;
     public $groupID;
+    public $dataEmploi ;
 
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
     public function receiveVariable($variable)
@@ -148,6 +149,8 @@ class Emploi extends Component
     }
     public function render()
     {
+        $this->dataEmploi =DB::table('main_emploi')
+        ->where('id', session()->get('id_main_emploi'))->get();
         // data for  model form
         $establishment_id = session()->get('establishment_id');
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();

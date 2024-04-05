@@ -34,34 +34,7 @@
 
 @endphp
     <h2>Schedule Table</h2>
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-  <div style="display: flex;">
-    <div style=" width :300px">
-    <form method="get" action="{{ route('createNewSchedule') }}">
-        @csrf
-        <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
-            class="btn btn-primary">
-            Créer un nouveau  emploi
-        </button>
-        <br>
-        <label >date start</label>
-        <div class="col-6">
-            <input name="dateStart" id="dateStart" type="date" class="form-control col-6" placeholder="mm/dd/yyyy"
-            value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
-        </div>
-    </form>
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
@@ -76,7 +49,17 @@
   </div>
 
     <div class="table-responsive">
+        <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
         <table  style="overflow:scroll" class="col-md-12 ">
+            <h3 style="float: right; margin: 10px;">
+                @if ($dataEmploi)
+                        @foreach ( $dataEmploi as  $item)
+                        Du: {{ $item->datestart}} au {{ $item->dateend}}
+                        @endforeach
+                @else
+                    Il faut créer un emploi
+                @endif
+            </h3>
             <thead>
                 <tr class="day">
 
@@ -204,7 +187,7 @@
                                     @if ($groups)
                                       {{-- Group --}}
 
-                            
+
 
                                     <div class="mb-3">
                                       <h6 style="margin: 10px;">Groupes</h6>
@@ -285,11 +268,7 @@
     </div>
 
 
-<button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
-      <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
-    Supprimer tout
-  </button>
+
   <!-- Modal for delete-->
   <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

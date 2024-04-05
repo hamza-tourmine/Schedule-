@@ -50,6 +50,8 @@ class EmploiToutFormateurs extends Component
     public $groupId ;
     public $selectedGroups = [];
 
+    public $dataEmploi ;
+
 
 
 
@@ -201,6 +203,12 @@ class EmploiToutFormateurs extends Component
 
     public function render()
     {
+        $this->dataEmploi =DB::table('main_emploi')
+        ->where('id', session()->get('id_main_emploi'))->get();
+        // dd($dataEmploi);
+
+
+
         $establishment_id = session()->get('establishment_id');
         // branches
         $this->baranches = DB::table('branches')

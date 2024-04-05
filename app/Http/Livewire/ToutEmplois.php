@@ -164,24 +164,24 @@ public function DeleteSession()
     // Method to update selected id emploi
     public function updateSelectedIDEmploi($value)
     {
-
-        // dd($this);
         session(['idEmploiSelected' => $value]);
         $this->selectedValue = $value;
     }
+    
     // for delate all sessions
     public function deleteAllSessions(){
         DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
         ->where('main_emploi_id',  $this->selectedValue)->delete();
         DB::table('main_emploi')->where('establishment_id', session()->get('establishment_id'))
         ->where('id',  $this->selectedValue)->delete();
+
        $this->Alert("success","Vous avez supprimé l'emploi du template.", [
         'position' => 'center',
         'timer' => 3000,
         'toast' => false,
         'width' =>650,
        ]);
-       return redirect('toutlesEmploi');
+       return redirect()->route('toutlesEmploi');
     }
 
     public function render()
@@ -191,7 +191,7 @@ public function DeleteSession()
         ->where('userId', Auth::id())->get() ;
 
         $this->Main_emplois = DB::table('main_emploi')
-            ->where('establishment_id', $establishment_id) ->orderBy('datestart')->get();
+            ->where('establishment_id', $establishment_id) ->orderBy('datestart' , 'desc')->get();
 
         $this->modules = Module::where('establishment_id', $establishment_id)->get();
         $this->salles = Class_room::where('id_establishment', $establishment_id)->get();
