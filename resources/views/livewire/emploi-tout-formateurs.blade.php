@@ -189,16 +189,6 @@
 
                                       {{-- Groupes --}}
                                       @if ($groups)
-                                      {{-- <select wire:model='groupId' class="form-select" aria-label="Default select example">
-                                          <option selected>Groupes</option>
-                                              @foreach ($groups as $group)
-                                                  <option value="{{ $group->id }}">
-                                                      {{ $group->group_name }}</option>
-                                              @endforeach
-                                      </select> --}}
-
-
-
                                       <div class="mb-3">
                                         <h6 style="margin: 10px;">Groupes</h6>
                                         <div style="width: 100%;" style="" class="checkboxContainer ">
