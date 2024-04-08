@@ -32,12 +32,9 @@ class AddGroupes extends Component
     public $oldyear ;
     public $oldBranch ;
 
-
-
-
-
-
-    protected $listeners = ['componentRefreshed' => 'FNrefresh' , 'GetIdGroupe' => 'GetIdGroupe'];
+    protected $listeners = ['componentRefreshed' => 'FNrefresh' ,
+    'GetIdGroupe' => 'GetIdGroupe' ,
+'updateGroup'=>'$refresh'];
     public function FNrefresh(){
         $this->reset();
     }
@@ -198,8 +195,7 @@ public function create()
              // set data on Edit Mudule
         if(!empty($this->Idgroup)){
              $group = group::find($this->Idgroup);
-            //  dd($group->barnch_id)  ;
-             //  $oldIdGroup ;
+
              $this->oldBranch = $group->barnch_id;
              $this->oldGroupName = $group->group_name;
              $this->oldyear = $group->year;

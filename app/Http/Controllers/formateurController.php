@@ -67,46 +67,8 @@ class formateurController extends Controller
             }
     }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $formateur = Formateur::findOrFail($id);
-
-            // Update formateur attributes
-            $formateur->update([
-                'user_name' => $request->name,
-                'passwordClone' => $request->password,
-                'password' => bcrypt($request->password),
-                'status' => $request->status,
-            ]);
-
-            // Synchronize branches
-            $formateur->branches()->sync($request->branches);
-
-            // Synchronize modules
-            $formateur->modules()->sync($request->modules);
-
-            // Synchronize groups
-            $formateur->groups()->sync($request->groupes);
-
-            return response()->json(['success' => 'You modified a formateur']);
-        } catch (\Exception $e) {
-            
-            return response()->json(['error' => 'Failed to update formateur'], 500);
-        }
-    }
+   
 
 
 
-
-
-
-
-    // public function destroy($id)
-    // {
-    //     $formateur = formateur::destroy($id);
-    //     if($formateur){
-    //         return redirect()->route('addFormateur')->with(['success'=>'you delete a formateur']) ;
-    //     }
-    // }
 }

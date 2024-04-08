@@ -25,8 +25,8 @@ return new class extends Migration
                     ->onDelete('cascade')
                     ->onUpdate('cascade');
 
-                    $table->string('formateur_id');
-                    $table->foreign('formateur_id')
+                $table->string('formateur_id');
+                $table->foreign('formateur_id')
                     ->references('id')
                     ->on('users')
                     ->onDelete('cascade')

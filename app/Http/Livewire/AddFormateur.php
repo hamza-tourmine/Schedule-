@@ -42,7 +42,12 @@ class AddFormateur extends Component
     public $branchesForEashFormateur = [];
 
 
-    protected $listeners = ['postAdded' => 'incrementPostCount'];
+
+
+    protected $listeners = [
+    'postAdded' => 'incrementPostCount' ,
+     'refreshComponentB' => '$refresh'];
+    // protected $listeners = [];
     public function incrementPostCount($id)
     {
         $this->New_idFormateur = $id;
@@ -224,30 +229,7 @@ class AddFormateur extends Component
 
 
 
-    // public function update(Request $request , $id)
-    // {
-    //     $formateur  = formateur::find($id);
-    //     $formateur->user_name =$request->name;
-    //     $formateur->email  =$request->email;
-    //     $formateur->passwordClone =$request->password;
-    //     $formateur->password =bcrypt($request->password);
-    //     $formateur->status =$request->status;
-    //     $formateur->save();
-    //     if($formateur){
-    //         return redirect()->route('addFormateur')->with(['success'=>'you modified  a  formateur']) ;
-    //     }else{
-    //         return redirect()->back()->withErrors(['errors'=>'some thing wrang']);
-    //     }
-    // }
 
 
-
-    // public function destroy($id)
-    // {
-    //     $formateur = formateur::destroy($id);
-    //     if($formateur){
-    //         return redirect()->route('addFormateur')->with(['success'=>'you delete a formateur']) ;
-    //     }
-    // }
 
 }

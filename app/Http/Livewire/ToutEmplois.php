@@ -141,7 +141,8 @@ public function DeleteSession()
     $group_id = substr($idcase, 11);
     $user_id = substr($idcase, 11);
     $dure_sission = substr($idcase,8,3);
-     if ($this->selectedType === "Group") {
+
+ if ($this->selectedType === "Group") {
   sission::where([
      'main_emploi_id' => Session::get('idEmploiSelected'),
      'day' => $day,
