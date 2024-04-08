@@ -21,7 +21,7 @@
   </div>
 
     <div class="table-responsive">
-        <table  style="overflow:scroll" class="col-md-12 ">
+        <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
             <h3 style="float: right; margin: 10px;">
                 @if ($dataEmploi)
                         @foreach ( $dataEmploi as  $item)
@@ -31,7 +31,7 @@
                     Il faut créer un emploi
                 @endif
             </h3>
-            
+
             <thead>
                 <tr class="day">
 
@@ -130,19 +130,18 @@
 
 
                                            {{-- Formateur --}}
-
+                                           @if (!$checkValues[0]->formateur)
                                            <select wire:model='formateurId' class="form-select"
                                            aria-label="Default select example">
                                            <option selected>Les Formateur</option>
                                            @if ($formateurs)
-
                                                @foreach ($formateurs as $formateur)
                                                    <option value="{{ $formateur->id }}">
                                                        {{ $formateur->user_name  }}</option>
                                                @endforeach
                                                @endif
-
                                        </select>
+                                       @endif
 
 
                                         {{-- module  content --}}
@@ -227,32 +226,66 @@
 
     </div>
 
-
+    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
+        telecharger</button>
 <button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
       <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
-    Supprimer tout
-  </button>
-  <!-- Modal for delete-->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Êtes-vous sûr(e)?</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            Voulez-vous supprimer toutes les sessions que vous avez créées ?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">fermer</button>
-          <button type="button" wire:click='deleteAllSessions' class="btn btn-danger">Oui Supprimer Tout</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  {{-- end Modal for delete  --}}
+      <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal111">
+        Supprimer tout
+    </button>
 
+    <!-- Modal for delete-->
+    <div wire:ignore class="modal fade" id="exampleModal111" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmer la suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr(e) de vouloir supprimer toutes les sessions que vous avez créées ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-danger" wire:click='deleteAllSessions'>Oui, Supprimer Tout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  {{-- end Modal for delete  --}}
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <script type="text/javascript" >
+
+  function ExportToExcel(type, fn, dl) {
+         var elt = document.getElementById('tbl_exporttable_to_xls');
+         var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+         return dl ?
+           XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+           XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+      }
+
+
+  document.addEventListener('livewire:load', function () {
+  const selectElement = document.getElementById('date-select');
+  selectElement.addEventListener('change', function() {
+      Livewire.emit('receiveidEmploiid', selectElement.value);
+  });
+
+  let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
+  elements.forEach(element => {
+      element.addEventListener('click', function() {
+          if (element.classList.contains('Cases')) {
+              Livewire.emit('receiveVariable', element.id);
+              console.log(element.id);
+          }
+      });
+  });
+});
+
+
+</script>
 
   <script  >
 
@@ -268,4 +301,4 @@
         });
 
     </script>
-</div>
+

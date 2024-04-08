@@ -38,7 +38,7 @@
 
     <div class="table-responsive">
         <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
-        <table  style="overflow:scroll" class="col-md-12 ">
+        <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
             <h3 style="float: right; margin: 10px;">
                 @if ($dataEmploi)
                         @foreach ( $dataEmploi as  $item)
@@ -162,6 +162,7 @@
                                 <div class="modal-body">
                                     <div style="display: flex">
                                         {{-- branches --}}
+                                        @if (!$checkValues[0]->branch)
                                         <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
                                             <option > Filiére</option>
                                             @if ($baranches)
@@ -170,6 +171,7 @@
                                             @endforeach
                                             @endif
                                             </select >
+                                            @endif
                                                {{-- module  content --}}
                                          @if (!$checkValues[0]->module)
                                          <select wire:model="module" class="form-select "
@@ -269,14 +271,14 @@
         </table>
     </div>
 
-
+    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">telecharger</button>
 <button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
       <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
     Supprimer tout
   </button>
   <!-- Modal for delete-->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div wire:ignore class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -294,6 +296,37 @@
     </div>
   </div>
 
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <script type="text/javascript" >
+
+  function ExportToExcel(type, fn, dl) {
+         var elt = document.getElementById('tbl_exporttable_to_xls');
+         var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+         return dl ?
+           XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+           XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+      }
+
+
+  document.addEventListener('livewire:load', function () {
+  const selectElement = document.getElementById('date-select');
+  selectElement.addEventListener('change', function() {
+      Livewire.emit('receiveidEmploiid', selectElement.value);
+  });
+
+  let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
+  elements.forEach(element => {
+      element.addEventListener('click', function() {
+          if (element.classList.contains('Cases')) {
+              Livewire.emit('receiveVariable', element.id);
+              console.log(element.id);
+          }
+      });
+  });
+});
+
+
+</script>
 
 <script  >
 

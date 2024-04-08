@@ -143,7 +143,7 @@
         <div class="containerContent">
             <div class="icon"> <span  class="mdi mdi-google-assistant iconStyle"></span></div>
             <div style="width: 70%">
-                    <span style="color: black">Ajouter les modules</span>
+                    <span style="color: black">Modeles Paramteres</span>
                     <br>
                     <span style="color: #504f4f">Tout les info sur les popapes</span>
 
@@ -198,7 +198,7 @@
     <div class="containerContent">
         <div  class="icon" ><span class="mdi mdi-file-edit-outline iconStyle"></span></div>
         <div style="width: 70%" >
-            <span style=" color:black "> Modules Paramteres  </span>
+            <span style=" color:black ">Ajouter les modules   </span>
             <br>
             <span style="color: #504f4f">Tout les info sur les Modules</span>
         </div>

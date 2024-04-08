@@ -206,8 +206,11 @@ class Emploi extends Component
         $this->sissions = $sissions;
         $this->salles = $newSalles;
 
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+        $this->checkValues = Setting::select('typeSession','module','formateur','branch','salle','typeSalle')
         ->where('userId', Auth::id())->get() ;
         return view('livewire.emploi');
     }
+
+
+
 }

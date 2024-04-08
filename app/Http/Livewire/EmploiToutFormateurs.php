@@ -73,6 +73,7 @@ class EmploiToutFormateurs extends Component
         $this->TypeSesion = null;
     }
 
+
     protected $rules = [
         'group' => 'required',
     ];
@@ -287,7 +288,7 @@ class EmploiToutFormateurs extends Component
         $this->salles = $newSalles;
 
 
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle' ,'branch')
         ->where('userId', Auth::id())->get() ;
 
 

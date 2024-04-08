@@ -23,7 +23,7 @@ class modelSetting extends Controller
                     'formateur'   => $request->input('Formateur'),
                     'salle'       => $request->input('Salle'),
                     'typeSalle'   => $request->input('TypeSalle'),
-                    'branch'=>$request->input('branch')
+                    'branch'      => $request->input('branch')
                 ]);
             } else {
                 Setting::create([
@@ -33,7 +33,7 @@ class modelSetting extends Controller
                     'formateur'   => $request->input('Formateur'),
                     'salle'       => $request->input('Salle'),
                     'typeSalle'   => $request->input('TypeSalle'),
-                    'branch'=>$request->input('branch')
+                    'branch'      =>$request->input('branch')
                 ]);
             }
 
@@ -46,7 +46,8 @@ class modelSetting extends Controller
     }
 
     public function getCheckedValue (){
-        $checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')->where('userId', Auth::user()->id)->get();
+        $checkValues = Setting::select('typeSession','module','formateur',
+        'salle','typeSalle' , 'branch')->where('userId', Auth::user()->id)->get();
         return response()->json($checkValues);
     }
 

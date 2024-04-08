@@ -59,6 +59,8 @@ class ToutEmplois extends Component
 
     }
 
+
+
 public function receiveidEmploiid($variable){
      session(['idEmploiSelected' => $variable]);
 }
@@ -195,7 +197,7 @@ public function DeleteSession()
     {
         // Initialize variables
         $establishment_id = session()->get('establishment_id');
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+        $this->checkValues = Setting::select('typeSession','branch','module','formateur','salle','typeSalle')
                             ->where('userId', Auth::id())->get();
 
         // Fetch data from branches table
