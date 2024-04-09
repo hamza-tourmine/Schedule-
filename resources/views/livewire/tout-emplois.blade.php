@@ -292,7 +292,7 @@
    <tr>
        <td>{{$group->group_name}}</td>
        @foreach ($dayWeek as $day)
-           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
+           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
                    @foreach ($sissions as $sission)
                        @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
@@ -311,8 +311,8 @@
     <tr>
         <td>{{$formateur->user_name}}</td>
         @foreach (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
-            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
-            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day . $sessionType . $formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">                @php
+            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day.$sessionType.$formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">                @php
                     $sessionWords = [];
                 @endphp
                 @foreach ($sissions as $sission)

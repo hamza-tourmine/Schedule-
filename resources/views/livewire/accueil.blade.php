@@ -171,7 +171,8 @@
         dateselect.style.display = 'none'
         flexCheckDefault.addEventListener('click' , function (){
            if(!flexCheckDefault.checked){
-            dateselect.style.display = 'none'
+            dateselect.style.display = 'none';
+            dateselect.value = null
            }else{
             dateselect.style.display = 'block'
            }
