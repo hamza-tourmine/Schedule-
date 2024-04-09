@@ -211,6 +211,18 @@ class PourChaqueGroup extends Component
             return view('livewire.pour-chaque-group');
         }
 
+        public function AddAutherEmploi(){
+            Session::forget('id_main_emploi');
+            Session::forget('datestart');
+            $this->Alert('success','Maintenant, vous pouvez créer un autre emploi du temps en
+            sélectionnant simplement la date de début.', [
+                'position' => 'center',
+                'timer' => 12000,
+                'toast' => false,
+                'width' =>650,
+               ]);
+            return redirect()->route('CreateEmploi');
 
+        }
 
 }

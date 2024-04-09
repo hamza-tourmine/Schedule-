@@ -145,7 +145,7 @@
                                                 </td>
                                                 <td>
 
-                                                    <button  id='{{$formateur->id}}' type="button" class="btn btn-primary catchEvent" data-bs-toggle="modal" data-bs-target="#staticBackdrop_{{$formateur->id}}" >View more</button>
+                                                    <button  id='{{$formateur->id}}' type="button" class="btn btn-primary catchEvent" data-bs-toggle="modal" data-bs-target="#staticBackdrop_{{$formateur->id}}" >View plus</button>
                                                     <button  id='{{$formateur->id}}' type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal_{{$formateur->id}}" >Modifier</button>
                                                 </td>
                                             </tr>
