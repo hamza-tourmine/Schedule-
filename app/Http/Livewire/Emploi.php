@@ -83,6 +83,7 @@ class Emploi extends Component
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,]);
+                 
 
         }
      }catch (\Illuminate\Database\QueryException $e) {
