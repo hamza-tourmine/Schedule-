@@ -179,6 +179,7 @@
                             <form wire:submit.prevent="createSession">
                                 <div class="modal-body">
 
+                                    {{-- branche --}}
                                     <div style="display: flex">
                                         @if (!$checkValues[0]->branch)
                                         <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
@@ -191,6 +192,18 @@
                                         </select>
                                         @endif
 
+                                        {{-- year --}}
+                                        @if (!$checkValues[0]->year)
+                                        <select wire:model='selectedYear'  class="form-select "  aria-label="Default select example">
+                                            <option > année </option>
+                                            @if ($yearFilter)
+                                            @foreach ($yearFilter as $item)
+                                            <option value="{{ $item }}">{{ $item}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select >
+                                        @endif
+
                                         {{-- module  content --}}
                                         @if (!$checkValues[0]->module)
                                         <select wire:model="moduleID"   class="form-select"
@@ -199,7 +212,7 @@
                                             @if ($modules)
                                                 @foreach ($modules as $module)
                                                 <option value="{{ $module->id }}">
-                                                        {{ $module->module_name }}</option>
+                                                        {{ preg_replace('/^\d+/' , '' , $module->id) }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -221,7 +234,7 @@
                                                 </div>
                                             </div>
                                             @endif
-                                            
+
 
                                     {{-- </select> --}}
 

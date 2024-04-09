@@ -52,6 +52,8 @@ class PourChaqueFormateur extends Component
     public $selectedGroups = [];
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
     public $dataEmploi ;
+    public $selectedYear  ;
+    public $yearFilter = [];
 
     public function receiveVariable($variable)
     {
@@ -159,7 +161,12 @@ class PourChaqueFormateur extends Component
 
 
     if ($this->formateurId) {
-        
+        $this->yearFilter = DB::table('groups')
+        ->where('establishment_id', $establishment_id)
+        ->select('year')
+        ->distinct()
+        ->pluck('year');
+
         $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
         ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
         ->where('modules.establishment_id', $establishment_id)
@@ -194,8 +201,13 @@ class PourChaqueFormateur extends Component
         ->select('groups.id', 'groups.group_name'); // Select ID along with group_name
 
     // Check if $this->brancheId is set and add the condition if it is
-    if ($this->brancheId) {
+    if ($this->brancheId !== 'Filiére' && $this->brancheId) {
         $groupsQuery->where('groups.barnch_id', $this->brancheId);
+
+    }
+    if($this->selectedYear !=='année' && $this->selectedYear ){
+
+        $groupsQuery->where('groups.year', "{$this->selectedYear}");
     }
 
     $groups = $groupsQuery->get();
@@ -247,7 +259,7 @@ class PourChaqueFormateur extends Component
         $this->sissions =  [];
     }
 
-    $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+    $this->checkValues = Setting::select('typeSession','module','formateur','branch' ,'year','salle','typeSalle')
     ->where('userId', Auth::id())->get() ;
 
     return view('livewire.pour-chaque-formateur');

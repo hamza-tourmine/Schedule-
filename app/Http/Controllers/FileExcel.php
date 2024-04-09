@@ -50,7 +50,7 @@ class FileExcel extends Controller
             $Groupe      = $worksheet->getCell('I' . $row)->getValue();
             $Branches    = $worksheet->getCell('E' . $row)->getValue();
             $Modules     = $worksheet->getCell('Q' . $row)->getValue();
-            $neveau      = $worksheet->getCell('C' . $row)->getValue();
+            $neveau      = $worksheet->getCell('O' . $row)->getValue();
             $codeModules = $worksheet->getCell('R' . $row)->getValue();
             $brancheName = $worksheet->getCell('F' . $row)->getValue();
 

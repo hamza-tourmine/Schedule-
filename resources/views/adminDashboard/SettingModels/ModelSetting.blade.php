@@ -44,6 +44,12 @@
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
                     supprimer les filiéres filter</label>
             </div>
+
+            <div style="margin: 10px" class="form-check form-switch">
+                <input class="checkbox" name="year" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
+                    supprimer année filter</label>
+            </div>
         </form>
         </div>
 
@@ -75,6 +81,9 @@
                         case 'branch':
                             item.checked = data[0].branch        === 1;
                             break;
+                        case 'year':
+                             item.checked = data[0].year        === 1;
+                             break;
                         default:
                             break;
                     }

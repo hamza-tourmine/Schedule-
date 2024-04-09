@@ -166,6 +166,7 @@
                                 <div class="modal-body">
                                     {{-- branches  --}}
                                 @if($selectedType!=='Group')
+                                @if (!$checkValues[0]->branch)
                                     <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
                                         <option > Filiére</option>
                                         @if ($baranches)
@@ -173,8 +174,21 @@
                                         <option value="{{ $baranche->id }}">{{ $baranche->name }}</option>
                                         @endforeach
                                         @endif
-                                        </select >
+                                    </select >
+                                    @endif
+
+                                    @if (!$checkValues[0]->year)
+                                    <select wire:model='selectedYear'  class="form-select "  aria-label="Default select example">
+                                        <option > année </option>
+                                        @if ($yearFilter)
+                                        @foreach ($yearFilter as $item)
+                                        <option value="{{ $item }}">{{ $item}}</option>
+                                        @endforeach
+                                        @endif
+                                    </select >
+                                    @endif
                                 @endif
+
                                     <div style="display: flex">
 
 
@@ -190,14 +204,17 @@
                                                     @endforeach
                                         </select>
                                         @else
-                                        <select wire:model='group' class="form-select"
-                                        aria-label="Default select example">
-                                        <option selected>Groupes</option>
-                                                @foreach ($groupes as $group)
-                                                    <option value="{{ $group->id }}">
-                                                        {{ $group->group_name }}</option>
+                                        <select wire:model="group" class="form-select" aria-label="Default select example">
+                                            <option value="" selected>Groupes</option>
+                                            @if(!$groupes->isEmpty())
+                                                @foreach ($groupes as $grp)
+                                                    <option value="{{ $grp->id }}">{{ $grp->group_name }}</option>
                                                 @endforeach
+                                            @else
+                                                <option>Pas de groupe trouvé <i style="color:black" class="mdi mdi-alert-rhombus"></i></option>
+                                            @endif
                                         </select>
+
 
                                     @endif
 
@@ -210,7 +227,7 @@
                                           @if ($modules)
                                               @foreach ($modules as $module)
                                                   <option value="{{ $module->id }}">
-                                                      {{ $module->module_name }}</option>
+                                                    {{ preg_replace('/^\d+/' , '' ,$module->id )}}</option>
                                               @endforeach
                                           @endif
                                       </select>
@@ -279,7 +296,7 @@
            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
                    @foreach ($sissions as $sission)
                        @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                          {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d/' , ' ' , $sission->module_name )}}
+                          {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d+/' , ' ' , $sission->module_name )}}
                        @endif
                    @endforeach
                </td>

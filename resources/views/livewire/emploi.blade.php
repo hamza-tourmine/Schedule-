@@ -87,7 +87,7 @@
                                         {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d/' , ' ' , $sission->module_name )}}
                                     @endif
                                 @endforeach
-                            </td>
+                        </td>
                         @endforeach
                     @endforeach
                 </tr>
@@ -140,7 +140,9 @@
                                          @if ($modules)
                                              @foreach ($modules as $module)
                                                  <option value="{{ $module->id }}">
-                                                     {{ $module->module_name }}</option>
+                                                    {{ preg_replace('/^\d+/' , '' ,$module->id )}}</option>
+
+
                                              @endforeach
                                          @endif
                                      </select>

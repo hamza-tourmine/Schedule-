@@ -51,6 +51,8 @@ class EmploiToutFormateurs extends Component
     public $selectedGroups = [];
 
     public $dataEmploi ;
+    public $selectedYear  ;
+    public $yearFilter = [];
 
 
 
@@ -211,6 +213,12 @@ class EmploiToutFormateurs extends Component
 
 
         $establishment_id = session()->get('establishment_id');
+        $this->yearFilter = DB::table('groups')
+        ->where('establishment_id', $establishment_id)
+        ->select('year')
+        ->distinct()
+        ->pluck('year');
+
         // branches
         $this->baranches = DB::table('branches')
         ->select('branches.*')
@@ -224,9 +232,14 @@ class EmploiToutFormateurs extends Component
         ->select('groups.id', 'groups.group_name'); // Select ID along with group_name
 
     // Check if $this->brancheId is set and add the condition if it is
-    if ($this->brancheId) {
-        $groupsQuery->where('groups.barnch_id', $this->brancheId);
-    }
+      if ($this->brancheId !== 'Filiére' && $this->brancheId) {
+            $groupsQuery->where('groups.barnch_id', $this->brancheId);
+
+        }
+        if($this->selectedYear !=='année' && $this->selectedYear){
+
+            $groupsQuery->where('groups.year', "{$this->selectedYear}");
+        }
 
     $groups = $groupsQuery->get();
          // data for  model form
@@ -288,7 +301,7 @@ class EmploiToutFormateurs extends Component
         $this->salles = $newSalles;
 
 
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle' ,'branch')
+        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle' ,'year','branch')
         ->where('userId', Auth::id())->get() ;
 
 

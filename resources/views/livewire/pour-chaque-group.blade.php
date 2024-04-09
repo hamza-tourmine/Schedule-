@@ -152,7 +152,8 @@
                                             @if ($modules)
                                                 @foreach ($modules as $module)
                                                 <option value="{{ $module->id }}">
-                                                        {{ $module->module_name }}</option>
+                                                    {{ preg_replace('/^\d+/' , '' ,$module->id )}}</option>
+
                                                 @endforeach
                                             @endif
                                         </select>

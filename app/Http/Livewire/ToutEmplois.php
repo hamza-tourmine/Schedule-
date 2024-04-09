@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Session;
 use App\Models\sission;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
+use function PHPUnit\Framework\isEmpty;
+
 class ToutEmplois extends Component
 {
     use LivewireAlert;
@@ -45,6 +47,8 @@ class ToutEmplois extends Component
     public $brancheId;
     public $baranches;
     public $Group_has_formateurs;
+    public $yearFilter = [];
+    public $selectedYear ;
 
     protected $listeners = [
         'receiveidEmploiid'=>'receiveidEmploiid',
@@ -125,13 +129,13 @@ public function UpdateSession()
 
         $this->emit('fresh');
     } catch (\Exception $e) {
-        // $this->alert('error', 'La salle  que vous avez sélectionnée a été réservée', [
-        //     'position' => 'center',
-        //     'timer' => 3000,
-        //     'toast' => true,
-        // ]);
+        $this->alert('error', $e->getMessage() , [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => true,
+        ]);
 
-        dd($e->getMessage());
+
     }
 }
 
@@ -195,9 +199,17 @@ public function DeleteSession()
 
     public function render()
     {
+
         // Initialize variables
         $establishment_id = session()->get('establishment_id');
-        $this->checkValues = Setting::select('typeSession','branch','module','formateur','salle','typeSalle')
+        $this->yearFilter = DB::table('groups')
+        ->where('establishment_id', $establishment_id)
+        ->select('year')
+        ->distinct()
+        ->pluck('year');
+
+
+        $this->checkValues = Setting::select('typeSession','branch','year','module','formateur','salle','typeSalle')
                             ->where('userId', Auth::id())->get();
 
         // Fetch data from branches table
@@ -244,7 +256,7 @@ public function DeleteSession()
         $this->classType = Class_room_type::where('establishment_id', $establishment_id)->get();
 
         // Fetch sissions data
-        $this->sissions = DB::table('sissions')
+        $sissions = DB::table('sissions')
                         ->select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.*', 'class_rooms.class_name')
                         ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
                         ->join('groups', 'groups.id', '=', 'sissions.group_id')
@@ -260,8 +272,13 @@ public function DeleteSession()
                         ->where('f.formateur_id', substr($this->receivedVariable, 11))
                         ->select('groups.id', 'groups.group_name');
 
-        if ($this->brancheId) {
+        if ($this->brancheId !== 'Filiére' && $this->brancheId  ) {
             $groupsQuery->where('groups.barnch_id', $this->brancheId);
+
+        }
+        if($this->selectedYear !=='année' && $this->selectedYear ){
+
+            $groupsQuery->where('groups.year', "{$this->selectedYear}");
         }
 
         $this->groupes = $groupsQuery->get();
@@ -271,7 +288,7 @@ public function DeleteSession()
         $removeGroupes = [];
         $removeFormateur = [];
 
-        foreach ($this->sissions as $session) {
+        foreach ($sissions as $session) {
             $combinedValue = $session->day . $session->day_part . $session->dure_sission;
             if ($combinedValue === substr($this->receivedVariable, 0, 11)) {
                 $removeFormateur[] = $session->user_id;
@@ -279,6 +296,7 @@ public function DeleteSession()
                 $removeGroupes[] = $session->group_id;
             }
         }
+
 
         // Filter data
         $this->Group_has_formateurs = $allFormateursByGroup->reject(function($formateur) use ($removeFormateur){
@@ -294,6 +312,7 @@ public function DeleteSession()
         });
 
         // Fetch additional data
+        $this->sissions = $sissions ;
         $this->groups = Group::where('establishment_id', $establishment_id)->get();
         $this->formateurs = User::where(['establishment_id' => $establishment_id, 'role' => 'formateur'])->get();
 
