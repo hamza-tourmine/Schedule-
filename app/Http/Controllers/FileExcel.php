@@ -30,19 +30,19 @@ class FileExcel extends Controller
             'file' => 'required|mimes:xlsx',
         ]);
 
-          // Store the uploaded file
-          $filePath = $request->file('file')->storeAs('excel', $request->file('file')->getClientOriginalName());
+        // Store the uploaded file
+        $filePath = $request->file('file')->storeAs('excel', $request->file('file')->getClientOriginalName());
 
-          // Load the Excel file
-          $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-          $spreadsheet = $reader->load(storage_path('app/' . $filePath));
-          $worksheet = $spreadsheet->getActiveSheet();
-          $highestRow = $worksheet->getHighestRow();
+        // Load the Excel file
+        $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+        $spreadsheet = $reader->load(storage_path('app/' . $filePath));
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
 
-        $FormateursInfo = [];
-        $ModulesInfo = [];
-        $GroupsInfo = [];
-        $BranchesInfo = [];
+      $FormateursInfo = [];
+      $ModulesInfo = [];
+      $GroupsInfo = [];
+      $BranchesInfo = [];
 
         for ($row = 1; $row <= $highestRow; $row++) {
             $Formateur   = $worksheet->getCell('U' . $row)->getValue();
@@ -243,7 +243,7 @@ class FileExcel extends Controller
 
             }
           }
-         unlink(storage_path('app/' . $filePath));
+          unlink(storage_path('app/' . $filePath));
         return redirect()->route('UploedFileExcelView')->with(['success'=>'Vous avez configuré les paramètres de votre compte avec succès.']);
     }
       catch(\Illuminate\database\QueryException $e){
