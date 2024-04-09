@@ -38,7 +38,7 @@ class AddFormateur extends Component
     public $adBranche = false;
     public $addGroupe = false;
     public $addModule = false;
-
+    public $SearchValue ;
     public $branchesForEashFormateur = [];
 
 
@@ -61,7 +61,7 @@ class AddFormateur extends Component
 
         $this->groupes = Group::where('establishment_id', $establishment_id)->get();
 
-        $this->formateurs = Formateur::where('role', 'formateur')
+        $this->formateurs = Formateur::where('user_name' , 'like' ,'%'.$this->SearchValue.'%')->where('role', 'formateur')
             ->where('establishment_id', $establishment_id)
             ->get();
 

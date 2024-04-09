@@ -49,6 +49,7 @@ class ToutEmplois extends Component
     public $Group_has_formateurs;
     public $yearFilter = [];
     public $selectedYear ;
+    public $SearchValue;
 
     protected $listeners = [
         'receiveidEmploiid'=>'receiveidEmploiid',
@@ -313,8 +314,8 @@ public function DeleteSession()
 
         // Fetch additional data
         $this->sissions = $sissions ;
-        $this->groups = Group::where('establishment_id', $establishment_id)->get();
-        $this->formateurs = User::where(['establishment_id' => $establishment_id, 'role' => 'formateur'])->get();
+        $this->groups = Group::where('group_name' ,'like','%'.$this->SearchValue.'%')->where('establishment_id', $establishment_id)->get();
+        $this->formateurs = User::where('user_name','like','%'.$this->SearchValue.'%')->where(['establishment_id' => $establishment_id, 'role' => 'formateur'])->get();
 
         // Render view
         return view('livewire.tout-emplois');

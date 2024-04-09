@@ -75,25 +75,35 @@
         </style>
         @php
     @endphp
-       <div style="display: flex;justify-content: space-between">
-        <h2>Schedule Table</h2>
-        <div  style="max-width: 350px; ">
-            <label for=""><h4>date de emploi :</h4></label>
+       <div style="display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+       ">
+
+        <div style="height: 40px ;" class="input-group rounded">
+            <input wire:model='SearchValue'  type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <span class="input-group-text border-0" id="search-addon">
+              <i class="fas fa-search"></i>
+            </span>
+        </div>
+
+        <div >
+
             <select id='date-select' class="form-select"  wire:model="selectedValue" wire:change="updateSelectedIDEmploi($event.target.value)">
-                <option >Select emploi</option>
+                <option >Select date emploi</option>
                 @forEach( $Main_emplois as $Main_emploi)
                     <option value="{{ $Main_emploi->id }}">{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
                 @endforeach
             </select>
-    </div>
-    <div  style="max-width: 350px; ">
-            <label for=""><h4>type d'emploi</h4></label>
+        </div>
+
+         <div >
+
             <select class="form-select"  wire:model="selectedType" wire:change="updateSelectedType($event.target.value)">
-                <option  disabled>Select type</option>
+                <option  disabled selected >Select type emploi</option>
                 <option value="Formateur" selected>Formateur</option>
                 <option value="Group">Group</option>
             </select>
-    </div>
+         </div>
 
        </div>
 
@@ -111,6 +121,7 @@
             </div>
         @endif
         <div  class="table-responsive">
+
             <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 "  >
                 <thead>
                     <tr class="day">

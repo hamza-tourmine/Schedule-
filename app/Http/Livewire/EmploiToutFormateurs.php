@@ -53,6 +53,7 @@ class EmploiToutFormateurs extends Component
     public $dataEmploi ;
     public $selectedYear  ;
     public $yearFilter = [];
+    public $SearchValue;
 
 
 
@@ -256,7 +257,7 @@ class EmploiToutFormateurs extends Component
         ->get();
 
 
-        $this->formateurs  =  user::where(['establishment_id'=> $establishment_id ,
+        $this->formateurs  =  user::where('user_name','like','%'.$this->SearchValue.'%')->where(['establishment_id'=> $establishment_id ,
         'status'=>'active' ,
         'role'=>'formateur'])->get();
 

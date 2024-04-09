@@ -89,4 +89,17 @@ public function login(Request $request){
     }
 }
 
+// logout
+
+public function logout(Request $request)
+{
+    Auth::logout();
+
+    // Invalidate the session
+    $request->session()->invalidate();
+
+    // Redirect to the home page or any other desired page
+    return redirect('/');
+}
+
 }

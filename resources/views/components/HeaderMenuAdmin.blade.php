@@ -356,10 +356,8 @@
 
 
 
-
-
                                 <li>
-                                    <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                         <i style="font-weight: 400 ; font-size:25PX" class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
                                          data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
 

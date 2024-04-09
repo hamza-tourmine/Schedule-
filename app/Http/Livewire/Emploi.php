@@ -45,6 +45,7 @@ class Emploi extends Component
     public $checkValues ;
     public $groupID;
     public $dataEmploi ;
+    public $SearchValue ;
 
     protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
     public function receiveVariable($variable)
@@ -154,7 +155,7 @@ class Emploi extends Component
         // data for  model form
         $establishment_id = session()->get('establishment_id');
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-        $this->groups = group::where('establishment_id', $establishment_id)->get();
+        $this->groups = group::where('group_name' , 'like' ,'%'.$this->SearchValue.'%')->where('establishment_id', $establishment_id)->get();
         // $this->modules = module::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 

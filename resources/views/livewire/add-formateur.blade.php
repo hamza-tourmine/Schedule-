@@ -113,14 +113,21 @@
   </div>
     {{-- end create formateur  --}}
 
-
     {{-- Display formateur info  --}}
+    <div class="input-group rounded">
+        <input wire:model='SearchValue' style="max-width:400px" type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <span class="input-group-text border-0" id="search-addon">
+          <i class="fas fa-search"></i>
+        </span>
+    </div>
+    <br>
     <div class="row">
         <div class="col-md-12">
             <div class="row">
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
+
                             <table class="table table-centered mb-0">
                                 <thead>
                                     <tr>

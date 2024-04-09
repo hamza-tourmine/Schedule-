@@ -55,6 +55,8 @@ Route::post('/login',[auth_controller::class ,'login'])->name('login_into_accoun
 
 // for admin
 Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function(){
+    // logout
+    Route::get('/logout' ,[auth_controller::class , 'logout'])->name('logout');
     // profile
     Route::controller(adminProfileController::class)->group(function(){
         Route::get('/profile' , 'index')->name('showProfileAdmin');
