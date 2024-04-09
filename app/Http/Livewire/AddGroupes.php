@@ -156,7 +156,7 @@ public function create()
         $this->groupesModules = DB::table('groups')
             ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
             ->join('modules as m', 'm.id' , '=', 'ghm.module_id')
-            ->select('m.*', 'groups.*')
+            ->select('m.id as module_name', 'groups.*')
             ->where('groups.establishment_id', $establishment)
             ->get();
 
@@ -166,13 +166,13 @@ public function create()
             $dataGroupsWithBranchAndModules = DB::table('groups')
             ->join('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
             ->join('modules as m', 'm.id', '=', 'ghm.module_id')
-            ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
+            ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.id as module_name')
             ->where('groups.establishment_id', $establishment);
             // Query to fetch groups without any branches or modules
             $dataGroupsWithoutBranchAndModules = DB::table('groups')
             ->leftJoin('groupe_has_modules as ghm', 'ghm.group_id', '=', 'groups.id')
             ->leftJoin('modules as m', 'm.id', '=', 'ghm.module_id')
-            ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.*')
+            ->select('groups.id as group_id', 'groups.group_name', 'groups.year', 'groups.barnch_id', 'm.id as module_name')
             ->where('groups.establishment_id', $establishment)
             ->whereNull('groups.barnch_id')
             ->orwhereNull('m.id');

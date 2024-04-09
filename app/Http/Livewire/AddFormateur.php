@@ -71,7 +71,7 @@ class AddFormateur extends Component
         ->where('establishment_id', $establishment_id)
         ->get(); ;
             $this->branches = Branch::where('establishment_id', $establishment_id)->get();
-           $this->modules = Module::where('establishment_id', $establishment_id)->get();
+           $this->modules = Module::select('modules.id')->where('establishment_id', $establishment_id)->get();
         if($this->New_idFormateur){
             $formateur = Formateur::find($this->New_idFormateur);
             $this->New_formateur_name = $formateur->user_name;

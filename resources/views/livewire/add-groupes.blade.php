@@ -64,7 +64,7 @@
                                     @foreach ($modules as $module)
                                     <span>
                                         <input wire:model="selectedModules.{{ $module->id }}" type="checkbox" id="module{{ $module->id }}" name="selectedModules[]" value="{{ $module->id }}">
-                                        <label for="module{{ $module->id }}">{{ $module->module_name }}</label>
+                                        <label for="module{{ $module->id }}">{{ preg_replace('/^\d+/', '', $module->id) }}</label>
                                     </span>
                                     @endforeach
                                 </div>
@@ -153,7 +153,7 @@
                                     <tr>
                                         <td colspan="9">
                                             @foreach ($group['modules'] as $module)
-                                            {{ $module }},
+                                            {{ preg_replace('/^\d+/' , '' , $module) }},
                                             @endforeach
                                         </td>
                                     </tr>

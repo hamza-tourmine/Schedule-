@@ -28,7 +28,7 @@
                                     @foreach ($modules as $module)
                                     <span>
                                         <input class="modulesoption" type="checkbox" wire:model="selectedModules.{{ $module->id }}" value="{{ $module->id }}">
-                                        <label for="module{{$group['group_id']}}_{{ $module->id }}">{{ $module->module_name }}</label>
+                                        <label for="module{{$group['group_id']}}_{{ $module->id }}">{{ preg_replace('/^\d+/', '', $module->id) }}</label>
                                     </span>
                                 @endforeach
 

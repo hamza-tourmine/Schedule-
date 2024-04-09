@@ -58,7 +58,7 @@
                                             <span>
                                                 <input  class="modulesoptoins" type="checkbox" id="{{ $module->id }}"
                                                    wire:model="selectedModules.{{$module->id}}">
-                                                <label for="New_module{{ $module->id }}">{{ $module->module_name }}</label>
+                                                <label for="New_module{{ $module->id }}">{{ preg_replace('/^\d+/', '', $module->id) }}</label>
                                             </span>
                                         @endforeach
                                     </div>
