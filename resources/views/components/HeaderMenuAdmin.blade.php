@@ -294,7 +294,7 @@
                     <div class="widthSideBare ">
                         <div class="user-wid text-center py-4">
                             <div class="user-img">
-                                <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
+                                <img src="{{asset('assets/images/users/user.jpg')}}" alt="" class="avatar-md mx-auto rounded-circle">
                             </div>
 
                             <div class="mt-3">

@@ -1,7 +1,7 @@
 <x-HeaderMenuAdmin>
 
         <div>
-            <h1>Model Paramtere !</h1>
+            <h1>Model Paramtere </h1>
             <div class="Alter"></div>
         <form action="">
             @csrf
@@ -46,9 +46,18 @@
             </div>
 
             <div style="margin: 10px" class="form-check form-switch">
-                <input class="checkbox" name="year" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                <input  class="checkbox" name="year" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
                     supprimer année filter</label>
+            </div>
+
+
+            <hr style="width: 45%">
+            <h1>autre Paramtere</h1>
+            <div style="margin: 10px" class="form-check form-switch">
+                <input class="checkbox" name="modeRamadan" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
+                    Mode Ramadan</label>
             </div>
         </form>
         </div>
@@ -83,6 +92,9 @@
                             break;
                         case 'year':
                              item.checked = data[0].year        === 1;
+                             break;
+                        case 'modeRamadan':
+                             item.checked = data[0].modeRamadan        === 1;
                              break;
                         default:
                             break;

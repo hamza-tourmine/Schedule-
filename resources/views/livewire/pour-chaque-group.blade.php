@@ -22,15 +22,31 @@
 
     <div class="table-responsive">
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
-            <h3 style="float: right; margin: 10px;">
-                @if ($dataEmploi)
-                        @foreach ( $dataEmploi as  $item)
-                        Du: {{ $item->datestart}} au {{ $item->dateend}}
-                        @endforeach
+            <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
+                @if ($this->checkValues[0]->modeRamadan)
+                <h4 style="marign-top:15px " >
+                    SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
+                </h4>
                 @else
-                    Il faut créer un emploi
+                <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
                 @endif
-            </h3>
+
+
+
+                    @if (!$dataEmploi->isEmpty())
+                    <h4 style="float: right; margin-top: 15px;">
+                        @foreach ($dataEmploi as $item)
+                            Du: {{ $item->datestart }} au {{ $item->dateend }}
+                        @endforeach
+                    </h4>
+                    @else
+                    <h4 style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                        Il faut créer un emploi
+                    </h4>
+                    @endif
+
+
+             </div>
 
             <thead>
                 <tr class="day">

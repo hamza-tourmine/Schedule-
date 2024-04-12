@@ -145,7 +145,7 @@
             <div style="width: 70%">
                     <span style="color: black">Modeles Paramteres</span>
                     <br>
-                    <span style="color: #504f4f">Tout les info sur les popapes</span>
+                    <span style="color: #504f4f">Tout les info sur les popapes et autre</span>
 
             </div>
         </div>

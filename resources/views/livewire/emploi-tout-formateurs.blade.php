@@ -45,15 +45,31 @@
             </span>
         </div>
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
-            <h3 style="float: right; margin: 10px;">
-                @if ($dataEmploi)
-                        @foreach ( $dataEmploi as  $item)
-                        Du: {{ $item->datestart}} au {{ $item->dateend}}
-                        @endforeach
+            <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
+                @if ($this->checkValues[0]->modeRamadan)
+                <h4 style="marign-top:15px " >
+                    SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
+                </h4>
                 @else
-                    Il faut créer un emploi
+                <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
                 @endif
-            </h3>
+
+
+
+                    @if (!$dataEmploi->isEmpty())
+                    <h4 style="float: right; margin-top: 15px;">
+                        @foreach ($dataEmploi as $item)
+                            Du: {{ $item->datestart }} au {{ $item->dateend }}
+                        @endforeach
+                    </h4>
+                    @else
+                    <h4 style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                        Il faut créer un emploi
+                    </h4>
+                    @endif
+
+
+             </div>
 
                         <thead>
 
@@ -220,7 +236,13 @@
                                             @endforeach
                                         </div>
                                     </div>
-
+                                    @else
+                                    <div class="mb-3">
+                                        <h6 style="margin: 10px;">Groupes</h6>
+                                        <div style="width: 100%;" style="" class="checkboxContainer ">
+                                           No groupe trouver !
+                                        </div>
+                                    </div>
                                     @endif
                                     <br>
 
@@ -360,6 +382,24 @@
 
 
         });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const handleDomChanges = function(mutationsList, observer) {
+
+                // console.log( document.querySelectorAll('.TableCases'));
+                let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
+            elements.forEach(element => {
+                element.addEventListener('click', function() {
+                    Livewire.emit('receiveVariable', element.id);
+                    console.log(element.id)
+                });
+            });
+            };
+                const observerConfig = { childList: true, subtree: true };
+                const observer = new MutationObserver(handleDomChanges);
+                observer.observe(document.body, observerConfig);
+});
 
 
     </script>

@@ -302,7 +302,7 @@ class EmploiToutFormateurs extends Component
         $this->salles = $newSalles;
 
 
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle' ,'year','branch')
+        $this->checkValues = Setting::select('typeSession','modeRamadan','module','formateur','salle','typeSalle' ,'year','branch')
         ->where('userId', Auth::id())->get() ;
 
 

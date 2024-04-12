@@ -146,7 +146,7 @@ class PourChaqueGroup extends Component
 
             $establishment_id = session()->get('establishment_id');
             $this->groups = group::where('establishment_id', $establishment_id)->get();
-            $this->checkValues = Setting::select('typeSession','branch','module','formateur','salle','typeSalle')
+            $this->checkValues = Setting::select('typeSession','modeRamadan','branch','module','formateur','salle','typeSalle')
                 ->where('userId', Auth::id())->get();
 
             if ($this->groupID) {

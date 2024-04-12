@@ -47,11 +47,14 @@ class Emploi extends Component
     public $dataEmploi ;
     public $SearchValue ;
 
-    protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
+    protected $listeners = ['receiveVariable' => 'receiveVariable',
+    'closeModal'=>'closeModal'];
     public function receiveVariable($variable)
     {
         $this->groupID = substr($variable,11);
         $this->receivedVariable = $variable;
+        // dd($variable);
+
     }
 
     protected $rules = [
@@ -83,7 +86,7 @@ class Emploi extends Component
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,]);
-                 
+
 
         }
      }catch (\Illuminate\Database\QueryException $e) {
@@ -208,7 +211,8 @@ class Emploi extends Component
         $this->sissions = $sissions;
         $this->salles = $newSalles;
 
-        $this->checkValues = Setting::select('typeSession','module','formateur','branch','salle','typeSalle')
+        $this->checkValues = Setting::select('typeSession','modeRamadan','module',
+        'formateur','branch','salle','typeSalle')
         ->where('userId', Auth::id())->get() ;
         return view('livewire.emploi');
     }

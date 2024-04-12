@@ -1,30 +1,50 @@
 <div>
+
+
     @php
 
 @endphp
     <h2>Schedule Table</h2>
 
 
-    <div class="table-responsive">
+    <div  class="table-responsive">
         <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
 
-        <div class="input-group rounded">
+        <div id="SearchInput" class="input-group rounded">
             <input wire:model='SearchValue' style="max-width:400px" type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
             <span class="input-group-text border-0" id="search-addon">
               <i class="fas fa-search"></i>
             </span>
         </div>
         <table id="tbl_exporttable_to_xls"  style="overflow:scroll" class="col-md-12 ">
-            <h3 style="float: right; margin: 10px;">
-                @if ($dataEmploi)
-                        @foreach ( $dataEmploi as  $item)
-                        Du: {{ $item->datestart}} au {{ $item->dateend}}
-                        @endforeach
-                @else
-                    Il faut créer un emploi
-                @endif
-            </h3>
+
+
             <thead>
+                <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
+                    @if ($this->checkValues[0]->modeRamadan)
+                    <h4 style="marign-top:15px " >
+                        SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
+                    </h4>
+                    @else
+                    <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
+                    @endif
+
+
+
+                        @if (!$dataEmploi->isEmpty())
+                        <h4 style="float: right; margin-top: 15px;">
+                            @foreach ($dataEmploi as $item)
+                                Du: {{ $item->datestart }} au {{ $item->dateend }}
+                            @endforeach
+                        </h4>
+                        @else
+                        <h4 style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                            Il faut créer un emploi
+                        </h4>
+                        @endif
+
+
+                 </div>
                 <tr class="day">
                     <th style="width: 140px !important"  rowspan="3">Groups Name</th>
                     <th colspan="4">Lundi</th>
@@ -88,10 +108,13 @@
                     <td>{{$group->group_name}}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$group->id }}"  >
+                        <td  colspan="1" rowspan="1" data-bs-toggle="modal" data-bs-target="#exampleModal" class="TableCases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d/' , ' ' , $sission->module_name )}}
+                                    {{ $sission->sission_type }}
+                                    {{ $sission->class_name }}
+                                    {{ $sission->user_name }}
+                                    {{ preg_replace('/^\d/' , ' ' , $sission->module_name ) }}
                                     @endif
                                 @endforeach
                         </td>
@@ -287,6 +310,25 @@
                 });
             });
         });
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const handleDomChanges = function(mutationsList, observer) {
+
+                // console.log( document.querySelectorAll('.TableCases'));
+                let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
+            elements.forEach(element => {
+                element.addEventListener('click', function() {
+                    Livewire.emit('receiveVariable', element.id);
+                    console.log(element.id)
+                });
+            });
+            };
+                const observerConfig = { childList: true, subtree: true };
+                const observer = new MutationObserver(handleDomChanges);
+                observer.observe(document.body, observerConfig);
+});
 
     </script>
 </div>

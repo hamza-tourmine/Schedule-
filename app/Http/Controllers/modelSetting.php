@@ -24,7 +24,8 @@ class modelSetting extends Controller
                     'salle'       => $request->input('Salle'),
                     'typeSalle'   => $request->input('TypeSalle'),
                     'branch'      => $request->input('branch'),
-                    'year'        =>$request->input('year')
+                    'year'        =>$request->input('year'),
+                    'modeRamadan'        =>$request->input('modeRamadan')
                 ]);
             } else {
                 Setting::create([
@@ -35,7 +36,9 @@ class modelSetting extends Controller
                     'salle'       => $request->input('Salle'),
                     'typeSalle'   => $request->input('TypeSalle'),
                     'branch'      =>$request->input('branch'),
-                    'year'        =>$request->input('year')
+                    'year'        =>$request->input('year'),
+                    'modeRamadan' =>$request->input('modeRamadan')
+
                 ]);
             }
 
@@ -43,13 +46,13 @@ class modelSetting extends Controller
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
 
-            // return response()->json('Failed to update or create settings', 500);
+
         }
     }
 
     public function getCheckedValue (){
         $checkValues = Setting::select('typeSession','module','formateur',
-        'salle','typeSalle' , 'branch' ,'year')->where('userId', Auth::user()->id)->get();
+        'salle','typeSalle' , 'branch' ,'year' , 'modeRamadan')->where('userId', Auth::user()->id)->get();
         return response()->json($checkValues);
     }
 

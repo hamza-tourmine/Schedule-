@@ -259,7 +259,7 @@ class PourChaqueFormateur extends Component
         $this->sissions =  [];
     }
 
-    $this->checkValues = Setting::select('typeSession','module','formateur','branch' ,'year','salle','typeSalle')
+    $this->checkValues = Setting::select('typeSession','modeRamadan','module','formateur','branch' ,'year','salle','typeSalle')
     ->where('userId', Auth::id())->get() ;
 
     return view('livewire.pour-chaque-formateur');

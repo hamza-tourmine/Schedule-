@@ -12,5 +12,7 @@ class Setting extends Model
     public $table = 'usersetting';
     public $timestamps = false ;
     protected $primaryKey = 'userId';
-    public $fillable = ['userId',	'module',	'typeSession'	,'typeSalle',	'salle'	,'formateur','branch'];
+    public $fillable = ['userId',	'module',
+    	'typeSession'	,'typeSalle',
+    'salle'	,'formateur', 'modeRamadan','branch'];
 }

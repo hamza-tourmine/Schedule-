@@ -2,8 +2,13 @@
     <style>
         .Container-create-emploi {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
             gap: 10px 15px;
+        }
+        @media screen and (max-width:700px){
+            .Container-create-emploi {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
         }
     </style>
 
@@ -84,85 +89,61 @@
         </div>
     </div>
 
-
-
-
-    <div class="card text-center " style="width: 40rem">
-
-{{-- display formateur --}}
-@if($formateurs->isEmpty())
-<div class="card-header">
-    Paramétre
-  </div>
-  <div class="card-body">
-    <div class="card-body">
-        <div class="alert alert-danger" style="margin-top:6rem "><h5>Vous devriez configurer vos paramètres de votre compte</h5>
-        <span>Voulez-vous configurer vos paramètres à l'aide d'un fichier Excel ou manuellement ?</span>
-        <a style="margin-top: 5px" class="btn btn-primary " href="{{route('UploedFileExcelView')}}">fichier excel</a>
-        <a style="margin-top: 5px" class="btn btn-primary" href="{{route('AllSetting')}}">manuellement</a>
-      </div>
-
-@else
-<div class="card-header">
-    Formateur
-  </div>
-  <div class="card-body">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="row">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-centered mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th colspan="2">Matricule</th>
-                                        <th>État</th>
-                                        <th colspan="2">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($formateurs as $key => $formateur)
-                                        <tr>
-                                            <td colspan="">{{$formateur->user_name}}</td>
-                                            <td colspan="2">{{$formateur->id}}</td>
-                                            <td>
-                                                <span class="badge {{$formateur->status === 'active' ? 'badge-soft-success' : 'badge-soft-danger'}} font-size-12">{{$formateur->status}}</span>
-                                            </td>
-                                            <td>
-                                                <a id='{{$formateur->id}}' type="button" class="btn btn-primary catchEvent" data-bs-toggle="modal" data-bs-target="#staticBackdrop_{{$formateur->id}}" href="{{route('addFormateur')}}">View more</a>
-                                                <a id='{{$formateur->id}}' type="button" class="btn btn-primary catchEvent" data-bs-toggle="modal" data-bs-target="#exampleModal" href="{{route('addFormateur')}}">Modifier</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+    <div class="card text-center">
+        {{-- display formateur --}}
+        @if($formateurs->isEmpty())
+            <div class="card-header">
+                Paramètre
+            </div>
+            <div class="card-body">
+                <div class="alert alert-danger" style="margin-top: 6rem;">
+                    <h5>Vous devriez configurer vos paramètres de votre compte</h5>
+                    <span>Voulez-vous configurer vos paramètres à l'aide d'un fichier Excel ou manuellement ?</span>
+                    <a style="margin-top: 5px" class="btn btn-primary" href="{{route('UploedFileExcelView')}}">fichier excel</a>
+                    <a style="margin-top: 5px" class="btn btn-primary" href="{{route('AllSetting')}}">manuellement</a>
                 </div>
             </div>
-        </div>
-    </div>
-
-
-
-
-
-{{-- end display formateur  --}}
-
-          <a href="{{route('addFormateur')}}" class="btn btn-primary">Voir Formateurs</a>
-
-        </div>
+        @else
+            <div class="card-header">
+                Formateur
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-centered table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th colspan="2">Matricule</th>
+                                <th>État</th>
+                                <th colspan="2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($formateurs as $key => $formateur)
+                                <tr>
+                                    <td>{{$formateur->user_name}}</td>
+                                    <td colspan="2">{{$formateur->id}}</td>
+                                    <td>
+                                        <span class="badge {{$formateur->status === 'active' ? 'badge-soft-success' : 'badge-soft-danger'}} font-size-12">{{$formateur->status}}</span>
+                                    </td>
+                                    <td>
+                                        <a id="{{$formateur->id}}" type="button" class="btn btn-primary catchEvent" data-bs-toggle="modal" data-bs-target="#staticBackdrop_{{$formateur->id}}" href="{{route('addFormateur')}}">Voir plus</a>
+                                        <a id="{{$formateur->id}}" type="button" class="btn btn-primary catchEvent" data-bs-toggle="modal" data-bs-target="#exampleModal" href="{{route('addFormateur')}}">Modifier</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+        {{-- end display formateur --}}
+        <a href="{{route('addFormateur')}}" class="btn btn-primary">Voir Formateurs</a>
         <div class="card-footer text-muted">
             Voir toutes les informations des formateurs
         </div>
-      </div>
-@endif
+    </div>
 
-
-
-</div>
 
 
     <script>
