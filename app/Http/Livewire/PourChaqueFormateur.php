@@ -18,6 +18,7 @@ use App\Models\formateur_has_group;
 use App\Models\user;
 use App\Models\branch;
 use App\Models\formateur_has_branche;
+use App\Models\EmploiStrictureModel;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class PourChaqueFormateur extends Component
@@ -54,6 +55,7 @@ class PourChaqueFormateur extends Component
     public $dataEmploi ;
     public $selectedYear  ;
     public $yearFilter = [];
+    public $tableEmploi;
 
     public function receiveVariable($variable)
     {
@@ -149,6 +151,7 @@ class PourChaqueFormateur extends Component
 
     public function render()
 {
+    $this->tableEmploi = EmploiStrictureModel::where('user_id', Auth::user()->id)->get();
     $this->dataEmploi =DB::table('main_emploi')
         ->where('id', session()->get('id_main_emploi'))->get();
     $establishment_id = session()->get('establishment_id');
@@ -180,13 +183,17 @@ class PourChaqueFormateur extends Component
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 
         $sessions = DB::table('sissions')
-        ->select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'class_rooms.class_name')
+        ->select('sissions.*', 'modules.id as module_name', 'users.user_name','groups.group_name', 'class_rooms.class_name')
         ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('users' , 'users.id' ,'=' , "sissions.user_id")
         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
         ->where('sissions.establishment_id', $establishment_id)
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
+        ->orderBy('sissions.day') // Order by day
+        ->orderBy('sissions.dure_sission')
         ->get();
+
 
 
         $this->baranches = DB::table('branches')

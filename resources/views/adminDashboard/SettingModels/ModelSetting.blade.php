@@ -1,5 +1,37 @@
 <x-HeaderMenuAdmin>
+    <style>
+             input[type='checkbox'] {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 20px;
+        height: 20px;
 
+
+        cursor: pointer;
+    }
+
+    /* Create custom check mark */
+    input[type='checkbox']::before {
+        content: '\2713';
+        display: inline-block;
+        font-size: 16px;
+        line-height: 20px;
+        text-align: center;
+        color: white;
+        background-color: rgb(180, 224, 180);
+        border-radius: 3px;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+    }
+
+
+    input[type='checkbox']:checked::before {
+        content: '\2713'; /* Unicode for check mark symbol */
+        background-color: rgb(69, 69, 218); /* Change color of the check mark when checked */
+    }
+    </style>
         <div>
             <h1>Model Paramtere </h1>
             <div class="Alter"></div>
@@ -8,47 +40,47 @@
             <div style="margin: 10px" class="form-check form-switch">
                 <input class="checkbox" name="Module" type="checkbox"  style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input"  id="flexSwitchCheckChecked1"  >
                 <label style="font-size:19px;font-weigth:400;"  class="form-check-label ms-1" for="flexSwitchCheckChecked1">
-                    supprimer Module input</label>
+                    désactivé Module input</label>
 
             </div>
 
             <div style="margin: 10px" class="form-check form-switch">
                 <input class="checkbox"  name="Salle"  style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label style="font-size:19px;font-weigth:400;"  class="form-check-label ms-1" for="flexSwitchCheckChecked">
-                    supprimer  Salle input</label>
+                    désactivé  Salle input</label>
             </div>
 
             <div style="margin: 10px" class="form-check form-switch">
                 <input class="checkbox"  name='Formateur' style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label style="font-size:19px;font-weigth:400;"  class="form-check-label ms-1" for="flexSwitchCheckChecked">
-                    supprimer Formateur input</label>
+                    désactivé Formateur input</label>
             </div>
 
 
             <div style="margin: 10px" class="form-check form-switch">
                 <input class="checkbox" name='TypeSalle'  style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
-                    supprimer Type Salle input</label>
+                    désactivé Type Salle input</label>
             </div>
 
 
             <div style="margin: 10px" class="form-check form-switch">
                 <input class="checkbox" name="TypeSeance" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
-                    supprimer Type Séance input</label>
+                    désactivé Type Séance input</label>
             </div>
 
 
             <div style="margin: 10px" class="form-check form-switch">
                 <input class="checkbox" name="branch" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
-                    supprimer les filiéres filter</label>
+                    désactivé les filiéres filter</label>
             </div>
 
             <div style="margin: 10px" class="form-check form-switch">
                 <input  class="checkbox" name="year" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
-                    supprimer année filter</label>
+                    désactivé année filter</label>
             </div>
 
 
@@ -67,7 +99,7 @@
         fetch('/admin/Model-values')
             .then(resp => resp.json())
             .then(data => {
-                console.log('----------------')
+
                 console.log(data[0])
                 let checkboxes = document.querySelectorAll('.checkbox');
                 checkboxes.forEach(item => {

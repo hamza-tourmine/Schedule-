@@ -13,6 +13,7 @@ use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
 use App\Models\formateur_has_group;
+use App\Models\EmploiStrictureModel;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,6 +47,8 @@ class Emploi extends Component
     public $groupID;
     public $dataEmploi ;
     public $SearchValue ;
+    public $tableEmploi ;
+
 
     protected $listeners = ['receiveVariable' => 'receiveVariable',
     'closeModal'=>'closeModal'];
@@ -53,7 +56,7 @@ class Emploi extends Component
     {
         $this->groupID = substr($variable,11);
         $this->receivedVariable = $variable;
-        // dd($variable);
+
 
     }
 
@@ -154,6 +157,7 @@ class Emploi extends Component
     }
     public function render()
     {
+        $this->tableEmploi = EmploiStrictureModel::where('user_id', Auth::user()->id)->get();
         $this->dataEmploi =DB::table('main_emploi')
         ->where('id', session()->get('id_main_emploi'))->get();
         // data for  model form

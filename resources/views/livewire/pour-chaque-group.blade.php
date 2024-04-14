@@ -1,16 +1,13 @@
 <div>
 
-    @php
 
-@endphp
     <h2>Schedule Table</h2>
-
   <div style="display: flex;">
     <div style=" width :300px">
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
-        <select wire:model="groupID" id="formateurSelected" class="form-control col-3" name="">
+        <select style="maxWidth:45vw" wire:model="groupID" id="formateurSelected" class="form-control col-3" name="">
             <option > les Groupes</option>
             @foreach ($groups as $group)
                <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
@@ -21,33 +18,31 @@
   </div>
 
     <div class="table-responsive">
+
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
-            <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
+            <div >
                 @if ($this->checkValues[0]->modeRamadan)
-                <h4 style="marign-top:15px " >
+                <h5 colspan="6" style="marign-top:15px " >
                     SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
-                </h4>
+                </h5>
                 @else
-                <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
+                <h5 colspan="6"> SE1 = 08:30 - 11:00 SE2 = 11:00 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h5>
                 @endif
-
-
-
                     @if (!$dataEmploi->isEmpty())
-                    <h4 style="float: right; margin-top: 15px;">
+                    <h5 colspan="6" style="float: right; margin-top: 15px;">
                         @foreach ($dataEmploi as $item)
                             Du: {{ $item->datestart }} au {{ $item->dateend }}
                         @endforeach
-                    </h4>
+                    </h5>
                     @else
-                    <h4 style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                    <h5 colspan="6" style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
                         Il faut créer un emploi
-                    </h4>
+                </h5>
                     @endif
 
+                </div>
 
-             </div>
-
+             @if($tableEmploi[0]->groupe == '2')
             <thead>
                 <tr class="day">
 
@@ -75,7 +70,7 @@
                 </tr>
                 <tr class="se-row">
 
-                    <th >SE1</th>
+                    <th>SE1</th>
                     <th>SE2</th>
                     <th>SE1</th>
                     <th>SE2</th>
@@ -119,6 +114,17 @@
                         @endforeach
                     @endforeach
                 </tr>
+                            </form>
+                    </div>
+                 </div>
+
+            </tbody>
+            @elseif ($tableEmploi[0]->groupe == '1')
+            @include('livewire.PourGroupe')
+            @else
+            @include('livewire.PourGroup3')
+            @endif
+
 
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
@@ -231,15 +237,8 @@
                                     <button data-bs-dismiss="modal"
                                     aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
                                 </div>
-                            </form>
-
-                    </div>
-                 </div>
-
-            </tbody>
-
-
         </table>
+
 
     </div>
 
@@ -294,7 +293,7 @@
   elements.forEach(element => {
       element.addEventListener('click', function() {
           if (element.classList.contains('Cases')) {
-              Livewire.emit('receiveVariable', element.id);
+              Livewire.emit('receiveVariable', element.id );
               console.log(element.id);
           }
       });

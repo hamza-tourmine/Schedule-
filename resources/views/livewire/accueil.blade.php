@@ -45,7 +45,7 @@
                         data-date-container="#datepicker1" data-provide="datepicker">
                 </div>
                 <div style="margin:15px 0px 15px 0px" class="form-check">
-                    <input style="width:25px; height:25px;margin-right:10px" class="form-check-input" type="checkbox" value=""
+                    <input  style="width:25px; height:25px;margin-right:10px" class="form-check-input" type="checkbox" value=""
                         id="flexCheckDefault">
                     <label style="font-size:18px;" class="form-check-label" for="flexCheckDefault">
                         base sure emploi
@@ -53,7 +53,7 @@
                 </div>
 
                 <select id='date-select' class="form-select"  name="selectedValue">
-                    <option value="" disabled>Select emploi</option>
+                    <option value="" selected disabled>Select emploi</option>
                     @foreach( $Main_emplois as $Main_emploi)
                         <option value="{{ $Main_emploi->id }}">{{ $Main_emploi->datestart }} to {{ $Main_emploi->dateend }}</option>
                     @endforeach

@@ -56,4 +56,6 @@ class modelSetting extends Controller
         return response()->json($checkValues);
     }
 
+
+ 
 }

@@ -30,9 +30,7 @@
             background-color: #eee;
         }
     </style>
-    @php
 
-@endphp
     <h2>Schedule Table</h2>
 
 
@@ -44,7 +42,9 @@
               <i class="fas fa-search"></i>
             </span>
         </div>
+        @if($tableEmploi[0]->toutFormateur == '1')
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
+
             <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
                 @if ($this->checkValues[0]->modeRamadan)
                 <h4 style="marign-top:15px " >
@@ -70,6 +70,7 @@
 
 
              </div>
+              {{-- first table --}}
 
                         <thead>
 
@@ -163,6 +164,7 @@
                     @endforeach
                 </tr>
                 @endforeach
+
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9"  id="exampleModal"
                       tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -298,17 +300,17 @@
                                     aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
                                 </div>
                             </form>
-
-
-
-
             </div>
-
-                     {{-- @livewire('modal-component', ['classType'=>$classType,'salles'=>$salles ,'formateurs'=>$formateurs,'groups'=>$groups,'group' => $group, 'modules'=>$modules]) --}}
                  </div>
                 @endif
             </tbody>
+              {{-- end first table table --}}
         </table>
+        @else
+        @include('livewire.ToutFormateur')
+        @endif
+
+
     </div>
 
     <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">telecharger</button>

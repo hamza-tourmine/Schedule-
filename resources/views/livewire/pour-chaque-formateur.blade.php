@@ -1,5 +1,6 @@
 <div>
 
+
     <style>
         .checkboxContainer {
             background-color: white;
@@ -82,92 +83,101 @@
 
 
              </div>
-            <thead>
-                <tr class="day">
 
-                    <th colspan="4">Lundi</th>
-                    <th colspan="4">Mardi</th>
-                    <th colspan="4">Mercredi</th>
-                    <th colspan="4">Jeudi</th>
-                    <th colspan="4">Vendredi</th>
-                    <th colspan="4">Samedi</th>
-                </tr>
-                <tr>
+             @if($tableEmploi[0]->formateur == '1')
+      <thead>
 
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                </tr>
-                <tr class="se-row">
+        <tr class="day">
 
-                    <th >SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                </tr>
-              </thead>
-            <tbody>
-                @php
-                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
-                @endphp
-               <tr>
-                @foreach ($dayWeek as $day)
-                    @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}">
+            <th colspan="4">Lundi</th>
+            <th colspan="4">Mardi</th>
+            <th colspan="4">Mercredi</th>
+            <th colspan="4">Jeudi</th>
+            <th colspan="4">Vendredi</th>
+            <th colspan="4">Samedi</th>
+        </tr>
+        <tr>
+
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+        </tr>
+        <tr class="se-row">
+
+            <th >SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+        </tr>
+      </thead>
+    <tbody>
+        @php
+             $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
+        @endphp
+       <tr>
+        @foreach ($dayWeek as $day)
+            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+                <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}">
+                    @php
+                        $sessionWords = []; // Array to keep track of words already displayed in this cell
+                    @endphp
+                    @foreach ($sissions as $sission)
+                        @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
                             @php
-                                $sessionWords = []; // Array to keep track of words already displayed in this cell
-                            @endphp
-                            @foreach ($sissions as $sission)
-                                @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                    @php
-                                        // Prepare session details
-                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . preg_replace('/^\d+/', '', $sission->module_name);
+                                // Prepare session details
+                                $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . preg_replace('/^\d+/', '', $sission->module_name);
 
-                                        // Remove duplicate words
-                                        $uniqueDetails = [];
-                                        foreach (explode('<br>', $details) as $word) {
-                                            if (!in_array($word, $sessionWords)) {
-                                                $uniqueDetails[] = $word;
-                                                $sessionWords[] = $word;
-                                            }
-                                        }
-                                        echo implode('<br>', $uniqueDetails);
-                                    @endphp
-                                @endif
-                            @endforeach
-                        </td>
+                                // Remove duplicate words
+                                $uniqueDetails = [];
+                                foreach (explode('<br>', $details) as $word) {
+                                    if (!in_array($word, $sessionWords)) {
+                                        $uniqueDetails[] = $word;
+                                        $sessionWords[] = $word;
+                                    }
+                                }
+                                echo implode('<br>', $uniqueDetails);
+                            @endphp
+                        @endif
                     @endforeach
-                @endforeach
-            </tr>
+                </td>
+            @endforeach
+        @endforeach
+    </tr>
+</tbody>
+@elseif ($tableEmploi[0]->formateur == '2')
+@include('livewire.PourFormateur')
+@else
+@include('livewire.PourFormateur3')
+@endif
 
 
 
@@ -312,7 +322,7 @@
                     </div>
                  </div>
 
-            </tbody>
+
 
 
         </table>

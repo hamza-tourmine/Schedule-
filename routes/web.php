@@ -21,6 +21,7 @@ use App\Http\Controllers\ScheduleFormateurs;
 use App\Http\Controllers\Schedule;
 use App\Http\Controllers\ScheduleChaqueGroup;
 use App\Http\Controllers\adminProfileController;
+use App\Http\Controllers\EmploiStricture;
 use App\Models\group;
 
 
@@ -79,6 +80,9 @@ Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function()
     Route::get('/modele-seting',[modelSetting::class,'index'])->name('modelSetting');
     Route::post('/Model-setting', [modelSetting::class, 'createOrUpdate']);
     Route::get('/Model-values', [modelSetting::class, 'getCheckedValue']);
+    Route::get('/EmploiSricture' , [EmploiStricture::class , 'index'])->name('EmploiSricture');
+    Route::post('/Emplois-Stracture',[EmploiStricture::class , 'create']);
+    Route::get('/Emplois-Stracture',[EmploiStricture::class , 'getdata']);
     // end Model Setting
     // For Accueil page
     Route::get('dashboardAdmin',function (){return view('adminDashboard.Main.Accueil'); })->name('dashboardAdmin');

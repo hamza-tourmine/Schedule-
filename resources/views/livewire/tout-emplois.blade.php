@@ -389,13 +389,26 @@
              XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const handleDomChanges = function(mutationsList, observer) {
+
+                // console.log( document.querySelectorAll('.TableCases'));
+                let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
+            elements.forEach(element => {
+                element.addEventListener('click', function() {
+                    Livewire.emit('receiveVariable', element.id);
+                    console.log(element.id)
+                });
+            });
+            };
+                const observerConfig = { childList: true, subtree: true };
+                const observer = new MutationObserver(handleDomChanges);
+                observer.observe(document.body, observerConfig);
+        })
+
 
     document.addEventListener('livewire:load', function () {
     const selectElement = document.getElementById('date-select');
-    // selectElement.addEventListener('change', function() {
-        // Livewire.emit('receiveidEmploiid', selectElement.value);
-    // });
-
     let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
     elements.forEach(element => {
         element.addEventListener('click', function() {

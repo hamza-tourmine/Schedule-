@@ -13,6 +13,7 @@ use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
 use App\Models\formateur_has_group;
+use App\Models\EmploiStrictureModel;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,6 +55,8 @@ class EmploiToutFormateurs extends Component
     public $selectedYear  ;
     public $yearFilter = [];
     public $SearchValue;
+    public $branches ;
+    public $tableEmploi ;
 
 
 
@@ -211,6 +214,7 @@ class EmploiToutFormateurs extends Component
         ->where('id', session()->get('id_main_emploi'))->get();
         // dd($dataEmploi);
 
+        $this->tableEmploi = EmploiStrictureModel::where('user_id', Auth::user()->id)->get();
 
 
         $establishment_id = session()->get('establishment_id');

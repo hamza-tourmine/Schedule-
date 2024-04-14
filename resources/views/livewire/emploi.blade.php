@@ -16,6 +16,7 @@
               <i class="fas fa-search"></i>
             </span>
         </div>
+          @if($tableEmploi[0]->toueGroupe == '1')
         <table id="tbl_exporttable_to_xls"  style="overflow:scroll" class="col-md-12 ">
 
 
@@ -45,6 +46,7 @@
 
 
                  </div>
+
                 <tr class="day">
                     <th style="width: 140px !important"  rowspan="3">Groups Name</th>
                     <th colspan="4">Lundi</th>
@@ -111,9 +113,9 @@
                         <td  colspan="1" rowspan="1" data-bs-toggle="modal" data-bs-target="#exampleModal" class="TableCases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                    {{ $sission->sission_type }}
-                                    {{ $sission->class_name }}
-                                    {{ $sission->user_name }}
+                                    {{ $sission->sission_type }}</br>
+                                    {{ $sission->class_name }}</br>
+                                    {{ $sission->user_name }}</br>
                                     {{ preg_replace('/^\d/' , ' ' , $sission->module_name ) }}
                                     @endif
                                 @endforeach
@@ -122,6 +124,7 @@
                     @endforeach
                 </tr>
                 @endforeach
+
 
 
                      {{-- Model --}}
@@ -237,6 +240,9 @@
                 @endif
             </tbody>
         </table>
+        @else
+                @include('livewire.ToutGroupes2') ;
+                @endif
     </div>
 
     <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
@@ -324,6 +330,7 @@
                     console.log(element.id)
                 });
             });
+
             };
                 const observerConfig = { childList: true, subtree: true };
                 const observer = new MutationObserver(handleDomChanges);
