@@ -1,36 +1,47 @@
 <div>
+
+
+    <style>
+        .checkboxContainer {
+            background-color: white;
+            border-radius: 7px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px 15px;
+            border: 1.5px solid #eee;
+            max-height: 150px;
+            overflow-y: scroll;
+            width: 100%;
+        }
+
+        .checkboxContainer span {
+            margin: 4px;
+            display: block;
+        }
+
+        .checkboxContainer span:hover {
+            background-color: #eee
+        }
+
+        .checkboxContainer span input {
+            width: 35px;
+        }
+
+        /* Change the color of the checkbox when checked */
+        input[type="checkbox"]:checked+label {
+            background-color: #eee;
+        }
+    </style>
+
+
     @php
 
 @endphp
     <h2>Schedule Table</h2>
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
   <div style="display: flex;">
     <div style=" width :300px">
-    <form method="get" action="{{ route('createNewSchedule') }}">
-        @csrf
-        <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
-            class="btn btn-primary">
-            Créer un nouveau  emploi
-        </button>
-        <br>
-        <label >date start</label>
-        <div class="col-6">
-            <input name="dateStart" id="dateStart" type="date" class="form-control col-6" placeholder="mm/dd/yyyy"
-            value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
-        </div>
-    </form>
+
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
@@ -45,78 +56,133 @@
   </div>
 
     <div class="table-responsive">
-        <table  style="overflow:scroll" class="col-md-12 ">
-            <thead>
-                <tr class="day">
+        <table  id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
 
-                    <th colspan="4">Lundi</th>
-                    <th colspan="4">Mardi</th>
-                    <th colspan="4">Mercredi</th>
-                    <th colspan="4">Jeudi</th>
-                    <th colspan="4">Vendredi</th>
-                    <th colspan="4">Samedi</th>
-                </tr>
-                <tr>
+            <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
+                @if ($this->checkValues[0]->modeRamadan)
+                <h4 style="marign-top:15px " >
+                    SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
+                </h4>
+                @else
+                <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
+                @endif
 
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                  <th colspan="2">Matin </th>
-                  <th colspan="2">A.midi </th>
-                </tr>
-                <tr class="se-row">
 
-                    <th >SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                    <th>SE1</th>
-                    <th>SE2</th>
-                </tr>
-              </thead>
-            <tbody>
-                @php
-                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
-                @endphp
-                <tr>
 
-                    @foreach ($dayWeek as $day)
-                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
-                                @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day  && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br/>{{$sission->group_name}} <br/>{{$sission->module_name}}
-                                    @endif
-                                @endforeach
-                            </td>
+                    @if (!$dataEmploi->isEmpty())
+                    <h4 style="float: right; margin-top: 15px;">
+                        @foreach ($dataEmploi as $item)
+                            Du: {{ $item->datestart }} au {{ $item->dateend }}
                         @endforeach
+                    </h4>
+                    @else
+                    <h4 style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                        Il faut créer un emploi
+                    </h4>
+                    @endif
+
+
+             </div>
+
+             @if($tableEmploi[0]->formateur == '1')
+      <thead>
+
+        <tr class="day">
+
+            <th colspan="4">Lundi</th>
+            <th colspan="4">Mardi</th>
+            <th colspan="4">Mercredi</th>
+            <th colspan="4">Jeudi</th>
+            <th colspan="4">Vendredi</th>
+            <th colspan="4">Samedi</th>
+        </tr>
+        <tr>
+
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+          <th colspan="2">Matin </th>
+          <th colspan="2">A.midi </th>
+        </tr>
+        <tr class="se-row">
+
+            <th >SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+            <th>SE1</th>
+            <th>SE2</th>
+        </tr>
+      </thead>
+    <tbody>
+        @php
+             $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
+        @endphp
+       <tr>
+        @foreach ($dayWeek as $day)
+            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+                <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}">
+                    @php
+                        $sessionWords = []; // Array to keep track of words already displayed in this cell
+                    @endphp
+                    @foreach ($sissions as $sission)
+                        @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                            @php
+                                // Prepare session details
+                                $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . preg_replace('/^\d+/', '', $sission->module_name);
+
+                                // Remove duplicate words
+                                $uniqueDetails = [];
+                                foreach (explode('<br>', $details) as $word) {
+                                    if (!in_array($word, $sessionWords)) {
+                                        $uniqueDetails[] = $word;
+                                        $sessionWords[] = $word;
+                                    }
+                                }
+                                echo implode('<br>', $uniqueDetails);
+                            @endphp
+                        @endif
                     @endforeach
-                </tr>
+                </td>
+            @endforeach
+        @endforeach
+    </tr>
+</tbody>
+@elseif ($tableEmploi[0]->formateur == '2')
+@include('livewire.PourFormateur')
+@else
+@include('livewire.PourFormateur3')
+@endif
+
+
+
+
+
 
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
@@ -140,9 +206,9 @@
                             <form wire:submit.prevent="createSession">
                                 <div class="modal-body">
 
+                                    {{-- branche --}}
                                     <div style="display: flex">
-
-
+                                        @if (!$checkValues[0]->branch)
                                         <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
                                         <option > Filiére</option>
                                         @if ($baranches)
@@ -151,6 +217,19 @@
                                         @endforeach
                                         @endif
                                         </select>
+                                        @endif
+
+                                        {{-- year --}}
+                                        @if (!$checkValues[0]->year)
+                                        <select wire:model='selectedYear'  class="form-select "  aria-label="Default select example">
+                                            <option > année </option>
+                                            @if ($yearFilter)
+                                            @foreach ($yearFilter as $item)
+                                            <option value="{{ $item }}">{{ $item}}</option>
+                                            @endforeach
+                                            @endif
+                                        </select >
+                                        @endif
 
                                         {{-- module  content --}}
                                         @if (!$checkValues[0]->module)
@@ -160,28 +239,31 @@
                                             @if ($modules)
                                                 @foreach ($modules as $module)
                                                 <option value="{{ $module->id }}">
-                                                        {{ $module->module_name }}</option>
+                                                        {{ preg_replace('/^\d+/' , '' , $module->id) }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
                                         @endif
 
                                     </div>
-                                    <div style="display: flex">
-                                        {{-- Formateur --}}
+                                    <div style="display: block">
 
-                                        <select wire:model='groupID' class="form-select"
-                                        aria-label="Default select example">
-                                        <option selected>Groupes</option>
                                         @if ($groups)
-
-                                            @foreach ($groups as $groupe)
-                                                <option value="{{ $groupe->id }}">
-                                                    {{ $groupe->group_name }}</option>
-                                            @endforeach
+                                            <div class="mb-3">
+                                                <h6 style="margin: 10px;">Groupes</h6>
+                                                <div style="width: 100%;" style="" class="checkboxContainer ">
+                                                    @foreach ($groups as $group)
+                                                        <span style="display: block">
+                                                            <input class="modulesoption" type="checkbox" wire:model="selectedGroups.{{ $group->id }}" value="{{ $group->id }}">
+                                                            <label>{{ $group->group_name }}</label>
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            </div>
                                             @endif
 
-                                    </select>
+
+                                    {{-- </select> --}}
 
 
                                         {{-- salle --}}
@@ -240,21 +322,22 @@
                     </div>
                  </div>
 
-            </tbody>
+
 
 
         </table>
 
     </div>
 
-
+    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
+        telecharger</button>
 <button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
       <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
     Supprimer tout
   </button>
   <!-- Modal for delete-->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div wire:ignore class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -273,7 +356,37 @@
   </div>
   {{-- end Modal for delete  --}}
 
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <script type="text/javascript" >
 
+  function ExportToExcel(type, fn, dl) {
+         var elt = document.getElementById('tbl_exporttable_to_xls');
+         var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+         return dl ?
+           XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+           XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+      }
+
+
+  document.addEventListener('livewire:load', function () {
+  const selectElement = document.getElementById('date-select');
+  selectElement.addEventListener('change', function() {
+      Livewire.emit('receiveidEmploiid', selectElement.value);
+  });
+
+  let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
+  elements.forEach(element => {
+      element.addEventListener('click', function() {
+          if (element.classList.contains('Cases')) {
+              Livewire.emit('receiveVariable', element.id);
+              console.log(element.id);
+          }
+      });
+  });
+});
+
+
+</script>
   <script  >
 
 

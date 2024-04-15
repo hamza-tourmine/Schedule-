@@ -13,6 +13,7 @@ use App\Models\class_room;
 use App\Models\class_room_type;
 use App\Models\user;
 use App\Models\formateur_has_group;
+use App\Models\EmploiStrictureModel;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,12 +45,19 @@ class Emploi extends Component
     public $TypeSesion;
     public $checkValues ;
     public $groupID;
+    public $dataEmploi ;
+    public $SearchValue ;
+    public $tableEmploi ;
 
-    protected $listeners = ['receiveVariable' => 'receiveVariable','closeModal'=>'closeModal'];
+
+    protected $listeners = ['receiveVariable' => 'receiveVariable',
+    'closeModal'=>'closeModal'];
     public function receiveVariable($variable)
     {
         $this->groupID = substr($variable,11);
         $this->receivedVariable = $variable;
+
+
     }
 
     protected $rules = [
@@ -81,6 +89,7 @@ class Emploi extends Component
                 'position' => 'center',
                 'timer' => 3000,
                 'toast' => true,]);
+
 
         }
      }catch (\Illuminate\Database\QueryException $e) {
@@ -148,10 +157,13 @@ class Emploi extends Component
     }
     public function render()
     {
+        $this->tableEmploi = EmploiStrictureModel::where('user_id', Auth::user()->id)->get();
+        $this->dataEmploi =DB::table('main_emploi')
+        ->where('id', session()->get('id_main_emploi'))->get();
         // data for  model form
         $establishment_id = session()->get('establishment_id');
         $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
-        $this->groups = group::where('establishment_id', $establishment_id)->get();
+        $this->groups = group::where('group_name' , 'like' ,'%'.$this->SearchValue.'%')->where('establishment_id', $establishment_id)->get();
         // $this->modules = module::where('establishment_id', $establishment_id)->get();
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 
@@ -170,7 +182,7 @@ class Emploi extends Component
         ->get();
 
         $sissions = DB::table('sissions')
-        ->select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+        ->select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
         ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
         ->join('users', 'users.id', '=', 'sissions.user_id')
@@ -203,8 +215,12 @@ class Emploi extends Component
         $this->sissions = $sissions;
         $this->salles = $newSalles;
 
-        $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+        $this->checkValues = Setting::select('typeSession','modeRamadan','module',
+        'formateur','branch','salle','typeSalle')
         ->where('userId', Auth::id())->get() ;
         return view('livewire.emploi');
     }
+
+
+
 }

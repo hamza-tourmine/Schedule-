@@ -66,11 +66,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customControlInline">
-                                        <label class="form-check-label" for="customControlInline">Remember
-                                            me</label>
-                                    </div>
+                                   
 
                                     <div class="mt-3">
                                         <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log

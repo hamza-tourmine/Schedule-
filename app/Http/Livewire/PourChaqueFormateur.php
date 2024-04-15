@@ -18,6 +18,7 @@ use App\Models\formateur_has_group;
 use App\Models\user;
 use App\Models\branch;
 use App\Models\formateur_has_branche;
+use App\Models\EmploiStrictureModel;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class PourChaqueFormateur extends Component
@@ -49,12 +50,23 @@ class PourChaqueFormateur extends Component
     public $moduleID ;
     public $baranches = [] ;
     public $brancheId;
-
+    public $selectedGroups = [];
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
+    public $dataEmploi ;
+    public $selectedYear  ;
+    public $yearFilter = [];
+    public $tableEmploi;
 
     public function receiveVariable($variable)
     {
         $this->receivedVariable = $variable;
+
+        $this->brancheId = null;
+        $this->module = null;
+        $this->selectedGroups = [];
+        $this->salle = null;
+        $this->salleclassTyp = null;
+        $this->TypeSesion = null;
     }
 
     protected $rules = [
@@ -65,17 +77,27 @@ class PourChaqueFormateur extends Component
     public function createSession()
     {
 
+        if (empty($this->selectedGroups) || empty($this->salle) || empty($this->formateurId)) {
+            // throw new \Exception('Selected groups, salle, and formateurId must not be empty.');
+            $this->alert('error', 'Selected groups, salle, and formateurId must not be empty.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+        }else{
+
 
 
 
         try{
             $idcase = $this->receivedVariable;
+            foreach($this->selectedGroups as $group) {
             $sission = sission::create([
                 'day'=>substr($idcase,0,3),
                 'day_part'=>substr($idcase,3,5),
                 'dure_sission'=>substr($idcase,8,3),
                 'module_id'=> $this->moduleID,
-                'group_id'=> $this->groupID,
+                'group_id'=> $group,
                 'establishment_id'=>session()->get('establishment_id'),
                 'user_id'=>$this->formateurId,
                 'class_room_id'=>$this->salle,
@@ -93,6 +115,7 @@ class PourChaqueFormateur extends Component
                     'toast' => true,]);
                 // return redirect()->route('ChaqueFormateur');
             }
+        }
          }catch (\Illuminate\Database\QueryException $e) {
             if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
                 $this->alert('error', 'Vous devriez sélectionner la date de début.', [
@@ -120,14 +143,17 @@ class PourChaqueFormateur extends Component
                     'timer' => 3000,
                     'toast' => true,
                 ]);
-                // return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
             }
         }
+    }
 
         }
 
     public function render()
 {
+    $this->tableEmploi = EmploiStrictureModel::where('user_id', Auth::user()->id)->get();
+    $this->dataEmploi =DB::table('main_emploi')
+        ->where('id', session()->get('id_main_emploi'))->get();
     $establishment_id = session()->get('establishment_id');
     // Load all formateurs
     $this->formateurs = user::where('establishment_id', $establishment_id)
@@ -138,13 +164,17 @@ class PourChaqueFormateur extends Component
 
 
     if ($this->formateurId) {
+        $this->yearFilter = DB::table('groups')
+        ->where('establishment_id', $establishment_id)
+        ->select('year')
+        ->distinct()
+        ->pluck('year');
 
-        // $this->modules = module::where('formateur_id', $this->formateurId)->get();
         $this->modules = Module::join('module_has_formateur as MHF', 'MHF.module_id', '=', 'modules.id')
         ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
         ->where('modules.establishment_id', $establishment_id)
         ->where('MHF.formateur_id', $this->formateurId)
-        ->where('GHM.group_id', $this->groupID)
+        ->whereIn('GHM.group_id', $this->selectedGroups)
         ->select('modules.*')
         ->get();
 
@@ -153,13 +183,17 @@ class PourChaqueFormateur extends Component
         $salles = class_room::where('id_establishment', $establishment_id)->get();
 
         $sessions = DB::table('sissions')
-        ->select('sissions.*', 'modules.module_name as module_name', 'groups.group_name', 'class_rooms.class_name')
+        ->select('sissions.*', 'modules.id as module_name', 'users.user_name','groups.group_name', 'class_rooms.class_name')
         ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
         ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('users' , 'users.id' ,'=' , "sissions.user_id")
         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
         ->where('sissions.establishment_id', $establishment_id)
         ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
+        ->orderBy('sissions.day') // Order by day
+        ->orderBy('sissions.dure_sission')
         ->get();
+
 
 
         $this->baranches = DB::table('branches')
@@ -174,8 +208,13 @@ class PourChaqueFormateur extends Component
         ->select('groups.id', 'groups.group_name'); // Select ID along with group_name
 
     // Check if $this->brancheId is set and add the condition if it is
-    if ($this->brancheId) {
+    if ($this->brancheId !== 'Filiére' && $this->brancheId) {
         $groupsQuery->where('groups.barnch_id', $this->brancheId);
+
+    }
+    if($this->selectedYear !=='année' && $this->selectedYear ){
+
+        $groupsQuery->where('groups.year', "{$this->selectedYear}");
     }
 
     $groups = $groupsQuery->get();
@@ -227,14 +266,65 @@ class PourChaqueFormateur extends Component
         $this->sissions =  [];
     }
 
-    $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+    $this->checkValues = Setting::select('typeSession','modeRamadan','module','formateur','branch' ,'year','salle','typeSalle')
     ->where('userId', Auth::id())->get() ;
 
     return view('livewire.pour-chaque-formateur');
 }
 
 
+public function AddAutherEmploi(){
+    Session::forget('id_main_emploi');
+    Session::forget('datestart');
+    $this->Alert('success','Maintenant, vous pouvez créer un autre emploi du temps en
+    sélectionnant simplement la date de début.', [
+        'position' => 'center',
+        'timer' => 12000,
+        'toast' => false,
+        'width' =>650,
+       ]);
+    return redirect()->route('CreateEmploi');
+
 }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -45,7 +45,7 @@
     <td colspan="2">{{$class->class_name}}</td>
     {{-- <td>{{$class->class_room_type}}</td> --}}
     <td>
-      <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url('UpdateClasses/'.$class->id)}}">Edit</a></button>
+      <button type="button" class="btn  btn-primary"><a  style="text-decoration: none ;color:black" href="{{url('admin/UpdateClasses/'.$class->id)}}">Edit</a></button>
       <button type="button" class="btn btn-danger"><a href="{{route('delate-class',['id'=>$class->id])}}">Delete</a></button>
     </td>
   </tr>

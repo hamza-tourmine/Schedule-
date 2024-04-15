@@ -6,7 +6,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Schedule Table</title>
-
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -16,15 +15,22 @@
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 20px;
+                table-layout: fixed;
+                word-wrap: break-word;
             }
 
             th,
             td {
+
                 height: 40px;
-                width: 60px !important;
+                width: 430px !important;
                 border: 1px solid #ddd;
                 text-align: center;
             }
+            td{
+            height: 70px;
+
+        }
 
             th {
                 background-color: #f2f2f2;

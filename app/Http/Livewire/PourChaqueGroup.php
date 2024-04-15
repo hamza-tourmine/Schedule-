@@ -18,6 +18,7 @@ use App\Models\formateur_has_group;
 use App\Models\user;
 use App\Models\branch;
 use App\Models\formateur_has_branche;
+use App\Models\EmploiStrictureModel;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class PourChaqueGroup extends Component
@@ -48,6 +49,10 @@ class PourChaqueGroup extends Component
     public $groupID;
     public $moduleID ;
     public $baranches = [] ;
+    public $dataEmploi ;
+    public $tableEmploi ;
+
+
 
 
     protected $listeners = ['receiveVariable' => 'receiveVariable'];
@@ -55,8 +60,26 @@ class PourChaqueGroup extends Component
     public function receiveVariable($variable)
     {
         $this->receivedVariable = $variable;
+        // dd(substr($variable, 0, 11));
     }
 
+    public function deleteAllSessions(){
+
+        DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
+        ->where('main_emploi_id', session()->get('id_main_emploi'))->delete();
+        DB::table('main_emploi')->where('establishment_id', session()->get('establishment_id'))
+        ->where('id', session()->get('id_main_emploi'))->delete();
+        $this->Alert('success', "Vous supprimez toutes les séances.", [
+            'position' => 'center',
+            'timer' => 12000,
+            'toast' => false,
+            'width' =>650,
+           ]);
+        Session::forget('id_main_emploi');
+        Session::forget('datestart');
+        return redirect()->route('CreateEmploi');
+
+    }
     protected $rules = [
         'group' => 'required',
     ];
@@ -123,14 +146,19 @@ class PourChaqueGroup extends Component
 
         public function render()
         {
+            $this->dataEmploi =DB::table('main_emploi')
+            ->where('id', session()->get('id_main_emploi'))->get();
+
+            $this->tableEmploi = EmploiStrictureModel::where('user_id', Auth::user()->id)->get();
+            // dd($this->tableEmploi);
             $establishment_id = session()->get('establishment_id');
             $this->groups = group::where('establishment_id', $establishment_id)->get();
-            $this->checkValues = Setting::select('typeSession','module','formateur','salle','typeSalle')
+            $this->checkValues = Setting::select('typeSession','modeRamadan','branch','module','formateur','salle','typeSalle')
                 ->where('userId', Auth::id())->get();
 
             if ($this->groupID) {
                 // Load all formateurs for the selected group
-                $this->formateurs = user::join('formateur_has_groups as FHG', 'FHG.formateur_id', '=', 'users.id')
+                $formateurs = user::join('formateur_has_groups as FHG', 'FHG.formateur_id', '=', 'users.id')
                     ->where('FHG.group_id', $this->groupID)
                     ->select('users.*')
                     ->get();
@@ -141,19 +169,24 @@ class PourChaqueGroup extends Component
                     ->join('groupe_has_modules as GHM', 'GHM.module_id', '=', 'modules.id')
                     ->where('modules.establishment_id', $establishment_id)
                     ->where('MHF.formateur_id', $this->formateurId)
-                    ->where('GHM.group_id', $this->groupID)
                     ->select('modules.*')
+                    ->distinct()
                     ->get();
 
                     // Fetch all sessions for the selected group
-                    $sessions = Sission::select('sissions.*', 'modules.module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
+                    $sessions = Sission::select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.user_name', 'class_rooms.class_name')
                     ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
                     ->join('groups', 'groups.id', '=', 'sissions.group_id')
                     ->join('users', 'users.id', '=', 'sissions.user_id')
                     ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
                     ->where('sissions.establishment_id', $establishment_id)
                     ->where('sissions.main_emploi_id', session()->get('id_main_emploi'))
+                    ->orderBy('sissions.day') // Order by day
+                    ->orderBy('sissions.dure_sission')
                     ->get();
+                    // if($sessions){
+                    //     dd($sessions);
+                    // }
 
                     // Load class room types and available rooms for the establishment
                     $this->classType = class_room_type::where('establishment_id', $establishment_id)->get();
@@ -161,22 +194,27 @@ class PourChaqueGroup extends Component
 
                     // Prepare an array of room IDs that should be removed based on session criteria
                     $salleShouldRemove = [];
+                    $formateurShouldRemove = [];
                     foreach ($sessions as $session) {
                     $combinedValue = $session->day . $session->day_part . $session->dure_sission;
 
                     if ($combinedValue === substr($this->receivedVariable, 0, 11)) {
                         $salleShouldRemove[] = $session->class_room_id;
+                        $formateurShouldRemove[] = $session->user_id ;
                     }
                     }
 
                     // Filter the available rooms to exclude those that should be removed
                     $newSalles = $salles->reject(function ($salle) use ($salleShouldRemove) {
-                    return in_array($salle->id, $salleShouldRemove);
+                        return in_array($salle->id, $salleShouldRemove);
                     });
-
+                    $newFormateur =$formateurs->reject(function($formateur) use ($formateurShouldRemove){
+                        return in_array($formateur->id , $formateurShouldRemove);
+                    });
                     // Assign the filtered rooms to the component property
+                    $this->formateurs = $newFormateur;
                     $this->salles = $newSalles;
-                    $this->sissions = $sessions;
+                    $this->sissions = $sessions->where('group_id' , $this->groupID);
 
             } else {
                 // If no group is selected, reset data
@@ -190,6 +228,18 @@ class PourChaqueGroup extends Component
             return view('livewire.pour-chaque-group');
         }
 
+        public function AddAutherEmploi(){
+            Session::forget('id_main_emploi');
+            Session::forget('datestart');
+            $this->Alert('success','Maintenant, vous pouvez créer un autre emploi du temps en
+            sélectionnant simplement la date de début.', [
+                'position' => 'center',
+                'timer' => 12000,
+                'toast' => false,
+                'width' =>650,
+               ]);
+            return redirect()->route('CreateEmploi');
 
+        }
 
 }

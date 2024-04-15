@@ -10,10 +10,13 @@ use App\Models\module_has_formateur;
 use App\Models\RequestEmploi;
 use App\Models\sission;
 use App\Models\User;
+use App\Notifications\RequestEmploiNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Testing\Fakes\NotificationFake;
 
 class FormateurRequestController extends Controller
 {
@@ -142,7 +145,10 @@ public function createRequestEmploi(Request $request)
                 'main_emploi_id' => $mainEmploiId,
             ]);
             $requestEmploi->save();
-
+            $MainUser = User::where('role', 'admin')->first();
+            $FormateurRequest = Auth::user()->user_name;
+            $RequestCommentaire = $request['comment'];
+            Notification::send($MainUser,new RequestEmploiNotification($requestEmploi->id,$FormateurRequest,$RequestCommentaire,$mainEmploiId));
             return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300, 'requestExists' => $requestExists]);
         }
     } catch (\Exception $e) {

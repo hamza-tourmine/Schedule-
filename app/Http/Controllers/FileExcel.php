@@ -30,18 +30,19 @@ class FileExcel extends Controller
             'file' => 'required|mimes:xlsx',
         ]);
 
-        $uploaddir = 'excel/';
-        $uploadFile = $uploaddir . basename($_FILES['file']['name']);
-        move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile);
-        $inputFileName = '../public/'.$uploadFile;
+        // Store the uploaded file
+        $filePath = $request->file('file')->storeAs('excel', $request->file('file')->getClientOriginalName());
+
+        // Load the Excel file
         $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-        $spreadsheet = $reader->load($inputFileName);
+        $spreadsheet = $reader->load(storage_path('app/' . $filePath));
         $worksheet = $spreadsheet->getActiveSheet();
         $highestRow = $worksheet->getHighestRow();
-        $FormateursInfo = [];
-        $ModulesInfo = [];
-        $GroupsInfo = [];
-        $BranchesInfo = [];
+
+      $FormateursInfo = [];
+      $ModulesInfo = [];
+      $GroupsInfo = [];
+      $BranchesInfo = [];
 
         for ($row = 1; $row <= $highestRow; $row++) {
             $Formateur   = $worksheet->getCell('U' . $row)->getValue();
@@ -49,11 +50,12 @@ class FileExcel extends Controller
             $Groupe      = $worksheet->getCell('I' . $row)->getValue();
             $Branches    = $worksheet->getCell('E' . $row)->getValue();
             $Modules     = $worksheet->getCell('Q' . $row)->getValue();
-            $neveau      = $worksheet->getCell('C' . $row)->getValue();
+            $neveau      = $worksheet->getCell('O' . $row)->getValue();
             $codeModules = $worksheet->getCell('R' . $row)->getValue();
             $brancheName = $worksheet->getCell('F' . $row)->getValue();
 
-            if ($Formateur !== '' && $Matricule !== '' && $Groupe !== '' && $Branches !== '' && $Modules !== "") {
+            if ($Formateur !== '' && $Matricule !== '' && $Groupe !== '' &&
+            $Branches !== '' && $Modules !== "") {
                 // Check if the formateur already exists in FormateursInfo
                 $foundFormateurIndex = null;
                 foreach ($FormateursInfo as $index => $formateurInfo) {
@@ -162,7 +164,7 @@ class FileExcel extends Controller
 
       try {
 
-        
+
           // inserting data into DB
           $establishment_id = session()->get('establishment_id');
           if(!empty($BranchesInfo)){
@@ -242,11 +244,11 @@ class FileExcel extends Controller
 
             }
           }
-        unlink($inputFileName);
+          unlink(storage_path('app/' . $filePath));
         return redirect()->route('UploedFileExcelView')->with(['success'=>'Vous avez configuré les paramètres de votre compte avec succès.']);
     }
       catch(\Illuminate\database\QueryException $e){
-            unlink($inputFileName);
+        unlink(storage_path('app/' . $filePath));
             return  redirect()->route('UploedFileExcelView')->withErrors(['errors'=>$e->errorInfo[2]]);
         }
 

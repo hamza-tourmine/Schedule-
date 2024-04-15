@@ -22,15 +22,31 @@
 
     <style>
        /* CSS for the arrow button and sidebar toggle */
+       .vertical-menu {
+    min-width: 100px;
+    max-width: var(--bs-sidebar-width);
+    width:100px ;
+    z-index: 1001;
+    background: var(--bs-sidebar-bg);
+    bottom: 0;
+    margin-top: 0;
+    position: fixed;
+    top: var(--bs-header-height);
+    -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+    box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+    margin-bottom: 55px;
+}
+
+
 .arow {
 
 
-            position: fixed;
-            top: 100px;
-            left: 10px;
+    position: fixed;
+    top: 100px ;
+    left: 10px;
 
-            z-index: 100;
-            padding: 10px;
+    z-index: 100;
+    padding: 10px;
 
         }
 
@@ -47,10 +63,10 @@
             background-color: #ffffff;
         }
 
-        .vertical-menu.collapsed .arow .toggle-sidebar {
-            left: auto;
-            right: 0;
-        }
+.vertical-menu.collapsed .arow .toggle-sidebar {
+    left: auto;
+    right: 0;
+}
     </style>
 </head>
 
@@ -106,7 +122,7 @@
                                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-bell-outline"></i>
-                                    <span class="badge rounded-pill bg-danger ">3</span>
+                                    <span class="badge rounded-pill bg-danger ">{{Auth::user()->unreadNotifications->count()}}</span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                     aria-labelledby="page-header-notifications-dropdown">
@@ -120,70 +136,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @foreach(Auth::user()->unreadNotifications as $Notification)
                                     <div data-simplebar style="max-height: 230px;">
                                         <a href="" class="text-reset notification-item">
                                             <div class="d-flex align-items-start">
                                                 <div class="avatar-xs me-3">
                                                     <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                                        <i class="bx bx-cart"></i>
+                                                        <i class="mdi mdi-account-question"></i>
                                                     </span>
                                                 </div>
                                                 <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">Your order is placed</h6>
+                                                    <h6 class="mt-0 mb-1">{{$Notification->data['FormateurRequest']}}</h6>
                                                     <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">If several languages coalesce the grammar</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min
-                                                            ago</p>
+                                                        <p class="mb-1">{{$Notification->data['RequestCommentaire']}}</p>
+                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> {{$Notification->created_at->diffForHumans()}}
+                                                            </p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </a>
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
+                                       
 
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">James Lemire</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">It will seem like simplified English.</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 1 hours
-                                                            ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-                                                <div class="avatar-xs me-3">
-                                                    <span class="avatar-title bg-success rounded-circle font-size-16">
-                                                        <i class="bx bx-badge-check"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">Your item is shipped</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">If several languages coalesce the grammar</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min
-                                                            ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">Salena Layfield</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">As a skeptical Cambridge friend of mine
-                                                            occidental.</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 1
-                                                            hours ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+                                        
                                     </div>
+                                    @endforeach
                                     <div class="p-2 border-top d-grid">
                                         <a class="btn btn-sm btn-link font-size-14 " href="javascript:void(0)">
                                             <i class="mdi mdi-arrow-right-circle me-1"></i> View More..
@@ -234,22 +210,21 @@
 
                             <!-- Mega menu -->
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </header>
-            <!-- ENd header  -->
-            <!-- ========== Left Sidebar Start ========== -->
-            <div class="vertical-menu" style="">
-                {{-- <div class="arow">
+                </header>
+                <!-- ENd header  -->
+ <!-- ========== Left Sidebar Start ========== -->
+ <div class="vertical-menu" style="">
+                    {{-- <div class="arow">
                         <button class="btn btn-primary toggle-sidebar"><i class="mdi mdi-chevron-left"></i></button>
                     </div> --}}
-                <div class="widthSideBare ">
-                    <div class="user-wid text-center py-4">
-                        <div class="user-img">
-                            <img src="assets/images/users/avatar-2.jpg" alt=""
-                                class="avatar-md mx-auto rounded-circle">
-                        </div>
+                    <div class="widthSideBare ">
+                        <div class="user-wid text-center py-4">
+                            <div class="user-img">
+                                <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
+                            </div>
 
                         <div class="mt-3">
 
@@ -260,51 +235,27 @@
                         </div>
                     </div>
 
-                    <!--- Sidemenu -->
-                    <div id="sidebar-menu" style="">
-                        <!-- Left Menu Start -->
-                        <ul class="metismenu list-unstyled" id="side-menu">
-                            <li class="menu-title">Menu</li>
-                            <li>
-                                <a href="{{ route('dashboardAdmin') }}" class=" waves-effect">
-                                    <i style="font-weight: 400 ; font-size:25PX"
-                                        class="mdi mdi-home-lightbulb-outline"></i>
-                                    <span class="hidentext">Accueil</span>
-                                </a>
-                            </li>
-
-
-                                <li class="hidentext">
-                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                                        <span class="mdi mdi-book-plus"></span>
-                                        <span>Creae un emploi </span>
+                        <!--- Sidemenu -->
+                        <div id="sidebar-menu"  style="" >
+                            <!-- Left Menu Start -->
+                            <ul class="metismenu list-unstyled" id="side-menu">
+                                <li class="menu-title">Menu</li>
+                                <li>
+                                    <a  href="{{route('dashboardAdmin')}}" class=" waves-effect">
+                                        <i style="font-weight: 400 ; font-size:25PX" class="mdi mdi-home-lightbulb-outline"></i>
+                                        <span class="hidentext" >Accueil</span>
                                     </a>
-                                    <ul class="sub-menu" aria-expanded="false">
-                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> tout les groupes</a></li>
-                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> tout les Formateurs</a></li>
-                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> chaque formateur</a></li>
-                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> chaque group</a></li>
-                                    </ul>
                                 </li>
 
-                            <div id="emploi12">
-                                <li><a href="{{ route('CreateEmploi') }}" class=" waves-effect"> <span
-                                            data-toggle="tooltip" data-placement="right" title="tout les groupes"
-                                            class="mdi mdi-lightbulb-group-outline"
-                                            style="font-weight: 400 ; font-size:25PX"></span></a></li>
-                                <li><a href="{{ route('emploiForFormateurs') }}" class=" waves-effect"> <span
-                                            data-toggle="tooltip" data-placement="right" title="tout les Formateurs"
-                                            style="font-weight: 400 ; font-size:25PX"
-                                            class="mdi mdi-account-supervisor-outline"></span></a></li>
-                                <li><a href="{{ route('ChaqueFormateur') }}" class=" waves-effect"> <span
-                                            data-toggle="tooltip" data-placement="right" title="chaque formateur"
-                                            style="font-weight: 400 ; font-size:25PX"
-                                            class="mdi mdi-account-tie-outline"></span></a></li>
-                                <li><a href="{{ route('emploiForGroup') }}" class=" waves-effect"> <span
-                                            data-toggle="tooltip" data-placement="right" title="chaque group"
-                                            style="font-weight: 400 ; font-size:25PX"
-                                            class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
-                            </div>
+
+
+
+                                <div id="emploi12">
+                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les groupes" class="mdi mdi-lightbulb-group-outline" style="font-weight: 400 ; font-size:25PX"></span></a></li>
+                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les Formateurs" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-supervisor-outline"></span></a></li>
+                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="chaque formateur" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-tie-outline"></span></a></li>
+                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="chaque group" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
+                                </div>
 
                                 <li>
                                     <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
@@ -330,12 +281,11 @@
 
 
 
-
-
                                 <li>
                                     <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
-                                        <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger" data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
-                                        {{-- Logout --}}
+                                        <i style="font-weight: 400 ; font-size:25PX" class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
+                                         data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
+
                                     </a>
                                 </li>
 
@@ -367,13 +317,13 @@
             </div>
             <!-- end main content-->
 
+            </div>
+            <!-- END layout-wrapper -->
+
         </div>
-        <!-- END layout-wrapper -->
+        <!-- end container-fluid -->
 
-    </div>
-    <!-- end container-fluid -->
-
-    <!-- Right Sidebar -->
+        <!-- Right Sidebar -->
 
 
     <div class="rightbar-overlay"></div>
@@ -404,33 +354,53 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          
-            let sidebarMenu = document.querySelector('.vertical-menu');
-            let hidenTexts = document.querySelectorAll('.hidentext');
-            let lesEmploi = document.querySelector('#emploi12')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                let sidebarMenu = document.querySelector('.vertical-menu');
+                let hidenTexts = document.querySelectorAll('.hidentext');
+                let lesEmploi = document.querySelector('#emploi12')
 
-            function hideHidentext() {
-                if (!sidebarMenu.classList.contains('collapsed')) {
-                    hidenTexts.forEach(function(element) {
-                        element.style.display = 'none';
-                        lesEmploi.style.display = 'block'
-                    });
-                } else {
-                    hidenTexts.forEach(function(element) {
-                        element.style.display = ' inline-block';
-                        lesEmploi.style.display = 'none'
-                    });
+                function hideHidentext() {
+                    if (!sidebarMenu.classList.contains('collapsed')) {
+                        hidenTexts.forEach(function(element) {
+                            element.style.display = 'none';
+                            lesEmploi.style.display ='block'
+                        });
+                    } else {
+                        hidenTexts.forEach(function(element) {
+                            element.style.display = ' inline-block';
+                            lesEmploi.style.display ='none'
+                        });
+                    }
                 }
-            }
 
-            hideHidentext(); // Initial call to hide hidentext elements
+                hideHidentext(); // Initial call to hide hidentext elements
 
                 document.querySelector('.toggle-sidebar').addEventListener('click', function() {
                     sidebarMenu.classList.toggle('collapsed');
                     hideHidentext(); // Call hideHidentext when the sidebar is toggled
                 });
+            });
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script>
+            Pusher.logToConsole = true;
+            var pusher = new Pusher('69820da6887a3d9f8088', {
+                cluster: 'mt1'
+            });
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('request-submitted', function(data) {
+                if (data && data.user_id && data.comment) {
+                    toastr.success('New Request Created', 'Formateur: ' + data.user_id + '<br>MainEmploiId: ' + data
+                        .main_emploi_id + '<br>Commentaire: ' + data
+                        .comment, {
+                            timeOut: 0,
+                            extendedTimeOut: 0,
+                        });
+                } else {
+                    console.error('Invalid data structure received:', data);
+                }
             });
         </script>
 

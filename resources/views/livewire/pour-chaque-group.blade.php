@@ -1,41 +1,13 @@
 <div>
 
-    @php
 
-@endphp
     <h2>Schedule Table</h2>
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
   <div style="display: flex;">
     <div style=" width :300px">
-    <form method="get" action="{{ route('createNewSchedule') }}">
-        @csrf
-        <button {{ session()->get('id_main_emploi') === null ? '' : 'disabled' }} style="margin: 5px 0px 10px"
-            class="btn btn-primary">
-            Créer un nouveau  emploi
-        </button>
-        <br>
-        <label >date start</label>
-        <div class="col-6">
-            <input name="dateStart" id="dateStart" type="date" class="form-control col-6" placeholder="mm/dd/yyyy"
-            value="{{ session()->get('datestart') }}" data-date-container="#datepicker1" data-provide="datepicker">
-        </div>
-    </form>
 </div>
     <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
-        <select wire:model="groupID" id="formateurSelected" class="form-control col-3" name="">
+        <select style="maxWidth:45vw" wire:model="groupID" id="formateurSelected" class="form-control col-3" name="">
             <option > les Groupes</option>
             @foreach ($groups as $group)
                <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
@@ -46,7 +18,31 @@
   </div>
 
     <div class="table-responsive">
-        <table  style="overflow:scroll" class="col-md-12 ">
+
+        <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
+            <div >
+                @if ($this->checkValues[0]->modeRamadan)
+                <h5 colspan="6" style="marign-top:15px " >
+                    SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
+                </h5>
+                @else
+                <h5 colspan="6"> SE1 = 08:30 - 11:00 SE2 = 11:00 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h5>
+                @endif
+                    @if (!$dataEmploi->isEmpty())
+                    <h5 colspan="6" style="float: right; margin-top: 15px;">
+                        @foreach ($dataEmploi as $item)
+                            Du: {{ $item->datestart }} au {{ $item->dateend }}
+                        @endforeach
+                    </h5>
+                    @else
+                    <h5 colspan="6" style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                        Il faut créer un emploi
+                </h5>
+                    @endif
+
+                </div>
+
+             @if($tableEmploi[0]->groupe == '2')
             <thead>
                 <tr class="day">
 
@@ -74,7 +70,7 @@
                 </tr>
                 <tr class="se-row">
 
-                    <th >SE1</th>
+                    <th>SE1</th>
                     <th>SE2</th>
                     <th>SE1</th>
                     <th>SE2</th>
@@ -111,13 +107,24 @@
                         <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
                                 @foreach ($sissions as $sission)
                                     @if ($sission->day === $day && $sission->group_id === $groupID && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ $sission->module_name }}
+                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d+/', '', $sission->module_name) }}
                                     @endif
                                 @endforeach
                             </td>
                         @endforeach
                     @endforeach
                 </tr>
+                            </form>
+                    </div>
+                 </div>
+
+            </tbody>
+            @elseif ($tableEmploi[0]->groupe == '1')
+            @include('livewire.PourGroupe')
+            @else
+            @include('livewire.PourGroup3')
+            @endif
+
 
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
@@ -145,19 +152,18 @@
 
 
                                            {{-- Formateur --}}
-
+                                           @if (!$checkValues[0]->formateur)
                                            <select wire:model='formateurId' class="form-select"
                                            aria-label="Default select example">
                                            <option selected>Les Formateur</option>
                                            @if ($formateurs)
-
                                                @foreach ($formateurs as $formateur)
                                                    <option value="{{ $formateur->id }}">
                                                        {{ $formateur->user_name  }}</option>
                                                @endforeach
                                                @endif
-
                                        </select>
+                                       @endif
 
 
                                         {{-- module  content --}}
@@ -168,7 +174,8 @@
                                             @if ($modules)
                                                 @foreach ($modules as $module)
                                                 <option value="{{ $module->id }}">
-                                                        {{ $module->module_name }}</option>
+                                                    {{ preg_replace('/^\d+/' , '' ,$module->id )}}</option>
+
                                                 @endforeach
                                             @endif
                                         </select>
@@ -230,44 +237,71 @@
                                     <button data-bs-dismiss="modal"
                                     aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
                                 </div>
-                            </form>
-
-                    </div>
-                 </div>
-
-            </tbody>
-
-
         </table>
 
+
     </div>
 
-
+    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
+        telecharger</button>
 <button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
       <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
-    Supprimer tout
-  </button>
-  <!-- Modal for delete-->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Êtes-vous sûr(e)?</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            Voulez-vous supprimer toutes les sessions que vous avez créées ?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">fermer</button>
-          <button type="button" wire:click='deleteAllSessions' class="btn btn-danger">Oui Supprimer Tout</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  {{-- end Modal for delete  --}}
+      <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal111">
+        Supprimer tout
+    </button>
 
+    <!-- Modal for delete-->
+    <div wire:ignore class="modal fade" id="exampleModal111" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmer la suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr(e) de vouloir supprimer toutes les sessions que vous avez créées ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-danger" wire:click='deleteAllSessions'>Oui, Supprimer Tout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  {{-- end Modal for delete  --}}
+  <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+  <script type="text/javascript" >
+
+  function ExportToExcel(type, fn, dl) {
+         var elt = document.getElementById('tbl_exporttable_to_xls');
+         var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+         return dl ?
+           XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+           XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+      }
+
+
+  document.addEventListener('livewire:load', function () {
+  const selectElement = document.getElementById('date-select');
+  selectElement.addEventListener('change', function() {
+      Livewire.emit('receiveidEmploiid', selectElement.value);
+  });
+
+  let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
+  elements.forEach(element => {
+      element.addEventListener('click', function() {
+          if (element.classList.contains('Cases')) {
+              Livewire.emit('receiveVariable', element.id );
+              console.log(element.id);
+          }
+      });
+  });
+});
+
+
+</script>
 
   <script  >
 
@@ -283,4 +317,4 @@
         });
 
     </script>
-</div>
+

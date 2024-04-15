@@ -1,62 +1,109 @@
 <div>
     <div>
         <style>
-            body {
-                font-family: Arial, sans-serif;
-            }
-
-            table {
+            .checkboxContainer {
+                background-color: white;
+                border-radius: 7px;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 10px 15px;
+                border: 1.5px solid #eee;
+                max-height: 150px;
+                overflow-y: scroll;
                 width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
             }
 
-            th,
-            td {
-                height: 40px;
-                width: 60px !important;
-                border: 1px solid #ddd;
-                text-align: center;
+            .checkboxContainer span {
+                margin: 4px;
+                display: block;
             }
 
-            th {
-                background-color: #f2f2f2;
+            .checkboxContainer span:hover {
+                background-color: #eee
             }
-            thead tr.day{
-                font-size: 18px;
-                /* font-weight: bold; */
-                padding:30px
+
+            .checkboxContainer span input {
+                width: 35px;
             }
-          thead tr.se-row {
-                height: 30px !important;
-                width: 30px;
-                margin: 0px;
-                padding: 0px;
-                font-size: 16px
+
+            /* Change the color of the checkbox when checked */
+            input[type="checkbox"]:checked+label {
+                background-color: #eee;
             }
+
+        {{-- table --}}
+         body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+
+        th,
+        td {
+
+            height: 40px;
+            width: 520px !important;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        td{
+            height: 70px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        thead tr.day{
+            font-size: 18px;
+            /* font-weight: bold; */
+            padding:30px
+        }
+      thead tr.se-row {
+            height: 30px !important;
+            width: 30px;
+            margin: 0px;
+            padding: 0px;
+            font-size: 16px
+        }
 
         </style>
         @php
     @endphp
-       <div style="display: flex;justify-content: space-between">
-        <h2>Schedule Table</h2>
-        <div  style="max-width: 350px; ">
-            <label for=""><h4>date de emploi :</h4></label>
+       <div style="display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+       ">
+
+        <div style="height: 40px ;" class="input-group rounded">
+            <input wire:model='SearchValue'  type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <span class="input-group-text border-0" id="search-addon">
+              <i class="fas fa-search"></i>
+            </span>
+        </div>
+
+        <div >
+
             <select id='date-select' class="form-select"  wire:model="selectedValue" wire:change="updateSelectedIDEmploi($event.target.value)">
-                <option value="" disabled>Select emploi</option>
+                <option >Select date emploi</option>
                 @forEach( $Main_emplois as $Main_emploi)
                     <option value="{{ $Main_emploi->id }}">{{$Main_emploi->datestart  }} to {{$Main_emploi->dateend }}</option>
                 @endforeach
             </select>
-    </div>
-    <div  style="max-width: 350px; ">
-            <label for=""><h4>type d'emploi</h4></label>
+        </div>
+
+         <div >
+
             <select class="form-select"  wire:model="selectedType" wire:change="updateSelectedType($event.target.value)">
-                <option  disabled>Select type</option>
+                <option  disabled selected >Select type emploi</option>
                 <option value="Formateur" selected>Formateur</option>
                 <option value="Group">Group</option>
             </select>
-    </div>
+         </div>
 
        </div>
 
@@ -74,10 +121,11 @@
             </div>
         @endif
         <div  class="table-responsive">
+
             <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 "  >
                 <thead>
                     <tr class="day">
-                        <th rowspan="3">@if ($selectedType ==="Formateur")
+                        <th style="width: 140px !important"  rowspan="3">@if ($selectedType ==="Formateur")
                            Nome  formateurs
                         @else
                         Nome Groupes
@@ -127,43 +175,74 @@
                             </div>
                             <form wire:submit.prevent="UpdateSession">
                                 <div class="modal-body">
-                                    <div style="display: flex">
-                                        {{-- module  content --}}
-                                        @if (!$checkValues[0]->module)
-                                        <select wire:model="module" class="form-select "
-                                            aria-label="Default select example">
-                                            <option selected>Modules</option>
-                                            @if ($modules)
-                                                @foreach ($modules as $module)
-                                                    <option value="{{ $module->id }}">
-                                                        {{ $module->module_name }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
+                                    {{-- branches  --}}
+                                @if($selectedType!=='Group')
+                                @if (!$checkValues[0]->branch)
+                                    <select wire:model='brancheId'  class="form-select "  aria-label="Default select example">
+                                        <option > Filiére</option>
+                                        @if ($baranches)
+                                        @foreach ($baranches as $baranche)
+                                        <option value="{{ $baranche->id }}">{{ $baranche->name }}</option>
+                                        @endforeach
                                         @endif
-                                    </div>
+                                    </select >
+                                    @endif
+
+                                    @if (!$checkValues[0]->year)
+                                    <select wire:model='selectedYear'  class="form-select "  aria-label="Default select example">
+                                        <option > année </option>
+                                        @if ($yearFilter)
+                                        @foreach ($yearFilter as $item)
+                                        <option value="{{ $item }}">{{ $item}}</option>
+                                        @endforeach
+                                        @endif
+                                    </select >
+                                    @endif
+                                @endif
+
                                     <div style="display: flex">
+
+
                                         {{-- Formateur --}}
                                         @if($selectedType==='Group')
                                         <select wire:model='formateur' class="form-select"
                                             aria-label="Default select example">
 
                                                 <option selected>Formateurs</option>
-                                                    @foreach ($formateurs as $formateur)
+                                                    @foreach ($Group_has_formateurs as $formateur)
                                                         <option value="{{ $formateur->id }}">
                                                             {{ $formateur->user_name }}</option>
                                                     @endforeach
                                         </select>
                                         @else
-                                        <select wire:model='group' class="form-select"
-                                        aria-label="Default select example">
-                                        <option selected>Groups</option>
-                                                @foreach ($groups as $group)
-                                                    <option value="{{ $group->id }}">
-                                                        {{ $group->group_name }}</option>
+                                        <select wire:model="group" class="form-select" aria-label="Default select example">
+                                            <option value="" selected>Groupes</option>
+                                            @if(!$groupes->isEmpty())
+                                                @foreach ($groupes as $grp)
+                                                    <option value="{{ $grp->id }}">{{ $grp->group_name }}</option>
                                                 @endforeach
-                                        </select>
+                                            @else
+                                                <option>Pas de groupe trouvé <i style="color:black" class="mdi mdi-alert-rhombus"></i></option>
                                             @endif
+                                        </select>
+
+
+                                    @endif
+
+
+                                      {{-- module  content --}}
+                                      @if (!$checkValues[0]->module)
+                                      <select wire:model="module" class="form-select "
+                                          aria-label="Default select example">
+                                          <option selected>Modules</option>
+                                          @if ($modules)
+                                              @foreach ($modules as $module)
+                                                  <option value="{{ $module->id }}">
+                                                    {{ preg_replace('/^\d+/' , '' ,$module->id )}}</option>
+                                              @endforeach
+                                          @endif
+                                      </select>
+                                      @endif
 
                                         {{-- salle --}}
                                         @if (!$checkValues[0]->salle)
@@ -224,11 +303,11 @@
    <tr>
        <td>{{$group->group_name}}</td>
        @foreach ($dayWeek as $day)
-           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
+           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
                    @foreach ($sissions as $sission)
                        @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                           {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }}
+                          {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d+/' , ' ' , $sission->module_name )}}
                        @endif
                    @endforeach
                </td>
@@ -243,15 +322,26 @@
     <tr>
         <td>{{$formateur->user_name}}</td>
         @foreach (['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as $day)
-            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE1', 'AmidiSE2'] as $sessionType)
-                <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day . $sessionType . $formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">
-                    @foreach ($sissions->where('user_id', $formateur->id) as $sission)
-                        @if ($sission->day === $day && $sission->day_part === substr($sessionType, 0, 5) &&
-                        $sission->dure_sission === substr($sessionType, 5))
-                            {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->group_name }}
-                        @endif
-                    @endforeach
-                </td>
+            @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+            <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" wire:click="getidCase('{{$day.$sessionType.$formateur->id }}')" id="{{$day . $sessionType . $formateur->id }}">                @php
+                    $sessionWords = [];
+                @endphp
+                @foreach ($sissions as $sission)
+                    @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                        @php
+                            $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' .preg_replace('/^\d+/', '', $sission->module_name) ;
+                            $uniqueDetails = [];
+                            foreach (explode('<br>', $details) as $word) {
+                                if (!in_array($word, $sessionWords)) {
+                                    $uniqueDetails[] = $word;
+                                    $sessionWords[] = $word;
+                                }
+                            }
+                            echo implode('<br>', $uniqueDetails);
+                        @endphp
+                    @endif
+                @endforeach
+            </td>
             @endforeach
         @endforeach
     </tr>
@@ -299,13 +389,26 @@
              XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const handleDomChanges = function(mutationsList, observer) {
+
+                // console.log( document.querySelectorAll('.TableCases'));
+                let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
+            elements.forEach(element => {
+                element.addEventListener('click', function() {
+                    Livewire.emit('receiveVariable', element.id);
+                    console.log(element.id)
+                });
+            });
+            };
+                const observerConfig = { childList: true, subtree: true };
+                const observer = new MutationObserver(handleDomChanges);
+                observer.observe(document.body, observerConfig);
+        })
+
 
     document.addEventListener('livewire:load', function () {
     const selectElement = document.getElementById('date-select');
-    // selectElement.addEventListener('change', function() {
-        // Livewire.emit('receiveidEmploiid', selectElement.value);
-    // });
-
     let elements = document.querySelectorAll('[data-bs-toggle="modal"], .Cases');
     elements.forEach(element => {
         element.addEventListener('click', function() {

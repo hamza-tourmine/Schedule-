@@ -6,6 +6,7 @@ use App\Models\establishment;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\EmploiStrictureModel;
 
 class auth_controller extends Controller
 
@@ -42,6 +43,13 @@ class auth_controller extends Controller
             'formateur'   => false,
             'salle'       => false,
             'typeSalle'   => false
+        ]);
+        EmploiStrictureModel::create([
+            'user_id'=> $validatedData['id'],
+            	'groupe'=>'1',
+                	'formateur'=>"1",
+                    	'toutFormateur'=>"1",
+                           'toueGroupe'=>"1"
         ]);
 
         if ($user) {
@@ -87,6 +95,19 @@ public function login(Request $request){
             'id' => 'The provided credentials do not match our records.',
         ])->onlyInput('id');
     }
+}
+
+// logout
+
+public function logout(Request $request)
+{
+    Auth::logout();
+
+    // Invalidate the session
+    $request->session()->invalidate();
+
+    // Redirect to the home page or any other desired page
+    return redirect('/');
 }
 
 }

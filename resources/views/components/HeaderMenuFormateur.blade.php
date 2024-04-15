@@ -91,7 +91,7 @@
                                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-bell-outline"></i>
-                                    <span class="badge rounded-pill bg-danger ">3</span>
+                                    <span class="badge rounded-pill bg-danger ">{{Auth::user()->unreadNotifications->count()}}</span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                     aria-labelledby="page-header-notifications-dropdown">
@@ -105,72 +105,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @foreach(Auth::user()->unreadNotifications as $Notification)
                                     <div data-simplebar style="max-height: 230px;">
                                         <a href="" class="text-reset notification-item">
                                             <div class="d-flex align-items-start">
                                                 <div class="avatar-xs me-3">
                                                     <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                                        <i class="bx bx-cart"></i>
+                                                        <i class="mdi mdi-account-question"></i>
                                                     </span>
                                                 </div>
                                                 <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">Your order is placed</h6>
+                                                    <h6 class="mt-0 mb-1">{{$Notification->data['FormateurRequest']}}</h6>
                                                     <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">If several languages coalesce the grammar</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min
-                                                            ago</p>
+                                                        <p class="mb-1">{{$Notification->data['RequestCommentaire']}}</p>
+                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> {{$Notification->created_at->diffForHumans()}}
+                                                            </p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </a>
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-                                                <img src="assets/images/users/avatar-2.jpg"
-                                                    class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">James Lemire</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">It will seem like simplified English.</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 1
-                                                            hours ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-                                                <div class="avatar-xs me-3">
-                                                    <span class="avatar-title bg-success rounded-circle font-size-16">
-                                                        <i class="bx bx-badge-check"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">Your item is shipped</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">If several languages coalesce the grammar</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min
-                                                            ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+                                       
 
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-                                                <img src="assets/images/users/avatar-2.jpg"
-                                                    class="me-3 rounded-circle avatar-xs" alt="user-pic">
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">Salena Layfield</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">As a skeptical Cambridge friend of mine
-                                                            occidental.</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 1
-                                                            hours ago</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
+                                        
                                     </div>
+                                    @endforeach
                                     <div class="p-2 border-top d-grid">
                                         <a class="btn btn-sm btn-link font-size-14 " href="javascript:void(0)">
                                             <i class="mdi mdi-arrow-right-circle me-1"></i> View More..
@@ -185,7 +143,7 @@
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
                                     <img class="rounded-circle header-profile-user"
-                                        src="assets/images/users/avatar-2.jpg" alt="Header Avatar">
+                                        src="assets/images/users/user.jpg" alt="Header Avatar">
                                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
 
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
