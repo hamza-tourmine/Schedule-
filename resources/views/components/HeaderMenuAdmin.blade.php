@@ -21,32 +21,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
     <style>
-       /* CSS for the arrow button and sidebar toggle */
-       .vertical-menu {
-    min-width: 100px;
-    max-width: var(--bs-sidebar-width);
-    width:100px ;
-    z-index: 1001;
-    background: var(--bs-sidebar-bg);
-    bottom: 0;
-    margin-top: 0;
-    position: fixed;
-    top: var(--bs-header-height);
-    -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
-    box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
-    margin-bottom: 55px;
-}
+        a.green {
+            color: green
+        }
+
+        a.danger {
+            color: red;
+        }
+
+        a.green:hover {
+            font-weight: bold;
+            color: green
+        }
+
+        a.danger:hover {
+            font-weight: bold;
+            color: red
+        }
+
+        /* CSS for the arrow button and sidebar toggle */
+        .vertical-menu {
+            min-width: 100px;
+            max-width: var(--bs-sidebar-width);
+            width: 100px;
+            z-index: 1001;
+            background: var(--bs-sidebar-bg);
+            bottom: 0;
+            margin-top: 0;
+            position: fixed;
+            top: var(--bs-header-height);
+            -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+            box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
+            margin-bottom: 55px;
+        }
 
 
-.arow {
+        .arow {
 
 
-    position: fixed;
-    top: 100px ;
-    left: 10px;
+            position: fixed;
+            top: 100px;
+            left: 10px;
 
-    z-index: 100;
-    padding: 10px;
+            z-index: 100;
+            padding: 10px;
 
         }
 
@@ -63,10 +81,10 @@
             background-color: #ffffff;
         }
 
-.vertical-menu.collapsed .arow .toggle-sidebar {
-    left: auto;
-    right: 0;
-}
+        .vertical-menu.collapsed .arow .toggle-sidebar {
+            left: auto;
+            right: 0;
+        }
     </style>
 </head>
 
@@ -122,7 +140,8 @@
                                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-bell-outline"></i>
-                                    <span class="badge rounded-pill bg-danger ">{{Auth::user()->unreadNotifications->count()}}</span>
+                                    <span
+                                        class="badge rounded-pill bg-danger ">{{ Auth::user()->unreadNotifications->count() }}</span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                     aria-labelledby="page-header-notifications-dropdown">
@@ -132,33 +151,44 @@
                                                 <h6 class="m-0"> Notifications </h6>
                                             </div>
                                             <div class="col-auto">
-                                                <a href="#!" class="small"> View All</a>
+                                                <a href="{{ route('markAsRead') }}" class="small green"><i
+                                                        class="fas fa-eye"></i>
+                                                    Mark All As Read</a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <a href="{{ route('Clear') }}" class="small danger"><i
+                                                        class="fas fa-trash-alt"></i>
+                                                    Clear</a>
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach(Auth::user()->unreadNotifications as $Notification)
-                                    <div data-simplebar style="max-height: 230px;">
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-                                                <div class="avatar-xs me-3">
-                                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                                        <i class="mdi mdi-account-question"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">{{$Notification->data['FormateurRequest']}}</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">{{$Notification->data['RequestCommentaire']}}</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> {{$Notification->created_at->diffForHumans()}}
+                                    @foreach (Auth::user()->Notifications as $Notification)
+                                        <div data-simplebar style="max-height: 230px;">
+                                            <a href="" class="text-reset notification-item">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="avatar-xs me-3">
+                                                        <span
+                                                            class="avatar-title bg-primary rounded-circle font-size-16">
+                                                            <i class="mdi mdi-account-question"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <h6 class="mt-0 mb-1">
+                                                            {{ $Notification->data['FormateurRequest'] }}</h6>
+                                                        <div class="font-size-12 text-muted">
+                                                            <p class="mb-1">
+                                                                {{ $Notification->data['RequestCommentaire'] }}</p>
+                                                            <p class="mb-0"><i class="mdi mdi-clock-outline"></i>
+                                                                {{ $Notification->created_at->diffForHumans() }}
                                                             </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                       
+                                            </a>
 
-                                        
-                                    </div>
+
+
+                                        </div>
                                     @endforeach
                                     <div class="p-2 border-top d-grid">
                                         <a class="btn btn-sm btn-link font-size-14 " href="javascript:void(0)">
@@ -210,21 +240,22 @@
 
                             <!-- Mega menu -->
 
-                            </div>
                         </div>
                     </div>
-                </header>
-                <!-- ENd header  -->
- <!-- ========== Left Sidebar Start ========== -->
- <div class="vertical-menu" style="">
-                    {{-- <div class="arow">
+                </div>
+            </header>
+            <!-- ENd header  -->
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="vertical-menu" style="">
+                {{-- <div class="arow">
                         <button class="btn btn-primary toggle-sidebar"><i class="mdi mdi-chevron-left"></i></button>
                     </div> --}}
-                    <div class="widthSideBare ">
-                        <div class="user-wid text-center py-4">
-                            <div class="user-img">
-                                <img src="assets/images/users/avatar-2.jpg" alt="" class="avatar-md mx-auto rounded-circle">
-                            </div>
+                <div class="widthSideBare ">
+                    <div class="user-wid text-center py-4">
+                        <div class="user-img">
+                            <img src="assets/images/users/avatar-2.jpg" alt=""
+                                class="avatar-md mx-auto rounded-circle">
+                        </div>
 
                         <div class="mt-3">
 
@@ -235,59 +266,78 @@
                         </div>
                     </div>
 
-                        <!--- Sidemenu -->
-                        <div id="sidebar-menu"  style="" >
-                            <!-- Left Menu Start -->
-                            <ul class="metismenu list-unstyled" id="side-menu">
-                                <li class="menu-title">Menu</li>
-                                <li>
-                                    <a  href="{{route('dashboardAdmin')}}" class=" waves-effect">
-                                        <i style="font-weight: 400 ; font-size:25PX" class="mdi mdi-home-lightbulb-outline"></i>
-                                        <span class="hidentext" >Accueil</span>
-                                    </a>
-                                </li>
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu" style="">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title">Menu</li>
+                            <li>
+                                <a href="{{ route('dashboardAdmin') }}" class=" waves-effect">
+                                    <i style="font-weight: 400 ; font-size:25PX"
+                                        class="mdi mdi-home-lightbulb-outline"></i>
+                                    <span class="hidentext">Accueil</span>
+                                </a>
+                            </li>
 
 
 
 
-                                <div id="emploi12">
-                                        <li><a href="{{route('CreateEmploi')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les groupes" class="mdi mdi-lightbulb-group-outline" style="font-weight: 400 ; font-size:25PX"></span></a></li>
-                                        <li><a href="{{route('emploiForFormateurs')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="tout les Formateurs" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-supervisor-outline"></span></a></li>
-                                        <li><a href="{{route('ChaqueFormateur')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="chaque formateur" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-account-tie-outline"></span></a></li>
-                                        <li><a href="{{route('emploiForGroup')}}" class=" waves-effect"> <span data-toggle="tooltip" data-placement="right" title="chaque group" style="font-weight: 400 ; font-size:25PX" class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
-                                </div>
+                            <div id="emploi12">
+                                <li><a href="{{ route('CreateEmploi') }}" class=" waves-effect"> <span
+                                            data-toggle="tooltip" data-placement="right" title="tout les groupes"
+                                            class="mdi mdi-lightbulb-group-outline"
+                                            style="font-weight: 400 ; font-size:25PX"></span></a></li>
+                                <li><a href="{{ route('emploiForFormateurs') }}" class=" waves-effect"> <span
+                                            data-toggle="tooltip" data-placement="right" title="tout les Formateurs"
+                                            style="font-weight: 400 ; font-size:25PX"
+                                            class="mdi mdi-account-supervisor-outline"></span></a></li>
+                                <li><a href="{{ route('ChaqueFormateur') }}" class=" waves-effect"> <span
+                                            data-toggle="tooltip" data-placement="right" title="chaque formateur"
+                                            style="font-weight: 400 ; font-size:25PX"
+                                            class="mdi mdi-account-tie-outline"></span></a></li>
+                                <li><a href="{{ route('emploiForGroup') }}" class=" waves-effect"> <span
+                                            data-toggle="tooltip" data-placement="right" title="chaque group"
+                                            style="font-weight: 400 ; font-size:25PX"
+                                            class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
+                            </div>
 
-                                <li>
-                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
-                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history" data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
-                                        {{-- <span>tous les emplois</span> --}}
-                                    </a>
-                                </li>
-
-
-                                <li>
-                                    <a href="{{route('toutlesEmploi')}}" class=" waves-effect">
-                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-message-text-clock-outline" data-toggle="tooltip" data-placement="right" title="tous les demandes"></span>
-                                        {{-- <span class="hidentext"> tous les demandes</span> --}}
-                                    </a>
-                                </li>
-
-                                  <li>
-                                    <a href="{{route('AllSetting')}}" class=" waves-effect">
-                                        <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-settings-transfer-outline" data-toggle="tooltip" data-placement="right" title="les paramteres "></span>
-                                        {{-- <span class="hidentext"> les paramteres </span> --}}
-                                    </a>
-                                 </li>
+                            <li>
+                                <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
+                                    <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history"
+                                        data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
+                                    {{-- <span>tous les emplois</span> --}}
+                                </a>
+                            </li>
 
 
+                            <li>
+                                <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
+                                    <span style="font-weight: 400 ; font-size:25PX"
+                                        class="mdi mdi-message-text-clock-outline" data-toggle="tooltip"
+                                        data-placement="right" title="tous les demandes"></span>
+                                    {{-- <span class="hidentext"> tous les demandes</span> --}}
+                                </a>
+                            </li>
 
-                                <li>
-                                    <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
-                                        <i style="font-weight: 400 ; font-size:25PX" class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
-                                         data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
+                            <li>
+                                <a href="{{ route('AllSetting') }}" class=" waves-effect">
+                                    <span style="font-weight: 400 ; font-size:25PX"
+                                        class="mdi mdi-settings-transfer-outline" data-toggle="tooltip"
+                                        data-placement="right" title="les paramteres "></span>
+                                    {{-- <span class="hidentext"> les paramteres </span> --}}
+                                </a>
+                            </li>
 
-                                    </a>
-                                </li>
+
+
+                            <li>
+                                <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                                    <i style="font-weight: 400 ; font-size:25PX"
+                                        class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
+                                        data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>
+
+                                </a>
+                            </li>
 
 
                         </ul>
@@ -317,13 +367,13 @@
             </div>
             <!-- end main content-->
 
-            </div>
-            <!-- END layout-wrapper -->
-
         </div>
-        <!-- end container-fluid -->
+        <!-- END layout-wrapper -->
 
-        <!-- Right Sidebar -->
+    </div>
+    <!-- end container-fluid -->
+
+    <!-- Right Sidebar -->
 
 
     <div class="rightbar-overlay"></div>
@@ -354,55 +404,55 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                let sidebarMenu = document.querySelector('.vertical-menu');
-                let hidenTexts = document.querySelectorAll('.hidentext');
-                let lesEmploi = document.querySelector('#emploi12')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let sidebarMenu = document.querySelector('.vertical-menu');
+            let hidenTexts = document.querySelectorAll('.hidentext');
+            let lesEmploi = document.querySelector('#emploi12')
 
-                function hideHidentext() {
-                    if (!sidebarMenu.classList.contains('collapsed')) {
-                        hidenTexts.forEach(function(element) {
-                            element.style.display = 'none';
-                            lesEmploi.style.display ='block'
-                        });
-                    } else {
-                        hidenTexts.forEach(function(element) {
-                            element.style.display = ' inline-block';
-                            lesEmploi.style.display ='none'
-                        });
-                    }
-                }
-
-                hideHidentext(); // Initial call to hide hidentext elements
-
-                document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-                    sidebarMenu.classList.toggle('collapsed');
-                    hideHidentext(); // Call hideHidentext when the sidebar is toggled
-                });
-            });
-        </script>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-        <script>
-            Pusher.logToConsole = true;
-            var pusher = new Pusher('69820da6887a3d9f8088', {
-                cluster: 'mt1'
-            });
-            var channel = pusher.subscribe('my-channel');
-            channel.bind('request-submitted', function(data) {
-                if (data && data.user_id && data.comment) {
-                    toastr.success('New Request Created', 'Formateur: ' + data.user_id + '<br>MainEmploiId: ' + data
-                        .main_emploi_id + '<br>Commentaire: ' + data
-                        .comment, {
-                            timeOut: 0,
-                            extendedTimeOut: 0,
-                        });
+            function hideHidentext() {
+                if (!sidebarMenu.classList.contains('collapsed')) {
+                    hidenTexts.forEach(function(element) {
+                        element.style.display = 'none';
+                        lesEmploi.style.display = 'block'
+                    });
                 } else {
-                    console.error('Invalid data structure received:', data);
+                    hidenTexts.forEach(function(element) {
+                        element.style.display = ' inline-block';
+                        lesEmploi.style.display = 'none'
+                    });
                 }
+            }
+
+            hideHidentext(); // Initial call to hide hidentext elements
+
+            document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+                sidebarMenu.classList.toggle('collapsed');
+                hideHidentext(); // Call hideHidentext when the sidebar is toggled
             });
-        </script>
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script>
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('69820da6887a3d9f8088', {
+            cluster: 'mt1'
+        });
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('request-submitted', function(data) {
+            if (data && data.user_id && data.comment) {
+                toastr.success('New Request Created', 'Formateur: ' + data.user_id + '<br>MainEmploiId: ' + data
+                    .main_emploi_id + '<br>Commentaire: ' + data
+                    .comment, {
+                        timeOut: 0,
+                        extendedTimeOut: 0,
+                    });
+            } else {
+                console.error('Invalid data structure received:', data);
+            }
+        });
+    </script>
 
 
 

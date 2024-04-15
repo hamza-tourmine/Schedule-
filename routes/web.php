@@ -67,6 +67,9 @@ Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function()
     Route::get('/emploi-for-formateurs' ,[ScheduleFormateurs::class , 'index'])->name('emploiForFormateurs');
     //emploi pour chaque group
     Route::get('/Schedule-for-Group' , [ScheduleChaqueGroup::class, 'index'])->name('emploiForGroup');
+    //notification
+    Route::get('/Notifications/MarkAsRead',[FormateurRequestController::class, 'markAsRead'])->name('markAsRead');;
+    Route::get('/Notifications/Clear',[FormateurRequestController::class, 'Clear'])->name('Clear');;
 // brache routes
     Route::controller(branchController::class)->group(function(){
         Route::get('/add-Branch','index')->name('addbranch');

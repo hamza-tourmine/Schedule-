@@ -156,5 +156,19 @@ public function createRequestEmploi(Request $request)
         return response()->json(['message' => 'Error creating or updating request emploi.', 'status' => 500, 'error' => $e->getMessage()]);
     }
 }
+public function MarkAsread() {
+    $user = User::find(auth()->user()->id);
+    foreach ($user->unreadNotifications as $notification) {
+        $notification->markAsRead();
+    }
+    return redirect()->back();
+}
+public function Clear() {
+    $user = User::find(auth()->user()->id);
+    foreach ($user->Notifications as $notification) {
+        $notification->delete();
+    }
+    return redirect()->back();
+}
 
 }

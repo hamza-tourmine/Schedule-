@@ -247,6 +247,9 @@
 
 
             <button id="toggleTablesBtn" onclick="toggleTables()"><i class="fas fa-table"></i> Changer la table</button>
+            <button onclick="ExportToExcel('xlsx')"><i class="mdi mdi-download"></i>
+                telecharger</button>
+
         </div>
 
 
@@ -783,6 +786,27 @@
                 }
             });
         });
+
+        function ExportToExcel(type, fn, dl) {
+            // Get the currently visible table
+            var currentTable = document.getElementById("tbl_exporttable_to_xls_1").style.display === "block" ?
+                document.getElementById("tbl_exporttable_to_xls_1") :
+                document.getElementById("tbl_exporttable_to_xls_2");
+
+            // Convert the table to Excel format
+            var wb = XLSX.utils.table_to_book(currentTable, {
+                sheet: "sheet1"
+            });
+
+            // Export the Excel file
+            return dl ?
+                XLSX.write(wb, {
+                    bookType: type,
+                    bookSST: true,
+                    type: 'base64'
+                }) :
+                XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+        }
     </script>
 
 
