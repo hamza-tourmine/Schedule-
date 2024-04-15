@@ -112,7 +112,11 @@
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                         <td  colspan="1" rowspan="1" data-bs-toggle="modal" data-bs-target="#exampleModal" class="TableCases" id="{{$day.$sessionType.$group->id }}"  >
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                    @if ($sission->day === $day &&
+                                     $sission->group_id === $group->id &&
+                                     $sission->day_part === substr($sessionType, 0, 5) &&
+                                     $sission->dure_sission === substr($sessionType, 5))
+                                     
                                     {{ $sission->sission_type }}</br>
                                     {{ $sission->class_name }}</br>
                                     {{ $sission->user_name }}</br>

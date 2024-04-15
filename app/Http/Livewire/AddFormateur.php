@@ -41,6 +41,9 @@ class AddFormateur extends Component
     public $SearchValue ;
     public $branchesForEashFormateur = [];
 
+    // filter
+    public $branchesIdsSelected  ;
+
 
 
 
@@ -57,9 +60,14 @@ class AddFormateur extends Component
 
     public function render()
     {
-        $establishment_id = session()->get('establishment_id');
 
-        $this->groupes = Group::where('establishment_id', $establishment_id)->get();
+        $establishment_id = session()->get('establishment_id');
+        $groupesAll = Group::where('establishment_id', $establishment_id);
+        if(!empty($this->selectedBranches)){
+             $groupesAll->whereIn('barnch_id',$this->selectedBranches)->get();
+
+        }
+        $this->groupes = $groupesAll->get();
 
         $this->formateurs = Formateur::where('user_name' , 'like' ,'%'.$this->SearchValue.'%')->where('role', 'formateur')
             ->where('establishment_id', $establishment_id)
@@ -71,7 +79,12 @@ class AddFormateur extends Component
         ->where('establishment_id', $establishment_id)
         ->get(); ;
             $this->branches = Branch::where('establishment_id', $establishment_id)->get();
-           $this->modules = Module::select('modules.id')->where('establishment_id', $establishment_id)->get();
+            $modulesAll = Module::select('modules.id')->where('establishment_id', $establishment_id);
+            // if(!empty($this->selectedGroupes){
+            //     $modulesAll->whereIn('');
+            // });
+            $this->modules  = $modulesAll->get();
+
         if($this->New_idFormateur){
             $formateur = Formateur::find($this->New_idFormateur);
             $this->New_formateur_name = $formateur->user_name;
@@ -112,6 +125,7 @@ class AddFormateur extends Component
           if ($formateur) {
               // Associate selected branches if they are provided
               if (!empty($this->selectedBranches)) {
+
                   foreach ($this->selectedBranches as $branche) {
                       // Check if the association already exists
                       $existingAssociation = formateur_has_branche::where('formateur_id', $this->idFormateur)

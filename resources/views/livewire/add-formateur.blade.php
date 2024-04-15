@@ -68,39 +68,105 @@
                     </div>
 
 
-                <div class="d-flex w-100 justify-content-between">
+                <div  class="d-flex w-100 justify-content-between">
+                    <div style="width:45%" >
+                    <div style="margin:15px 0px 15px 0px" class="form-check">
+                        <input  style="width:25px; height:25px;margin-right:10px" class="form-check-input" type="checkbox" value=""
+                            id="flexCheckDefault">
+                        <label style="font-size:18px;" class="form-check-label" for="flexCheckDefault">
+                            base sure les Filiéres
+                        </label>
+                    </div>
+                        <div id="Filier" style="width: 100%" class="checkboxContainer mb-lg-3   col-lg-9">
+                            <h6 style="margin:10px">Filiéres</h6>
+                            @foreach ($branches as $branch)
+                                <span>
+                                    <input wire:model="selectedBranches" type="checkbox" id="branch{{ $branch->id }}" name="selectedBranches[]" value="{{ $branch->id }}">
+                                    <label for="branch{{ $branch->id }}"> {{ $branch->name }} </label>
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
 
+                <script>
+                    let flexCheckDefault = document.getElementById('flexCheckDefault');
+                    let dateselect = document.getElementById('Filier')
+                    dateselect.style.display = 'none'
+                    flexCheckDefault.addEventListener('click' , function (){
+                       if(!flexCheckDefault.checked){
+                        dateselect.style.display = 'none';
+                        dateselect.value = null
+                       }else{
+                        dateselect.style.display = 'block'
+                       }
+                    })
+                </script>
 
-                <div style="width: 45%"  class="checkboxContainer mb-lg-3   col-lg-9">
-                    <h6 style="margin:10px">Filiéres</h6>
-                    @foreach ($branches as $branch)
-                        <span>
-                            <input wire:model="selectedBranches" type="checkbox" id="branch{{ $branch->id }}" name="selectedBranches[]" value="{{ $branch->id }}">
-                            <label for="branch{{ $branch->id }}"> {{ $branch->name }} </label>
-                        </span>
-                    @endforeach
-                </div>
-
-                <div style="width: 45%"  class="checkboxContainer mb-lg-3  col-lg-9">
-                    <h6 style="margin:10px">Les Groupes</h6>
-                    @foreach ($groupes as $groupe)
-                        <span>
-                            <input wire:model="selectedGroupes" type="checkbox" id="group{{ $groupe->id }}" name="selectedGroupes[]" value="{{ $groupe->id }}">
-                            <label for="group{{ $groupe->id }}">{{ $groupe->group_name }}</label>
-                        </span>
-                    @endforeach
-                </div>
-              </div>
-
-                    <div style="width: 65% ;margin:auto"  class="checkboxContainer mb-lg-3 col-lg-9">
-                        <h6 style="margin:10px">Les Modules</h6>
-                        @foreach ($modules as $module)
+               <div style=" width:45%">
+                    <div style="margin:15px 0px 15px 0px" class="form-check">
+                        <input  style="width:25px; height:25px;margin-right:10px" class="form-check-input" type="checkbox" value=""
+                            id="flexCheckDefault1">
+                        <label style="font-size:18px;" class="form-check-label" for="flexCheckDefault1">
+                            base sure les Groupes
+                        </label>
+                    </div>
+                    <div id="group" style="width: 100%"  class="checkboxContainer mb-lg-3  col-lg-9">
+                        <h6 style="margin:10px">Les Groupes</h6>
+                        @foreach ($groupes as $groupe)
                             <span>
-                                <input wire:model="selectedModules" type="checkbox" id="module{{ $module->id }}" name="selectedModules[]" value="{{ $module->id }}">
-                                <label for="module{{ $module->id }}">{{ preg_replace('/^\d+/', '', $module->id) }}</label>
+                                <input wire:model="selectedGroupes" type="checkbox" id="group{{ $groupe->id }}" name="selectedGroupes[]" value="{{ $groupe->id }}">
+                                <label for="group{{ $groupe->id }}">{{ $groupe->group_name }}</label>
                             </span>
                         @endforeach
                     </div>
+                    <script>
+                        let flexCheckDefault1 = document.getElementById('flexCheckDefault1');
+                        let dateselect1 = document.getElementById('group')
+                        dateselect1.style.display = 'none'
+                        flexCheckDefault1.addEventListener('click' , function (){
+                           if(!flexCheckDefault1.checked){
+                            dateselect1.style.display = 'none';
+                            dateselect1.value = null
+                           }else{
+                            dateselect1.style.display = 'block'
+                           }
+                        })
+                    </script>
+               </div>
+              </div>
+
+            <div>
+                <div style="margin:15px 0px 15px 0px" class="form-check">
+                    <input  style="width:25px; height:25px;margin-right:10px" class="form-check-input" type="checkbox" value=""
+                        id="flexCheckDefault3">
+                    <label style="font-size:18px;" class="form-check-label" for="flexCheckDefault3">
+                        base sure les Modules
+                    </label>
+                </div>
+                        <div id="module" style="width: 65% ;margin:auto"  class="checkboxContainer mb-lg-3 col-lg-9">
+                            <h6 style="margin:10px">Les Modules</h6>
+                            @foreach ($modules as $module)
+                                <span>
+                                    <input wire:model="selectedModules" type="checkbox" id="module{{ $module->id }}" name="selectedModules[]" value="{{ $module->id }}">
+                                    <label for="module{{ $module->id }}">{{ preg_replace('/^\d+/', '', $module->id) }}</label>
+                                </span>
+                            @endforeach
+                        </div>
+
+                        <script>
+                            let flexCheckDefault3 = document.getElementById('flexCheckDefault3');
+                            let dateselect3 = document.getElementById('module')
+                            dateselect3.style.display = 'none'
+                            flexCheckDefault3.addEventListener('click' , function (){
+                               if(!flexCheckDefault3.checked){
+                                dateselect3.style.display = 'none';
+                                dateselect3.value = null
+                               }else{
+                                dateselect3.style.display = 'block'
+                               }
+                            })
+                        </script>
+            </div>
             </div>
         </div>
         <div class="modal-footer">
