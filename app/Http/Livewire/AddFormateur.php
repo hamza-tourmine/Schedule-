@@ -11,6 +11,7 @@ use App\Models\formateur_has_branche;
 use App\Models\formateur_has_group;
 use App\Models\module_has_formateur;
 use App\Models\Establishment;
+use App\Models\group_has_module;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class AddFormateur extends Component
@@ -79,11 +80,18 @@ class AddFormateur extends Component
         ->where('establishment_id', $establishment_id)
         ->get(); ;
             $this->branches = Branch::where('establishment_id', $establishment_id)->get();
-            $modulesAll = Module::select('modules.id')->where('establishment_id', $establishment_id);
-            // if(!empty($this->selectedGroupes){
-            //     $modulesAll->whereIn('');
-            // });
-            $this->modules  = $modulesAll->get();
+            if(empty($this->selectedGroupes)){
+                 $this->modules = Module::select('modules.id')->where('establishment_id', $establishment_id)->get();
+            }else{
+                // $this->modules = group_has_module::select('module_id as id')->whereIn('group_id' ,$this->selectedGroupes)->get();
+                // dd($this->modules->id);
+                $this->modules= Module::select('modules.id')
+                ->join('groupe_has_modules','groupe_has_modules.module_id','=','modules.id')
+                ->whereIn('group_id' ,$this->selectedGroupes)
+                ->where('establishment_id', $establishment_id)
+                ->get();
+            };
+
 
         if($this->New_idFormateur){
             $formateur = Formateur::find($this->New_idFormateur);

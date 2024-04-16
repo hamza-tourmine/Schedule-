@@ -51,7 +51,7 @@ class Emploi extends Component
 
 
     protected $listeners = ['receiveVariable' => 'receiveVariable',
-    'closeModal'=>'closeModal'];
+    'closeModal'=>'closeModal' , 'freshComponent'=>'$refresh'];
     public function receiveVariable($variable)
     {
         $this->groupID = substr($variable,11);

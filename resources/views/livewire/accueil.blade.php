@@ -38,7 +38,7 @@
 
 
 
-                <label style="float:left" for="dateStart">date </label>
+                <label style=" float:left " for="dateStart">date </label>
                 <div class="col-6 ">
                     <input name="dateStart" id="dateStart" type="date" class="form-control col-6"
                         placeholder="mm/dd/yyyy" value="{{ session()->get('datestart') }}"
