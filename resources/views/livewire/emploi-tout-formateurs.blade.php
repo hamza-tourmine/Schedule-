@@ -36,13 +36,14 @@
 
     <div class="table-responsive">
         <h3 style="margin: auto ; width :fit-content;">Emploi Global hebdomadaire</h3>
+        @if($tableEmploi[0]->toutFormateur == '1')
         <div class="input-group rounded">
             <input wire:model='SearchValue' style="max-width:400px" type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
             <span class="input-group-text border-0" id="search-addon">
               <i class="fas fa-search"></i>
             </span>
         </div>
-        @if($tableEmploi[0]->toutFormateur == '1')
+
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
 
             <div style="display: flex ;justify-content:space-between ;marign-top:15px ">

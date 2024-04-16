@@ -54,10 +54,12 @@ Route::get('/create-account',[auth_controller::class ,'index'])->name('create-ac
 Route::post('/insert',[auth_controller::class,'create_account'])->name('insert');
 Route::post('/login',[auth_controller::class ,'login'])->name('login_into_account');
 
+
+   // logout
+   Route::get('/logout' ,[auth_controller::class , 'logout'])->name('logout');
 // for admin
 Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function(){
-    // logout
-    Route::get('/logout' ,[auth_controller::class , 'logout'])->name('logout');
+    
     // profile
     Route::controller(adminProfileController::class)->group(function(){
         Route::get('/profile' , 'index')->name('showProfileAdmin');
@@ -158,8 +160,7 @@ Route::controller(formateurController::class )->group(function(){
 
 // routes for  Formateur
 Route::middleware(['auth','RoutesForFormateur'])->group(function(){
-        // logout
-        Route::get('/logout' ,[auth_controller::class , 'logout'])->name('logout');
+
         // displat main page in formateur account
         Route::get('/dashboardFormateur',[formateurController::class , 'showHomepage'])->name('dashboard_formateur');
         // request Emploi
@@ -170,8 +171,8 @@ Route::middleware(['auth','RoutesForFormateur'])->group(function(){
         //
         Route::get('FormateurGroupeList',[ShowGroupAffected::class,'Show']);
         Route::get('FormateurModuleList',[ShowModuleAffected::class,'Show']);
-       
-        
+
+
 
 
 });

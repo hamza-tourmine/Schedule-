@@ -253,7 +253,7 @@
                 <div class="widthSideBare ">
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/user.jpg"
+                            <img class="rounded-circle header-profile-user" src="{{asset('assets/images/users/user.jpg')}}"
                                 alt="">
                         </div>
 
