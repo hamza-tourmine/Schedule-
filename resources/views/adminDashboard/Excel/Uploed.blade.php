@@ -84,9 +84,20 @@
     transition: color .2s ease-in-out;
   }
 
+  /* .loeder{
+    width: 100vw;
+    height: 100vw;
+    background-color :rgba(57, 28, 224, 0.5) ;
+    z-index: 1000;
+    position: absolute;
+
+  } */
+
+
     </style>
 
 @if($errors->any())
+
 <div id="liveAlertPlaceholder" class="alert alert-danger">
     <ul>
         @foreach ($errors->all() as $error)
@@ -96,10 +107,12 @@
 </div>
 @endif
 @if(session('success'))
+
 <div id="liveAlertPlaceholder" class="alert alert-success">
 {{ session('success') }}
 </div>
 @endif
+<div class="loader"></div>
         <form action="{{ route('UploedFileExcel') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div for="images" class="drop-container" id="dropcontainer">
@@ -107,7 +120,23 @@
                 or
                 <input type="file" name="file" accept=".xlsx" />
             </div>
-            <button type="submit">Upload ..</button>
+            <button id="uploadButton" type="submit">Upload ..</button>
         </form>
+        <script>
+          let uploadButton = document.querySelector('#uploadButton');
+          let loader = document.querySelector('.loader');
+
+          uploadButton.addEventListener('click', function(){
+              loader.innerHTML = `<div style='width: 100vw; height: 100vh;
+                  background-color: rgba(236, 219, 228, 0.29);
+                  z-index: 1000; position: fixed; top: 0; left: 0; display: flex; justify-content: center; align-items: center;'>
+
+                  <div class="spinner-border text-dark" role="status">
+                      <span class="sr-only">Loading...</span>
+                  </div>
+
+              </div>`;
+          });
+      </script>
 
 </x-HeaderMenuAdmin>

@@ -116,7 +116,7 @@
                                      $sission->group_id === $group->id &&
                                      $sission->day_part === substr($sessionType, 0, 5) &&
                                      $sission->dure_sission === substr($sessionType, 5))
-                                     
+
                                     {{ $sission->sission_type }}</br>
                                     {{ $sission->class_name }}</br>
                                     {{ $sission->user_name }}</br>
@@ -245,7 +245,7 @@
             </tbody>
         </table>
         @else
-                @include('livewire.ToutGroupes2') ;
+                @include('livewire.tout-groupes2') 
                 @endif
     </div>
 

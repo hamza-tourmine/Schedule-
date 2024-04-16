@@ -39,7 +39,7 @@ class Accueil extends Component
     ->where('establishment_id', $establishment_id)
     ->where('role' , 'formateur')
     ->limit(3)
-    ->get();
+    ->get(); 
 
         $this->Main_emplois = DB::table('main_emploi')
             ->where('establishment_id', $establishment_id) ->orderBy('datestart', 'desc')->get();
