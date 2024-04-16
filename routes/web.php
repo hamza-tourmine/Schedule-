@@ -101,6 +101,7 @@ Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function()
     Route::post('/deleteSessions' , [Schedule::class , 'deleteAllSessions'])->name('deleteAllSessions');
     Route::post('/AddAutherEmploi' , [Schedule::class , 'AddAutherEmploi'])->name('AddAutherEmploies');
     Route::get('/toutlesEmploi',[Schedule::class , 'toutlesEmploi'])->name('toutlesEmploi');
+    Route::get('/AllRequest',[Schedule::class , 'AllRequest'])->name('AllRequest');
     //end Schedule routes
     Route::get('/add-class-rooms',[classRoomsController::class,'index'])->name('add-class-rooms');
     Route::post('/insertClasses',[classRoomsController::class,'insert'])->name('insertClasses');
@@ -157,6 +158,8 @@ Route::controller(formateurController::class )->group(function(){
 
 // routes for  Formateur
 Route::middleware(['auth','RoutesForFormateur'])->group(function(){
+        // logout
+        Route::get('/logout' ,[auth_controller::class , 'logout'])->name('logout');
         // displat main page in formateur account
         Route::get('/dashboardFormateur',[formateurController::class , 'showHomepage'])->name('dashboard_formateur');
         // request Emploi

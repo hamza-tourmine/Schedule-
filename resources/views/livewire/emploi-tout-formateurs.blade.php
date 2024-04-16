@@ -143,7 +143,10 @@
                                 $sessionWords = [];
                             @endphp
                             @foreach ($sissions as $sission)
-                                @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                @if ($sission->day      === $day &&
+                                 $sission->user_id      === $formateur->id &&
+                                 $sission->day_part     === substr($sessionType, 0, 5) &&
+                                 $sission->dure_sission === substr($sessionType, 5))
                                     @php
                                         $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' .preg_replace('/^\d+/', '', $sission->module_name) ;
                                         $uniqueDetails = [];
@@ -158,8 +161,6 @@
                                 @endif
                             @endforeach
                         </td>
-
-
                         @endforeach
                     @endforeach
                 </tr>
@@ -300,9 +301,9 @@
                                     aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
                                 </div>
                             </form>
-            </div>
-                 </div>
-                @endif
+                    </div>
+                        </div>
+                        @endif
             </tbody>
               {{-- end first table table --}}
         </table>

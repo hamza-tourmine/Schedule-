@@ -208,16 +208,16 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <!-- item-->
-                                    <a class="dropdown-item" href="#"><i
+                                    <a class="dropdown-item" href="{{ route('showProfileAdmin') }}"><i
                                             class="bx bx-user font-size-16 align-middle me-1"></i>
                                         Profile</a>
 
-                                    <a class="dropdown-item d-block" href="#"><span
+                                    <a class="dropdown-item d-block" href="{{ route('AllSetting') }}"><span
                                             class="badge bg-success float-end">11</span><i
                                             class="bx bx-wrench font-size-16 align-middle me-1"></i> Settings</a>
 
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="#"><i
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i
                                             class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
                                         Logout</a>
                                 </div>
@@ -253,8 +253,8 @@
                 <div class="widthSideBare ">
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img src="assets/images/users/avatar-2.jpg" alt=""
-                                class="avatar-md mx-auto rounded-circle">
+                            <img class="rounded-circle header-profile-user" src="assets/images/users/user.jpg"
+                                alt="">
                         </div>
 
                         <div class="mt-3">
@@ -311,7 +311,7 @@
 
 
                             <li>
-                                <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
+                                <a href="{{ route('AllRequest') }}" class=" waves-effect">
                                     <span style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-message-text-clock-outline" data-toggle="tooltip"
                                         data-placement="right" title="tous les demandes"></span>
@@ -331,7 +331,7 @@
 
 
                             <li>
-                                <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                     <i style="font-weight: 400 ; font-size:25PX"
                                         class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
                                         data-toggle="tooltip" data-placement="right" title="Déconnexion"></i>

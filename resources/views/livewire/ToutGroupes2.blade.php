@@ -2,14 +2,8 @@
 
 </style>
 <table id="tbl_exporttable_to_xls"  style="overflow:scroll" class="col-md-12 ">
-
-
     <thead>
         <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
-
-
-
-
                 @if (!$dataEmploi->isEmpty())
                 <h4 style="float: right; margin-top: 15px;">
                     @foreach ($dataEmploi as $item)
@@ -21,8 +15,6 @@
                     Il faut créer un emploi
                 </h4>
                 @endif
-
-
             </div>
 <tr class="day">
     <th style="width: 200px !important" colspan="2" rowspan="3">Groups Name</th>
@@ -98,18 +90,18 @@
             <tr>
                 <td style="height: 50px !important" rowspan="{{ count($sessionData) }}">{{ $group->group_name }}</td>
                 @foreach ($sessionData as $item)
-
                 <td style="height: 50px !important">{{ $item }}</td>
-
-
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                             <td  style="height: 50px !important" colspan="1" rowspan="1" data-bs-toggle="modal" data-bs-target="#exampleModal" class="TableCases" id="{{ $day . $sessionType . $group->id }}">
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                    @if ($sission->day === $day &&
+                                    $sission->group_id === $group->id &&
+                                    $sission->day_part === substr($sessionType, 0, 5) &&
+                                    $sission->dure_sission === substr($sessionType, 5))
                                         @if ($item === 'Formateur')
                                             {{ $sission->user_name }}
-                                        @elseif ($item === 'Module' && !$checkValues[0]->module)
+                                        @elseif ($item === 'Module')
                                             {{ preg_replace('/^\d+/', '', $sission->module_name) }}
                                         @elseif ($item === 'Salle')
                                             {{ $sission->class_name }}
@@ -124,8 +116,7 @@
             </tr>
         @endforeach
         {{-- Model --}}
-        <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
-        aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"  aria-labelledby="exampleModalLabel" aria-hidden="true" >
         <div class="modal-dialog  modal-lg  ">
            <div class="modal-content  col-9">
                <div class="modal-header">
@@ -230,11 +221,9 @@
                    </div>
                </form>
 
-</div>
-
-    </div>
-  
-    @endif
+        </div>
+            </div>
+            @endif
 </tbody>
 
 </table>

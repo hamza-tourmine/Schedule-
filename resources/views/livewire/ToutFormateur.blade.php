@@ -90,16 +90,18 @@
             <tr>
                 <td style="height: 50px !important ;overflow: hidden;" rowspan="{{ count($sessionData) }}">{{ $formateur->user_name }}</td>
                 @foreach ($sessionData as $item)
-
                 <td style="height: 50px !important ;overflow: hidden">{{ $item }}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
                             <td style="height: 50px !important ;overflow: hidden" colspan="1" rowspan="1" data-bs-toggle="modal" data-bs-target="#exampleModal" class="TableCases" id="{{ $day . $sessionType . $formateur->id }}">
                                 @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                    @if ($sission->day === $day &&
+                                     $sission->user_id === $formateur->id &&
+                                     $sission->day_part === substr($sessionType, 0, 5) &&
+                                     $sission->dure_sission === substr($sessionType, 5))
                                         @if ($item === 'Groupe')
                                             {{ $sission->group_name }}
-                                        @elseif ($item === 'Module' && !$checkValues[0]->module)
+                                        @elseif ($item === 'Module' )
                                             {{ preg_replace('/^\d+/', '', $sission->module_name) }}
                                         @elseif ($item === 'Salle')
                                             {{ $sission->class_name }}
@@ -248,11 +250,9 @@
                       aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
                   </div>
               </form>
-</div>
-   </div>
+            </div>
+            </div>
   @endif
-  
 </tbody>
-
 </table>
 

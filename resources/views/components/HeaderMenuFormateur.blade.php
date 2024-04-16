@@ -16,6 +16,7 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/RequestEmploi.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
     <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -91,7 +92,8 @@
                                     id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-bell-outline"></i>
-                                    <span class="badge rounded-pill bg-danger ">{{Auth::user()->unreadNotifications->count()}}</span>
+                                    <span
+                                        class="badge rounded-pill bg-danger ">{{ Auth::user()->unreadNotifications->count() }}</span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                     aria-labelledby="page-header-notifications-dropdown">
@@ -105,29 +107,33 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @foreach(Auth::user()->unreadNotifications as $Notification)
-                                    <div data-simplebar style="max-height: 230px;">
-                                        <a href="" class="text-reset notification-item">
-                                            <div class="d-flex align-items-start">
-                                                <div class="avatar-xs me-3">
-                                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                                        <i class="mdi mdi-account-question"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <h6 class="mt-0 mb-1">{{$Notification->data['FormateurRequest']}}</h6>
-                                                    <div class="font-size-12 text-muted">
-                                                        <p class="mb-1">{{$Notification->data['RequestCommentaire']}}</p>
-                                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> {{$Notification->created_at->diffForHumans()}}
+                                    @foreach (Auth::user()->unreadNotifications as $Notification)
+                                        <div data-simplebar style="max-height: 230px;">
+                                            <a href="" class="text-reset notification-item">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="avatar-xs me-3">
+                                                        <span
+                                                            class="avatar-title bg-primary rounded-circle font-size-16">
+                                                            <i class="mdi mdi-account-question"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <h6 class="mt-0 mb-1">
+                                                            {{ $Notification->data['FormateurRequest'] }}</h6>
+                                                        <div class="font-size-12 text-muted">
+                                                            <p class="mb-1">
+                                                                {{ $Notification->data['RequestCommentaire'] }}</p>
+                                                            <p class="mb-0"><i class="mdi mdi-clock-outline"></i>
+                                                                {{ $Notification->created_at->diffForHumans() }}
                                                             </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </a>
-                                       
+                                            </a>
 
-                                        
-                                    </div>
+
+
+                                        </div>
                                     @endforeach
                                     <div class="p-2 border-top d-grid">
                                         <a class="btn btn-sm btn-link font-size-14 " href="javascript:void(0)">
@@ -142,8 +148,8 @@
                                 <button type="button" class="btn header-item waves-effect"
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    <img class="rounded-circle header-profile-user"
-                                        src="assets/images/users/user.jpg" alt="Header Avatar">
+                                    <img class="rounded-circle header-profile-user" src="assets/images/users/user.jpg"
+                                        alt="Header Avatar">
                                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
 
                                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
@@ -159,7 +165,7 @@
                                             class="bx bx-wrench font-size-16 align-middle me-1"></i> Settings</a>
 
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="#"><i
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i
                                             class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
                                         Logout</a>
                                 </div>
@@ -221,8 +227,8 @@
                 <div class="h-100">
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img src="{{ asset('assets/images/users/avatar-2.jpg') }}" alt=""
-                                class="avatar-md mx-auto rounded-circle" />
+                            <img class="rounded-circle header-profile-user" src="assets/images/users/user.jpg"
+                                alt="Header Avatar">
                         </div>
 
 
@@ -290,7 +296,7 @@
                             </li>
 
                             <li>
-                                <a class="dropdown-item text-danger" href="{{ url('logOut') }}">
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                     <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
                                     Logout
                                 </a>
@@ -352,6 +358,7 @@
 
 
     <!-- App js -->
+    <script src="{{ asset('/assets/js/app.js') }}"></script>
     <script src="{{ asset('/assets/js/app.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
 

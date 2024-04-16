@@ -1,28 +1,253 @@
-<x-HeaderMenuFormateur>
-    
+<x-HeaderMenuAdmin>
+    <style>
+        label {
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        /* CSS for the fixed fly button */
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .fixed-button button {
+            padding: 10px 20px;
+            background-color: #00a2b7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .fixed-button button:hover {
+            background-color: #0088a2;
+        }
+
+        .wrapper {
+            margin: 15px auto;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .button-container-calendar button {
+            cursor: pointer;
+            display: inline-block;
+            zoom: 1;
+            background: #00a2b7;
+            color: #fff;
+            border: 1px solid #0aa2b5;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        #submitAll {
+            cursor: pointer;
+            display: inline-block;
+            zoom: 1;
+            background: #00a2b7;
+            color: #fff;
+            border: 1px solid #0aa2b5;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        #previous {
+            float: left;
+        }
+
+        #next {
+            float: right;
+        }
+
+        .button-container-calendar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .button-container-calendar .fixed-button {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            /* Allow items to wrap to the next line */
+        }
+
+        .button-container-calendar .fixed-button button {
+            padding: 8px 16px;
+            margin: 5px;
+        }
+
+        .button-container-calendar label {
+            font-size: 20px;
+        }
+
+        .button-container-calendar .date-info {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .date-container {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .date-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-info span {
+            margin-right: 10px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            height: 40px;
+            width: 60px !important;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        thead tr.day {
+            font-size: 18px;
+            /* font-weight: bold; */
+            padding: 30px
+        }
+
+        thead tr.se-row {
+            height: 30px !important;
+            width: 30px;
+            margin: 0px;
+            padding: 0px;
+            font-size: 16px
+        }
+
+        .idemploi {
+            font-weight: bold
+        }
+
+        .st {
+            color: tomato
+        }
+
+        .ed {
+            color: teal
+        }
+
+        a {
+            text-decoration: none;
+            color: white
+        }
+
+        button .nextprevious {
+            cursor: pointer;
+            background: #00a2b7;
+            color: #fff;
+            border: 1px solid #0aa2b5;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+
+        button:disabled {
+            background: #ddd;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        label.left-arrow {
+            float: left;
+        }
+
+        label.right-arrow {
+            float: right;
+        }
+
+        @media only screen and (max-width: 600px) {
+            h4 {
+                font-size: 18px;
+            }
+
+            .button-container-calendar label {
+                font-size: 20px;
+            }
+
+        }
+
+        @media only screen and (max-width: 420px) {
+            h4 {
+                font-size: 14px;
+            }
+
+            .button-container-calendar label {
+                font-size: 16px;
+            }
+
+        }
+
+        @media only screen and (max-width: 360px) {
+            h4 {
+                font-size: 10px;
+            }
+
+            .button-container-calendar label {
+                font-size: 12px;
+            }
+
+        }
+
+        @media only screen and (max-width: 290px) {
+            h4 {
+                font-size: 8px;
+            }
+
+            .button-container-calendar label {
+                font-size: 10px;
+            }
+
+        }
+    </style>
 
 
     <div class="button-container-calendar">
-        <label class="left-arrow" id="previous" onclick="previous()" style="display: none;">&#8249;</label>
-        <div id="dates-div" class="date-info" style="display: none;">
+        <label class="left-arrow" id="previous" onclick="previous()">&#8249;</label>
+        <div class="date-info">
             <h4> Start:<span id="dateStart" class="idemploi st"></span></h4>
             <h4> End: <span id="dateEnd" class="idemploi ed"></span></h4>
         </div>
-        <!-- Div contenant le message d'alerte -->
-        <label class="right-arrow" id="next" onclick="next()" style="display: none;">&#8250;</label>
-        <div id="message-div" class="alert alert-danger alert-dismissible fade show" role="alert">
-            Veuillez attendre jusqu'à ce que l'admin crée l'emploi.
-
-        </div>
+        <label class="right-arrow" id="next" onclick="next()">&#8250;</label>
         <div class="fixed-button">
-            <button id="createRequestBtn" type="button" class="btn btn-outline-warning waves-effect waves-light"><i class="fa fa-exclamation-circle"
+            <button id="createRequestBtn" type="button"><i class="fa fa-exclamation-circle"
                     style="font-size:16px;"></i>
                 Creer une demande </button>
 
 
 
-            <button id="toggleTablesBtn" onclick="toggleTables()" class="btn btn-success waves-effect waves-light"><i class="fas fa-table"></i> Changer la table</button>
-            <button onclick="ExportToExcel('xlsx')" class="btn btn-primary waves-effect waves-light"><i class="mdi mdi-download"></i>
+            <button id="toggleTablesBtn" onclick="toggleTables()"><i class="fas fa-table"></i> Changer la table</button>
+            <button onclick="ExportToExcel('xlsx')"><i class="mdi mdi-download"></i>
                 telecharger</button>
 
         </div>
@@ -30,7 +255,15 @@
 
     </div>
 
-
+    <div>
+        <label class="left-arrow" id="previousF" onclick="previous()">&#8249;</label>
+        <div class="date-info">
+            {{-- @foreach($formateurs as $formateur)
+                <h1>{{$formateur->user_name}}</h1>            
+            @endforeach --}}
+        </div>
+        <label class="right-arrow" id="nextF" onclick="next()">&#8250;</label>
+    </div>
     <div id="tbl_exporttable_to_xls_2" class="table-responsive" style="display: none">
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12  active">
             <thead>
@@ -188,10 +421,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="msg">Type your message:</label>
-                            <input type="text" id="msg" class="form-control">
+                            <label for="class">Type your msg:</label>
+                            <input type="text" id="msg">
                         </div>
-                        
                         <br />
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-primary">Soumettre</button>
@@ -264,6 +496,26 @@
 
             var selectedData = [];
 
+            var formateurs = @json($formateurs);
+            var currentIndex = 0;
+
+
+            document.getElementById('previousF').addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + formateurs.length) % formateurs.length;
+                displayItem(currentIndex);
+                console.log(formateurs);
+
+
+            });
+
+            document.getElementById('nextF').addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % formateurs.length;
+                displayItem(currentIndex);
+                console.log(formateurs);
+
+            });
+
+            //f foreach formateurs
             var mainEmplois = @json($main_emplois);
             var currentIndex = 0;
 
@@ -285,27 +537,15 @@
 
             function displayItem(index) {
                 if (mainEmplois.length == 0) {
-                    // Masquer les éléments de date et de navigation
-                    document.getElementById('dates-div').style.display = 'none';
-                    document.getElementById('next').style.display = 'none';
-                    document.getElementById('previous').style.display = 'none';
+                    document.getElementById('dateStart').innerText =
+                        "veuillez attendre jusqu'a le directeur creer l'emploi";
 
-                    // Afficher le div contenant le message d'alerte
-                    document.getElementById('message-div').style.display = 'block';
                 } else {
-                    // Afficher les dates et la navigation
-                    document.getElementById('dates-div').style.display = 'flex';
-                    document.getElementById('next').style.display = 'flex';
-                    document.getElementById('previous').style.display = 'flex';
-                    document.getElementById('message-div').style.display = 'none';
-
-
-                    // Définir les dates de début et de fin
                     mainEmploiId = mainEmplois[index].id;
                     document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
                     document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
-                }
 
+                }
             }
 
             displayItem(currentIndex);
@@ -598,4 +838,5 @@
     </script>
 
 
-</x-HeaderMenuFormateur>
+
+</x-HeaderMenuAdmin>
