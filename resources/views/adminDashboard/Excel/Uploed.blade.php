@@ -1,5 +1,26 @@
 <x-HeaderMenuAdmin>
     <style>
+        .loader{
+    display: block;
+    position: relative;
+    height: 25px;
+    width: 200px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .loader:after{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: #084cdf;
+    animation: 6s prog ease-in infinite;
+  }
+  @keyframes prog {
+    to  {   width: 100%;}
+  }
     button , input[type=file]::file-selector-button {
     margin-right: 40px;
     margin-top: 2.5px;
@@ -112,7 +133,7 @@
 {{ session('success') }}
 </div>
 @endif
-<div class="loader"></div>
+<div class="loader1"></div>
         <form action="{{ route('UploedFileExcel') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div for="images" class="drop-container" id="dropcontainer">
@@ -124,16 +145,13 @@
         </form>
         <script>
           let uploadButton = document.querySelector('#uploadButton');
-          let loader = document.querySelector('.loader');
+          let loader1 = document.querySelector('.loader1');
 
           uploadButton.addEventListener('click', function(){
-              loader.innerHTML = `<div style='width: 100vw; height: 100vh;
-                  background-color: rgba(236, 219, 228, 0.29);
-                  z-index: 1000; position: fixed; top: 0; left: 0; display: flex; justify-content: center; align-items: center;'>
-
-                  <div class="spinner-border text-dark" role="status">
-                      <span class="sr-only">Loading...</span>
-                  </div>
+            loader1.innerHTML = `<div style='width: 100vw; height: 100vh;
+                  background-color: rgba(107, 150, 245,0.29);
+                  z-index: 1400; position: fixed; top: 0; left: 0; display: flex; justify-content: center; align-items: center;'>
+                  <span class="loader"></span>
 
               </div>`;
           });

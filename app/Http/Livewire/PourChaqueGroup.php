@@ -65,19 +65,22 @@ class PourChaqueGroup extends Component
 
     public function deleteAllSessions(){
 
-        DB::table('sissions')->where('establishment_id', session()->get('establishment_id'))
-        ->where('main_emploi_id', session()->get('id_main_emploi'))->delete();
-        DB::table('main_emploi')->where('establishment_id', session()->get('establishment_id'))
-        ->where('id', session()->get('id_main_emploi'))->delete();
+        DB::table('sissions')
+        ->where('establishment_id', session()->get('establishment_id'))
+        ->where('main_emploi_id', session()->get('id_main_emploi'))
+        ->where('group_id' , $this->groupID)
+        ->delete();
+
+
+
         $this->Alert('success', "Vous supprimez toutes les séances.", [
             'position' => 'center',
             'timer' => 12000,
             'toast' => false,
             'width' =>650,
            ]);
-        Session::forget('id_main_emploi');
-        Session::forget('datestart');
-        return redirect()->route('CreateEmploi');
+
+        return redirect()->back();
 
     }
     protected $rules = [

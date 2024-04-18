@@ -17,7 +17,12 @@
     'Jeudi' => 'Thu',
     'Vendredi' => 'Fri',
     'Samedi' => 'Sat'];
-    $sessionData = ['Groupe', 'Module', 'Salle'];
+    $sessionData = ['Groupe', 'Module', 'Salle' ,'type Séance'];
+    if ($checkValues[0]->module) {
+        unset($sessionData[1]);
+    }elseif($checkValues[0]->typeSession){
+        unset($sessionData[3]);
+    }
     @endphp
 
     @foreach ($days as $day)
@@ -38,10 +43,12 @@
             {{ preg_replace('/^\d+/' , '' , $sission->module_name) }}
             @elseif ($item === 'Salle')
             {{ $sission->class_name }}
+            @elseif($item === 'type Séance')
+            {{ $sission->sission_type }}
             @endif
             @endif
             @endforeach
-            
+
         </td>
         @endforeach
     </tr>
