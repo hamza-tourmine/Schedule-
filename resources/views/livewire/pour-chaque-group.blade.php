@@ -5,37 +5,49 @@
   <div style="display: flex;">
     <div style=" width :300px">
 </div>
-    <div style="width:200px ;  display:flex; flex-direction :column-reverse">
 
-        <select style="maxWidth:45vw" wire:model="groupID" id="formateurSelected" class="form-control col-3" name="">
-            <option > les Groupes</option>
-            @foreach ($groups as $group)
-               <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
-            @endforeach
-        </select>
-        <label for="" style="font-size: 19px"> les Groupes</label>
-    </div>
   </div>
 
     <div class="table-responsive">
+        <div style="  display:flex;   position :fixed ; marign:10px">
 
-        <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
-            <div >
+            <div style="width:50%"  class="input-group rounded">
+                <input id='searchInput'   type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                  <i class="fas fa-search"></i>
+                </span>
+            </div>
+            <div style="height: 47px ; width:50%">
+                    <select style="maxWidth:45vw" wire:model="groupID" id="selectOptions" class="form-control col-3" name="">
+                        <option > les Groupes</option>
+                        @foreach ($groups as $group)
+                        <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <table id="tbl_exporttable_to_xls" style="overflow:scroll " class="col-md-12 ">
+            <div style="width: 60rem" >
                 @if ($this->checkValues[0]->modeRamadan)
-                <h5 colspan="6" style="marign-top:15px " >
+                <h5  style="marign-top:15px " >
                     SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
                 </h5>
                 @else
-                <h5 colspan="6"> SE1 = 08:30 - 11:00 SE2 = 11:00 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h5>
+                <h5 > SE1 = 08:30 - 11:00 SE2 = 11:00 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h5>
                 @endif
                     @if (!$dataEmploi->isEmpty())
-                    <h5 colspan="6" style="float: right; margin-top: 15px;">
+                    <h5 style="float: right;">
                         @foreach ($dataEmploi as $item)
                             Du: {{ $item->datestart }} au {{ $item->dateend }}
                         @endforeach
                     </h5>
                     @else
-                    <h5 colspan="6" style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                    <h5 style="float: right; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
                         Il faut créer un emploi
                 </h5>
                     @endif
@@ -315,6 +327,33 @@
                 });
             });
         });
+
+
+
+                      // input
+
+                      document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById("searchInput");
+  const selectOptions = document.getElementById("selectOptions");
+
+  // Event listener for input changes in the search input
+  searchInput.addEventListener("input", function() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    // Loop through all options in the select input
+    Array.from(selectOptions.options).forEach(option => {
+      const optionText = option.text.toLowerCase();
+
+      // Check if the option text contains the search value
+      if (optionText.includes(searchValue)) {
+        option.style.display = ""; // Show the option
+      } else {
+        option.style.display = "none"; // Hide the option
+      }
+    });
+  });
+});
+
 
     </script>
 

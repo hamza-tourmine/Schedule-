@@ -39,38 +39,42 @@
 @endphp
     <h2>Schedule Table</h2>
 
-  <div style="display: flex;">
-    <div style=" width :300px">
-
-</div>
-    <div style="width:200px ;  display:flex; flex-direction :column-reverse">
-
-        <select wire:model="formateurId" id="formateurSelected" class="form-control col-3" name="">
-            <option >Formateur</option>
-            @foreach ($formateurs as $formateur)
-               <option class="form-control"  value="{{$formateur->id}}">{{$formateur->user_name}} </option>
-            @endforeach
-        </select>
-        <label for="" style="font-size: 19px"> les Formateurs</label>
-    </div>
-  </div>
 
     <div class="table-responsive">
-        <table  id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
+        <div style="max-width:60rem ;  display:flex; justify-content:flex-start ; position: fixed">
 
-            <div style="display: flex ;justify-content:space-between ;marign-top:15px ">
+            <div style="width:50%"  class="input-group rounded">
+                <input id='searchInput'   type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                  <i class="fas fa-search"></i>
+                </span>
+            </div>
+            <div style="height: 47px ; width:50%">
+
+            <select selectOptions wire:model="formateurId" id="selectOptions" class="form-control " name="">
+                <option >Formateur</option>
+                @foreach ($formateurs as $formateur)
+                   <option class="form-control"  value="{{$formateur->id}}">{{$formateur->user_name}} </option>
+                @endforeach
+            </select>
+
+            </div>
+
+      </div>
+      <br></br>
+
+        <table  id="tbl_exporttable_to_xls" style="overflow:scroll ;" class="col-md-12 ">
+
+            <div style="display: flex ;justify-content:space-between ;marign-top:50px ;width:70rem">
                 @if ($this->checkValues[0]->modeRamadan)
-                <h4 style="marign-top:15px " >
-                    SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
-                </h4>
+                    <h4 style="marign-top:15px " >
+                        SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
+                    </h4>
                 @else
-                <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
+                    <h4> SE1 = 08:30 - 11:20 SE2 = 11:30 - 13:30 SE3 = 13:30 - 16:20 SE4 = 16:30 - 18:30 </h4>
                 @endif
-
-
-
                     @if (!$dataEmploi->isEmpty())
-                    <h4 style="float: right; margin-top: 15px;">
+                    <h4 >
                         @foreach ($dataEmploi as $item)
                             Du: {{ $item->datestart }} au {{ $item->dateend }}
                         @endforeach
@@ -80,9 +84,7 @@
                         Il faut créer un emploi
                     </h4>
                     @endif
-
-
-             </div>
+            </div>
 
              @if($tableEmploi[0]->formateur == '1')
       <thead>
@@ -400,5 +402,29 @@
             });
         });
 
+
+                // input
+
+                document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById("searchInput");
+  const selectOptions = document.getElementById("selectOptions");
+
+  // Event listener for input changes in the search input
+  searchInput.addEventListener("input", function() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    // Loop through all options in the select input
+    Array.from(selectOptions.options).forEach(option => {
+      const optionText = option.text.toLowerCase();
+
+      // Check if the option text contains the search value
+      if (optionText.includes(searchValue)) {
+        option.style.display = ""; // Show the option
+      } else {
+        option.style.display = "none"; // Hide the option
+      }
+    });
+  });
+});
     </script>
 </div>
