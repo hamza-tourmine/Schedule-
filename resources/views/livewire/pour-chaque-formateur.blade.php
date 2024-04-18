@@ -31,6 +31,24 @@
         input[type="checkbox"]:checked+label {
             background-color: #eee;
         }
+
+
+    @media screen  and (max-width : 700px){
+        .ResponceUI{
+        flex-direction: column ;
+
+    }
+    .searchDev{
+        width: 100vw ;
+    }
+    .selectDiv{
+        width: 70vw !important;
+        margin-left:0px !important ;
+    }
+
+    }
+
+
     </style>
 
 
@@ -41,26 +59,27 @@
 
 
     <div class="table-responsive">
-        <div style="max-width:60rem ;  display:flex; justify-content:flex-start ; position: fixed">
+        <div class="ResponceUI" style="max-width:60rem ;  display:flex; justify-content:flex-start ; position: fixed">
 
-            <div style="width:50%"  class="input-group rounded">
-                <input id='searchInput'   type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <div   class="input-group rounded">
+                <input id='searchInput'   type="search" class="form-control rounded searchDev " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                 <span class="input-group-text border-0" id="search-addon">
                   <i class="fas fa-search"></i>
                 </span>
             </div>
-            <div style="height: 47px ; width:50%">
+            <div class="selectDiv" style=";height: 47px ;width:360px ;margin-left: 15px">
 
-            <select selectOptions wire:model="formateurId" id="selectOptions" class="form-control " name="">
+            <select  style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="formateurId" id="selectOptions" class="form-control " name="">
                 <option >Formateur</option>
                 @foreach ($formateurs as $formateur)
                    <option class="form-control"  value="{{$formateur->id}}">{{$formateur->user_name}} </option>
                 @endforeach
             </select>
-
             </div>
-
       </div>
+      <br/>
+      <br/>
+      <br/>
       <br></br>
 
         <table  id="tbl_exporttable_to_xls" style="overflow:scroll ;" class="col-md-12 ">

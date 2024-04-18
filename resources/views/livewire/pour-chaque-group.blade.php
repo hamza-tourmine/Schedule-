@@ -1,5 +1,21 @@
 <div>
+<style>
+    @media screen  and (max-width : 700px){
+        .ResponceUI{
+        flex-direction: column ;
 
+    }
+    .searchDev{
+        width: 100vw ;
+    }
+    .selectDiv{
+        width: 70vw !important;
+        margin-left:0px !important ;
+    }
+
+    }
+
+</style>
 
     <h2>Schedule Table</h2>
   <div style="display: flex;">
@@ -9,25 +25,24 @@
   </div>
 
     <div class="table-responsive">
-        <div style="  display:flex;   position :fixed ; marign:10px">
-
-            <div style="width:50%"  class="input-group rounded">
-                <input id='searchInput'   type="search" class="form-control rounded " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <div class="ResponceUI" style=" width:40rem; display:flex;   position :fixed ; marign:10px">
+            <div  class="input-group rounded">
+                <input id='searchInput'   type="search" class="form-control rounded searchDev " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                 <span class="input-group-text border-0" id="search-addon">
                   <i class="fas fa-search"></i>
                 </span>
             </div>
-            <div style="height: 47px ; width:50%">
-                    <select style="maxWidth:45vw" wire:model="groupID" id="selectOptions" class="form-control col-3" name="">
+            <div class="selectDiv" style=";height: 47px ;width:360px ;margin-left: 15px">
+                    <select style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="groupID" id="selectOptions" class="form-control col-3" name="">
                         <option > les Groupes</option>
                         @foreach ($groups as $group)
                         <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
                         @endforeach
                     </select>
                 </div>
-
-
         </div>
+        <br/>
+        <br/>
         <br/>
         <br/>
         <br/>

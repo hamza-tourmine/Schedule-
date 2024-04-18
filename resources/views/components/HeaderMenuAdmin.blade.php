@@ -85,6 +85,9 @@
             left: auto;
             right: 0;
         }
+        .visible{
+            display: none ;
+        }
     </style>
 </head>
 
@@ -246,7 +249,7 @@
             </header>
             <!-- ENd header  -->
             <!-- ========== Left Sidebar Start ========== -->
-            <div class="vertical-menu" style="">
+            <div id="sideBareMenu" class="vertical-menu" class="visible">
                 {{-- <div class="arow">
                         <button class="btn btn-primary toggle-sidebar"><i class="mdi mdi-chevron-left"></i></button>
                     </div> --}}
@@ -267,7 +270,7 @@
                     </div>
 
                     <!--- Sidemenu -->
-                    <div id="sidebar-menu" style="">
+                    <div id="sidebar-menu" >
                         <!-- Left Menu Start -->
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title">Menu</li>
@@ -275,7 +278,7 @@
                                 <a href="{{ route('dashboardAdmin') }}" class=" waves-effect">
                                     <i style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-home-lightbulb-outline"></i>
-                                    <span class="hidentext">Accueil</span>
+
                                 </a>
                             </li>
 
