@@ -73,7 +73,7 @@
                 </tr>
                 <tr class="se-row">
 
-                    <th >SE1</th>
+                    <th>SE1</th>
                     <th>SE2</th>
                     <th>SE1</th>
                     <th>SE2</th>
@@ -107,29 +107,48 @@
                 @endphp
                 @foreach ($groups as $group)
                 <tr>
-                    <td>{{$group->group_name}}</td>
+                    <td>{{ $group->group_name }}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td  colspan="1" rowspan="1" data-bs-toggle="modal" data-bs-target="#exampleModal" class="TableCases" id="{{$day.$sessionType.$group->id }}"  >
-                                @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day &&
+                            @php
+                                $foundSession = false;
+                            @endphp
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === $day &&
                                      $sission->group_id === $group->id &&
                                      $sission->day_part === substr($sessionType, 0, 5) &&
                                      $sission->dure_sission === substr($sessionType, 5))
-
-                                    {{ $sission->sission_type }}</br>
-                                    {{ $sission->class_name }}</br>
-                                    {{ $sission->user_name }}</br>
-                                    {{ preg_replace('/^\d/' , ' ' , $sission->module_name ) }}
-                                    @endif
-                                @endforeach
-                        </td>
+                                    @php
+                                        $foundSession = true;
+                                    @endphp
+                                    <td wire:click="updateCaseStatus(false)"
+                                        colspan="1" rowspan="1"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"
+                                        class="TableCases"
+                                        id="{{ $day.$sessionType.$group->id }}">
+                                        {{ $sission->sission_type }}</br>
+                                        {{ $sission->class_name }}</br>
+                                        {{ $sission->user_name }}</br>
+                                        {{ preg_replace('/^\d/' , ' ' , $sission->module_name ) }}
+                                    </td>
+                                    @break
+                                @endif
+                            @endforeach
+                            @if (!$foundSession)
+                                <td wire:click="updateCaseStatus(true)"
+                                    colspan="1" rowspan="1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal"
+                                    class="TableCases"
+                                    id="{{ $day.$sessionType.$group->id }}">
+                                </td>
+                            @endif
                         @endforeach
                     @endforeach
                 </tr>
+
                 @endforeach
-
-
 
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9" id="exampleModal" tabindex="-1"
@@ -146,11 +165,11 @@
                                     </div>
                               @endforeach
                               @endif
-
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form wire:submit.prevent="createSession">
+
+                            <form wire:submit.prevent='UpdateSession'>
                                 <div class="modal-body">
                                     <div style="display: flex">
                                            {{-- Formateur --}}
@@ -178,8 +197,6 @@
                                              @foreach ($modules as $module)
                                                  <option value="{{ $module->id }}">
                                                     {{ preg_replace('/^\d+/' , '' ,$module->id )}}</option>
-
-
                                              @endforeach
                                          @endif
                                      </select>
@@ -231,16 +248,29 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button data-bs-dismiss="modal"
-                                    aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    {{-- <button id="SaveAndUpdate" data-bs-dismiss="modal" aria-label="Close" type="submit"  class="btn btn-primary" >Save</button> --}}
+
+                                        @if ($isCaseEmpty)
+                                           <button id="SaveAndUpdate" data-bs-dismiss="modal" type="submit" class="btn btn-primary">
+                                            Save
+                                           </button>
+                                        @else
+                                           <button id="SaveAndUpdate" data-bs-dismiss="modal" type="submit" class="btn btn-success ">
+                                            Update
+                                           </button>
+                                           <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="button"  class="btn btn-danger">supprimer</button>
+
+                                        @endif
+
+
                                 </div>
                             </form>
 
             </div>
 
                  </div>
+                 {{-- end model  --}}
                 @endif
             </tbody>
         </table>
@@ -309,7 +339,22 @@
 </script>
 
 <script  >
+// model
+// document.addEventListener('DOMContentLoaded', function() {
+//     document.querySelectorAll('.TableCases').forEach(caseItem => {
+//         caseItem.addEventListener('click', function() {
+//             if (caseItem.textContent.trim() === "") {
+//                 console.log("The case is empty.");
+//                 document.querySelector('#SaveAndUpdate').textContent = 'Save';
+//             } else {
+//                 console.log("The case is not empty.");
+//                 document.querySelector('#SaveAndUpdate').textContent = 'Update';
+//             }
+//         });
+//     });
+// });
 
+// model
 
     document.addEventListener('livewire:load', function () {
             let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
@@ -325,9 +370,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const handleDomChanges = function(mutationsList, observer) {
-
-                // console.log( document.querySelectorAll('.TableCases'));
-                let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
+            let elements = document.querySelectorAll('[data-bs-toggle="modal"]');
             elements.forEach(element => {
                 element.addEventListener('click', function() {
                     Livewire.emit('receiveVariable', element.id);

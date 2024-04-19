@@ -30,8 +30,6 @@ class moduleController extends Controller
     {
         $valid = Validator::make($request->all(), [
             'id'=> 'required|unique:modules',
-            'module_name' => 'required|string|max:255', // Add validation rules for 'module_name'
-            // Add more validation rules if needed for other fields
         ]);
 
         if ($valid->fails()) {
@@ -43,7 +41,7 @@ class moduleController extends Controller
         try {
             module::create([
                 'id' => $establishment.$request->id,
-                'module_name' => $request->module_name,
+                'module_name' =>  $establishment.$request->id,
                 'establishment_id' => $establishment
             ]);
 

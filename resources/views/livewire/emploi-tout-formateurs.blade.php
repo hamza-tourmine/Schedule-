@@ -135,36 +135,41 @@
                 @endphp
                 @foreach ($formateurs as $formateur)
                 <tr>
-                    <td>{{$formateur->user_name}}</td>
+                    <td>{{ $formateur->user_name }}</td>
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-
-                        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType.$formateur->id }}">
                             @php
-                                $sessionWords = [];
+                                $sessionFound = false;
+                                $sessionDetails = [];
+                                $sessionKey = $day . $sessionType . $formateur->id; // Unique session identifier
                             @endphp
                             @foreach ($sissions as $sission)
-                                @if ($sission->day      === $day &&
-                                 $sission->user_id      === $formateur->id &&
-                                 $sission->day_part     === substr($sessionType, 0, 5) &&
-                                 $sission->dure_sission === substr($sessionType, 5))
+                                @if ($sission->day === $day &&
+                                     $sission->user_id === $formateur->id &&
+                                     $sission->day_part === substr($sessionType, 0, 5) &&
+                                     $sission->dure_sission === substr($sessionType, 5))
                                     @php
-                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' .preg_replace('/^\d+/', '', $sission->module_name) ;
-                                        $uniqueDetails = [];
-                                        foreach (explode('<br>', $details) as $word) {
-                                            if (!in_array($word, $sessionWords)) {
-                                                $uniqueDetails[] = $word;
-                                                $sessionWords[] = $word;
-                                            }
-                                        }
-                                        echo implode('<br>', $uniqueDetails);
+                                        $sessionFound = true;
+                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . preg_replace('/^\d+/', '', $sission->module_name);
+                                        $uniqueDetails = array_unique(explode('<br>', $details));
+                                        $sessionDetails[$sessionKey] = implode('<br>', $uniqueDetails); // Store details using session key
                                     @endphp
                                 @endif
                             @endforeach
-                        </td>
+                            <td wire:click="updateCaseStatus({{ !$sessionFound ? 'true' : 'false' }})"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal"
+                                class="Cases"
+                                id="{{ $sessionKey }}">
+                                @if ($sessionFound)
+                                    {!! $sessionDetails[$sessionKey] !!} <!-- Display details using session key -->
+                                @endif
+                            </td>
                         @endforeach
                     @endforeach
                 </tr>
+
+
                 @endforeach
 
                      {{-- Model --}}
@@ -184,7 +189,8 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form wire:submit.prevent="createSession">
+                            {{-- <form wire:submit.prevent="createSession"> --}}
+                                <form wire:submit.prevent='UpdateSession'>
                                 <div class="modal-body">
                                     <div style="display: flex">
                                         {{-- branches --}}
@@ -298,8 +304,19 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button data-bs-dismiss="modal"
-                                    aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
+                                    {{-- <button data-bs-dismiss="modal"
+                                    aria-label="Close" type="submit"  class="btn btn-primary">Save</button> --}}
+                                    @if ($isCaseEmpty)
+                                    <button id="SaveAndUpdate" data-bs-dismiss="modal" type="submit" class="btn btn-primary">
+                                     Save
+                                    </button>
+                                 @else
+                                    <button id="SaveAndUpdate" data-bs-dismiss="modal" type="submit" class="btn btn-success ">
+                                     Update
+                                    </button>
+                                    <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="button"  class="btn btn-danger">supprimer</button>
+
+                                 @endif
                                 </div>
                             </form>
                     </div>

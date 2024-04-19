@@ -33,18 +33,18 @@
         }
 
 
-    @media screen  and (max-width : 700px){
-        .ResponceUI{
-        flex-direction: column ;
+        @media screen  and (max-width : 700px){
+            .ResponceUI{
+            flex-direction: column ;
 
-    }
-    .searchDev{
-        width: 100vw ;
-    }
-    .selectDiv{
-        width: 70vw !important;
-        margin-left:0px !important ;
-    }
+        }
+        .searchDev{
+            width: 100vw ;
+        }
+        .selectDiv{
+            width: 70vw !important;
+            margin-left:0px !important ;
+        }
 
     }
 

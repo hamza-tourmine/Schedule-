@@ -7,16 +7,23 @@
     box-sizing: border-box;
 }
 
-input{
-    /* border: 1px solid rgb(31, 31, 150) !important; */
+input[type='text'],
+ input[type='search']
+ input[type = 'email']
+ input[type = 'password'] {
+    border: 1px solid rgb(31, 31, 150) !important;
     max-width: 45vw !important;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px !important;
     margin-bottom: 5px !important;
-    transform: 0.8s all;
+    transition: 0.8s all; /* corrected from 'transform' to 'transition' */
 }
-input:hover{
-    height: 43px;
+input[type = 'checkbox']{
+    width : 20px !important ;
+     height:  20px !important;
 }
+
+
+
 .checkbox-group {
     display: flex;
     flex-wrap: wrap;

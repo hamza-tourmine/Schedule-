@@ -9,7 +9,7 @@ class main_emploi extends Model
 {
     use HasFactory;
     public $table = 'main_emploi' ;
-    public $timestamps = false ;
+    // public $timestamps = false ;
     public $fillable = [
 
         'datestart',

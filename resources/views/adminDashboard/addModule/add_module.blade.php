@@ -16,13 +16,10 @@
       @endif
 
             @csrf
-            <div class="mb-3 col-9">
-              <label for="exampleInputEmail1" class="form-label">Module Name </label>
-              <input type="text"name='module_name' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            </div>
+          
             <div class="mb-3 col-9">
                 <label for="exampleInputEmail1" class="form-label">Code Module  </label>
-                <input type="text"name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <input placeholder=" Example  EGT101" type="text"name='id' class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
               </div>
 
             <button type="submit" class="btn btn-success">save</button>

@@ -50,6 +50,38 @@ class Emploi extends Component
     public $tableEmploi ;
 
 
+    public $isCaseEmpty = true; // Property to track if the clicked case is empty or not
+
+    // Method to update $isCaseEmpty based on the clicked case
+    public function updateCaseStatus($isEmpty)
+    {
+        $this->isCaseEmpty = $isEmpty;
+    }
+
+
+    public function DeleteSession()
+{
+    $idcase = $this->receivedVariable;
+    $day = substr($idcase, 0, 3);
+    $day_part = substr($idcase, 3, 5);
+    $group_id = substr($idcase, 11);
+    $dure_sission = substr($idcase,8,3);
+
+
+  sission::where([
+    'main_emploi_id' => session()->get('id_main_emploi'),
+     'day' => $day,
+     'day_part' => $day_part,
+     'group_id' => $group_id,
+     'dure_sission' => $dure_sission
+ ])->delete();
+
+
+}
+
+
+
+
     protected $listeners = ['receiveVariable' => 'receiveVariable',
     'closeModal'=>'closeModal' , 'freshComponent'=>'$refresh'];
     public function receiveVariable($variable)
@@ -62,68 +94,79 @@ class Emploi extends Component
 
     protected $rules = [
         'group' => 'required',
+
     ];
-    public function createSession()
+
+
+    public function UpdateSession()
 {
-    // dd(session()->get('id_main_emploi'));
-    try{
+    try {
         $idcase = $this->receivedVariable;
-        $sission = sission::create([
-            'day'=>substr($idcase,0,3),
-            'day_part'=>substr($idcase,3,5),
-            'dure_sission'=>substr($idcase,8,3),
-            'module_id'=>$this->module ,
-            'group_id'=>substr($idcase,11),
-        	'establishment_id'=>session()->get('establishment_id'),
-            'user_id'=>$this->formateur,
-            'class_room_id'=>$this->salle,
-            'validate_date'=>null,
-            'main_emploi_id'=>session()->get('id_main_emploi'),
-            "demand_emploi_id"=>null,
-            'message'=>null,
-            'sission_type'=>$this->TypeSesion,
-        	'status_sission'=>'Accepted',
+        $day = substr($idcase, 0, 3);
+        $day_part = substr($idcase, 3, 5);
+        $group_id = substr($idcase, 11);
+        $dure_sission = substr($idcase, 8, 3);
+
+        // dd($sessionData);
+            $session = sission::where([
+                'main_emploi_id' => session()->get('id_main_emploi'),
+                'day' => $day,
+                'day_part' => $day_part,
+                'group_id' => $group_id,
+                'dure_sission' => $dure_sission,
+            ])->first();
+            $sessionData = [
+                'day' => $day,
+                'day_part' => $day_part ,
+                'dure_sission' => $dure_sission ,
+                'establishment_id' => session()->get('establishment_id'),
+                'class_room_id' => $this->salle,
+                'main_emploi_id' => session()->get('id_main_emploi') ,
+                'demand_emploi_id' => null,
+                'message' => null,
+                'sission_type' => $this->TypeSesion,
+                'status_sission' => 'Accepted',
+                'user_id'=> $this->formateur,
+                'group_id'=> $group_id
+            ];
+
+        if ($session) {
+            if ($this->module !== null) {
+                $session->update(['module_id'=> $this->module]);
+            }
+
+            if ($this->formateur !== null) {
+                $session->update(['user_id'=> $this->formateur]);
+            }
+            if ($this->salle !== null) {
+                $session->update(['class_room_id'=> $this->salle]);
+            }
+            if ($this->TypeSesion !== null) {
+                $session->update(['sission_type'=> $this->TypeSesion]);
+            }
+        } else {
+
+                if ($this->module !== null) {
+                    $sessionData['module_id'] = $this->module;
+                }
+                sission::create($sessionData);
+        }
+
+        $this->emit('fresh');
+    } catch (\Exception $e) {
+        $this->alert('error', $e->getMessage() , [
+            'position' => 'center',
+            'timer' => 3000,
+            'toast' => true,
         ]);
-        if($sission){
-            $this->alert('success', 'Vous créez une nouvelle session',[
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,]);
 
-
-        }
-     }catch (\Illuminate\Database\QueryException $e) {
-        if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
-            $this->alert('error', 'Vous devriez sélectionner la date de début.', [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-        }elseif(strpos($e->getMessage(), "Column 'user_id' cannot be null") !==false){
-            $this->alert('error', 'Vous devriez sélectionner le formateur.', [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-        }
-        elseif(strpos($e->getMessage(),"Column 'class_room_id' cannot be null") !==false){
-            $this->alert('error', 'Vous devriez sélectionner la salle.', [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-        }
-        else {
-            $this->alert('error', $e->errorInfo[2], [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-            return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
-        }
-    }
 
     }
+}
+
+
+
+
 
     public function AddAutherEmploi(){
         Session::forget('id_main_emploi');

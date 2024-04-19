@@ -7,6 +7,7 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\EmploiStrictureModel;
+use App\Models\main_emploi;
 
 class auth_controller extends Controller
 
@@ -74,8 +75,21 @@ public function login(Request $request){
         $request->session()->regenerate();
         // store id in session
         $user = auth::user();
-        session(['user_name' => $user->user_name, 'user_id' => $user->id, 'establishment_id' => $user->establishment_id]);
-        return redirect()->route('dashboardAdmin');
+
+        session(
+        ['user_name' => $user->user_name,
+         'user_id' => $user->id,
+         'establishment_id' => $user->establishment_id]
+        );
+        $lastEmploiCreated = main_emploi::where('establishment_id', $user->establishment_id)
+        ->latest()
+        ->first();
+
+        if(!empty($lastEmploiCreated)){
+            session(['id_main_emploi'=>$lastEmploiCreated->id] );
+
+        }
+                return redirect()->route('dashboardAdmin');
     }
     // Attempt authentication for formateur role
     elseif (Auth::attempt(['id' => $credentials['id'], 'password' => $credentials['password'], 'role' => 'formateur'])) {

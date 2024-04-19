@@ -80,99 +80,142 @@ class EmploiToutFormateurs extends Component
     }
 
 
-    protected $rules = [
-        'group' => 'required',
-    ];
 
-    public function createSession(){
+    public $isCaseEmpty = true;
 
+    public function updateCaseStatus($isEmpty)
+    {
+        $this->isCaseEmpty = $isEmpty;
+    }
+
+
+    public function DeleteSession()
+{
+    $idcase = $this->receivedVariable;
+    $day = substr($idcase, 0, 3);
+    $day_part = substr($idcase, 3, 5);
+    $user_id = substr($idcase, 11);
+    $dure_sission = substr($idcase,8,3);
+
+
+  sission::where([
+    'main_emploi_id' => session()->get('id_main_emploi'),
+     'day' => $day,
+     'day_part' => $day_part,
+     'user_id' => $user_id,
+     'dure_sission' => $dure_sission
+ ])->delete();
+
+
+}
+
+    public function UpdateSession()
+    {
         try {
-            // Validate inputs
-            if (empty($this->selectedGroups) || empty($this->salle) || empty($this->formateurId)) {
-                // throw new \Exception('Selected groups, salle, and formateurId must not be empty.');
-                $this->alert('error', 'Selected groups, salle, and formateurId must not be empty.', [
-                    'position' => 'center',
-                    'timer' => 3000,
-                    'toast' => true,
-                ]);
-            }else{
+            $idcase = $this->receivedVariable;
+            $day = substr($idcase, 0, 3);
+            $day_part = substr($idcase, 3, 5);
+            $group_id = substr($idcase, 11);
+            $dure_sission = substr($idcase, 8, 3);
 
-                $idcase = $this->receivedVariable;
-            foreach($this->selectedGroups as $group) {
-                // dd($group);
-                $session = sission::create([
-                    'day' => substr($idcase, 0, 3),
-                    'day_part' => substr($idcase, 3, 5),
-                    'dure_sission' => substr($idcase, 8, 3),
-                    'module_id' => $this->module,
-                    'group_id' => $group,
-                    'establishment_id' => session()->get('establishment_id'),
-                    'user_id' => $this->formateurId,
-                    'class_room_id' => $this->salle,
-                    'validate_date' => null,
-                    'main_emploi_id' => session()->get('id_main_emploi'),
-                    "demand_emploi_id" => null,
-                    'message' => null,
-                    'sission_type' => $this->TypeSesion,
-                    'status_sission' => 'Accepted',
-                ]);
+            $session = Sission::where([
+                'main_emploi_id' => session()->get('id_main_emploi'),
+                'day' => $day,
+                'day_part' => $day_part,
+                'user_id' => $this->formateurId,
+                'dure_sission' => $dure_sission,
+            ])->get();
+            if ($session->isNotEmpty()) {
+                foreach ($session as $item) {
+                    if ($this->module !== null) {
+                        $item->update(['module_id' => $this->module]);
+                    }
 
-                if (!$session) {
-                    $this->alert('error', 'Session creation failed for group ID: $group', [
+                    if (!empty($this->selectedGroups)) {
+                        foreach ($this->selectedGroups as $group) {
+                            $item->update(['group_id' => $group]);
+                        }
+                    }
+
+                    if ($this->salle !== null) {
+                        $item->update(['class_room_id' => $this->salle]);
+                    }
+
+                    if ($this->TypeSesion !== null) {
+                        $item->update(['sission_type' => $this->TypeSesion]);
+                    }
+                }
+            } else {
+                foreach ($this->selectedGroups as $group) {
+                    Sission::create([
+                        'day' => $day,
+                        'day_part' => $day_part,
+                        'dure_sission' => $dure_sission,
+                        'module_id' => $this->module,
+                        'group_id' => $group,
+                        'establishment_id' => session()->get('establishment_id'),
+                        'user_id' => $this->formateurId,
+                        'class_room_id' => $this->salle,
+                        'validate_date' => null,
+                        'main_emploi_id' => session()->get('id_main_emploi'),
+                        "demand_emploi_id" => null,
+                        'message' => null,
+                        'sission_type' => $this->TypeSesion,
+                        'status_sission' => 'Accepted',
+                    ]);
+                    if (!$session) {
+                        $this->alert('error', 'Session creation failed for group ID: $group', [
+                            'position' => 'center',
+                            'timer' => 3000,
+                            'toast' => true,
+                        ]);
+                         }
+                }
+
+
+                     $this->selectedGroups = [];
+                     $this->alert('success', 'Vous créez une nouvelle session', [
                         'position' => 'center',
                         'timer' => 3000,
                         'toast' => true,
                     ]);
-                }
+
             }
 
-            // Success alert
-            $this->alert('success', 'Vous créez une nouvelle session', [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);}
-
-            // Reset selectedGroups
-            $this->selectedGroups = [];
+            $this->emit('fresh');
         } catch (\Illuminate\Database\QueryException $e) {
-            // Handle specific database errors
-            if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
-                $this->alert('error', 'Vous devriez sélectionner la date de début.', [
-                    'position' => 'center',
-                    'timer' => 3000,
-                    'toast' => true,
-                ]);
-            } elseif (strpos($e->getMessage(), "Column 'user_id' cannot be null") !== false) {
-                $this->alert('error', 'Vous devriez sélectionner le formateur.', [
-                    'position' => 'center',
-                    'timer' => 3000,
-                    'toast' => true,
-                ]);
-            } elseif (strpos($e->getMessage(), "Column 'class_room_id' cannot be null") !== false) {
-                $this->alert('error', 'Vous devriez sélectionner la salle.', [
-                    'position' => 'center',
-                    'timer' => 3000,
-                    'toast' => true,
-                ]);
-            } else {
-                // Generic error handling
-                $this->alert('error', $e->errorInfo[2], [
-                    'position' => 'center',
-                    'timer' => 3000,
-                    'toast' => true,
-                ]);
-                return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
-            }
-        } catch (\Exception $e) {
-            // Handle other exceptions
-            $this->alert('error', $e->getMessage(), [
-                'position' => 'center',
-                'timer' => 3000,
-                'toast' => true,
-            ]);
-        }
+
+                    if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
+                        $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+                            'position' => 'center',
+                            'timer' => 3000,
+                            'toast' => true,
+                        ]);
+                    } elseif (strpos($e->getMessage(), "Column 'user_id' cannot be null") !== false) {
+                        $this->alert('error', 'Vous devriez sélectionner le formateur.', [
+                            'position' => 'center',
+                            'timer' => 3000,
+                            'toast' => true,
+                        ]);
+                    } elseif (strpos($e->getMessage(), "Column 'class_room_id' cannot be null") !== false) {
+                        $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                            'position' => 'center',
+                            'timer' => 3000,
+                            'toast' => true,
+                        ]);
+                    } else {
+                        // Generic error handling
+                        $this->alert('error', $e->errorInfo[2], [
+                            'position' => 'center',
+                            'timer' => 3000,
+                            'toast' => true,
+                        ]);
+                        return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+                    }
+                }
+
     }
+
 
 
 
