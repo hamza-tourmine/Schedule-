@@ -106,6 +106,10 @@ class EmploiToutFormateurs extends Component
      'dure_sission' => $dure_sission
  ])->delete();
 
+ if ($this->tableEmploi[0]->toutFormateur !== '1'){
+    return redirect()->route('emploiForFormateurs');
+ }
+
 
 }
 
@@ -115,7 +119,6 @@ class EmploiToutFormateurs extends Component
             $idcase = $this->receivedVariable;
             $day = substr($idcase, 0, 3);
             $day_part = substr($idcase, 3, 5);
-            $group_id = substr($idcase, 11);
             $dure_sission = substr($idcase, 8, 3);
 
             $session = Sission::where([
@@ -125,6 +128,8 @@ class EmploiToutFormateurs extends Component
                 'user_id' => $this->formateurId,
                 'dure_sission' => $dure_sission,
             ])->get();
+
+            // dd($session);
             if ($session->isNotEmpty()) {
                 foreach ($session as $item) {
                     if ($this->module !== null) {
@@ -147,7 +152,7 @@ class EmploiToutFormateurs extends Component
                 }
             } else {
                 foreach ($this->selectedGroups as $group) {
-                    Sission::create([
+                       Sission::create([
                         'day' => $day,
                         'day_part' => $day_part,
                         'dure_sission' => $dure_sission,
@@ -163,23 +168,13 @@ class EmploiToutFormateurs extends Component
                         'sission_type' => $this->TypeSesion,
                         'status_sission' => 'Accepted',
                     ]);
-                    if (!$session) {
-                        $this->alert('error', 'Session creation failed for group ID: $group', [
-                            'position' => 'center',
-                            'timer' => 3000,
-                            'toast' => true,
-                        ]);
-                         }
                 }
-
-
                      $this->selectedGroups = [];
                      $this->alert('success', 'Vous créez une nouvelle session', [
                         'position' => 'center',
                         'timer' => 3000,
                         'toast' => true,
                     ]);
-
             }
 
             $this->emit('fresh');
@@ -349,8 +344,7 @@ class EmploiToutFormateurs extends Component
         $this->salles = $newSalles;
 
 
-        $this->checkValues = Setting::select('typeSession','modeRamadan','module','formateur','salle','typeSalle' ,'year','branch')
-        ->where('userId', Auth::id())->get() ;
+        $this->checkValues = Setting::where('userId', Auth::id())->get() ;
 
 
         return view('livewire.emploi-tout-formateurs');

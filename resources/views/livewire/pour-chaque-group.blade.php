@@ -25,7 +25,7 @@
   </div>
 
     <div class="table-responsive">
-        <div class="ResponceUI" style=" width:40rem; display:flex;   position :fixed ; marign:10px">
+        <div class="ResponceUI element-to-remove" style=" width:40rem; display:flex;   position :fixed ; marign:10px">
             <div  class="input-group rounded">
                 <input id='searchInput'   type="search" class="form-control rounded searchDev " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                 <span class="input-group-text border-0" id="search-addon">
@@ -123,29 +123,34 @@
                     <th>SE2</th>
                 </tr>
               </thead>
-            <tbody>
+              <tbody>
                 @php
-                     $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu','Fri','Sat'];
+                    $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
                 <tr>
-
                     @foreach ($dayWeek as $day)
                         @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                        <td data-bs-toggle="modal" class="tdClass" data-bs-target="#exampleModal" class="Cases" id="{{$day.$sessionType }}"  >
-                                @foreach ($sissions as $sission)
-                                    @if ($sission->day === $day && $sission->group_id === $groupID && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                        {{ $sission->sission_type }}<br />{{ $sission->class_name }}<br />{{ $sission->user_name }} <br />{{ preg_replace('/^\d+/', '', $sission->module_name) }}
-                                    @endif
-                                @endforeach
-                            </td>
+                            @php
+                                $sessionFound = false;
+                            @endphp
+                            @foreach ($sissions as $sission)
+                                @if ($sission->day === $day && $sission->group_id === $groupID && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                                    <td wire:click='updateCaseStatus(false)' data-bs-toggle="modal" class="tdClass Cases" data-bs-target="#exampleModal" id="{{ $day . $sessionType }}">
+                                        {{ $sission->sission_type }}<br>{{ $sission->class_name }}<br>{{ $sission->user_name }}<br>{{ preg_replace('/^\d+/', '', $sission->module_name) }}
+                                    </td>
+                                    @php
+                                        $sessionFound = true;
+                                    @endphp
+                                @endif
+                            @endforeach
+                            @if (!$sessionFound)
+                                <td wire:click='updateCaseStatus(true)' data-bs-toggle="modal" class="tdClass Cases" data-bs-target="#exampleModal" id="{{ $day . $sessionType }}"></td>
+                            @endif
                         @endforeach
                     @endforeach
                 </tr>
-                            </form>
-                    </div>
-                 </div>
-
             </tbody>
+
             @elseif ($tableEmploi[0]->groupe == '1')
             @include('livewire.PourGroupe')
             @else
@@ -172,7 +177,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            <form wire:submit.prevent="createSession">
+                            <form wire:submit.prevent="UpdateSession">
                                 <div class="modal-body">
 
                                     <div style="display: flex">
@@ -182,7 +187,7 @@
                                            @if (!$checkValues[0]->formateur)
                                            <select wire:model='formateurId' class="form-select"
                                            aria-label="Default select example">
-                                           <option selected>Les Formateur</option>
+                                           <option selected value="null">Les Formateur</option>
                                            @if ($formateurs)
                                                @foreach ($formateurs as $formateur)
                                                    <option value="{{ $formateur->id }}">
@@ -197,7 +202,7 @@
                                         @if (!$checkValues[0]->module)
                                         <select wire:model="moduleID"   class="form-select"
                                         aria-label="Default select example">
-                                            <option selected>Modules</option>
+                                            <option selected value="null">Modules</option>
                                             @if ($modules)
                                                 @foreach ($modules as $module)
                                                 <option value="{{ $module->id }}">
@@ -217,7 +222,7 @@
                                         @if (!$checkValues[0]->salle)
                                         <select wire:model="salle" class="form-select"
                                             aria-label="Default select example">
-                                            <option selected>les salles</option>
+                                            <option selected value="null">les salles</option>
                                             @if ($salles)
                                                 @foreach ($salles as $salle)
                                                     <option value="{{ $salle->id }}">
@@ -233,7 +238,7 @@
                                         @if (!$checkValues[0]->typeSalle)
                                         <select wire:model="salleclassTyp" class="form-select"
                                             aria-label="Default select example">
-                                            <option selected>les Types</option>
+                                            <option selected value="null">les Types</option>
                                             @if ($classType)
                                                 @foreach ($classType as $classTyp)
                                                     <option value="{{ $classTyp->id }}">
@@ -249,7 +254,7 @@
                                         @if (!$checkValues[0]->typeSession)
                                         <select wire:model="TypeSesion" class="form-select"
                                             aria-label="Default select example">
-                                            <option selected>Types</option>
+                                            <option selected value="null">Types</option>
                                             <option value="presentielle">Presentielle</option>
                                             <option value="teams">Teams</option>
                                             <option value="EFM">EFM</option>
@@ -261,8 +266,17 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button data-bs-dismiss="modal"
-                                    aria-label="Close" type="submit"  class="btn btn-primary">Save</button>
+                                        @if ($isCaseEmpty)
+                                        <button id="SaveAndUpdate" data-bs-dismiss="modal" type="submit" class="btn btn-primary">
+                                         Save
+                                        </button>
+                                     @else
+                                        <button id="SaveAndUpdate" data-bs-dismiss="modal" type="submit" class="btn btn-success ">
+                                         Update
+                                        </button>
+                                        <button data-bs-dismiss="modal" wire:click="DeleteSession" aria-label="Close" type="button"  class="btn btn-danger">supprimer</button>
+
+                                     @endif
                                 </div>
         </table>
 

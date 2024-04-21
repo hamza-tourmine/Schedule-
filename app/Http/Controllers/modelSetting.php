@@ -25,7 +25,9 @@ class modelSetting extends Controller
                     'typeSalle'   => $request->input('TypeSalle'),
                     'branch'      => $request->input('branch'),
                     'year'        =>$request->input('year'),
-                    'modeRamadan'        =>$request->input('modeRamadan')
+                    'modeRamadan'        =>$request->input('modeRamadan'),
+                    'group'         =>$request->input('group'),
+                    'typeSessionCase'=>$request->input('typeSessionCase')
                 ]);
             } else {
                 Setting::create([
@@ -37,8 +39,9 @@ class modelSetting extends Controller
                     'typeSalle'   => $request->input('TypeSalle'),
                     'branch'      =>$request->input('branch'),
                     'year'        =>$request->input('year'),
-                    'modeRamadan' =>$request->input('modeRamadan')
-
+                    'modeRamadan' =>$request->input('modeRamadan'),
+                    'group'       =>$request->input('group'),
+                    'typeSessionCase'=>$request->input('typeSessionCase')
                 ]);
             }
 
@@ -52,10 +55,11 @@ class modelSetting extends Controller
 
     public function getCheckedValue (){
         $checkValues = Setting::select('typeSession','module','formateur',
-        'salle','typeSalle' , 'branch' ,'year' , 'modeRamadan')->where('userId', Auth::user()->id)->get();
+        'salle','typeSalle' , 'branch' ,'year' ,'group', 'typeSessionCase',
+        'modeRamadan')->where('userId', Auth::user()->id)->get();
         return response()->json($checkValues);
     }
 
 
- 
+
 }

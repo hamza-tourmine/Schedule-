@@ -91,6 +91,18 @@
                 <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
                     Mode Ramadan</label>
             </div>
+
+            <div style="margin: 10px" class="form-check form-switch">
+                <input class="checkbox" name="group" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
+                    désactivé groupe case  </label>
+            </div>
+
+            <div style="margin: 10px" class="form-check form-switch">
+                <input class="checkbox" name="typeSessionCase" style="width: 50px ; height:25px ; border:3px solid  #ddd9d9" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" >
+                <label  style="font-size:19px;font-weigth:400;" class="form-check-label ms-1" for="flexSwitchCheckChecked">
+                    désactivé type séance case  </label>
+            </div>
         </form>
         </div>
 
@@ -127,6 +139,12 @@
                              break;
                         case 'modeRamadan':
                              item.checked = data[0].modeRamadan        === 1;
+                             break
+                        case 'group':
+                              item.checked = data[0].group        === 1;
+                              break
+                        case 'typeSessionCase':
+                              item.checked = data[0].typeSessionCase        === 1;
                              break;
                         default:
                             break;
@@ -156,8 +174,6 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        // Handle response from the server if needed
-
                     })
                     .catch(error => {
                         console.error('Error:', error);

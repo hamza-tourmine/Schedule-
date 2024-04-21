@@ -13,6 +13,6 @@ class Setting extends Model
     public $timestamps = false ;
     protected $primaryKey = 'userId';
     public $fillable = ['userId',	'module',
-    	'typeSession'	,'typeSalle',
+    	'typeSession'	,'typeSalle', 'group', 'typeSessionCase',
     'salle'	,'formateur', 'modeRamadan','branch'];
 }

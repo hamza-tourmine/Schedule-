@@ -53,6 +53,7 @@
             -webkit-box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
             box-shadow: 0 0.75rem 1.5rem rgba(18, 38, 63, 0.03);
             margin-bottom: 55px;
+
         }
 
 
@@ -85,7 +86,7 @@
             left: auto;
             right: 0;
         }
-        .visible{
+        .display{
             display: none ;
         }
     </style>
@@ -231,6 +232,11 @@
                         </div>
                         <div>
                             <!-- LOGO -->
+                            <div class="dropdown d-none d-lg-inline-block ms-1">
+                                <button class="btn btn-sm px-3 font-size-16 header-item toggle-sidebar "  >
+                                    <i class="fa fa-fw fa-bars"></i>
+                                </button>
+                            </div>
 
 
                             <button type="button"
@@ -249,7 +255,7 @@
             </header>
             <!-- ENd header  -->
             <!-- ========== Left Sidebar Start ========== -->
-            <div id="sideBareMenu" class="vertical-menu" class="visible">
+            <div id="sideBareMenu" class="vertical-menu  display" >
                 {{-- <div class="arow">
                         <button class="btn btn-primary toggle-sidebar"><i class="mdi mdi-chevron-left"></i></button>
                     </div> --}}
@@ -285,7 +291,7 @@
 
 
 
-                            <div id="emploi12">
+
                                 <li><a href="{{ route('CreateEmploi') }}" class=" waves-effect"> <span
                                             data-toggle="tooltip" data-placement="right" title="tout les groupes"
                                             class="mdi mdi-lightbulb-group-outline"
@@ -302,13 +308,13 @@
                                             data-toggle="tooltip" data-placement="right" title="chaque group"
                                             style="font-weight: 400 ; font-size:25PX"
                                             class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
-                            </div>
+
 
                             <li>
                                 <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
                                     <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history"
                                         data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
-                                    {{-- <span>tous les emplois</span> --}}
+
                                 </a>
                             </li>
 
@@ -318,7 +324,7 @@
                                     <span style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-message-text-clock-outline" data-toggle="tooltip"
                                         data-placement="right" title="tous les demandes"></span>
-                                    {{-- <span class="hidentext"> tous les demandes</span> --}}
+
                                 </a>
                             </li>
 
@@ -327,7 +333,7 @@
                                     <span style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-settings-transfer-outline" data-toggle="tooltip"
                                         data-placement="right" title="les paramteres "></span>
-                                    {{-- <span class="hidentext"> les paramteres </span> --}}
+
                                 </a>
                             </li>
 
@@ -408,32 +414,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let sidebarMenu = document.querySelector('.vertical-menu');
-            let hidenTexts = document.querySelectorAll('.hidentext');
-            let lesEmploi = document.querySelector('#emploi12')
+     document.addEventListener('DOMContentLoaded', function() {
+    let sidebarMenu = document.querySelector('#sideBareMenu');
 
-            function hideHidentext() {
-                if (!sidebarMenu.classList.contains('collapsed')) {
-                    hidenTexts.forEach(function(element) {
-                        element.style.display = 'none';
-                        lesEmploi.style.display = 'block'
-                    });
-                } else {
-                    hidenTexts.forEach(function(element) {
-                        element.style.display = ' inline-block';
-                        lesEmploi.style.display = 'none'
-                    });
-                }
-            }
+    function hideHidentext() {
+        if (sidebarMenu.classList.contains('display')) {
+            sidebarMenu.classList.remove('display');
 
-            hideHidentext(); // Initial call to hide hidentext elements
+        } else {
+            sidebarMenu.classList.add('display');
 
-            document.querySelector('.toggle-sidebar').addEventListener('click', function() {
-                sidebarMenu.classList.toggle('collapsed');
-                hideHidentext(); // Call hideHidentext when the sidebar is toggled
-            });
-        });
+        }
+    }
+
+    hideHidentext();
+
+    document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+        sidebarMenu.classList.toggle('collapsed');
+        hideHidentext();
+    });
+});
+
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -455,7 +456,9 @@
                 console.error('Invalid data structure received:', data);
             }
         });
-    </script>
+
+
+</script>
 
 
 

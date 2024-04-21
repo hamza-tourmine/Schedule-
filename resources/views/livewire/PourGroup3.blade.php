@@ -22,9 +22,11 @@
         'Vendredi' => 'Fri',
         'Samedi' => 'Sat'
     ];
+    $count = 0 ;
     $sessionData = ['Formateur', 'Module', 'Salle'];
     $HORAIRE = ['SE1'=>'08h30-11h' ,"SE2"=>"11h-13h30", 'SE3' => "13h30-16h" , "SE4" =>'16h-18h30' ];
-   $count = 0 ;
+
+
    @endphp
 
         @foreach ($abbreviations as $dayName => $abbreviation)
@@ -33,7 +35,9 @@
 
 
                 @if ($session->group_id === $groupID && $session->day === $abbreviation && $session->dure_sission ===$key)
-                    {{$count +=1}}
+                     @php
+                        $count +=1
+                     @endphp
                 <tr>
                     <td>{{$session->group_name}}</td>
                         <td>{{$session->user_name}}</td>
@@ -57,6 +61,41 @@
         <td style="font-size: 20px ; font-weight: bold"> {{2.5*$count}}</td>
     </tr>
 </tbody>
+
+<script>
+
+    const elementToRemove = document.querySelector('.element-to-remove');
+
+
+    function removeElement() {
+
+        elementToRemove.style.display = 'none';
+
+        window.removeEventListener('scroll', handleScroll);
+
+        window.addEventListener('scroll', handleScrollTop);
+    }
+
+
+    function handleScroll() {
+
+        if (window.scrollY > 100) {
+
+            removeElement();
+        }
+    }
+
+    function handleScrollTop() {
+        if (window.scrollY === 0) {
+            elementToRemove.style.display = 'block';
+            elementToRemove.style.display = 'flex';
+            window.removeEventListener('scroll', handleScrollTop);
+
+            window.addEventListener('scroll', handleScroll);
+        }
+    }
+    window.addEventListener('scroll', handleScroll);
+</script>
 
 
 

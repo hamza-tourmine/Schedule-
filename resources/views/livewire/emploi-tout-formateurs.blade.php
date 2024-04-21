@@ -133,44 +133,47 @@
                 @php
                      $dayWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                 @endphp
-                @foreach ($formateurs as $formateur)
-                <tr>
-                    <td>{{ $formateur->user_name }}</td>
-                    @foreach ($dayWeek as $day)
-                        @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-                            @php
-                                $sessionFound = false;
-                                $sessionDetails = [];
-                                $sessionKey = $day . $sessionType . $formateur->id; // Unique session identifier
-                            @endphp
-                            @foreach ($sissions as $sission)
-                                @if ($sission->day === $day &&
-                                     $sission->user_id === $formateur->id &&
-                                     $sission->day_part === substr($sessionType, 0, 5) &&
-                                     $sission->dure_sission === substr($sessionType, 5))
-                                    @php
-                                        $sessionFound = true;
-                                        $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>' . $sission->group_name . '<br>' . preg_replace('/^\d+/', '', $sission->module_name);
-                                        $uniqueDetails = array_unique(explode('<br>', $details));
-                                        $sessionDetails[$sessionKey] = implode('<br>', $uniqueDetails); // Store details using session key
-                                    @endphp
-                                @endif
-                            @endforeach
-                            <td wire:click="updateCaseStatus({{ !$sessionFound ? 'true' : 'false' }})"
-                                data-bs-toggle="modal"
-                                data-bs-target="#exampleModal"
-                                class="Cases"
-                                id="{{ $sessionKey }}">
-                                @if ($sessionFound)
-                                    {!! $sessionDetails[$sessionKey] !!} <!-- Display details using session key -->
-                                @endif
-                            </td>
-                        @endforeach
-                    @endforeach
-                </tr>
+               @foreach ($formateurs as $formateur)
+               <tr>
+                   <td>{{ $formateur->user_name }}</td>
+                   @foreach ($dayWeek as $day)
+                       @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+                           @php
+                               $foundSession = false;
+                               $groupes = [];
+                               $salleValue ;
+                               $typeValue ;
+                               $ModelValue ;
+                           @endphp
+                           @foreach ($sissions as $sission)
+                               @if ($sission->day === $day &&
+                                    $sission->user_id === $formateur->id &&
+                                    $sission->day_part === substr($sessionType, 0, 5) &&
+                                    $sission->dure_sission === substr($sessionType, 5))
+                                   @php
+                                       $foundSession = true;
+                                       $groupes[] = $sission->group_name;
+                                       $salleValue = $sission->class_name ;
+                                       $typeValue = $sission->sission_type ;
+                                       $ModelValue = $sission->module_name ;
+                                   @endphp
+                               @endif
+                           @endforeach
+                           <td wire:click="updateCaseStatus({{ $foundSession ? 'false' : 'true' }})"
+                               colspan="1" rowspan="1"  data-bs-toggle="modal"  data-bs-target="#exampleModal"
+                               class="TableCases" id="{{ $day.$sessionType.$formateur->id }}">
+                               @if ($foundSession)
+                                   {{ $typeValue}}</br>
+                                   {{ $salleValue }}</br>
+                                   {{ implode(' - ', $groupes) }}</br>
+                                   {{ preg_replace('/^\d/', ' ', $ModelValue) }}
+                               @endif
+                           </td>
+                       @endforeach
+                   @endforeach
+               </tr>
+           @endforeach
 
-
-                @endforeach
 
                      {{-- Model --}}
                      <div wire:ignore.self  class="modal fade col-9"  id="exampleModal"
