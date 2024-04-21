@@ -38,31 +38,47 @@
         @endif
         <td>{{ $item }}</td>
         @foreach (['SE1', 'SE2', 'SE3', 'SE4'] as $dure)
-        <td data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases casesNewtamplate" id="{{ $abbreviations[$day] . (in_array($dure, ['SE1', 'SE2']) ? 'Matin' : 'Amidi') . $dure }}">
             @php
-                $formateurs = [];
-                $modules = [0];
-
+                $moduleValue ;
+                $sessionFound = false ;
+                $SalleValue ;
+                $Sessiontype ;
+                $GroupName = [] ;
+                $FormateurName ;
             @endphp
-
             @foreach ($sissions as $sission)
                 @if ($sission->day === $abbreviations[$day] && $sission->dure_sission === $dure)
-                    @if ($item === 'Formateur')
-                        @php
-                            $formateurs[] = $sission->user_name;
-                        @endphp
-                    @elseif ($item === 'Module')
-                    {{  $modules[0] = preg_replace('/^\d+/', '', $sission->module_name); }}
-                    @elseif ($item === 'Salle')
-                        {{ $sission->class_name }}
-                    @elseif ($item === 'type Séance')
-                       {{$sission->sission_type}}
-                    @elseif ($item === 'Groupe')
-                       {{$sission->group_name}}
-                    @endif
+                    @php
+                        $sessionFound = true ;
+                        $moduleValue =  preg_replace('/^\d+/', '', $sission->module_name );
+                        $SalleValue = $sission->class_name  ;
+                        $SessionType = $sission->sission_type ;
+                        $GroupName[] = $sission->group_name ;
+                        $FormateurName = $sission->user_name ;
+                    @endphp
                 @endif
             @endforeach
-            {{ $formateurs ? $formateurs[0] : '' }}
+            @if ($sessionFound)
+            <td data-bs-toggle="modal" data-bs-target="#exampleModal" wire:click = 'updateCaseStatus(false)'
+            style="background-color: {{$sessionFound ? 'rgba(12, 72, 166, 0.3)' : ''}}"
+            class="Cases casesNewtamplate" id="{{ $abbreviations[$day] . (in_array($dure, ['SE1', 'SE2']) ? 'Matin' : 'Amidi') . $dure }}">
+                        @if ($item === 'Formateur')
+                            {{$FormateurName}}
+                        @elseif ($item === 'Module')
+                             {{  $moduleValue }}
+                        @elseif ($item === 'Salle')
+                            {{ $SalleValue}}
+                        @elseif ($item === 'type Séance')
+                            {{$SessionType}}
+                        @elseif ($item === 'Groupe')
+                            {{implode(' - ' , $GroupName)}}
+                        @endif
+            </td>
+            @else
+            <td data-bs-toggle="modal" data-bs-target="#exampleModal" wire:click = 'updateCaseStatus(true)'
+            class="Cases casesNewtamplate" id="{{ $abbreviations[$day] . (in_array($dure, ['SE1', 'SE2']) ? 'Matin' : 'Amidi') . $dure }}"></td>
+            @endif
+
 
         </td>
 

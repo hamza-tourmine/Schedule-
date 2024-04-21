@@ -58,9 +58,11 @@ class PourChaqueFormateur extends Component
     public $tableEmploi;
     public $isCaseEmpty ;
 
-    public function updateCaseStatus($isEmpty)
+
+    public function updateCaseStatus($isEmpty )
     {
         $this->isCaseEmpty = $isEmpty;
+       
     }
 
 

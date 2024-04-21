@@ -57,6 +57,7 @@ class EmploiToutFormateurs extends Component
     public $SearchValue;
     public $branches ;
     public $tableEmploi ;
+    public $isActive = true ;
 
 
 
@@ -83,9 +84,10 @@ class EmploiToutFormateurs extends Component
 
     public $isCaseEmpty = true;
 
-    public function updateCaseStatus($isEmpty)
+    public function updateCaseStatus($isEmpty , $bool)
     {
         $this->isCaseEmpty = $isEmpty;
+        $this->isActive = $bool ;
     }
 
 

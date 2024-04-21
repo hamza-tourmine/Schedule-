@@ -50,14 +50,15 @@ class Emploi extends Component
     public $tableEmploi ;
 
 
-    public $isCaseEmpty = true; // Property to track if the clicked case is empty or not
+    public $isCaseEmpty = true;
+    public $isActive = true ;
 
     // Method to update $isCaseEmpty based on the clicked case
-    public function updateCaseStatus($isEmpty)
+    public function updateCaseStatus($isEmpty , $isActivee)
     {
         $this->isCaseEmpty = $isEmpty;
+        $this->isActive =  $isActivee ;
     }
-
 
     public function DeleteSession()
 {
@@ -91,12 +92,6 @@ class Emploi extends Component
 
 
     }
-
-    protected $rules = [
-        'group' => 'required',
-
-    ];
-
 
     public function UpdateSession()
 {

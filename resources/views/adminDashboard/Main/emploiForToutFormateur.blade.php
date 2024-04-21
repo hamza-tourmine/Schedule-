@@ -23,7 +23,7 @@
             td {
 
                 height: 40px;
-                width: 430px !important;
+                width: 460px !important;
                 border: 1px solid #ddd;
                 text-align: center;
             }

@@ -18,11 +18,19 @@
     'Vendredi' => 'Fri',
     'Samedi' => 'Sat'];
     $sessionData = ['Groupe', 'Module', 'Salle' ,'type Séance'];
-    if ($checkValues[0]->module) {
-        unset($sessionData[1]);
-    }elseif($checkValues[0]->typeSession){
-        unset($sessionData[3]);
-    }
+    if ($checkValues[0]->module){
+                unset($sessionData[1]);
+            }
+            if ($checkValues[0]->typeSessionCase) {
+                unset($sessionData[3]);
+            }
+            if ($checkValues[0]->group) {
+                unset($sessionData[0]);
+            }
+            if ($checkValues[0]->module) {
+                unset($sessionData[1]);
+            }
+
     @endphp
 
     @foreach ($days as $day)
