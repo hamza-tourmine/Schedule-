@@ -8,7 +8,7 @@
         transform: translate(-35%, -35%);
 
         min-width: 50vw !important ;
-        min-height: 26vh;
+        min-height: 30vh;
     }
     .modal-header{
         cursor: move;

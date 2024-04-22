@@ -84,10 +84,10 @@ class EmploiToutFormateurs extends Component
 
     public $isCaseEmpty = true;
 
-    public function updateCaseStatus($isEmpty , $bool)
+    public function updateCaseStatus($isEmpty )
     {
         $this->isCaseEmpty = $isEmpty;
-        $this->isActive = $bool ;
+        
     }
 
 
