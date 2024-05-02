@@ -8,11 +8,12 @@
         <form id="emploi-form" action="{{ route('DemanderEmploi') }}" method="GET">
             @csrf
             <select id='date-select' class="form-select" onchange="submitForm()">
-                <option>Select date emploi</option>
                 @foreach ($main_emplois as $Main_emploi)
-                    <option value="{{ $Main_emploi->id }}">{{ $Main_emploi->datestart }} to {{ $Main_emploi->dateend }}
+                    <option @if ($Main_emploi->id == $emploiID) selected="selected" @endif value="{{ $Main_emploi->id }}">
+                        {{ $Main_emploi->datestart }} - {{ $Main_emploi->dateend }}
                     </option>
                 @endforeach
+
             </select>
             <input type="hidden" id="emploiID" name="emploiID">
         </form>
@@ -285,6 +286,7 @@
 
     <script>
         var emploi = {{ $emploiID }};
+
         function submitForm() {
             document.getElementById("emploi-form").submit();
         }
