@@ -345,6 +345,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+   
     <script src="{{ asset('/assets/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('/assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('/assets/libs/metismenu/metisMenu.min.js') }}"></script>
@@ -359,7 +360,6 @@
 
     <!-- App js -->
     <script src="{{ asset('/assets/js/app.js') }}"></script>
-    <script src="{{ asset('/assets/js/app.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -367,12 +367,13 @@
 
 
     <script>
-        $(document).ready(function() {
-            $('#vertical-menu-toggle').click(function() {
-                $('.vertical-menu').toggleClass('hide-menu');
-                $('.main-content').toggleClass('expanded');
-            });
-        });
+       $(document).ready(function() {
+    $('#vertical-menu-toggle').click(function() {
+        $('.vertical-menu').toggleClass('hide-menu');
+    });
+});
+
+
     </script>
 
 </body>

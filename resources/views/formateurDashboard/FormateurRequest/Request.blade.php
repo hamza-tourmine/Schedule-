@@ -29,10 +29,6 @@
                     class="fa fa-exclamation-circle" style="font-size:16px;"></i>
                 Creer une demande </button>
 
-
-
-            <button id="toggleTablesBtn" onclick="toggleTables()" class="btn btn-success waves-effect waves-light"><i
-                    class="fas fa-table"></i> Changer la table</button>
             <button onclick="ExportToExcel('xlsx')" class="btn btn-primary waves-effect waves-light"><i
                     class="mdi mdi-download"></i>
                 telecharger</button>
@@ -43,127 +39,107 @@
     </div>
 
 
-    <div id="tbl_exporttable_to_xls_2" class="table-responsive" style="display: none">
-        <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12  active">
-            <thead>
-                <tr class="day">
-                    @foreach ($days_of_week as $day_of_week)
-                        <th class="text-uppercase" colspan="4">{{ $day_of_week }}</th>
-                    @endforeach
-                </tr>
-                <tr class="dPart bg-light-gray">
-                    @foreach ($days_of_week as $day_of_week)
-                        @foreach ($days_part as $day_part)
-                            <th class="text-uppercase" colspan="2">{{ $day_part }}</th>
-                        @endforeach
-                    @endforeach
-                </tr>
-                <tr class="se-row">
-                    @foreach ($days_of_week as $day_of_week)
-                        @foreach ($seances_part as $seance_part)
-                            <th>{{ $seance_part }}</th>
-                        @endforeach
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="dtdynamic bg-light-gray">
-                    @foreach ($days_of_week as $day_of_week)
-                        @foreach ($seances_part as $seance_part)
-                            <td data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal" class="Cases">
-                                @foreach ($AllSeances as $AllSeance)
-                                    @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
-                                        {{ $AllSeance->sission_type }} <br>
-                                        {{ $AllSeance->group->group_name }} <br>
-                                        {{ $AllSeance->class_room->class_name }}
-                                    @endif
-                                @endforeach
-                            </td>
-                        @endforeach
-                    @endforeach
-                </tr>
-            </tbody>
-        </table>
-        <br>
 
+    @foreach ($days_of_week as $day_of_week)
+        @foreach ($days_part as $day_part)
+        @endforeach
+    @endforeach
     </div>
 
 
-    <div id="tbl_exporttable_to_xls_1" class="table-responsive">
-        <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
-            <thead>
-                <!-- Header row for seance parts -->
-                <tr>
-                    <th rowspan="2">Days/Seance</th>
-                    <!-- Loop through days part -->
-                    @foreach ($days_part as $dayPart)
-                        <!-- Display days part in the top row -->
-                        <th colspan="2">{{ $dayPart }}</th>
-                    @endforeach
-                    <!-- Empty cell for spacing -->
-                </tr>
-                <tr>
-                    <!-- Loop through seance part -->
-                    @foreach ($seances_part as $seance_part)
-                        <!-- Display seance part in the bottom row -->
-                        <th>{{ $seance_part }}</th>
-                    @endforeach
+    <table id="tbl_exporttable_to_xls" style="overflow: scroll" class="col-md-12">
+        <thead>
+            <!-- Header row for seance parts -->
+            <tr>
+                <th rowspan="2">Days/Seance</th>
+                <!-- Loop through days part -->
+                @foreach ($days_part as $dayPart)
+                    <!-- Display days part in the top row -->
+                    <th colspan="2">{{ $dayPart }}</th>
+                @endforeach
+                <!-- Empty cell for spacing -->
+            </tr>
+            <tr>
+                <!-- Loop through seance part -->
+                @foreach ($seances_part as $seance_part)
+                    <!-- Display seance part in the bottom row -->
+                    <th>{{ $seance_part }}</th>
+                @endforeach
 
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Loop through each day -->
-                @foreach ($days_of_week as $day_of_week)
-                    <tr class="dtdynamic bg-light-gray">
-                        <!-- Display the day -->
-                        @php
-                            switch ($day_of_week) {
-                                case 'Mon':
-                                    $day = 'Lundi';
-                                    break;
-                                case 'Tue':
-                                    $day = 'Mardi';
-                                    break;
-                                case 'Wed':
-                                    $day = 'Mercredi';
-                                    break;
-                                case 'Thu':
-                                    $day = 'Jeudi';
-                                    break;
-                                case 'Fri':
-                                    $day = 'Vendredi';
-                                    break;
-                                case 'Sat':
-                                    $day = 'Samedi';
-                                    break;
-                                default:
-                                    $day = $day_of_week;
-                                    break;
-                            }
-                        @endphp
-                        <th>{{ $day }}</th>
-                        <!-- Loop through each seance part -->
-                        @foreach ($seances_part as $seance_part)
-                            <!-- Display the schedule data for each day and seance part -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through each day -->
+            @foreach ($days_of_week as $day_of_week)
+                <tr class="dtdynamic bg-light-gray">
+                    <!-- Display the day -->
+                    @php
+                        switch ($day_of_week) {
+                            case 'Mon':
+                                $day = 'Lundi';
+                                break;
+                            case 'Tue':
+                                $day = 'Mardi';
+                                break;
+                            case 'Wed':
+                                $day = 'Mercredi';
+                                break;
+                            case 'Thu':
+                                $day = 'Jeudi';
+                                break;
+                            case 'Fri':
+                                $day = 'Vendredi';
+                                break;
+                            case 'Sat':
+                                $day = 'Samedi';
+                                break;
+                            default:
+                                $day = $day_of_week;
+                                break;
+                        }
+                    @endphp
+                    <th>{{ $day }}</th>
+                    <!-- Loop through each seance part -->
+
+                    @foreach ($seances_part as $seance_part)
+                        @php $seanceFound = false; @endphp
+                        @foreach ($AllSeances as $AllSeance)
+                            @php
+                                $color = '';
+                                if ($AllSeance->status_sission === 'Pending') {
+                                    $color = 'yellow';
+                                } elseif ($AllSeance->status_sission === 'Accepted') {
+                                    $color = 'green';
+                                } elseif ($AllSeance->status_sission === 'Cancelled') {
+                                    $color = 'red';
+                                }
+                            @endphp
+                            @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
+                                @php $seanceFound = true; @endphp
+                                <td data-emploi="{{ $emploiID }}" data-part="{{ $day_part }}"
+                                    data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
+                                    data-seanceId="{{ $AllSeance->id }}" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" class="Cases" style="color: {{ $color }}">
+                                    {{ $AllSeance->sission_type }} <br>
+                                    {{ $AllSeance->group->group_name }} <br>
+                                    {{ $AllSeance->class_room->class_name }}
+                                </td>
+                            @endif
+                        @endforeach
+                        @if (!$seanceFound)
                             <td data-emploi="{{ $emploiID }}" data-part="{{ $day_part }}"
                                 data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
-                                @foreach ($AllSeances as $AllSeance)
-                                    @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
-                                        {{ $AllSeance->sission_type }} <br>
-                                        {{ $AllSeance->group->group_name }} <br>
-                                        {{ $AllSeance->class_room->class_name }}
-                                    @endif
-                                @endforeach
                             </td>
-                        @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <br>
-    </div>
+                        @endif
+                    @endforeach
+
+
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <br>
     <button id="submitAll">Submit All</button>
 
 
@@ -295,19 +271,7 @@
             submitForm();
         });
 
-        function toggleTables() {
-            var table1 = document.getElementById("tbl_exporttable_to_xls_1");
-            var table2 = document.getElementById("tbl_exporttable_to_xls_2");
 
-            // If table1 is currently visible, hide it and show table2
-            if (table1.style.display === "block") {
-                table1.style.display = "none";
-                table2.style.display = "block";
-            } else { // If table1 is currently hidden, show it and hide table2
-                table1.style.display = "block";
-                table2.style.display = "none";
-            }
-        }
         document.addEventListener("DOMContentLoaded", function() {
             var cells = document.querySelectorAll("td.Cases");
             var daysOfWeek = @json($days_of_week);
@@ -459,6 +423,12 @@
 
                         var dayOfWeek = clickedCell.dataset.day;
                         var seancePart = clickedCell.dataset.seance;
+                        var seanceIds = clickedCell.dataset.seanceid ||
+                            ''; // Use an empty string as a default value
+                        console.log(
+                            seanceIds
+                        ); // Check if the `seanceIds` value is displayed in the console
+
                         var dayPart = (seancePart == "SE1" || seancePart == "SE2") ?
                             "Matin" : "Amidi";
                         var emploi = clickedCell.dataset.emploi;
@@ -482,7 +452,8 @@
                             'dayPart': dayPart,
                             'seancePart': seancePart,
                             'mainEmploiId': emploi,
-                            'message': ShowselectedMsg
+                            'message': ShowselectedMsg,
+                            'seanceId': seanceIds
                         });
 
 
@@ -566,24 +537,17 @@
         });
 
         function ExportToExcel(type, fn, dl) {
-            // Get the currently visible table
-            var currentTable = document.getElementById("tbl_exporttable_to_xls_1").style.display === "block" ?
-                document.getElementById("tbl_exporttable_to_xls_1") :
-                document.getElementById("tbl_exporttable_to_xls_2");
-
-            // Convert the table to Excel format
-            var wb = XLSX.utils.table_to_book(currentTable, {
+            var elt = document.getElementById('tbl_exporttable_to_xls');
+            var wb = XLSX.utils.table_to_book(elt, {
                 sheet: "sheet1"
             });
-
-            // Export the Excel file
             return dl ?
                 XLSX.write(wb, {
                     bookType: type,
                     bookSST: true,
                     type: 'base64'
                 }) :
-                XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+                XLSX.writeFile(wb, fn || ('DemandeEmplois.' + (type || 'xlsx')));
         }
     </script>
 
