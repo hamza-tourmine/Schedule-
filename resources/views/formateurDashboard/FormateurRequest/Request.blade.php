@@ -1,13 +1,22 @@
 <x-HeaderMenuFormateur>
-    
+
 
 
     <div class="button-container-calendar">
-        <label class="left-arrow" id="previous" onclick="previous()" style="display: none;">&#8249;</label>
-        <div id="dates-div" class="date-info" style="display: none;">
-            <h4> Start:<span id="dateStart" class="idemploi st"></span></h4>
-            <h4> End: <span id="dateEnd" class="idemploi ed"></span></h4>
-        </div>
+        <label class="left-arrow" id="previous" style="display: none;"></label>
+
+        <form id="emploi-form" action="{{ route('DemanderEmploi') }}" method="GET">
+            @csrf
+            <select id='date-select' class="form-select" onchange="submitForm()">
+                <option>Select date emploi</option>
+                @foreach ($main_emplois as $Main_emploi)
+                    <option value="{{ $Main_emploi->id }}">{{ $Main_emploi->datestart }} to {{ $Main_emploi->dateend }}
+                    </option>
+                @endforeach
+            </select>
+            <input type="hidden" id="emploiID" name="emploiID">
+        </form>
+
         <!-- Div contenant le message d'alerte -->
         <label class="right-arrow" id="next" onclick="next()" style="display: none;">&#8250;</label>
         <div id="message-div" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -15,14 +24,16 @@
 
         </div>
         <div class="fixed-button">
-            <button id="createRequestBtn" type="button" class="btn btn-outline-warning waves-effect waves-light"><i class="fa fa-exclamation-circle"
-                    style="font-size:16px;"></i>
+            <button id="createRequestBtn" type="button" class="btn btn-outline-warning waves-effect waves-light"><i
+                    class="fa fa-exclamation-circle" style="font-size:16px;"></i>
                 Creer une demande </button>
 
 
 
-            <button id="toggleTablesBtn" onclick="toggleTables()" class="btn btn-success waves-effect waves-light"><i class="fas fa-table"></i> Changer la table</button>
-            <button onclick="ExportToExcel('xlsx')" class="btn btn-primary waves-effect waves-light"><i class="mdi mdi-download"></i>
+            <button id="toggleTablesBtn" onclick="toggleTables()" class="btn btn-success waves-effect waves-light"><i
+                    class="fas fa-table"></i> Changer la table</button>
+            <button onclick="ExportToExcel('xlsx')" class="btn btn-primary waves-effect waves-light"><i
+                    class="mdi mdi-download"></i>
                 telecharger</button>
 
         </div>
@@ -83,10 +94,21 @@
             <thead>
                 <!-- Header row for seance parts -->
                 <tr>
-                    <th>Days/Seance</th> <!-- Empty cell for spacing -->
+                    <th rowspan="2">Days/Seance</th>
+                    <!-- Loop through days part -->
+                    @foreach ($days_part as $dayPart)
+                        <!-- Display days part in the top row -->
+                        <th colspan="2">{{ $dayPart }}</th>
+                    @endforeach
+                    <!-- Empty cell for spacing -->
+                </tr>
+                <tr>
+                    <!-- Loop through seance part -->
                     @foreach ($seances_part as $seance_part)
+                        <!-- Display seance part in the bottom row -->
                         <th>{{ $seance_part }}</th>
                     @endforeach
+
                 </tr>
             </thead>
             <tbody>
@@ -94,11 +116,37 @@
                 @foreach ($days_of_week as $day_of_week)
                     <tr class="dtdynamic bg-light-gray">
                         <!-- Display the day -->
-                        <th>{{ $day_of_week }}</th>
+                        @php
+                            switch ($day_of_week) {
+                                case 'Mon':
+                                    $day = 'Lundi';
+                                    break;
+                                case 'Tue':
+                                    $day = 'Mardi';
+                                    break;
+                                case 'Wed':
+                                    $day = 'Mercredi';
+                                    break;
+                                case 'Thu':
+                                    $day = 'Jeudi';
+                                    break;
+                                case 'Fri':
+                                    $day = 'Vendredi';
+                                    break;
+                                case 'Sat':
+                                    $day = 'Samedi';
+                                    break;
+                                default:
+                                    $day = $day_of_week;
+                                    break;
+                            }
+                        @endphp
+                        <th>{{ $day }}</th>
                         <!-- Loop through each seance part -->
                         @foreach ($seances_part as $seance_part)
                             <!-- Display the schedule data for each day and seance part -->
-                            <td data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
+                            <td data-emploi="{{ $emploiID }}" data-part="{{ $day_part }}"
+                                data-day="{{ $day_of_week }}" data-seance="{{ $seance_part }}"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases">
                                 @foreach ($AllSeances as $AllSeance)
                                     @if ($AllSeance->day == $day_of_week && $AllSeance->dure_sission == $seance_part)
@@ -191,7 +239,7 @@
                             <label for="msg">Type your message:</label>
                             <input type="text" id="msg" class="form-control">
                         </div>
-                        
+
                         <br />
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-primary">Soumettre</button>
@@ -236,6 +284,15 @@
     {{-- end modal --}}
 
     <script>
+        var emploi = {{ $emploiID }};
+        function submitForm() {
+            document.getElementById("emploi-form").submit();
+        }
+        document.getElementById('date-select').addEventListener('change', function() {
+            document.getElementById('emploiID').value = this.value;
+            submitForm();
+        });
+
         function toggleTables() {
             var table1 = document.getElementById("tbl_exporttable_to_xls_1");
             var table2 = document.getElementById("tbl_exporttable_to_xls_2");
@@ -254,80 +311,54 @@
             var daysOfWeek = @json($days_of_week);
             var daysPart = @json($days_part);
             var seancesPart = @json($seances_part);
-            var casesPerDay = 4;
-            var casesPerPartOfDay = 2;
+            var seancesPemploiart = @json($emploiID);
 
             var clickedCell;
             var FlashMsg = document.createElement("div");
 
-
-
             var selectedData = [];
 
             var mainEmplois = @json($main_emplois);
+            var emploiID = emploi;
+            console.log(emploiID);
             var currentIndex = 0;
-
 
             document.getElementById('previous').addEventListener('click', function() {
                 currentIndex = (currentIndex - 1 + mainEmplois.length) % mainEmplois.length;
-                displayItem(currentIndex);
-                console.log(mainEmploiId);
-
+                afficherIDEmploi(currentIndex);
 
             });
 
             document.getElementById('next').addEventListener('click', function() {
                 currentIndex = (currentIndex + 1) % mainEmplois.length;
-                displayItem(currentIndex);
-                console.log(mainEmploiId);
+                afficherIDEmploi(currentIndex);
 
             });
 
-            function displayItem(index) {
-                if (mainEmplois.length == 0) {
-                    // Masquer les éléments de date et de navigation
-                    document.getElementById('dates-div').style.display = 'none';
-                    document.getElementById('next').style.display = 'none';
-                    document.getElementById('previous').style.display = 'none';
-
-                    // Afficher le div contenant le message d'alerte
-                    document.getElementById('message-div').style.display = 'block';
-                } else {
-                    // Afficher les dates et la navigation
-                    document.getElementById('dates-div').style.display = 'flex';
-                    document.getElementById('next').style.display = 'flex';
-                    document.getElementById('previous').style.display = 'flex';
-                    document.getElementById('message-div').style.display = 'none';
 
 
-                    // Définir les dates de début et de fin
-                    mainEmploiId = mainEmplois[index].id;
-                    document.getElementById('dateStart').innerText = mainEmplois[index].datestart;
-                    document.getElementById('dateEnd').innerText = mainEmplois[index].dateend;
-                }
-
-            }
-
-            displayItem(currentIndex);
             var mainEmploiId = mainEmplois[currentIndex].id;
-            $.ajax({
-                type: 'GET',
-                url: '{{ route('DemanderEmploi') }}',
-                data: {
+            afficherIDEmploi(currentIndex)
 
-                    mainEmploiId: mainEmploiId,
 
-                },
-                success: function(response) {
+            function afficherIDEmploi(index) {
+                // var emploiID = mainEmplois[index].id;
+                // console.log("ID de l'emploi actuel from funct:", emploiID);
 
-                },
-                error: function(error) {
-                    console.error('Error creating sission emploi:',
-                        error
-                        .responseText);
-                    // Handle error and display appropriate message to the user
-                }
-            });
+                $.ajax({
+                    type: 'GET',
+                    url: '{{ route('DemanderEmploi') }}', // Assuming this route is correct
+                    data: {
+                        emploiID: emploiID
+                    },
+                    success: function(response) {
+                        // Handle success response if needed
+                    },
+                    error: function(error) {
+                        // Handle error response if needed
+                    }
+                });
+            }
             // Function to open the pop-up form and display the flash message
 
             $(document).ready(function() {
@@ -343,7 +374,7 @@
                         url: '{{ route('createRequestEmploi') }}',
                         data: {
                             '_token': '{{ csrf_token() }}',
-                            mainEmploiId: mainEmploiId, // Add main emploi variable
+                            mainEmploiId: emploi, // Add main emploi variable
                             comment: $('#cmt').val(),
                             formData: $(this).serialize() // Serialize form data
 
@@ -424,32 +455,20 @@
                         var ShowselectedClass = $('#class option:selected').text();
                         var ShowselectedMsg = document.getElementById("msg").value;
 
-                        // Get the position of the clicked cell in daysOfWeek, daysPart, and seancesPart
-
-                        // var totalCases = casesPerDay * daysOfWeek.length;
-                        // var clickedIndex = Array.from(clickedCell.parentNode
-                        //         .children)
-                        //     .indexOf(clickedCell);
-
-                        // var dayOfWeekIndex = Math.floor(clickedIndex /
-                        //         casesPerDay) %
-                        //     daysOfWeek.length;
-                        // var dayPartIndex = Math.floor((clickedIndex % totalCases) /
-                        //     casesPerPartOfDay) % daysPart.length;
-                        // var seancePartIndex = (clickedIndex % totalCases) %
-                        //     seancesPart
-                        //     .length;
-
-                        // var dayOfWeek = daysOfWeek[dayOfWeekIndex];
-
                         var dayOfWeek = clickedCell.dataset.day;
                         var seancePart = clickedCell.dataset.seance;
                         var dayPart = (seancePart == "SE1" || seancePart == "SE2") ?
-                            "Matin" : "A.midi";
+                            "Matin" : "Amidi";
+                        var emploi = clickedCell.dataset.emploi;
+                        console.log(dayOfWeek);
+                        console.log(seancePart);
+                        console.log(dayPart);
+                        console.log(emploi);
+
 
                         // var seancePart = seancesPart[seancePartIndex];
 
-                        // 
+                        //
 
                         // all data in once
                         selectedData.push({
@@ -460,7 +479,7 @@
                             'day': dayOfWeek,
                             'dayPart': dayPart,
                             'seancePart': seancePart,
-                            'mainEmploiId': mainEmploiId,
+                            'mainEmploiId': emploi,
                             'message': ShowselectedMsg
                         });
 
@@ -468,23 +487,6 @@
 
                         clickedCell.innerText = ShowselectedType + '\n ' +
                             ShowselectedGroup + '\n' + ShowselectedClass;
-
-                        // // Create a new div to display the selected information
-                        // var infoDiv = document.createElement("div");
-                        // infoDiv.innerHTML = '<h3>Day of Week: ' + dayOfWeek +
-                        //     '</h3>' +
-                        //     '<h3>Day Part: ' + dayPart + '</h3>' +
-                        //     '<h3>Seance Part: ' + seancePart + '</h3>' +
-                        //     '<h3>Module: ' + ShowselectedModule + '</h3>' +
-                        //     '<h3>Group: ' + ShowselectedGroup + '</h3>' +
-                        //     '<h3>Seance Type: ' + ShowselectedType + '</h3>' +
-                        //     '<h3>Seance MSG: ' + ShowselectedMsg + '</h3>' +
-                        //     '<h3>class :' + ShowselectedClass + ' </h3>';
-
-                        // // Append the new div to the "infoContainer"
-                        // document.getElementById('infoContainer').innerHTML = '';
-                        // document.getElementById('infoContainer').appendChild(
-                        //     infoDiv);
 
                         $('#groupModuleClassModal').modal('hide');
                     });
@@ -522,7 +524,7 @@
 
                         '_token': '{{ csrf_token() }}',
                         'selectedData': selectedData,
-                        'mainEmploiId': mainEmploiId,
+                        'mainEmploiId': emploi,
 
                     },
                     success: function(response) {
@@ -552,21 +554,7 @@
 
 
 
-            console.log('demander', mainEmploiId);
-            $.ajax({
-                type: 'GET',
-                url: '{{ route('DemanderEmploi') }}',
-                data: {
-                    'main_emploi_id': mainEmploiId, // Correct parameter name
-                },
-                success: function(response) {
-                    console.log("c bon pour l'affiachge de l'emploi");
-                },
-                error: function(error) {
-                    console.error('Error creating session emploi:', error.responseText);
-                    // Handle error and display appropriate message to the user
-                }
-            });
+
             $(document).ready(function() {
                 var buttonState = localStorage.getItem('requestButtonState');
                 if (buttonState) {
