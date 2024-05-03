@@ -11,6 +11,7 @@ use App\Models\RequestEmploi;
 use App\Models\sission;
 use App\Models\User;
 use App\Notifications\RequestEmploiNotification;
+use App\Notifications\UpdateRequestEmploiNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -179,7 +180,10 @@ class FormateurRequestController extends Controller
                     'date_request' => now(),
                     'comment' => $comment,
                 ]);
-
+                 // Notify admin about the new request emploi
+                 $MainUser = User::where('role', 'admin')->first();
+                 $FormateurRequest = Auth::user()->user_name;
+                 Notification::send($MainUser, new UpdateRequestEmploiNotification($existingRequest->id, $FormateurRequest, $comment, $mainEmploiId));
                 return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400, 'requestExists' => $requestExists]);
             } else {
                 // If no request exists, create a new one
