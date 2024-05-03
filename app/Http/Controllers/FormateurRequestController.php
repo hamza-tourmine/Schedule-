@@ -11,7 +11,6 @@ use App\Models\RequestEmploi;
 use App\Models\sission;
 use App\Models\User;
 use App\Notifications\RequestEmploiNotification;
-use App\Notifications\UpdateRequestEmploiNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -114,6 +113,12 @@ class FormateurRequestController extends Controller
                 ]);
 
                 $sission->save();
+                // Notify admin about the new request emploi
+                $MainUser = User::where('role', 'admin')->first();
+                $comment = $item['message'];
+                $type = 'seance';
+                $FormateurRequest = Auth::user()->user_name;
+                Notification::send($MainUser, new RequestEmploiNotification($type,$sission->id, $FormateurRequest, $mainEmploiId,$comment, $sission->status_sission));
                 Log::info('Sission created:', ['data' => $item]);
             }
             return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
@@ -183,7 +188,9 @@ class FormateurRequestController extends Controller
                  // Notify admin about the new request emploi
                  $MainUser = User::where('role', 'admin')->first();
                  $FormateurRequest = Auth::user()->user_name;
-                 Notification::send($MainUser, new UpdateRequestEmploiNotification($existingRequest->id, $FormateurRequest, $comment, $mainEmploiId));
+                $type = 'emploi';
+
+                 Notification::send($MainUser, new RequestEmploiNotification($type,$existingRequest->id, $FormateurRequest,$mainEmploiId, $comment,''));
                 return response()->json(['message' => 'Request emploi updated successfully.', 'status' => 400, 'requestExists' => $requestExists]);
             } else {
                 // If no request exists, create a new one
@@ -198,7 +205,9 @@ class FormateurRequestController extends Controller
                 // Notify admin about the new request emploi
                 $MainUser = User::where('role', 'admin')->first();
                 $FormateurRequest = Auth::user()->user_name;
-                Notification::send($MainUser, new RequestEmploiNotification($requestEmploi->id, $FormateurRequest, $comment, $mainEmploiId));
+                $type = 'emploi';
+
+                Notification::send($MainUser, new RequestEmploiNotification($type,$requestEmploi->id, $FormateurRequest,$mainEmploiId, $comment,''));
 
                 return response()->json(['message' => 'Request emploi created successfully.', 'status' => 300, 'requestExists' => $requestExists]);
             }

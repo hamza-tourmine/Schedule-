@@ -132,6 +132,7 @@ public function Accepte()
     if ($session) {
         $session->status_sission = 'Accepted';
         $session->save();
+        
         $this->alert('success', 'Session accepted successfully.', [
             'position' => 'center',
             'timer' => 3000,
