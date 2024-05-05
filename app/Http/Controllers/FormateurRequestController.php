@@ -95,31 +95,36 @@ class FormateurRequestController extends Controller
                     Sission::where('id', $item['seanceId'])->delete();
                 }
 
-                // Create a new session
-                $sission = new sission([
-                    'day' => $item['day'],
-                    'day_part' => $item['dayPart'],
-                    'sission_type' => $item['type'],
-                    'group_id' => $item['group'],
-                    'module_id' => $item['module'],
-                    'class_room_id' => $item['class'],
-                    'establishment_id' => $establishment,
-                    'dure_sission' => $item['seancePart'],
-                    'user_id' => $user_id,
-                    'main_emploi_id' => $mainEmploiId,
-                    "demand_emploi_id" => $requestEmploiId,
-                    'message' => $item['message'],
-                    'status_sission' => "Pending",
-                ]);
+                // If multiple groups are selected
+                $selectedGroups = is_array($item['group']) ? $item['group'] : [$item['group']];
 
-                $sission->save();
-                // Notify admin about the new request emploi
-                $MainUser = User::where('role', 'admin')->first();
-                $comment = $item['message'];
-                $type = 'seance';
-                $FormateurRequest = Auth::user()->user_name;
-                Notification::send($MainUser, new RequestEmploiNotification($type,$sission->id, $FormateurRequest, $mainEmploiId,$comment, $sission->status_sission));
-                Log::info('Sission created:', ['data' => $item]);
+                foreach ($selectedGroups as $groupId) {
+                    // Create a new session for each selected group
+                    $sission = new sission([
+                        'day' => $item['day'],
+                        'day_part' => $item['dayPart'],
+                        'sission_type' => $item['type'],
+                        'group_id' => $groupId,
+                        'module_id' => $item['module'],
+                        'class_room_id' => $item['class'],
+                        'establishment_id' => $establishment,
+                        'dure_sission' => $item['seancePart'],
+                        'user_id' => $user_id,
+                        'main_emploi_id' => $mainEmploiId,
+                        "demand_emploi_id" => $requestEmploiId,
+                        'message' => $item['message'],
+                        'status_sission' => "Pending",
+                    ]);
+
+                    $sission->save();
+                    // Notify admin about the new request emploi
+                    $MainUser = User::where('role', 'admin')->first();
+                    $comment = $item['message'];
+                    $type = 'seance';
+                    $FormateurRequest = Auth::user()->user_name;
+                    Notification::send($MainUser, new RequestEmploiNotification($type,$sission->id, $FormateurRequest, $mainEmploiId,$comment, $sission->status_sission));
+                    Log::info('Sission created:', ['data' => $item]);
+                }
             }
             return response()->json(['sucess' => 'Toutes les données ont été soumises avec succès.', 'status' => 200]);
         }
@@ -127,6 +132,7 @@ class FormateurRequestController extends Controller
         return response()->json(['message' => 'Error occurred while processing request.', 'status' => 500, 'error' => $e->getMessage()]);
     }
 }
+
 
 
     public function updateSession(Request $request)
