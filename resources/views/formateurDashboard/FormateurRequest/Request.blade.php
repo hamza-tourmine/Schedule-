@@ -264,6 +264,7 @@
                         </div>
 
                         <br />
+
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-primary">Soumettre</button>
 
@@ -331,15 +332,6 @@
             var selectedData = [];
 
             var mainEmplois = @json($main_emplois);
-            // Check if there are no schedules available
-            if (mainEmplois.length === 0) {
-                // If no schedules are available, show the message
-                document.getElementById('message-div').style.display = 'block';
-            } else {
-                // If schedules are available, hide the message
-                document.getElementById('message-div').style.display = 'none';
-            }
-
             var emploiID = emploi;
             console.log(emploiID);
             var currentIndex = 0;
@@ -592,24 +584,31 @@
         });
 
         function ExportToExcel(type, fn, dl) {
-            // Get the currently visible table
-            var currentTable = document.getElementById("tbl_exporttable_to_xls_1").style.display === "block" ?
-                document.getElementById("tbl_exporttable_to_xls_1") :
-                document.getElementById("tbl_exporttable_to_xls_2");
+            var selectedEmploiID = $('#emploiID').val(); // Get the selected emploiID
+            var dateStart = $('#date-select option:selected').text().split(' - ')[
+                0]; // Extract date start from selected option
+            var dateEnd = $('#date-select option:selected').text().split(' - ')[1]; // Extract date end from selected option
 
-            // Convert the table to Excel format
-            var wb = XLSX.utils.table_to_book(currentTable, {
+            // Depending on your implementation, you may need to adjust how you fetch the selected emploiID and dates
+
+            var elt = document.getElementById('tbl_exporttable_to_xls_1');
+            var wb = XLSX.utils.table_to_book(elt, {
                 sheet: "sheet1"
             });
 
-            // Export the Excel file
+            // Include date start and date end in the filename
+            var filename = '{{ Auth::user()->user_name }} - ' + dateStart.trim() + ' - ' + dateEnd.trim() + '.' + (type ||
+                'xlsx');
+
             return dl ?
                 XLSX.write(wb, {
                     bookType: type,
                     bookSST: true,
                     type: 'base64'
                 }) :
-                XLSX.writeFile(wb, fn || ('Schedule.' + (type || 'xlsx')));
+                XLSX.writeFile(wb, fn || filename, {
+                    selectedEmploiID: selectedEmploiID // Pass the selected emploiID as a parameter
+                });
         }
     </script>
 

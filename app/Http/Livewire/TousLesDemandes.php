@@ -532,4 +532,4 @@ public function UpdateSession()
         return view('livewire.tous-les-demandes',['seance' => $seance,'allseances'=>$allseances]);
     }
 
-}
+  }
