@@ -47,6 +47,8 @@
     // return  a view for page  that can  return view for page   change password
     Route::get('/reset-password/{token}', [forgotPassword::class, 'resetPasswordView'])->name('resetPasswordView');
     //login and  create an account
+         // logout
+         Route::get('/logout', [auth_controller::class, 'logout'])->name('logout');
 
 
     Route::get('/', function () {
@@ -58,8 +60,7 @@
 
     // for admin
     Route::middleware(['auth', 'RoutesForAdmin'])->prefix('admin')->group(function () {
-        // logout
-        Route::get('/logout', [auth_controller::class, 'logout'])->name('logout');
+
         // profile
         Route::controller(adminProfileController::class)->group(function () {
             Route::get('/profile', 'index')->name('showProfileAdmin');
@@ -161,8 +162,7 @@
 
     // routes for  Formateur
     Route::middleware(['auth', 'RoutesForFormateur'])->group(function () {
-        // logout
-        Route::get('/logout', [auth_controller::class, 'logout'])->name('logout');
+
         // displat main page in formateur account
         Route::get('/dashboardFormateur', [formateurController::class, 'showHomepage'])->name('dashboard_formateur');
         // request Emploi

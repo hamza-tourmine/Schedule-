@@ -15,7 +15,6 @@ use App\Models\class_room_type;
 use Illuminate\Support\Facades\Session;
 use App\Models\sission;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-
 use function PHPUnit\Framework\isEmpty;
 
 class ToutEmplois extends Component
@@ -264,6 +263,7 @@ public function DeleteSession()
                         ->join('users', 'users.id', '=', 'sissions.user_id')
                         ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
                         ->where('sissions.establishment_id', $establishment_id)
+                        ->where('sissions.status_sission', 'Accepted')
                         ->where('sissions.main_emploi_id', $this->selectedValue)
                         ->get();
 

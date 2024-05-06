@@ -46,7 +46,7 @@
 
         <table id="tbl_exporttable_to_xls" style="overflow:scroll" class="col-md-12 ">
 
-            <div style="width:70rem ;display: flex ;justify-content:space-between ;marign-top:15px ">
+            <div style="width:85vw ; display: flex ;justify-content:space-between ;marign-top:15px ; ">
                 @if ($this->checkValues[0]->modeRamadan)
                 <h4 style="marign-top:15px " >
                     SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
@@ -58,13 +58,14 @@
 
 
                     @if (!$dataEmploi->isEmpty())
-                    <h4 style="float: right; margin-top: 15px;">
+                    <h4 style="float: right; ">
                         @foreach ($dataEmploi as $item)
                             Du: {{ $item->datestart }} au {{ $item->dateend }}
                         @endforeach
                     </h4>
                     @else
-                    <h4 style="float: right; margin-top: 15px; padding: 0px 5px 0px 5px; border-radius: 3px; background-color: #dc3545; color: white;">
+                    <h4 style="float: right;  padding: 0px 5px 0px 5px;
+                     border-radius: 3px; background-color: #dc3545; color: white;">
                         Il faut créer un emploi
                     </h4>
                     @endif
