@@ -5,6 +5,8 @@
 *:after,
 *:before {
     box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
 }
 
  input[type = 'text'],
@@ -593,6 +595,7 @@ body[data-layout="horizontal"] .footer {
     }
     body.sidebar-enable .vertical-menu {
         display: block;
+
     }
 }
 .vertical-collpsed .main-content {

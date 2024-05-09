@@ -77,9 +77,10 @@
         Route::controller(branchController::class)->group(function () {
             Route::get('/add-Branch', 'index')->name('addbranch');
             Route::post('/create-Branch', 'create')->name('createBranch');
-            Route::get('/update-branch/{id}', 'updateView')->name('updateBranch');
             Route::get('/delate-branch/{id}', 'delateBranch')->name('delateBranch');
-            Route::post('update-branch/{id}', 'updateBarnch')->name('updateBarnch');
+
+            Route::get('/update-branch/{id}', 'updateView')->name('update-branch');
+            Route::post('/update-branch/{id}', 'updateBarnch')->name('updateBarnch');
         });
         // end branch routes
         // Model Setting
