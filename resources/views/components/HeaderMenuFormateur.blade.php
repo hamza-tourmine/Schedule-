@@ -10,6 +10,8 @@
     <!-- App favicon -->
     {{-- driver JS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <script src="{{ asset('js/jquery.min.js') }}"></script>
 
 
@@ -151,8 +153,8 @@
                                 <button type="button" class="btn header-item waves-effect"
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    <img class="rounded-circle header-profile-user"  src="{{ asset('uploads/' . Auth::user()->image) }}"
-                                alt="Header Avatar">
+                                    <img class="rounded-circle header-profile-user"
+                                        src="{{ asset('uploads/' . Auth::user()->image) }}" alt="Header Avatar">
                                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
 
                                 </button>
@@ -166,20 +168,30 @@
                             <!-- LOGO -->
                             <div class="navbar-brand-box">
                                 <a class="logo logo-dark">
-                                    <span class="logo-sm">
-                                        <img src="assets/images/logo-sm.png" alt="" height="20">
-                                    </span>
-                                    <span class="logo-lg">
-                                        <img src="assets/images/logo-dark.png" alt="" height="17">
-                                    </span>
+                                    <span class="logo-sm" style="font-size: 20px;font-weight:bold">
+                                        @php
+                                        $ISTA = Auth::user()->establishment_id;
+                                        $establishmentName = \App\Models\establishment::find($ISTA)->name_establishment;
+                                    @endphp
+                                    
+                                    {{ $establishmentName }}                                    </span>
+                                    <span class="logo-lg" style="font-size: 17px;font-weight:bold">
+                                        @php
+                                        $ISTA = Auth::user()->establishment_id;
+                                        $establishmentName = \App\Models\establishment::find($ISTA)->name_establishment;
+                                    @endphp
+                                    
+                                    {{ $establishmentName }}                                    </span>
                                 </a>
 
                                 <a class="logo logo-light">
-                                    <span class="logo-sm">
-                                        <img src="assets/images/logo-sm.png" alt="" height="20">
-                                    </span>
-                                    <span class="logo-lg">
-                                        <img src="assets/images/logo-light.png" alt="" height="19">
+                                                                        <span class="w3-cursive" style="font-size: 20px;font-weight:bold">
+                                        @php
+                                            $ISTA = Auth::user()->establishment_id;
+                                            $establishmentName = \App\Models\establishment::find($ISTA)->name_establishment;
+                                        @endphp
+                                        
+                                        {{ $establishmentName }}
                                     </span>
                                 </a>
                             </div>
@@ -215,8 +227,8 @@
                 <div class="h-100">
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img class="rounded-circle header-profile-user"  src="{{ asset('uploads/' . Auth::user()->image) }}"
-                                alt="Header Avatar">
+                            <img class="rounded-circle header-profile-user"
+                                src="{{ asset('uploads/' . Auth::user()->image) }}" alt="Header Avatar">
                         </div>
 
 
@@ -274,19 +286,37 @@
                                 </a>
                             </li>
 
-                            
 
-                            
+
+
 
                             <li class="Settings">
                                 <a class="dropdown-item d-block" href="{{ url('settingsFormateur') }}">
                                     <i class="mdi mdi-settings-outline"></i> Settings
                                 </a>
                             </li>
-                            <li class="Documentation">
-                                <a class="dropdown-item d-block" onclick="launchDriver()">
-                                    <i class="fas fa-book"></i>Lunch Documentation
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect" aria-expanded="false">
+                                    <i class="fas fa-book"></i>
+                                    <span>Lunch Documentation</span>
                                 </a>
+                                <ul class="sub-menu mm-collapse" aria-expanded="false">
+                                    <li>
+                                        <a onclick="launchDriver()">
+                                            Decouvrir l'application
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="launchDriver()">
+                                            Comment creer une demande
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="launchDriver()">
+                                            Comment modifier les parametre
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
 
 
