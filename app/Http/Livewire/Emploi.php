@@ -11,7 +11,7 @@ use App\Models\group;
 use App\Models\module;
 use App\Models\class_room;
 use App\Models\class_room_type;
-use App\Models\user;
+use App\Models\User;
 use App\Models\formateur_has_group;
 use App\Models\EmploiStrictureModel;
 use App\Models\Setting;

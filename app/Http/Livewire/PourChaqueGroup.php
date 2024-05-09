@@ -15,7 +15,7 @@ use App\Models\Setting;
 use App\Models\sission ;
 use Illuminate\Support\Facades\Auth;
 use App\Models\formateur_has_group;
-use App\Models\user;
+use App\Models\User;
 use App\Models\branch;
 use App\Models\formateur_has_branche;
 use App\Models\EmploiStrictureModel;

@@ -271,7 +271,7 @@ class EmploiToutFormateurs extends Component
         ->where('formateur_has_filier.formateur_id', $this->formateurId)
         ->get();
         // groupes
-        $groupsQuery = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
+        $groupsQuery = group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
         ->where('groups.establishment_id', $establishment_id)
         ->where('f.formateur_id', $this->formateurId)
         ->select('groups.id', 'groups.group_name'); // Select ID along with group_name

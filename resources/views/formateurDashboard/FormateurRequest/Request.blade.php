@@ -218,8 +218,8 @@
                             <select class="form-control" id="group" name="group" required>
                                 @foreach ($GroupsList as $GroupList)
                                     @php
-                                        $groupId = \App\Models\Group::find($GroupList['group_id'])->id;
-                                        $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
+                                        $groupId = \App\Models\group::find($GroupList['group_id'])->id;
+                                        $groupName = \App\Models\group::find($GroupList['group_id'])->group_name;
                                     @endphp
                                     <option value="{{ $groupId }}">{{ $groupName }}</option>
                                 @endforeach

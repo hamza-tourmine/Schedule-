@@ -48,6 +48,26 @@
 
     }
 
+    .dateContent{
+            width: 85vw ;
+            display: flex ;
+            justify-content: space-between
+        }
+        @media screen and (max-width:600px){
+            .dateContent{
+            margin-top: 15px ;
+            width: 95vw ;
+            display: flex ;
+            flex-direction: column
+        }
+        .hide{
+            display: none ;
+        }
+        .data{
+            margin-top:5px
+        }
+        }
+
 
     </style>
 
@@ -84,7 +104,7 @@
 
         <table  id="tbl_exporttable_to_xls" style="overflow:scroll ;" class="col-md-12 ">
 
-            <div style="width:85vw ; display: flex ;justify-content:space-between ;marign-top:15px ; ">
+            <div class="dateContent">
                 @if ($this->checkValues[0]->modeRamadan)
                 <h4 style="marign-top:15px " >
                     SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
@@ -218,9 +238,7 @@
         </table>
     </div>
 
-    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
-        telecharger</button>
-<button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
+    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5"> télécharger</button>
       <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1">
     Supprimer tout
