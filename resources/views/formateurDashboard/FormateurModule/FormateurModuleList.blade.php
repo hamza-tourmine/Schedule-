@@ -27,7 +27,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="2">No modules assigned to this formateur</td>
+                                            <td colspan="3">No modules assigned to this formateur</td>
                                         </tr>
                                     @endif
                                 </tbody>

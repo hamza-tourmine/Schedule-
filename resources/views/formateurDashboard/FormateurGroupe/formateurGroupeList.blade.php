@@ -36,7 +36,7 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td colspan="2">No groups assigned to this formateur</td>
+                                                <td colspan="3">No groups assigned to this formateur</td>
                                             </tr>
                                         @endif
                                     </tbody>

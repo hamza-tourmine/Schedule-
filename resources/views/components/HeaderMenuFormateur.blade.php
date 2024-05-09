@@ -10,6 +10,7 @@
     <!-- App favicon -->
     {{-- driver JS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
 
 
     <!-- Plugin css -->
@@ -150,27 +151,12 @@
                                 <button type="button" class="btn header-item waves-effect"
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    <img class="rounded-circle header-profile-user" src="assets/images/users/user.jpg"
-                                        alt="Header Avatar">
+                                    <img class="rounded-circle header-profile-user"  src="{{ asset('uploads/' . Auth::user()->image) }}"
+                                alt="Header Avatar">
                                     <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
 
-                                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <!-- item-->
-                                    <a class="dropdown-item" href="#"><i
-                                            class="bx bx-user font-size-16 align-middle me-1"></i>
-                                        Profile</a>
 
-                                    <a class="dropdown-item d-block" href="#"><span
-                                            class="badge bg-success float-end">11</span><i
-                                            class="bx bx-wrench font-size-16 align-middle me-1"></i> Settings</a>
-
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"><i
-                                            class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
-                                        Logout</a>
-                                </div>
                             </div>
 
 
@@ -229,7 +215,7 @@
                 <div class="h-100">
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img class="rounded-circle header-profile-user" src="assets/images/users/user.jpg"
+                            <img class="rounded-circle header-profile-user"  src="{{ asset('uploads/' . Auth::user()->image) }}"
                                 alt="Header Avatar">
                         </div>
 
@@ -238,8 +224,13 @@
                             <a href="#"
                                 class="text-reset fw-medium font-size-16">{{ Auth::user()->user_name }}</a>
                             <p class="text-muted mt-1 mb-0 font-size-13">
-                                Domaine du formation
+                                @if (Auth::user()->domaine)
+                                    {{ Auth::user()->domaine }}
+                                @else
+                                    Domaine du formation
+                                @endif
                             </p>
+
                         </div>
                     </div>
 
@@ -270,29 +261,25 @@
                                     <span>Calendar</span>
                                 </a>
                             </li>
-
                             <li class="Groupes">
-                                <a href="javascript:void(0);" class="has-arrow waves-effect">
+                                <a href="{{ url('FormateurGroupeList') }}" class="waves-effect">
                                     <i class="mdi mdi-account-group"></i>
-                                    <span>Groupes</span>
+                                    <span>List des Groupes</span>
                                 </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{{ url('FormateurGroupeList') }}">List des Groupes</a></li>
-                                </ul>
+                            </li>
+                            <li class="Modules">
+                                <a href="{{ url('FormateurModuleList') }}" class="waves-effect">
+                                    <i class="mdi mdi-inbox-full"></i>
+                                    <span>List des Modules</span>
+                                </a>
                             </li>
 
-                            <li class="Modules">
-                                <a href="javascript:void(0);" class="has-arrow waves-effect">
-                                    <i class="mdi mdi-inbox-full"></i>
-                                    <span>Modules</span>
-                                </a>
-                                <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="{{ url('FormateurModuleList') }}">List des Modules</a></li>
-                                </ul>
-                            </li>
+                            
+
+                            
 
                             <li class="Settings">
-                                <a class="dropdown-item d-block" href="{{ url('settings') }}">
+                                <a class="dropdown-item d-block" href="{{ url('settingsFormateur') }}">
                                     <i class="mdi mdi-settings-outline"></i> Settings
                                 </a>
                             </li>

@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\auth_controller;
@@ -165,6 +165,10 @@
 
         // displat main page in formateur account
         Route::get('/dashboardFormateur', [formateurController::class, 'showHomepage'])->name('dashboard_formateur');
+        Route::get('/settingsFormateur', [FormateurRequestController::class, 'settings'])->name('settings_formateur');
+        Route::post('/update_settings', [FormateurRequestController::class, 'updateSettings'])->name('update_settings');
+
+
         // request Emploi
         Route::get('DemanderEmploi', [FormateurRequestController::class, 'show'])->name('DemanderEmploi');
         // Route::post('DemanderEmploi',[FormateurRequestController::class,'show'])->name('DemanderEmploi');
@@ -174,6 +178,8 @@
 
         Route::post('createRequestEmploi', [FormateurRequestController::class, 'createRequestEmploi'])->name('createRequestEmploi');
         //
+        Route::get('dashboardFormateur', [ShowGroupAffected::class, 'ShowInHomeGroupAndModuleAffected'])->name('dashboard_formateur');
+
         Route::get('FormateurGroupeList', [ShowGroupAffected::class, 'Show']);
         Route::get('FormateurModuleList', [ShowModuleAffected::class, 'Show']);
     });
