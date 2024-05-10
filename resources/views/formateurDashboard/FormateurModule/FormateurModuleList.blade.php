@@ -11,6 +11,7 @@
                             <table id="FormateurModulesTable" class="table table-striped table-bordered dt-responsive nowrap">
                                 <thead>
                                     <tr>
+                                        <th>ID Du module</th>
                                         <th>Nom Du module</th>
                                     </tr>
                                 </thead>
@@ -20,14 +21,16 @@
                                         @foreach ($modulesList as $moduleList)
                                         @php
                                         $moduleName = \App\Models\module::find($moduleList['module_id'])->module_name;
+                                        $moduleId = substr(\App\Models\Module::find($moduleList['module_id'])->id, 1);
                                         @endphp
                                             <tr>
+                                                <td>{{ $moduleId }}</td>
                                                 <td>{{ $moduleName }}</td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="3">No modules assigned to this formateur</td>
+                                            <td colspan="2">No modules assigned to this formateur</td>
                                         </tr>
                                     @endif
                                 </tbody>

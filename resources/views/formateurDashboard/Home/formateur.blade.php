@@ -6,9 +6,24 @@
                     <div class="profile-widgets py-3">
 
                         <div class="text-center">
+                            @php
+                                // Get the user's image
+$userImage = Auth::user()->image;
+
+// Check if the user has uploaded an image
+if ($userImage) {
+    // Use the uploaded image
+    $imagePath = 'uploads/' . $userImage;
+} else {
+    // Use the default image
+    $imagePath = 'assets/images/users/user.jpg';
+                                }
+
+                            @endphp
                             <div class="">
-                                <img src="{{ asset('uploads/' . Auth::user()->image) }}" alt="Profile picture"
-                                    class="avatar-lg mx-auto img-thumbnail rounded-circle">
+                                <img class="rounded-circle header-profile-user" src="{{ asset($imagePath) }}"
+                                    alt="Header Avatar">
+
                                 <div class="online-circle"><i class="fas fa-circle text-success"></i>
                                 </div>
                             </div>
@@ -40,7 +55,7 @@
                                         $user = Auth::user();
                                         $seancesList = \App\Models\sission::where('user_id', $user->id)->count();
                                     @endphp
-                                    <h5 class="mb-0">{{$seancesList}}</h5>
+                                    <h5 class="mb-0">{{ $seancesList }}</h5>
                                 </div>
                             </div>
 
@@ -92,6 +107,7 @@
                     <table id="FormateurGroupesTable" class="table table-striped table-bordered dt-responsive nowrap">
                         <thead>
                             <tr>
+                                <th>ID Du Groupe</th>
                                 <th>Nom Du Groupe</th>
                                 <th>Branch</th>
                                 <th>Year</th>
@@ -103,11 +119,17 @@
                                 @php $counter = 0; @endphp
                                 @foreach ($GroupsList as $GroupList)
                                     @php
+                                        $groupId = substr(\App\Models\Group::find($GroupList['group_id'])->id, 1);
+
                                         $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
-                                        $groupBranch = \App\Models\Group::find($GroupList['group_id'])->barnch_id;
+                                        $groupBranch = substr(
+                                            \App\Models\Group::find($GroupList['group_id'])->barnch_id,
+                                            1,
+                                        );
                                         $groupYear = \App\Models\Group::find($GroupList['group_id'])->year;
                                     @endphp
                                     <tr @if ($counter >= 3) style="display: none;" @endif>
+                                        <td>{{ $groupId }}</td>
                                         <td>{{ $groupName }}</td>
                                         <td>{{ $groupBranch }}</td>
                                         <td>{{ $groupYear }}</td>
@@ -116,7 +138,7 @@
                                 @endforeach
                                 @if ($counter > 3)
                                     <tr id="showMoreRow">
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <a href="{{ url('FormateurGroupeList') }}" class="btn btn-primary">Show
                                                 More</a>
                                         </td>
@@ -124,7 +146,7 @@
                                 @endif
                             @else
                                 <tr>
-                                    <td colspan="3">No groups assigned to this formateur</td>
+                                    <td colspan="4">No groups assigned to this formateur</td>
                                 </tr>
                             @endif
                         </tbody>
@@ -152,6 +174,7 @@
                     <table id="FormateurModulesTable" class="table table-striped table-bordered dt-responsive nowrap">
                         <thead>
                             <tr>
+                                <th>ID Du module</th>
                                 <th>Nom Du module</th>
                             </tr>
                         </thead>
@@ -161,16 +184,18 @@
                                 @php $counter = 0; @endphp
                                 @foreach ($modulesList as $moduleList)
                                     @php
-                                        $moduleName = \App\Models\Module::find($moduleList['module_id'])->module_name;
+                                        $moduleName = \App\Models\module::find($moduleList['module_id'])->module_name;
+                                        $moduleId = substr(\App\Models\Module::find($moduleList['module_id'])->id, 1);
                                     @endphp
                                     <tr @if ($counter >= 3) style="display: none;" @endif>
+                                        <td>{{ $moduleId }}</td>
                                         <td>{{ $moduleName }}</td>
                                     </tr>
                                     @php $counter++; @endphp
                                 @endforeach
                                 @if ($counter > 3)
                                     <tr id="showMoreModulesRow">
-                                        <td colspan="1">
+                                        <td colspan="2">
                                             <a href="{{ url('FormateurModuleList') }}" class="btn btn-primary">Show
                                                 More</a>
                                         </td>
@@ -178,7 +203,7 @@
                                 @endif
                             @else
                                 <tr>
-                                    <td colspan="1">No modules assigned to this formateur</td>
+                                    <td colspan="2">No modules assigned to this formateur</td>
                                 </tr>
                             @endif
                         </tbody>

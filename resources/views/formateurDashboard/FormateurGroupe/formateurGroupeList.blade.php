@@ -12,6 +12,7 @@
                                     class="table table-striped table-bordered dt-responsive nowrap">
                                     <thead>
                                         <tr>
+                                            <th>ID Du Groupe</th>
                                             <th>Nom Du Groupe</th>
                                             <th>Branch</th>
                                             <th>Year</th>
@@ -22,13 +23,21 @@
                                         @if (isset($GroupsList) && $GroupsList->count() > 0)
                                             @foreach ($GroupsList as $GroupList)
                                                 @php
+                                                    $groupId = substr(
+                                                        \App\Models\Group::find($GroupList['group_id'])->id,
+                                                        1,
+                                                    );
+
                                                     $groupName = \App\Models\Group::find($GroupList['group_id'])
                                                         ->group_name;
-                                                    $groupBranch = \App\Models\Group::find($GroupList['group_id'])
-                                                        ->barnch_id;
+                                                    $groupBranch = substr(
+                                                        \App\Models\Group::find($GroupList['group_id'])->barnch_id,
+                                                        1,
+                                                    );
                                                     $groupYear = \App\Models\Group::find($GroupList['group_id'])->year;
                                                 @endphp
                                                 <tr>
+                                                    <td>{{ $groupId }}</td>
                                                     <td>{{ $groupName }}</td>
                                                     <td>{{ $groupBranch }}</td>
                                                     <td>{{ $groupYear }}</td>

@@ -8,6 +8,8 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesbrand" name="author" />
     <!-- App favicon -->
+    <link rel="shortcut icon" href="{{ asset('assets/images/users/user.jpg') }}">
+
     {{-- driver JS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -149,14 +151,29 @@
                             </div>
 
 
+                            @php
+                                // Get the user's image
+$userImage = Auth::user()->image;
+
+// Check if the user has uploaded an image
+if ($userImage) {
+    // Use the uploaded image
+    $imagePath = 'uploads/' . $userImage;
+} else {
+    // Use the default image
+    $imagePath = 'assets/images/users/user.jpg';
+                                }
+
+                            @endphp
                             <div class="dropdown d-inline-block">
                                 <button type="button" class="btn header-item waves-effect"
                                     id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    <img class="rounded-circle header-profile-user"
-                                        src="{{ asset('uploads/' . Auth::user()->image) }}" alt="Header Avatar">
-                                    <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
+                                    <img class="rounded-circle header-profile-user" src="{{ asset($imagePath) }}"
+                                        alt="Header Avatar">
 
+                                    <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
+                                    {{-- "assets/images/users/user.jpg" --}}
                                 </button>
 
                             </div>
@@ -170,27 +187,30 @@
                                 <a class="logo logo-dark">
                                     <span class="logo-sm" style="font-size: 20px;font-weight:bold">
                                         @php
-                                        $ISTA = Auth::user()->establishment_id;
-                                        $establishmentName = \App\Models\establishment::find($ISTA)->name_establishment;
-                                    @endphp
-                                    
-                                    {{ $establishmentName }}                                    </span>
+                                            $ISTA = Auth::user()->establishment_id;
+                                            $establishmentName = \App\Models\establishment::find($ISTA)
+                                                ->name_establishment;
+                                        @endphp
+
+                                        {{ $establishmentName }} </span>
                                     <span class="logo-lg" style="font-size: 17px;font-weight:bold">
                                         @php
-                                        $ISTA = Auth::user()->establishment_id;
-                                        $establishmentName = \App\Models\establishment::find($ISTA)->name_establishment;
-                                    @endphp
-                                    
-                                    {{ $establishmentName }}                                    </span>
+                                            $ISTA = Auth::user()->establishment_id;
+                                            $establishmentName = \App\Models\establishment::find($ISTA)
+                                                ->name_establishment;
+                                        @endphp
+
+                                        {{ $establishmentName }} </span>
                                 </a>
 
                                 <a class="logo logo-light">
-                                                                        <span class="w3-cursive" style="font-size: 20px;font-weight:bold">
+                                    <span class="w3-cursive" style="font-size: 20px;font-weight:bold">
                                         @php
                                             $ISTA = Auth::user()->establishment_id;
-                                            $establishmentName = \App\Models\establishment::find($ISTA)->name_establishment;
+                                            $establishmentName = \App\Models\establishment::find($ISTA)
+                                                ->name_establishment;
                                         @endphp
-                                        
+
                                         {{ $establishmentName }}
                                     </span>
                                 </a>
@@ -227,8 +247,23 @@
                 <div class="h-100">
                     <div class="user-wid text-center py-4">
                         <div class="user-img">
-                            <img class="rounded-circle header-profile-user"
-                                src="{{ asset('uploads/' . Auth::user()->image) }}" alt="Header Avatar">
+                            @php
+                                // Get the user's image
+$userImage = Auth::user()->image;
+
+// Check if the user has uploaded an image
+if ($userImage) {
+    // Use the uploaded image
+    $imagePath = 'uploads/' . $userImage;
+} else {
+    // Use the default image
+    $imagePath = 'assets/images/users/user.jpg';
+                                }
+
+                            @endphp
+                            <img class="rounded-circle header-profile-user" src="{{ asset($imagePath) }}"
+                                alt="Header Avatar">
+
                         </div>
 
 
