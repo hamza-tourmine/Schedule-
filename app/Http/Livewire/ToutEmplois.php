@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\main_emploi;
 use Illuminate\Support\Facades\DB;
 use App\Models\group;
-use App\Models\user;
+use App\Models\User;
 use App\Models\module;
 use App\Models\class_room;
 use Illuminate\Support\Facades\Auth;
@@ -90,6 +90,7 @@ public function UpdateSession()
             'main_emploi_id' => session()->get('idEmploiSelected'),
             'demand_emploi_id' => null,
             'message' => null,
+            'typeSalle'=>$this->salleclassTyp,
             'sission_type' => $this->TypeSesion,
             'status_sission' => 'Accepted',
         ];
@@ -129,7 +130,7 @@ public function UpdateSession()
 
         $this->emit('fresh');
     } catch (\Exception $e) {
-        $this->alert('error', $e->getMessage() , [
+        $this->alert('error', 'il y a un problème' , [
             'position' => 'center',
             'timer' => 3000,
             'toast' => true,
@@ -268,7 +269,7 @@ public function DeleteSession()
                         ->get();
 
         // Fetch groups data
-        $groupsQuery = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
+        $groupsQuery = group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
                         ->where('groups.establishment_id', $establishment_id)
                         ->where('f.formateur_id', substr($this->receivedVariable, 11))
                         ->select('groups.id', 'groups.group_name');
@@ -314,7 +315,7 @@ public function DeleteSession()
 
         // Fetch additional data
         $this->sissions = $sissions ;
-        $this->groups = Group::where('group_name' ,'like','%'.$this->SearchValue.'%')->where('establishment_id', $establishment_id)->get();
+        $this->groups = group::where('group_name' ,'like','%'.$this->SearchValue.'%')->where('establishment_id', $establishment_id)->get();
         $this->formateurs = User::where('user_name','like','%'.$this->SearchValue.'%')->where(['establishment_id' => $establishment_id, 'role' => 'formateur'])->get();
 
         // Render view

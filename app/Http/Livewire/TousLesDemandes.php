@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\main_emploi;
 use Illuminate\Support\Facades\DB;
 use App\Models\group;
-use App\Models\user;
+use App\Models\User;
 use App\Models\module;
 use App\Models\class_room;
 use Illuminate\Support\Facades\Auth;
@@ -479,7 +479,7 @@ class TousLesDemandes extends Component
 ;
 
         // Fetch groups data
-        $groupsQuery = Group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
+        $groupsQuery = group::join('formateur_has_groups as f', 'f.group_id', '=', 'groups.id')
             ->where('groups.establishment_id', $establishment_id)
             ->where('f.formateur_id', substr($this->receivedVariable, 11))
             ->select('groups.id', 'groups.group_name');
@@ -524,7 +524,7 @@ class TousLesDemandes extends Component
 
         // Fetch additional data
         $this->sissions = $sissions;
-        $this->groups = Group::where('group_name', 'like', '%' . $this->SearchValue . '%')->where('establishment_id', $establishment_id)->get();
+        $this->groups = group::where('group_name', 'like', '%' . $this->SearchValue . '%')->where('establishment_id', $establishment_id)->get();
         $this->formateurs = User::where('user_name', 'like', '%' . $this->SearchValue . '%')->where(['establishment_id' => $establishment_id, 'role' => 'formateur'])->get();
 
         // NEWADD

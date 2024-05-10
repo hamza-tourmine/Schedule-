@@ -12,7 +12,6 @@
                                 <thead>
                                     <tr>
                                         <th>ID Du module</th>
-                                        <th>Nom Du module</th>
                                     </tr>
                                 </thead>
 
@@ -25,12 +24,11 @@
                                         @endphp
                                             <tr>
                                                 <td>{{ $moduleId }}</td>
-                                                <td>{{ $moduleName }}</td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="2">No modules assigned to this formateur</td>
+                                            <td colspan="1">No modules assigned to this formateur</td>
                                         </tr>
                                     @endif
                                 </tbody>

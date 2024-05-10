@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Session;
 class Schedule extends Controller
 {
     public function index(){
-        return  view('adminDashboard.main.main');
+        return  view('adminDashboard.Main.main');
     }
 
 
@@ -43,6 +43,7 @@ class Schedule extends Controller
 
     public function createNewSchedule(Request $request)
     {
+       
         $request->validate([
             'dateStart' => 'required|date',
         ]);
@@ -60,7 +61,7 @@ class Schedule extends Controller
                 'dateend' => $dateEnd,
                 'establishment_id' => $establishment_id,
             ]);
-            
+
 
             if ($main_emploi) {
                 session(['id_main_emploi' => $main_emploi->id, 'datestart' => $main_emploi->datestart]);

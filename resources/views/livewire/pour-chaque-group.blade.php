@@ -15,6 +15,37 @@
 
     }
 
+    .dateContent{
+            width: 85vw ;
+            display: flex ;
+            justify-content: space-between
+        }
+        @media screen and (max-width:600px){
+            .dateContent{
+            margin-top: 15px ;
+            width: 95vw ;
+            display: flex ;
+            flex-direction: column
+        }
+        .hide{
+            display: none ;
+        }
+        .data{
+            margin-top:5px
+        }
+        }
+
+
+        #SearchInput{
+            width: 45% !important;
+        }
+
+        @media screen and (max-width: 600px){
+            #SearchInput{
+            width: 100% !important;
+        }
+        }
+
 </style>
 
     <h2>Schedule Table</h2>
@@ -36,7 +67,7 @@
                     <select style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="groupID" id="selectOptions" class="form-control col-3" name="">
                         <option > les Groupes</option>
                         @foreach ($groups as $group)
-                        <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
+                              <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
                         @endforeach
                     </select>
                 </div>
@@ -47,7 +78,7 @@
         <br/>
         <br/>
         <table id="tbl_exporttable_to_xls" style="overflow:scroll " class="col-md-12 ">
-            <div style="width:85vw ; display: flex ;justify-content:space-between ;marign-top:15px ; ">
+            <div class="dateContent">
                 @if ($this->checkValues[0]->modeRamadan)
                 <h4 style="marign-top:15px " >
                     SE1 = 08:30 - 10:20 SE2 = 10:25 - 12:15 SE3 = 12:45 - 14:35 SE4 = 14:40 - 16:30
@@ -139,8 +170,10 @@
                             @endphp
                             @foreach ($sissions as $sission)
                                 @if ($sission->day === $day && $sission->group_id === $groupID && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                                    <td wire:click='updateCaseStatus(false)' data-bs-toggle="modal" class="tdClass Cases" data-bs-target="#exampleModal" id="{{ $day . $sessionType }}">
-                                        {{ $sission->sission_type }}<br>{{ $sission->class_name }}<br>{{ $sission->user_name }}<br>{{ preg_replace('/^\d+/', '', $sission->module_name) }}
+                                    <td wire:click='updateCaseStatus(false)' data-bs-toggle="modal"
+                                    style="background-color:rgba(12, 72, 166, 0.3) ;"
+                                     class="tdClass Cases" data-bs-target="#exampleModal" id="{{ $day . $sessionType }}">
+                                       {{$sission->group_name}}<br> {{ $sission->sission_type }}<br>{{ $sission->class_name }} <br>{{ $sission->typeSalle }} <br>{{ $sission->user_name }}<br>{{ preg_replace('/^\d+/', '', $sission->module_name) }}
                                     </td>
                                     @php
                                         $sessionFound = true;
@@ -245,7 +278,7 @@
                                             <option selected value="null">les Types</option>
                                             @if ($classType)
                                                 @foreach ($classType as $classTyp)
-                                                    <option value="{{ $classTyp->id }}">
+                                                    <option value="{{ $classTyp->class_room_types }}">
                                                         {{ $classTyp->class_room_types }}</option>
                                                 @endforeach
                                             @endif
@@ -287,9 +320,7 @@
 
     </div>
 
-    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">
-        telecharger</button>
-<button class="btn  btn-primary mt-5" wire:click='AddAutherEmploi'> <span class="mdi mdi-plus"></span> Ajouter un autre</button>
+    <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">télécharger</button>
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal111">
         Supprimer tout

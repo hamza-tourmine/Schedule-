@@ -6,18 +6,18 @@ use App\Models\module_has_formateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ShowGroupAffected extends Controller
+class ShowgroupAffected extends Controller
 {
     //
     function Show (){
         $user_id = Auth::id(); // Retrieve the logged-in formateur's ID
-        $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
-        return view('formateurDashboard.FormateurGroupe.FormateurGroupeList',['GroupsList'=> $GroupsList]);
+        $groupsList = formateur_has_group::where('formateur_id', $user_id)->get();
+        return view('formateurDashboard.Formateurgroupe.FormateurgroupeList',['groupsList'=> $groupsList]);
     }
-    function ShowInHomeGroupAndModuleAffected (){
+    function ShowInHomegroupAndModuleAffected (){
         $user_id = Auth::id(); // Retrieve the logged-in formateur's ID
-        $GroupsList = formateur_has_group::where('formateur_id', $user_id)->get();
+        $groupsList = formateur_has_group::where('formateur_id', $user_id)->get();
         $modulesList = module_has_formateur::where('formateur_id', $user_id)->get();
-        return view('formateurDashboard.Home.formateur',['GroupsList'=> $GroupsList,'modulesList' => $modulesList]);
+        return view('formateurDashboard.Home.formateur',['groupsList'=> $groupsList,'modulesList' => $modulesList]);
     }
 }

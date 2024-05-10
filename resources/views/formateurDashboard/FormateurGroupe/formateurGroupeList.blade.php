@@ -6,35 +6,35 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Liste Des Groupes</h4>
+                                <h4 class="card-title">Liste Des groupes</h4>
 
-                                <table id="FormateurGroupesTable"
+                                <table id="FormateurgroupesTable"
                                     class="table table-striped table-bordered dt-responsive nowrap">
                                     <thead>
                                         <tr>
-                                            <th>ID Du Groupe</th>
-                                            <th>Nom Du Groupe</th>
+                                            <th>ID Du groupe</th>
+                                            <th>Nom Du groupe</th>
                                             <th>Branch</th>
                                             <th>Year</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @if (isset($GroupsList) && $GroupsList->count() > 0)
-                                            @foreach ($GroupsList as $GroupList)
+                                        @if (isset($groupsList) && $groupsList->count() > 0)
+                                            @foreach ($groupsList as $groupList)
                                                 @php
                                                     $groupId = substr(
-                                                        \App\Models\Group::find($GroupList['group_id'])->id,
+                                                        \App\Models\group::find($groupList['group_id'])->id,
                                                         1,
                                                     );
 
-                                                    $groupName = \App\Models\Group::find($GroupList['group_id'])
+                                                    $groupName = \App\Models\group::find($groupList['group_id'])
                                                         ->group_name;
                                                     $groupBranch = substr(
-                                                        \App\Models\Group::find($GroupList['group_id'])->barnch_id,
+                                                        \App\Models\group::find($groupList['group_id'])->barnch_id,
                                                         1,
                                                     );
-                                                    $groupYear = \App\Models\Group::find($GroupList['group_id'])->year;
+                                                    $groupYear = \App\Models\group::find($groupList['group_id'])->year;
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $groupId }}</td>
@@ -61,7 +61,7 @@
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script>
         function ExportToExcel(type, fn, dl) {
-            var elt = document.getElementById('FormateurGroupesTable');
+            var elt = document.getElementById('FormateurgroupesTable');
             var wb = XLSX.utils.table_to_book(elt, {
                 sheet: "sheet1"
             });
@@ -80,7 +80,7 @@
                     bookSST: true,
                     type: 'base64'
                 }) :
-                XLSX.writeFile(wb, fn || ('FormateurGroupesTable.' + (type || 'xlsx')));
+                XLSX.writeFile(wb, fn || ('FormateurgroupesTable.' + (type || 'xlsx')));
         }
     </script>
 

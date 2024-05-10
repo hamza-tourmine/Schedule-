@@ -175,7 +175,6 @@ if ($userImage) {
                         <thead>
                             <tr>
                                 <th>ID Du module</th>
-                                <th>Nom Du module</th>
                             </tr>
                         </thead>
 
@@ -189,13 +188,12 @@ if ($userImage) {
                                     @endphp
                                     <tr @if ($counter >= 3) style="display: none;" @endif>
                                         <td>{{ $moduleId }}</td>
-                                        <td>{{ $moduleName }}</td>
                                     </tr>
                                     @php $counter++; @endphp
                                 @endforeach
                                 @if ($counter > 3)
                                     <tr id="showMoreModulesRow">
-                                        <td colspan="2">
+                                        <td colspan="1">
                                             <a href="{{ url('FormateurModuleList') }}" class="btn btn-primary">Show
                                                 More</a>
                                         </td>
@@ -203,7 +201,7 @@ if ($userImage) {
                                 @endif
                             @else
                                 <tr>
-                                    <td colspan="2">No modules assigned to this formateur</td>
+                                    <td colspan="1">No modules assigned to this formateur</td>
                                 </tr>
                             @endif
                         </tbody>

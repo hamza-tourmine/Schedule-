@@ -2,10 +2,10 @@
 
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\auth_controller;
-    use App\Http\controllers\classRoomsController;
-    use App\Http\controllers\groupController;
-    use App\Http\controllers\moduleController;
-    use App\Http\controllers\formateurController;
+    use App\Http\Controllers\classRoomsController;
+    use App\Http\Controllers\groupController;
+    use App\Http\Controllers\moduleController;
+    use App\Http\Controllers\formateurController;
     use App\Http\Controllers\FormateurHasGroup;
     use App\Http\Controllers\ShowGroupAffected;
     use App\Http\Controllers\ShowModuleAffected;
@@ -77,9 +77,10 @@
         Route::controller(branchController::class)->group(function () {
             Route::get('/add-Branch', 'index')->name('addbranch');
             Route::post('/create-Branch', 'create')->name('createBranch');
-            Route::get('/update-branch/{id}', 'updateView')->name('updateBranch');
             Route::get('/delate-branch/{id}', 'delateBranch')->name('delateBranch');
-            Route::post('update-branch/{id}', 'updateBarnch')->name('updateBarnch');
+
+            Route::get('/update-branch/{id}', 'updateView')->name('update-branch');
+            Route::post('/update-branch/{id}', 'updateBarnch')->name('updateBarnch');
         });
         // end branch routes
         // Model Setting
