@@ -303,7 +303,7 @@ if ($userImage) {
                             </li>
 
                             <li class="Calendar">
-                                <a href="{{ url('calendarFormateur') }}" class="waves-effect">
+                                <a href="{{ url('TousLesSeances') }}" class="waves-effect">
                                     <i class="mdi mdi-calendar-text"></i>
                                     <span>Calendar</span>
                                 </a>

@@ -127,5 +127,8 @@ class Schedule extends Controller
         return view('formateurDashboard.FormateurRequest.Request');
 
     }
+    public function ForamteurCalendar(){
+        return view('formateurDashboard.FormateurCalendar.calendar');
+    }
 
 }

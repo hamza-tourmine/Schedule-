@@ -178,6 +178,8 @@
         Route::post('/deleteSession', [FormateurRequestController::class, 'deleteSession'])->name('deleteSession');
 
         Route::post('createRequestEmploi', [FormateurRequestController::class, 'createRequestEmploi'])->name('createRequestEmploi');
+        Route::get('/TousLesSeances', [Schedule::class, 'ForamteurCalendar'])->name('TousLesSeances');
+
         //
         Route::get('dashboardFormateur', [ShowGroupAffected::class, 'ShowInHomeGroupAndModuleAffected'])->name('dashboard_formateur');
 
