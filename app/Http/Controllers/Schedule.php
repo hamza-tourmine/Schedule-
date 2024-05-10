@@ -43,7 +43,6 @@ class Schedule extends Controller
 
     public function createNewSchedule(Request $request)
     {
-       
         $request->validate([
             'dateStart' => 'required|date',
         ]);
@@ -123,6 +122,7 @@ class Schedule extends Controller
         return view('adminDashboard.Main.AllRequest');
 
     }
+
     public function FormateurRequest(){
         return view('formateurDashboard.FormateurRequest.Request');
 

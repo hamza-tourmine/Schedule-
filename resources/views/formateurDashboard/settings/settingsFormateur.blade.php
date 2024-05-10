@@ -28,13 +28,12 @@ if ($userImage) {
                         <img class="avatar-lg mx-auto img-thumbnail rounded-circle" src="{{ asset($imagePath) }}"
                             alt="Header Avatar">
 
-                        <div class="online-circle"><i class="fas fa-circle text-success"></i>
-                        </div>
+                        
                     </div>
 
                     <div class="mt-3 ">
                         <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
-                        <p class="text-body mt-1 mb-1">Domaine de formation</p>
+                        <p class="text-body mt-1 mb-1">{{ $user->domaine }}</p>
 
 
                     </div>
