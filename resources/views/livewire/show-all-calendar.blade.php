@@ -142,9 +142,9 @@
                     <tr class="day">
                         <th style="width: 140px !important" rowspan="3">
                             @if ($selectedType === 'Formateur')
-                                Nome formateurs
+                                Nom formateurs
                             @else
-                                Nome Groupes
+                                Nom Groupes
                             @endif
                         </th>
                         <th colspan="4">Lundi</th>

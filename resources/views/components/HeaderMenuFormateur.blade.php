@@ -330,7 +330,7 @@ if ($userImage) {
                                     <i class="mdi mdi-settings-outline"></i> Settings
                                 </a>
                             </li>
-                            <li>
+                            <li class="Documentation">
                                 <a href="javascript: void(0);" class="has-arrow waves-effect" aria-expanded="false">
                                     <i class="fas fa-book"></i>
                                     <span>Lunch Documentation</span>
@@ -342,10 +342,11 @@ if ($userImage) {
                                         </a>
                                     </li>
                                     <li>
-                                        <a onclick="launchDriver()">
+                                        <a onclick="redirectToDemandeEmploi()">
                                             Comment creer une demande
                                         </a>
                                     </li>
+
                                     <li>
                                         <a onclick="launchDriver()">
                                             Comment modifier les parametre
@@ -437,74 +438,68 @@ if ($userImage) {
             });
         });
 
+        function redirectToDemandeEmploi() {
+            // Effectuer la redirection vers la page DemanderEmploi avec le conducteur en tant que paramètre
+            window.location.href = "{{ url('DemanderEmploi') }}?driver=true";
+        }
+
+        // Vérifier si le paramètre "driver" est présent dans l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('driver')) {
+            // Démarrer le conducteur
+            launchDriverRequest();
+        }
 
         function launchDriver() {
             const driver = window.driver.js.driver;
             const username = "{{ Auth::user()->user_name }}"; // Obtenir le nom d'utilisateur dynamiquement
             const driverObj = driver({
                 showProgress: true,
-                showButtons: ['next', 'previous'],
+
+                showButtons: ['next', 'previous', 'close'],
                 steps: [
                     // Première étape
-                    {
-                        element: '#some-element',
-                        popover: {
-                            title: username,
-                            description: 'Suivez les instructions pour comprendre comment vous pouvez utiliser ce site.',
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    // Deuxième étape
-                    {
-                        element: '.vertical-menu',
-                        popover: {
-                            title: 'Menu Principal',
-                            description: 'Voici le menu principal du tableau de bord.',
-                            side: "left",
-                            align: 'start'
-                        }
-                    },
-                    // Troisième étape
-                    {
-                        element: '.navbar-header',
-                        popover: {
-                            title: 'En-tête',
-                            description: 'Ceci est l\'en-tête du tableau de bord.',
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    // Quatrième étape
-                    {
-                        element: '.logo-light',
-                        popover: {
-                            title: 'Logo',
-                            description: 'Ceci est notre logo.',
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    // Cinquième étape
-                    {
-                        element: '#vertical-menu-toggle',
-                        popover: {
-                            title: 'Basculer le Menu Vertical',
-                            description: 'Cliquez ici pour basculer la visibilité du menu vertical.',
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    // Sixième étape
-                    {
-                        element: '.mdi-fullscreen',
-                        popover: {
-                            title: 'Bouton Plein Écran',
-                            description: 'Cliquez ici pour basculer en mode plein écran.',
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
+                    // {
+                    //     element: '#some-element',
+                    //     popover: {
+                    //         title: username,
+                    //         description: 'Suivez les instructions pour comprendre comment vous pouvez utiliser ce site.',
+                    //         side: "bottom",
+                    //         align: 'start'
+                    //     }
+                    // },
+                    // // Deuxième étape
+                    // {
+                    //     element: '.vertical-menu',
+                    //     popover: {
+                    //         title: 'Menu Principal',
+                    //         description: 'Voici le menu principal du tableau de bord.',
+                    //         side: "left",
+                    //         align: 'start'
+                    //     }
+                    // },
+                    // // Troisième étape
+                    // {
+                    //     element: '.navbar-header',
+                    //     popover: {
+                    //         title: 'En-tête',
+                    //         description: 'Ceci est l\'en-tête du tableau de bord.',
+                    //         side: "bottom",
+                    //         align: 'start'
+                    //     }
+                    // },
+
+                    // // Cinquième étape
+                    // {
+                    //     element: '#vertical-menu-toggle',
+                    //     popover: {
+                    //         title: 'Basculer le Menu Vertical',
+                    //         description: 'Cliquez ici pour basculer la visibilité du menu vertical.',
+                    //         side: "bottom",
+                    //         align: 'start'
+                    //     }
+                    // },
+
                     // Septième étape
                     {
                         element: '.mdi-bell-outline',
@@ -517,24 +512,15 @@ if ($userImage) {
                     },
                     // Huitième étape
                     {
-                        element: '.header-profile-user',
-                        popover: {
-                            title: 'Profil Utilisateur',
-                            description: 'Cliquez ici pour afficher votre profil.',
-                            side: "bottom",
-                            align: 'start'
-                        }
-                    },
-                    // Neuvième étape
-                    {
                         element: '#page-header-user-dropdown span',
                         popover: {
-                            title: 'Menu de Profil',
-                            description: 'Cliquez ici pour accéder aux options de profil.',
+                            title: 'Profil Utilisateur',
+                            description: 'vous trouvez votre profile et username.',
                             side: "bottom",
                             align: 'start'
                         }
                     },
+
                     // Dixième étape
                     {
                         element: '.user-wid',
@@ -624,7 +610,93 @@ if ($userImage) {
                             side: "left",
                             align: 'start'
                         }
+                    },
+                    // Dix-neuvième étape
+                    {
+                        element: '.page-content',
+                        popover: {
+                            title: ' contenu de la page',
+                            description: 'decouvrir le contenu de chaque page .',
+                            side: "button",
+                            align: 'center'
+                        }
                     }
+                ]
+            });
+
+            driverObj.drive();
+        }
+
+        function launchDriverRequest() {
+            const driver = window.driver.js.driver;
+            const username = "{{ Auth::user()->user_name }}"; // Obtenir le nom d'utilisateur dynamiquement
+            const driverObj = driver({
+                showProgress: true,
+                allowClose: false,
+
+                showButtons: ['next', 'previous'],
+                steps: [
+                    // Première étape
+                    {
+                        element: '#some-element',
+                        popover: {
+                            title: username,
+                            description: 'Suivez les instructions pour creer une demande.',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    // Deuxième étape
+                    {
+                        element: '#createRequestBtn',
+                        popover: {
+                            title: 'd\'abord creer une request',
+                            description: 'lorsqu\'il est en rouge cela dit que vous n\'avez pas encore creer une demande ',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Troisième étape
+                    {
+                        element: '#date-select',
+                        popover: {
+                            title: 'verifier la date est convenable',
+                            description: 'sinon vous pouvez cliquer pour selectionner la date convenable',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    // Quatrième étape
+                    {
+                        element: '#tbl_exporttable_to_xls_1',
+                        popover: {
+                            title: 'vous devez remplir les seances que vous souhaitez',
+                            description: 'une fois vous creer les seances ils prenent la couleur selon le status',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+
+                    // Sixième étape
+                    {
+                        element: '.mdi-bell-outline',
+                        popover: {
+                            title: 'lorsque le status est change vous recevez une notification',
+                            description: 'une fois l\'admin accepte ou refuser une seance vous recevez une notification indique le nouveau status de la seance',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: '.Calendar',
+                        popover: {
+                            title: 'seance est accepter',
+                            description: 'une fois accepte vous trouvez l\'emploi general ici',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+
                 ]
             });
 
