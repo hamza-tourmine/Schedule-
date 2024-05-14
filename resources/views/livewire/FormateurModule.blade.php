@@ -1,5 +1,5 @@
   {{-- Model --}}
-  <div wire:ignore.self  class="modal fade col-9"  id="exampleModal"
+  <div style="z-index: 9999099983" wire:ignore.self  class="modal fade col-9"  id="exampleModal"
   tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
  <div class="modal-dialog  modal-lg  ">
     <div class="modal-content  col-9">
@@ -101,7 +101,7 @@
                     @if (!$checkValues[0]->typeSalle)
                     <select wire:model="salleclassTyp" class="form-select"
                         aria-label="Default select example">
-                        <option selected> Type Salle</option>
+                        <option value="" selected> Type Salle</option>
                         @if ($classType)
                             @foreach ($classType as $classTyp)
                                 <option value="{{ $classTyp->class_room_types }}">
@@ -119,8 +119,8 @@
                     @if (!$checkValues[0]->typeSession)
                     <select wire:model="TypeSesion" class="form-select"
                         aria-label="Default select example">
-                        <option selected>Type  Séance</option>
-                        <option value="presentielle">Presentielle</option>
+                        <option value="null" selected>Type  Séance</option>
+                        <option value="presen...">Presentielle</option>
                         <option value="teams">Teams</option>
                         <option value="EFM">EFM</option>
                     </select>

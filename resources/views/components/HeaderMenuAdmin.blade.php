@@ -24,25 +24,7 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
 
     <style>
-        a.green {
-            color: green
-        }
 
-        a.danger {
-            color: red;
-        }
-
-        a.green:hover {
-            font-weight: bold;
-            color: green
-        }
-
-        a.danger:hover {
-            font-weight: bold;
-            color: red
-        }
-
-        /* CSS for the arrow button and sidebar toggle */
         .vertical-menu {
             min-width: 100px;
             max-width: var(--bs-sidebar-width);
@@ -99,7 +81,7 @@
 
 
 <body data-layout="detached" data-topbar="colored">
-    <!-- <body data-layout="horizontal" data-topbar="dark"> -->
+
     <div class="container-fluid">
         <!-- Begin page -->
         <div id="layout-wrapper">
@@ -110,7 +92,7 @@
                         <div class="float-end">
 
                             <div class="dropdown d-inline-block d-lg-none ms-2">
-                               
+
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                     aria-labelledby="page-header-search-dropdown">
 
@@ -410,7 +392,7 @@
 
                 <div class="page-content">
 
-                    <div style="margin-top: 6.4rem;margin-left:2rem" class="row">
+                    <div style="margin-top: 6.4rem; border-radius: 10px ;" class="row">
                         {{ $slot }}
                     </div>
                     <!-- end row -->
