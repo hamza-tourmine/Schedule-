@@ -96,7 +96,7 @@ if ($userImage) {
         </div>
     </div>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body informations">
             <h4 class="card-title mb-4">Informations Personnel : </h4>
             <form action="{{ route('update_settings') }}" method="POST" class="outer-repeater"
                 enctype="multipart/form-data">
@@ -115,12 +115,12 @@ if ($userImage) {
                         </div>
 
 
-                        <div class="mb-3">
+                        <div class="mb-3 form-email">
                             <span class="form-span" for="formemail">Email:</span>
                             <input type="email" name="email" class="form-control" id="formemail"
                                 placeholder="Enter your Email..." value="{{ $user->email }}">
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 form-picture">
                             @php
                                 // Get the user's image
 $userImage = Auth::user()->image;
@@ -144,12 +144,12 @@ if ($userImage) {
                             @endif
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 form-Domaine">
                             <span class="form-span" for="FormationDemaine">Domaine de Formation:</span>
                             <input type="text" name="domaine" class="form-control" maxlength="25"
                                 id="FormationDemaine" value="{{ $user->domaine }}">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary Done">Submit</button>
                     </div>
 
                 </div>
