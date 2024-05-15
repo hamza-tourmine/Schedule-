@@ -7,6 +7,8 @@
     </style>
     <div class="card">
         <div class="card-body">
+            <!-- Alert message -->
+
             <div class="profile-widgets py-3">
 
                 <div class="text-center">
@@ -28,31 +30,69 @@ if ($userImage) {
                         <img class="avatar-lg mx-auto img-thumbnail rounded-circle" src="{{ asset($imagePath) }}"
                             alt="Header Avatar">
 
-                        <div class="online-circle"><i class="fas fa-circle text-success"></i>
-                        </div>
+
                     </div>
 
                     <div class="mt-3 ">
                         <span class="d-none d-xl-inline-block ms-1">{{ Auth::user()->user_name }}</span>
-                        <p class="text-body mt-1 mb-1">Domaine de formation</p>
+                        <p class="text-body mt-1 mb-1">{{ $user->domaine }}</p>
 
 
                     </div>
 
                     <div class="row mt-4 border border-start-0 border-end-0 p-3">
-                        <div class="col-md-6">
-                            <h6 class="text-muted">
+                        <div class="col-md-3">
+                            <h6 class="text-muted" style="color: black !important">
                                 Nombres des demandes
                             </h6>
+                            @php
+                                $user = Auth::user();
+                                $DemandesList = \App\Models\RequestEmploi::where('user_id', $user->id)->count();
+                            @endphp
                             <h5 class="mb-0">{{ $DemandesList }}</h5>
                         </div>
 
-                        <div class="col-md-6">
-                            <h6 class="text-muted">
+                        <div class="col-md-3">
+                            <h6 class="text-muted" style="color: black !important">
                                 Nombres des seances
                             </h6>
+                            @php
+                                $user = Auth::user();
+                                $seancesList = \App\Models\sission::where('user_id', $user->id)->count();
+                            @endphp
                             <h5 class="mb-0">{{ $seancesList }}</h5>
                         </div>
+
+
+                        <div class="col-md-3">
+                            <h6 class="text-muted" style="color: orange !important">
+                                Nombres des seances en attends
+                            </h6>
+                            @php
+                                $user = Auth::user();
+                                $DemandesList = \App\Models\sission::where('user_id', $user->id)
+                                    ->where('status_sission', 'Pending')
+                                    ->count();
+                            @endphp
+                            <h5 class="mb-0">{{ $DemandesList }}</h5>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-muted" style="color: green !important">
+                                Nombres des seances accepte
+                            </h6>
+                            @php
+                                $user = Auth::user();
+                                $DemandesList = \App\Models\sission::where('user_id', $user->id)
+                                    ->where('status_sission', 'Accepted')
+                                    ->count();
+                            @endphp
+                            <h5 class="mb-0">{{ $DemandesList }}</h5>
+                        </div>
+
+
+
+
+
                     </div>
 
 
@@ -62,11 +102,17 @@ if ($userImage) {
         </div>
     </div>
     <div class="card">
-        <div class="card-body">
+        <div class="card-body informations">
             <h4 class="card-title mb-4">Informations Personnel : </h4>
             <form action="{{ route('update_settings') }}" method="POST" class="outer-repeater"
                 enctype="multipart/form-data">
                 @csrf
+                @if (session('success'))
+                <div class="alert alert-success w-50" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
                 <div data-repeater-list="outer-group" class="outer">
                     <div data-repeater-item class="outer">
                         <div class="mb-3">
@@ -81,12 +127,21 @@ if ($userImage) {
                         </div>
 
 
-                        <div class="mb-3">
+                        <div class="mb-3 form-email">
+                            @if ($errors->any())
+                                <div class="alert alert-danger w-50" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <span class="form-span" for="formemail">Email:</span>
                             <input type="email" name="email" class="form-control" id="formemail"
                                 placeholder="Enter your Email..." value="{{ $user->email }}">
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 form-picture">
                             @php
                                 // Get the user's image
 $userImage = Auth::user()->image;
@@ -110,16 +165,18 @@ if ($userImage) {
                             @endif
                         </div>
 
-                        <div class="mb-3">
+                        <div class="mb-3 form-Domaine">
                             <span class="form-span" for="FormationDemaine">Domaine de Formation:</span>
                             <input type="text" name="domaine" class="form-control" maxlength="25"
                                 id="FormationDemaine" value="{{ $user->domaine }}">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary Done">Submit</button>
                     </div>
+
 
                 </div>
             </form>
+           
         </div>
     </div>
 </x-HeaderMenuFormateur>

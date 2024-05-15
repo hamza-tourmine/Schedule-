@@ -24,8 +24,7 @@ if ($userImage) {
                                 <img class="rounded-circle header-profile-user" src="{{ asset($imagePath) }}"
                                     alt="Header Avatar">
 
-                                <div class="online-circle"><i class="fas fa-circle text-success"></i>
-                                </div>
+
                             </div>
 
                             <div class="mt-3 ">
@@ -37,7 +36,7 @@ if ($userImage) {
 
                             <div class="row mt-4 border border-start-0 border-end-0 p-3">
                                 <div class="col-md-6">
-                                    <h6 class="text-muted">
+                                    <h6 class="text-muted" style="color: black !important">
                                         Nombres des demandes
                                     </h6>
                                     @php
@@ -48,7 +47,7 @@ if ($userImage) {
                                 </div>
 
                                 <div class="col-md-6">
-                                    <h6 class="text-muted">
+                                    <h6 class="text-muted" style="color: black !important">
                                         Nombres des seances
                                     </h6>
                                     @php
@@ -57,6 +56,36 @@ if ($userImage) {
                                     @endphp
                                     <h5 class="mb-0">{{ $seancesList }}</h5>
                                 </div>
+
+                            </div>
+                            <div class="row mt-4 border border-start-0 border-end-0 p-3">
+                                <div class="col-md-6">
+                                    <h6 class="text-muted" style="color: orange !important">
+                                        Nombres des seances en attends
+                                    </h6>
+                                    @php
+                                        $user = Auth::user();
+                                        $DemandesList = \App\Models\sission::where('user_id', $user->id)
+                                            ->where('status_sission', 'Pending')
+                                            ->count();
+                                    @endphp
+                                    <h5 class="mb-0">{{ $DemandesList }}</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="text-muted" style="color: green !important">
+                                        Nombres des seances accepte
+                                    </h6>
+                                    @php
+                                        $user = Auth::user();
+                                        $DemandesList = \App\Models\sission::where('user_id', $user->id)
+                                            ->where('status_sission', 'Accepted')
+                                            ->count();
+                                    @endphp
+                                    <h5 class="mb-0">{{ $DemandesList }}</h5>
+                                </div>
+
+
+
                             </div>
 
 
@@ -102,31 +131,31 @@ if ($userImage) {
 
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Liste Des Groupes</h4>
+                    <h4 class="card-title">Liste Des groupes</h4>
 
-                    <table id="FormateurGroupesTable" class="table table-striped table-bordered dt-responsive nowrap">
+                    <table id="FormateurgroupesTable" class="table table-striped table-bordered dt-responsive nowrap">
                         <thead>
                             <tr>
-                                <th>ID Du Groupe</th>
-                                <th>Nom Du Groupe</th>
+                                <th>ID Du groupe</th>
+                                <th>Nom Du groupe</th>
                                 <th>Branch</th>
                                 <th>Year</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @if (isset($GroupsList) && $GroupsList->count() > 0)
+                            @if (isset($groupsList) && $groupsList->count() > 0)
                                 @php $counter = 0; @endphp
-                                @foreach ($GroupsList as $GroupList)
+                                @foreach ($groupsList as $groupList)
                                     @php
-                                        $groupId = substr(\App\Models\Group::find($GroupList['group_id'])->id, 1);
+                                        $groupId = substr(\App\Models\group::find($groupList['group_id'])->id, 1);
 
-                                        $groupName = \App\Models\Group::find($GroupList['group_id'])->group_name;
+                                        $groupName = \App\Models\group::find($groupList['group_id'])->group_name;
                                         $groupBranch = substr(
-                                            \App\Models\Group::find($GroupList['group_id'])->barnch_id,
+                                            \App\Models\group::find($groupList['group_id'])->barnch_id,
                                             1,
                                         );
-                                        $groupYear = \App\Models\Group::find($GroupList['group_id'])->year;
+                                        $groupYear = \App\Models\group::find($groupList['group_id'])->year;
                                     @endphp
                                     <tr @if ($counter >= 3) style="display: none;" @endif>
                                         <td>{{ $groupId }}</td>
@@ -139,7 +168,7 @@ if ($userImage) {
                                 @if ($counter > 3)
                                     <tr id="showMoreRow">
                                         <td colspan="4">
-                                            <a href="{{ url('FormateurGroupeList') }}" class="btn btn-primary">Show
+                                            <a href="{{ url('FormateurgroupeList') }}" class="btn btn-primary">Show
                                                 More</a>
                                         </td>
                                     </tr>
@@ -171,7 +200,7 @@ if ($userImage) {
                 <div class="card-body">
                     <h4 class="card-title">Liste Des modules</h4>
 
-                    <table id="FormateurModulesTable" class="table table-striped table-bordered dt-responsive nowrap">
+                    <table id="FormateurmodulesTable" class="table table-striped table-bordered dt-responsive nowrap">
                         <thead>
                             <tr>
                                 <th>ID Du module</th>
@@ -184,7 +213,7 @@ if ($userImage) {
                                 @foreach ($modulesList as $moduleList)
                                     @php
                                         $moduleName = \App\Models\module::find($moduleList['module_id'])->module_name;
-                                        $moduleId = substr(\App\Models\Module::find($moduleList['module_id'])->id, 1);
+                                        $moduleId = substr(\App\Models\module::find($moduleList['module_id'])->id, 1);
                                     @endphp
                                     <tr @if ($counter >= 3) style="display: none;" @endif>
                                         <td>{{ $moduleId }}</td>
@@ -192,9 +221,9 @@ if ($userImage) {
                                     @php $counter++; @endphp
                                 @endforeach
                                 @if ($counter > 3)
-                                    <tr id="showMoreModulesRow">
+                                    <tr id="showMoremodulesRow">
                                         <td colspan="1">
-                                            <a href="{{ url('FormateurModuleList') }}" class="btn btn-primary">Show
+                                            <a href="{{ url('FormateurmoduleList') }}" class="btn btn-primary">Show
                                                 More</a>
                                         </td>
                                     </tr>
@@ -212,10 +241,10 @@ if ($userImage) {
             @push('scripts')
                 <script>
                     $(document).ready(function() {
-                        $('#showMoreModulesBtn').click(function() {
+                        $('#showMoremodulesBtn').click(function() {
                             $('tr:hidden').slice(0, 3).slideDown();
                             if ($('tr:hidden').length === 0) {
-                                $('#showMoreModulesRow').hide();
+                                $('#showMoremodulesRow').hide();
                             }
                         });
                     });
@@ -226,4 +255,5 @@ if ($userImage) {
 
 
     </div>
+    
 </x-HeaderMenuFormateur>
