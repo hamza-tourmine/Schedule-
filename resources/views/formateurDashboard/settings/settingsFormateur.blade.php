@@ -7,6 +7,8 @@
     </style>
     <div class="card">
         <div class="card-body">
+            <!-- Alert message -->
+
             <div class="profile-widgets py-3">
 
                 <div class="text-center">
@@ -28,7 +30,7 @@ if ($userImage) {
                         <img class="avatar-lg mx-auto img-thumbnail rounded-circle" src="{{ asset($imagePath) }}"
                             alt="Header Avatar">
 
-                        
+
                     </div>
 
                     <div class="mt-3 ">
@@ -51,7 +53,7 @@ if ($userImage) {
                         </div>
 
                         <div class="col-md-3">
-                            <h6 class="text-muted"  style="color: black !important">
+                            <h6 class="text-muted" style="color: black !important">
                                 Nombres des seances
                             </h6>
                             @php
@@ -61,32 +63,36 @@ if ($userImage) {
                             <h5 class="mb-0">{{ $seancesList }}</h5>
                         </div>
 
-                   
+
                         <div class="col-md-3">
-                            <h6 class="text-muted"  style="color: orange !important">
+                            <h6 class="text-muted" style="color: orange !important">
                                 Nombres des seances en attends
                             </h6>
                             @php
                                 $user = Auth::user();
-                                $DemandesList = \App\Models\sission::where('user_id', $user->id)->where('status_sission','Pending')->count();
+                                $DemandesList = \App\Models\sission::where('user_id', $user->id)
+                                    ->where('status_sission', 'Pending')
+                                    ->count();
                             @endphp
                             <h5 class="mb-0">{{ $DemandesList }}</h5>
                         </div>
                         <div class="col-md-3">
-                            <h6 class="text-muted"  style="color: green !important">
+                            <h6 class="text-muted" style="color: green !important">
                                 Nombres des seances accepte
                             </h6>
                             @php
                                 $user = Auth::user();
-                                $DemandesList = \App\Models\sission::where('user_id', $user->id)->where('status_sission','Accepted')->count();
+                                $DemandesList = \App\Models\sission::where('user_id', $user->id)
+                                    ->where('status_sission', 'Accepted')
+                                    ->count();
                             @endphp
                             <h5 class="mb-0">{{ $DemandesList }}</h5>
                         </div>
 
-                       
 
-                    
-                       
+
+
+
                     </div>
 
 
@@ -101,6 +107,12 @@ if ($userImage) {
             <form action="{{ route('update_settings') }}" method="POST" class="outer-repeater"
                 enctype="multipart/form-data">
                 @csrf
+                @if (session('success'))
+                <div class="alert alert-success w-50" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+
                 <div data-repeater-list="outer-group" class="outer">
                     <div data-repeater-item class="outer">
                         <div class="mb-3">
@@ -116,6 +128,15 @@ if ($userImage) {
 
 
                         <div class="mb-3 form-email">
+                            @if ($errors->any())
+                                <div class="alert alert-danger w-50" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <span class="form-span" for="formemail">Email:</span>
                             <input type="email" name="email" class="form-control" id="formemail"
                                 placeholder="Enter your Email..." value="{{ $user->email }}">
@@ -152,8 +173,10 @@ if ($userImage) {
                         <button type="submit" class="btn btn-primary Done">Submit</button>
                     </div>
 
+
                 </div>
             </form>
+           
         </div>
     </div>
 </x-HeaderMenuFormateur>
