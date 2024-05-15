@@ -29,8 +29,15 @@
         <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
         <style>
+            header#page-topbar {
+                box-sizing: border-box;
+                padding: 0px;
+                margin: -3px;
+            }
+
             .row {
-                margin-left: 0px;
+                margin-left: 5px;
+                margin-right: 5px;
             }
 
             .hide-menu {
@@ -383,7 +390,7 @@ if ($userImage) {
 
                     <div class="page-content">
 
-                        <div style="margin-top: 6.4rem;margin-left:2rem" class="row">
+                        <div style="margin-top: 6.4rem;" class="row">
                             {{ $slot }}
                         </div>
                         <!-- end row -->

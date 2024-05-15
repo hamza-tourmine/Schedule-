@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Notifications\RequestEmploiNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
@@ -147,6 +148,32 @@ class FormateurRequestController extends Controller
         return redirect()->back()->withInput()->withErrors([$e->getMessage()]);
     }
 }
+public function updatePassword(Request $request)
+{
+    // Validate form fields
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:6|different:current_password',
+        'confirm_new_password' => 'required|min:6|same:new_password',
+    ]);
+
+    // Retrieve the authenticated user
+    $user = auth()->user();
+
+    // Check if the current password is correct
+    if ($request->current_password != $user->passwordClone) {
+        // Return an error if the current password is incorrect
+        return back()->withErrors(['current_password' => 'The current password is incorrect.'])->withInput();
+    }
+
+    // Update the user's password
+    $user->passwordClone = $request->new_password;
+    $user->save();
+
+    // Redirect with a success message
+    return redirect()->back()->with('success', 'Password updated successfully.');
+}
+
 
 
 
