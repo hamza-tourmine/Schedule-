@@ -65,7 +65,8 @@ class FormateurRequests extends Component
     public $seance;
     public $seanceFirst;
     public $tableEmploi;
-
+    public $allSeances;
+    public $existingRequest;
 
     protected $listeners = [
         'receiveidEmploiid' => 'receiveidEmploiid',
@@ -74,20 +75,19 @@ class FormateurRequests extends Component
 
     public function mount()
     {
-         // Retrieve main emploi ID from the request data
-         if(empty($this->emploiID)){
+        // Retrieve main emploi ID from the request data
+        if (empty($this->emploiID)) {
 
-             $this->emploiID = main_emploi::latest()->value('id');
+            $this->emploiID = main_emploi::latest()->value('id');
 
-             // Fetch all main emplois
+            // Fetch all main emplois
 
-             // Fetch initial seances data
-             $this->handleEmploiChange($this->emploiID);
-         }else{
+            // Fetch initial seances data
+            $this->handleEmploiChange($this->emploiID);
+        } else {
             $this->emploiID = $this->emploiID;
             $this->handleEmploiChange($this->emploiID);
-         }
-
+        }
     }
 
     public function handleEmploiChange($main_emploi_id)
@@ -113,11 +113,11 @@ class FormateurRequests extends Component
         $this->isCaseEmpty = $isEmpty;
         $this->receivedVariable = $variable . Auth::id();
         $idcase = $this->receivedVariable;
-            $day = substr($idcase, 0, 3);
-            $day_part = substr($idcase, 3, 5);
-            $user_id = Auth::id();
-            $dure_sission = substr($idcase, 8, 3);
-            $this->seanceFirst = Sission::select('status_sission')
+        $day = substr($idcase, 0, 3);
+        $day_part = substr($idcase, 3, 5);
+        $user_id = Auth::id();
+        $dure_sission = substr($idcase, 8, 3);
+        $this->seanceFirst = Sission::select('status_sission')
             ->where('main_emploi_id', $this->emploiID)
             ->where('user_id', Auth::id())
             ->where('day', $day)
@@ -136,38 +136,38 @@ class FormateurRequests extends Component
     }
 
     public function DeleteSession()
-{
-    try{
-        $idcase = $this->receivedVariable;
-        $day = substr($idcase, 0, 3);
-        $day_part = substr($idcase, 3, 5);
-        $user_id = substr($idcase, 11);
-        $dure_sission = substr($idcase,8,3);
-        $requestEmploiId = RequestEmploi::where('user_id', $user_id)
-        ->where('main_emploi_id', $this->emploiID)
-        ->value('id');
+    {
+        try {
+            $idcase = $this->receivedVariable;
+            $day = substr($idcase, 0, 3);
+            $day_part = substr($idcase, 3, 5);
+            $user_id = substr($idcase, 11);
+            $dure_sission = substr($idcase, 8, 3);
+            $requestEmploiId = RequestEmploi::where('user_id', $user_id)
+                ->where('main_emploi_id', $this->emploiID)
+                ->value('id');
 
-        if (!$requestEmploiId) {
-            $this->alert('error', 'Tu dois créer une demande d\'emploi pour cet emploi d\'abord.');
-        }else{
-            sission::where([
-                'main_emploi_id' => $this->emploiID,
-                'day' => $day,
-                'day_part' => $day_part,
-                'user_id' => $user_id,
-                'dure_sission' => $dure_sission
-            ])->delete();
-            $this->mount();
-            $this->alert('success', 'vous avez supprimer une séance');
+            if (!$requestEmploiId) {
+                $this->alert('error', 'Tu dois créer une demande d\'emploi pour cet emploi d\'abord.');
+            } else {
+                sission::where([
+                    'main_emploi_id' => $this->emploiID,
+                    'day' => $day,
+                    'day_part' => $day_part,
+                    'user_id' => $user_id,
+                    'dure_sission' => $dure_sission
+                ])->delete();
+                $this->mount();
+                $this->alert('success', 'vous avez supprimer une séance');
+            }
+        } catch (\Exception $e) {
+            $this->alert('error', 'il y a un problème', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
         }
-    } catch (\Exception $e) {
-        $this->alert('error', 'il y a un problème', [
-            'position' => 'center',
-            'timer' => 3000,
-            'toast' => true,
-        ]);
     }
-}
 
 
     // Method to update selected type emploi group or formateur
@@ -187,13 +187,13 @@ class FormateurRequests extends Component
 
         $seance = null;
 
-            $seance = sission::where([
-                'main_emploi_id' => $this->emploiID,
-                'day' => $day,
-                'day_part' => $day_part,
-                'user_id' => $user_id,
-                'dure_sission' => $dure_sission
-            ])->get();
+        $seance = sission::where([
+            'main_emploi_id' => $this->emploiID,
+            'day' => $day,
+            'day_part' => $day_part,
+            'user_id' => $user_id,
+            'dure_sission' => $dure_sission
+        ])->get();
 
         return $seance ?: collect(); // Return an empty collection if $seance is null
     }
@@ -228,7 +228,7 @@ class FormateurRequests extends Component
 
             // Show an alert to the user
             $this->dispatchBrowserEvent('modal-hidden');
-            Notification::send($MainUser, new RequestEmploiNotification($type,$requestEmploi->id, Auth::user()->user_name,$this->emploiID, $comment,''));
+            Notification::send($MainUser, new RequestEmploiNotification($type, $requestEmploi->id, Auth::user()->user_name, $this->emploiID, $comment, ''));
         }
         $this->mount();
     }
@@ -242,14 +242,14 @@ class FormateurRequests extends Component
             $dure_sission = substr($idcase, 8, 3);
             $user_id = Auth::id();
             $requestEmploiId = RequestEmploi::where('user_id', $user_id)
-            ->where('main_emploi_id', $this->emploiID)
-            ->value('id');
+                ->where('main_emploi_id', $this->emploiID)
+                ->value('id');
 
 
 
             if (!$requestEmploiId) {
                 $this->alert('error', 'Tu dois créer une demande d\'emploi pour cet emploi d\'abord.');
-            }else{
+            } else {
                 $session = Sission::where([
                     'main_emploi_id' => $this->emploiID,
                     'day' => $day,
@@ -269,36 +269,39 @@ class FormateurRequests extends Component
                                 $item->update(['group_id' => $group]);
                             }
 
-                            $this->alert('success', 'Vous modifiez le Formateur de cette séance.',[
+                            $this->alert('success', 'Vous modifiez le Formateur de cette séance.', [
                                 'position' => 'center',
                                 'timer' => 3000,
-                                'toast' => true,]);
+                                'toast' => true,
+                            ]);
                         }
 
                         if ($this->salle !== null) {
                             $item->update(['class_room_id' => $this->salle]);
-                            $this->alert('success', 'Vous modifiez la salle de cette séance.',[
+                            $this->alert('success', 'Vous modifiez la salle de cette séance.', [
                                 'position' => 'center',
                                 'timer' => 3000,
-                                'toast' => true,]);
+                                'toast' => true,
+                            ]);
                         }
 
                         if ($this->TypeSesion !== null) {
                             $item->update(['sission_type' => $this->TypeSesion]);
-                            $this->alert('success', 'Vous modifiez le type de cette séance.',[
+                            $this->alert('success', 'Vous modifiez le type de cette séance.', [
                                 'position' => 'center',
                                 'timer' => 3000,
-                                'toast' => true,]);
+                                'toast' => true,
+                            ]);
                         }
                         if ($this->salleclassTyp !== null) {
-                            $item->update(['typeSalle'=> $this->salleclassTyp]);
-                            $this->alert('success', 'Vous modifiez le type de Salle.',[
+                            $item->update(['typeSalle' => $this->salleclassTyp]);
+                            $this->alert('success', 'Vous modifiez le type de Salle.', [
                                 'position' => 'center',
                                 'timer' => 3000,
-                                'toast' => true,]);
+                                'toast' => true,
+                            ]);
                         }
                     }
-
                 } else {
                     foreach ($this->selectedGroups as $group) {
                         Sission::create([
@@ -313,7 +316,7 @@ class FormateurRequests extends Component
                             'validate_date' => null,
                             'main_emploi_id' => $this->emploiID,
                             "demand_emploi_id" => null,
-                            'typeSalle'=>$this->salleclassTyp,
+                            'typeSalle' => $this->salleclassTyp,
                             'message' => null,
                             'sission_type' => $this->TypeSesion,
                             'status_sission' => 'Pending',
@@ -330,47 +333,47 @@ class FormateurRequests extends Component
                     ]);
                 }
                 $comment = '';
-                    $type = 'seance';
-                    $MainUser = User::where('role', 'admin')->first();
-                    Notification::send($MainUser, new RequestEmploiNotification($type,$requestEmploiId, Auth::user()->user_name,$this->emploiID, $comment,''));
+                $type = 'seance';
+                $MainUser = User::where('role', 'admin')->first();
+                Notification::send($MainUser, new RequestEmploiNotification($type, $requestEmploiId, Auth::user()->user_name, $this->emploiID, $comment, ''));
             }
             $this->mount();
             $this->emit('fresh');
         } catch (\Illuminate\Database\QueryException $e) {
 
-                    if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
-                        $this->alert('error', 'Vous devriez sélectionner la date de début.', [
-                            'position' => 'center',
-                            'timer' => 3000,
-                            'toast' => true,
-                        ]);
-                    } elseif (strpos($e->getMessage(), "Column 'user_id' cannot be null") !== false) {
-                        $this->alert('error', 'Vous devriez sélectionner le formateur.', [
-                            'position' => 'center',
-                            'timer' => 3000,
-                            'toast' => true,
-                        ]);
-                    } elseif (strpos($e->getMessage(), "Column 'class_room_id' cannot be null") !== false) {
-                        $this->alert('error', 'Vous devriez sélectionner la salle.', [
-                            'position' => 'center',
-                            'timer' => 3000,
-                            'toast' => true,
-                        ]);
-                    } else {
-                        // Generic error handling
-                        $this->alert('error', $e->errorInfo[2], [
-                            'position' => 'center',
-                            'timer' => 3000,
-                            'toast' => true,
-                        ]);
-                        return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
-                    }
-                }
-
+            if (strpos($e->getMessage(), "Column 'main_emploi_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner la date de début.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            } elseif (strpos($e->getMessage(), "Column 'user_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner le formateur.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            } elseif (strpos($e->getMessage(), "Column 'class_room_id' cannot be null") !== false) {
+                $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+            } else {
+                // Generic error handling
+                $this->alert('error', $e->errorInfo[2], [
+                    'position' => 'center',
+                    'timer' => 3000,
+                    'toast' => true,
+                ]);
+                return redirect()->back()->withErrors(['insertion_error' => $e->errorInfo[2]]);
+            }
+        }
     }
 
     public function render()
-    {$this->mainEmplois = main_emploi::all();
+    {
+        $this->mainEmplois = main_emploi::all();
 
         $this->daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
         $this->daysPart = ["Matin", "Amidi"];
@@ -467,5 +470,6 @@ class FormateurRequests extends Component
         $existingRequests = $this->existingRequest;
         return view('livewire.formateur-requests', [
             'existingRequest' => $existingRequests,
-        ]);    }
+        ]);
+    }
 }

@@ -406,6 +406,28 @@ if ($userImage) {
 
 
         <div class="rightbar-overlay"></div>
+        @php
+            // Get the current user
+            $user = auth()->user();
+
+            // Check if UserDejaLogin is false
+            if (!$user->UserDejaLogin) {
+                // Set a JavaScript variable to indicate that the driver should be launched
+                echo '<script>
+                    var launchDriverNeeded = true;
+                </script>';
+
+                // Update UserDejaLogin to true
+                $user->UserDejaLogin = true;
+                $user->save();
+            } else {
+                // Set a JavaScript variable to indicate that the driver should not be launched
+                echo '<script>
+                    var launchDriverNeeded = false;
+                </script>';
+            }
+        @endphp
+
 
         <!-- Bootstrap JS -->
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -443,6 +465,11 @@ if ($userImage) {
                 });
             });
 
+            // Check if the driver should be launched
+            if (typeof launchDriverNeeded !== 'undefined' && launchDriverNeeded) {
+                // Call the launchDriver() function
+                launchDriver();
+            }
 
 
 

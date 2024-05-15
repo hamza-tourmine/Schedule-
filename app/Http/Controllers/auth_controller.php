@@ -105,6 +105,7 @@ class auth_controller extends Controller
                 $request->session()->regenerate();
                 // store id in session
                 session(['user_id' => $user->id, 'establishment_id' => $user->establishment_id]);
+                
                 return redirect()->route('dashboard_formateur');
             } else {
                 return redirect()->back()->withErrors(['errors' => 'Votre compte est suspendu, veuillez contacter le directeur']);
