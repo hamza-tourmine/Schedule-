@@ -66,7 +66,6 @@
             z-index:30033 ;
             cursor: pointer;
         }
-
         @media screen and (max-width: 600px){
             #SearchInputContainer{
            display: none
@@ -75,8 +74,6 @@
             display: block ;
         }
         }
-
-
         .tableContainer{
             width: 100% !important;
             height:100% !important;
@@ -89,7 +86,7 @@
 
 
     </style>
-     
+
     @php
 
 @endphp
@@ -170,7 +167,7 @@
 
 
 
-        <table id="tbldemo"  class="col-md-12 ">
+        <table id="test_table"  class="col-md-12 ">
 
 
             <thead>
@@ -296,7 +293,7 @@
 
 
 <div style="margin: 10px ;">
-    <button id="btnexport"  class=" btn w-25 btn-primary mt-5">  télécharger</button>
+    <button id="generate-excel"  class=" btn w-25 btn-primary mt-5">  télécharger</button>
       <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger mt-5 col-3" data-bs-toggle="modal" data-bs-target="#exampleModal1"> Supprimer tout</button>
 </div>
@@ -332,11 +329,18 @@
 //       }
 
 
-        $(function () {
-            $("#btnexport").click(function () {
-                $("#tbldemo").table2excel();
-            });
+         $("document").ready(function () {
+        excel = new ExcelGen({
+
+            "src_id" : "test_table",
+            "show_header" : "true"
+
         });
+
+        $("#generate-excel").click(function () {
+            excel.generate();
+        });
+    });
 
 
 
