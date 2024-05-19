@@ -60,6 +60,13 @@ class ToutEmplois extends Component
         $this->selectedGroups = [];
          $this->brancheId = null;
          $this->formateur = null ;
+         $this->brancheId = null;
+        $this->selectedGroups = [];
+        $this->selectedYear = null;
+        $this->salle = null;
+        $this->module = null;
+        $this->salleclassTyp = null;
+        $this->TypeSesion = null;
 
     }
 
@@ -79,7 +86,6 @@ public function UpdateSession()
         $user_id = substr($idcase, 11);
         $dure_sission = substr($idcase, 8, 3);
 
-
         $sessionData = [
             'day' => $day,
             'day_part' => $day_part,
@@ -90,18 +96,17 @@ public function UpdateSession()
             'main_emploi_id' => session()->get('idEmploiSelected'),
             'demand_emploi_id' => null,
             'message' => null,
-            'typeSalle'=>$this->salleclassTyp,
+            'typeSalle' => $this->salleclassTyp,
             'sission_type' => $this->TypeSesion,
             'status_sission' => 'Accepted',
         ];
-        // dd($sessionData);
 
         if ($this->selectedType === "Group") {
-            // for group side
+            // For group side
             $sessionData['group_id'] = $group_id;
             $sessionData['user_id'] = $this->formateur;
 
-            $session = sission::where([
+            $session = Sission::where([
                 'main_emploi_id' => session()->get('idEmploiSelected'),
                 'day' => $day,
                 'day_part' => $day_part,
@@ -110,10 +115,10 @@ public function UpdateSession()
             ])->first();
 
         } else {
-            // for formateur group side
+            // For formateur side
             $sessionData['group_id'] = $this->group;
             $sessionData['user_id'] = $user_id;
-            $session = sission::where([
+            $session = Sission::where([
                 'main_emploi_id' => session()->get('idEmploiSelected'),
                 'day' => $day,
                 'day_part' => $day_part,
@@ -122,10 +127,27 @@ public function UpdateSession()
             ])->first();
         }
 
-        if ($session) {
-            $session->update($sessionData);
-        } else {
-            sission::create($sessionData);
+        if($this->TypeSesion === 'teams'){
+
+            if ($session) {
+                $session->update($sessionData);
+            } else {
+                sission::create($sessionData);
+            }
+        }elseif(!empty($this->salle)){
+
+            if ($session) {
+                $session->update($sessionData);
+            } else {
+                sission::create($sessionData);
+            }
+        }elseif(empty($this->salle)){
+            $this->alert('error', 'Vous devriez sélectionner la salle.', [
+                'position' => 'center',
+                'timer' => 3000,
+                'toast' => true,
+            ]);
+            return;
         }
 
         $this->emit('fresh');
@@ -258,11 +280,11 @@ public function DeleteSession()
 
         // Fetch sissions data
         $sissions = DB::table('sissions')
-                        ->select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.*', 'class_rooms.class_name')
-                        ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
-                        ->join('groups', 'groups.id', '=', 'sissions.group_id')
-                        ->join('users', 'users.id', '=', 'sissions.user_id')
-                        ->join('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
+        ->select('sissions.*', 'modules.id as module_name', 'groups.group_name', 'users.*', 'class_rooms.class_name')
+        ->leftJoin('modules', 'modules.id', '=', 'sissions.module_id')
+        ->join('groups', 'groups.id', '=', 'sissions.group_id')
+        ->join('users', 'users.id', '=', 'sissions.user_id')
+        ->leftJoin('class_rooms', 'class_rooms.id', '=', 'sissions.class_room_id')
                         ->where('sissions.establishment_id', $establishment_id)
                         ->where('sissions.status_sission', 'Accepted')
                         ->where('sissions.main_emploi_id', $this->selectedValue)

@@ -160,9 +160,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <input id='searchInput'   type="search" class="form-control rounded searchDev " placeholder="Search Formateur" aria-label="Search" aria-describedby="search-addon" />
+            <input id='searchInput12'   type="search" class="form-control rounded searchDev " placeholder="Search Formateur" aria-label="Search" aria-describedby="search-addon" />
 
-            <select  style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="formateurId" id="selectOptions" class="form-control " name="">
+            <select  style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="formateurId" id="selectOptions12" class="form-control " name="">
                 <option >Formateurs</option>
                 @foreach ($formateurs as $formateur)
                    <option class="form-control"  value="{{$formateur->id}}">{{$formateur->user_name}} </option>
@@ -319,7 +319,15 @@
                         @if ($sessionFound)
                           <span>  {{$formateur}}</span>
                           <span>  {{ implode(' - ', $groupes) }}</span>
-                          <span>  {{$SalleValue . "\n" . $typeSalle}}</span>
+                          <span>
+                            @if($SalleValue)
+                                {{ $SalleValue }}
+                            @else
+                                SALLE
+                            @endif
+                            <br>
+                            {{ "\n" . $typeSalle }}
+                        </span>
                          <span>   {{$Typevalue}}</span>
                           <span>  {{$ModuleValue}}</span>
                         @endif
@@ -415,6 +423,31 @@
                 document.addEventListener("DOMContentLoaded", function() {
   const searchInput = document.getElementById("searchInput");
   const selectOptions = document.getElementById("selectOptions");
+
+  // Event listener for input changes in the search input
+  searchInput.addEventListener("input", function() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    // Loop through all options in the select input
+    Array.from(selectOptions.options).forEach(option => {
+      const optionText = option.text.toLowerCase();
+
+      // Check if the option text contains the search value
+      if (optionText.includes(searchValue)) {
+        option.style.display = ""; // Show the option
+      } else {
+        option.style.display = "none"; // Hide the option
+      }
+    });
+  });
+});
+
+
+               // input
+
+                document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById("searchInput12");
+  const selectOptions = document.getElementById("selectOptions12");
 
   // Event listener for input changes in the search input
   searchInput.addEventListener("input", function() {

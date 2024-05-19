@@ -255,8 +255,13 @@
                                         style="background-color:{{ $isActive ? 'rgba(12, 72, 166, 0.3)' :  ''}} ;"
                                         id="{{ $day.$sessionType.$group->id }}">
                                        <span> {{ $sission->sission_type }}</span>
-                                        <span>{{ $sission->class_name }}</span>
-                                      <span>  {{ $sission->typeSalle }}</span>
+                                        @if($sission->class_name)
+                                           {{ $sission->class_name }}
+                                        @else
+                                            SALLE
+                                        @endif
+                                    </br>
+                                      <span>{{ $sission->typeSalle }}</span>
                                       <span>  {{ $sission->user_name }}</span>
                                         {{ preg_replace('/^\d/' , ' ' , $sission->module_name ) }}
                                     </td>

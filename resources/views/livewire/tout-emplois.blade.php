@@ -129,7 +129,7 @@
         td {
 
             height: 40px;
-            width: 400px !important;
+            width: 490px !important;
             border: 1.5px solid #272727;
             text-align: center;
         }
@@ -176,6 +176,11 @@
             display: block ;
             font-size: 14px !important;
             color: black !important;
+
+        }
+        td{
+             color: black !important;
+             font-size:18px;
         }
         thead  {
 
@@ -430,8 +435,9 @@
                                         <select wire:model="TypeSesion" class="form-select"
                                             aria-label="Default select example">
                                             <option selected>Type  de Séance</option>
-                                            <option value="presentielle">Presentielle</option>
+                                            <option value="PRESENTIEL">Presentielle</option>
                                             <option value="teams">Teams</option>
+                                             <option value="EFM">EFM</option>
                                         </select>
                                         @endif
                                     </div>
@@ -452,30 +458,34 @@
    <tr>
        <td>{{$group->group_name}}</td>
        @foreach ($dayWeek as $day)
-           @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
-           @php
-               $sessionFound = false ;
-           @endphp
+    @foreach (['MatinSE1', 'MatinSE2', 'AmidiSE3', 'AmidiSE4'] as $sessionType)
+        @php
+            $sessionFound = false;
+            $currentSission = null;
+        @endphp
 
-                   @foreach ($sissions as $sission)
-                       @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
-                       @php
-                       $sessionFound = true ;
-                       @endphp
-                       @endif
-                   @endforeach
-                 <td  style="background-color :  {{$sessionFound ? 'rgba(12, 72, 166, 0.3);' : ''}}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases {{$day}}"  wire:click="getidCase('{{ $day.$sessionType.$group->id }}')"  id="{{$day.$sessionType.$group->id }}"  >
-                     @if ($sessionFound)
-                   <span>  {{ $sission->sission_type }}</span>
-                   <span>  {{ $sission->user_name }}</span>
-                    <span> {{ preg_replace('/^\d+/' , ' ' , $sission->module_name )}}</span>
+        @foreach ($sissions as $sission)
+            @if ($sission->day === $day && $sission->group_id === $group->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
+                @php
+                    $sessionFound = true;
+                    $currentSission = $sission;
+                    break; // Exit the loop once the session is found
+                @endphp
+            @endif
+        @endforeach
 
-                  <span> {{ $sission->class_name }}</span>
-                    <span> {{ $sission->typeSalle }}</span>
-                     @endif
-                 </td>
-           @endforeach
-       @endforeach
+        <td style="background-color: {{ $sessionFound ? 'rgba(12, 72, 166, 0.3);' : '' }}" data-bs-toggle="modal" data-bs-target="#exampleModal" class="Cases {{ $day }}" wire:click="getidCase('{{ $day.$sessionType.$group->id }}')" id="{{ $day.$sessionType.$group->id }}">
+            @if ($sessionFound && $currentSission)
+                <span>{{ $currentSission->sission_type }}</span>
+                <span>{{ $currentSission->user_name }}</span>
+                <span>{{ preg_replace('/^\d+/', ' ', $currentSission->module_name) }}</span>
+                <span>{{ $currentSission->class_name ? $currentSission->class_name : 'SALLE' }}</span>
+                <span>{{ $currentSission->typeSalle }}</span>
+            @endif
+        </td>
+    @endforeach
+@endforeach
+
    </tr>
    @endforeach
        </div>
@@ -492,16 +502,22 @@
                 @foreach ($sissions as $sission)
                     @if ($sission->day === $day && $sission->user_id === $formateur->id && $sission->day_part === substr($sessionType, 0, 5) && $sission->dure_sission === substr($sessionType, 5))
                         @php
-                            $details = $sission->sission_type . '<br>' . $sission->class_name . '<br>'. $sission->typeSalle.'<br>'. $sission->group_name . '<br>' .preg_replace('/^\d+/', '', $sission->module_name) ;
-                            $uniqueDetails = [];
-                            foreach (explode('<br>', $details) as $word) {
-                                if (!in_array($word, $sessionWords)) {
-                                    $uniqueDetails[] = $word;
-                                    $sessionWords[] = $word;
-                                }
-                            }
-                            echo implode('<br>', $uniqueDetails);
-                        @endphp
+            $details = $sission->sission_type . '<br>'
+             . ($sission->class_name ? $sission->class_name : 'SALLE') . '<br>'
+             . $sission->typeSalle . '<br>'
+             . $sission->group_name . '<br>'
+             . preg_replace('/^\d+/', '', $sission->module_name);
+
+    $uniqueDetails = [];
+    foreach (explode('<br>', $details) as $word) {
+        if (!in_array($word, $sessionWords)) {
+            $uniqueDetails[] = $word;
+            $sessionWords[] = $word;
+        }
+    }
+    echo implode('<br>', $uniqueDetails);
+@endphp
+
                     @endif
                 @endforeach
             </td>
@@ -516,14 +532,9 @@
     </div>
 </div>
 
-
-</div>
-    <div style="">
-        <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">télécharger</button>
-        <button type="button" class="btn btn-danger col-3 mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal1"> Supprimer tout</button>
-    </div>
   <!-- Modal -->
-  <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+
+ <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -540,6 +551,13 @@
       </div>
     </div>
   </div>
+</div>
+    <div style="">
+        <button onclick="ExportToExcel('xlsx')" class=" btn  btn-primary mt-5">télécharger</button>
+        <button type="button" class="btn btn-danger col-3 mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal1"> Supprimer tout</button>
+    </div>
+
+
 
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script type="text/javascript" >

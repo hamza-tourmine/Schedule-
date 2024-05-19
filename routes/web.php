@@ -52,7 +52,7 @@
 
 
     Route::get('/', function () {
-        return view('auth.login');
+        return view('auth.Login');
     })->name('login');
     Route::get('/create-account', [auth_controller::class, 'index'])->name('create-account');
     Route::post('/insert', [auth_controller::class, 'create_account'])->name('insert');

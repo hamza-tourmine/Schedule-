@@ -299,7 +299,7 @@
                                             <select wire:model="TypeSesion" class="form-select"
                                                 aria-label="Default select example">
                                                 <option selected>Type  Séance</option>
-                                                <option value="presentielle">Presentielle</option>
+                                                <option value="PRESENTIEL">Presentielle</option>
                                                 <option value="teams">Teams</option>
                                                 <option value="EFM">EFM</option>
                                             </select>
@@ -386,7 +386,11 @@
                                             id="{{ $day . $sessionType . $group->id }}">
                                             @if ($foundSession)
                                                 {{ $typeValue }}<br>
-                                                {{ $salleValue }}<br>
+                                                @if($salleValue)
+                                                    {{ $salleValue }}
+                                                @else
+                                                    SALLE
+                                                @endif<br>
                                                 {{ implode(' - ', $formateurs) }}<br>
                                                 {{ preg_replace('/^\d/', ' ', $ModelValue) }}
                                             @endif
@@ -428,6 +432,7 @@
                                                     $salleValue = $sission->class_name;
                                                     $typeValue = $sission->sission_type;
                                                     $ModelValue = $sission->module_name;
+
                                                     if ($sission->status_sission) {
                                                         # code...
                                                         if ($sission->status_sission === 'Pending') {
@@ -449,6 +454,12 @@
                                             data-bs-target="#exampleModal" class="TableCases"
                                             id="{{ $day . $sessionType . $formateur->id }}">
                                             @if ($foundSession)
+                                            {{ $typeValue }}<br>
+                                            @if($salleValue)
+                                                {{ $salleValue }}
+                                            @else
+                                                SALLE
+                                            @endif<br>
                                                     @if(count($groupes) >= 2)
                                                     @php
                                                         // Extract party string
@@ -468,6 +479,7 @@
                                                 @else
                                                     {{ implode(',', $groupes) }}
                                                 @endif
+
                                                 <br>
                                                 {{ preg_replace('/^\d/', ' ', $ModelValue) }}
                                             @endif

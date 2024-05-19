@@ -119,7 +119,7 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input id='searchInput'  type="search" class="form-control rounded   " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                    <input id='searchInput'  type="search" class="form-control rounded  " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                             <select style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="groupID" id="selectOptions" class="form-control col-3" name="">
                                 <option > les Groupes</option>
                                 @foreach ($groups as $group)
@@ -139,9 +139,9 @@
         {{-- modal Search --}}
             <div class=" SearchContainer rounded">
                 <div style="  display:flex ;">
-                    <input id='searchInput'  type="search" class="form-control rounded searchDev hide " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                    <input id='searchInput12'  type="search" class="form-control rounded searchDev hide " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                     <div class="selectDiv hide" style=";height: 47px ;width:360px ;margin-left: 15px">
-                            <select style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="groupID" id="selectOptions" class="form-control col-3" name="">
+                            <select style="box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" wire:model="groupID" id="selectOptions12" class="form-control col-3" name="">
                                 <option > les Groupes</option>
                                 @foreach ($groups as $group)
                                       <option class="form-control"  value="{{$group->id}}">{{$group->group_name}} </option>
@@ -247,7 +247,7 @@
                                     <td wire:click='updateCaseStatus(false)' data-bs-toggle="modal"
                                     style="background-color:rgba(12, 72, 166, 0.3) ;"
                                      class="tdClass Cases {{$day}}" data-bs-target="#exampleModal" id="{{ $day . $sessionType }}">
-                                       {{$sission->group_name}}<br> {{ $sission->sission_type }}<br>{{ $sission->class_name }} <br>{{ $sission->typeSalle }} <br>{{ $sission->user_name }}<br>{{ preg_replace('/^\d+/', '', $sission->module_name) }}
+                                       {{$sission->group_name}}<br> {{ $sission->sission_type }}<br> @if($sission->class_name) {{ $sission->class_name }}  @else SALLE @endif <br>{{ $sission->typeSalle }} <br>{{ $sission->user_name }}<br>{{ preg_replace('/^\d+/', '', $sission->module_name) }}
                                     </td>
                                     @php
                                         $sessionFound = true;
@@ -368,7 +368,7 @@
                                         <select wire:model="TypeSesion" class="form-select"
                                             aria-label="Default select example">
                                             <option selected value="null">Type Séance</option>
-                                            <option value="presen...">Presentielle</option>
+                                            <option value="PRESENTIEL">Presentielle</option>
                                             <option value="teams">Teams</option>
                                             <option value="EFM">EFM</option>
                                         </select>
@@ -403,7 +403,7 @@
     </button>
 
     <!-- Modal for delete-->
-    <div wire:ignore class="modal fade" id="exampleModal111" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div style="z-index:12121212 ; " wire:ignore class="modal fade" id="exampleModal111" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -493,6 +493,35 @@
     });
   });
 });
+
+
+
+// auther input Searsh
+
+                      // input
+
+                      document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById("searchInput12");
+  const selectOptions = document.getElementById("selectOptions12");
+
+  // Event listener for input changes in the search input
+  searchInput.addEventListener("input", function() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    // Loop through all options in the select input
+    Array.from(selectOptions.options).forEach(option => {
+      const optionText = option.text.toLowerCase();
+
+      // Check if the option text contains the search value
+      if (optionText.includes(searchValue)) {
+        option.style.display = ""; // Show the option
+      } else {
+        option.style.display = "none"; // Hide the option
+      }
+    });
+  });
+});
+
 
 
     </script>
