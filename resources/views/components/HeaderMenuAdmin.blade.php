@@ -14,6 +14,8 @@
 
     <!-- Bootstrap Css -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css" />
+
     <!-- Icons Css -->
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- App Css-->
@@ -24,7 +26,6 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
 
     <style>
-
         .vertical-menu {
             min-width: 100px;
             max-width: var(--bs-sidebar-width);
@@ -134,16 +135,17 @@
                                     <div class="p-3">
                                         <div class="row align-items-center">
                                             <div class="col">
-                                                <h6 class="m-0"> Notifications </h6>
+                                                <h6 class="m-0" style="margin-left: -4px !important"> Notifications
+                                                </h6>
                                             </div>
                                             <div class="col-auto">
-                                                <a href="{{ route('markAsRead') }}" class="small green"><i
-                                                        class="fas fa-eye"></i>
+                                                <a href="{{ route('markAsRead') }}" class="small green"
+                                                    style="color: green"><i class="fas fa-eye"></i>
                                                     Mark All As Read</a>
                                             </div>
                                             <div class="col-auto">
-                                                <a href="{{ route('Clear') }}" class="small danger"><i
-                                                        class="fas fa-trash-alt"></i>
+                                                <a href="{{ route('Clear') }}" class="small danger"
+                                                    style="color: red"><i class="fas fa-trash-alt"></i>
                                                     Clear</a>
                                             </div>
                                         </div>
@@ -222,6 +224,16 @@
                                         Logout</a>
                                 </div>
                             </div>
+                            <div style="z-index:999999999999999999999" class="dropdown d-inline-block">
+                                <button type="button" class="useGuide btn header-item waves-effect"
+                                    id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false" onclick="launchDriver()">
+                                    <span class="d-none d-xl-inline-block ms-1">How To Use </span>
+                                    <i class="fa fa-question-circle"></i>
+
+                                </button>
+
+                            </div>
 
 
 
@@ -262,7 +274,7 @@
                             </div>
                             <div class="dropdown d-none d-lg-inline-block ms-1">
                                 <button class="btn btn-sm px-3 font-size-16 header-item toggle-sidebar "
-                                    style="margin-left: -125px;margin-top: 20px;">
+                                    style="margin-left: -125px;margin-top: 20px;" id="vertical-menu-toggle">
                                     <i class="fa fa-fw fa-bars"></i>
                                 </button>
                             </div>
@@ -309,7 +321,7 @@
                         <!-- Left Menu Start -->
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title">Menu</li>
-                            <li>
+                            <li class="Acceuil">
                                 <a href="{{ route('dashboardAdmin') }}" class=" waves-effect">
                                     <i style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-home-lightbulb-outline"></i>
@@ -321,25 +333,25 @@
 
 
 
-                            <li><a href="{{ route('CreateEmploi') }}" class=" waves-effect"> <span
-                                        data-toggle="tooltip" data-placement="right" title="tout les groupes"
+                            <li class="CreateEmploi"><a href="{{ route('CreateEmploi') }}" class=" waves-effect">
+                                    <span data-toggle="tooltip" data-placement="right" title="tout les groupes"
                                         class="mdi mdi-lightbulb-group-outline"
                                         style="font-weight: 400 ; font-size:25PX"></span></a></li>
-                            <li><a href="{{ route('emploiForFormateurs') }}" class=" waves-effect"> <span
-                                        data-toggle="tooltip" data-placement="right" title="tout les Formateurs"
-                                        style="font-weight: 400 ; font-size:25PX"
+                            <li class="emploiForFormateurs"><a href="{{ route('emploiForFormateurs') }}"
+                                    class=" waves-effect"> <span data-toggle="tooltip" data-placement="right"
+                                        title="tout les Formateurs" style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-account-supervisor-outline"></span></a></li>
-                            <li><a href="{{ route('ChaqueFormateur') }}" class=" waves-effect"> <span
-                                        data-toggle="tooltip" data-placement="right" title="chaque formateur"
-                                        style="font-weight: 400 ; font-size:25PX"
+                            <li class="ChaqueFormateur"><a href="{{ route('ChaqueFormateur') }}"
+                                    class=" waves-effect"> <span data-toggle="tooltip" data-placement="right"
+                                        title="chaque formateur" style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-account-tie-outline"></span></a></li>
-                            <li><a href="{{ route('emploiForGroup') }}" class=" waves-effect"> <span
-                                        data-toggle="tooltip" data-placement="right" title="chaque group"
-                                        style="font-weight: 400 ; font-size:25PX"
+                            <li class="emploiForGroup"><a href="{{ route('emploiForGroup') }}"
+                                    class=" waves-effect"> <span data-toggle="tooltip" data-placement="right"
+                                        title="chaque group" style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-lightbulb-multiple-outline"></span></a></li>
 
 
-                            <li>
+                            <li class="toutlesEmploi">
                                 <a href="{{ route('toutlesEmploi') }}" class=" waves-effect">
                                     <span style="font-weight: 400 ; font-size:25PX" class="mdi mdi-history"
                                         data-toggle="tooltip" data-placement="right" title="tous les emplois"></span>
@@ -348,7 +360,7 @@
                             </li>
 
 
-                            <li>
+                            <li class="AllRequest">
                                 <a href="{{ route('AllRequest') }}" class=" waves-effect">
                                     <span style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-message-text-clock-outline" data-toggle="tooltip"
@@ -357,7 +369,7 @@
                                 </a>
                             </li>
 
-                            <li>
+                            <li class="AllSetting">
                                 <a href="{{ route('AllSetting') }}" class=" waves-effect">
                                     <span style="font-weight: 400 ; font-size:25PX"
                                         class="mdi mdi-settings-transfer-outline" data-toggle="tooltip"
@@ -368,7 +380,9 @@
 
 
 
-                            <li>
+
+
+                            <li class="logout">
                                 <a class="dropdown-item text-danger" href="{{ route('logout') }}">
                                     <i style="font-weight: 400 ; font-size:25PX"
                                         class="bx bx-power-off font-size-16 align-middle me-1 text-danger"
@@ -415,6 +429,27 @@
 
 
     <div class="rightbar-overlay"></div>
+    @php
+        // Get the current user
+        $user = auth()->user();
+
+        // Check if UserDejaLogin is false
+        if (!$user->UserDejaLogin) {
+            // Set a JavaScript variable to indicate that the driver should be launched
+            echo '<script>
+                var launchDriverNeeded = true;
+            </script>';
+
+            // Update UserDejaLogin to true
+            $user->UserDejaLogin = true;
+            $user->save();
+        } else {
+            // Set a JavaScript variable to indicate that the driver should not be launched
+            echo '<script>
+                var launchDriverNeeded = false;
+            </script>';
+        }
+    @endphp
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Bootstrap JS -->
@@ -440,6 +475,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -462,6 +499,192 @@
                 hideHidentext();
             });
         });
+
+
+
+        // Check if the driver should be launched
+        if (typeof launchDriverNeeded !== 'undefined' && launchDriverNeeded) {
+            // Call the launchDriver() function
+            launchDriver();
+        }
+
+        function launchDriver() {
+            const driver = window.driver.js.driver;
+            const username = "{{ Auth::user()->user_name }}"; // Obtenir le nom d'utilisateur dynamiquement
+            const driverObj = driver({
+                showProgress: true,
+
+                showButtons: ['next', 'previous', 'close'],
+                steps: [
+                    // Première étape
+                    {
+                        element: '#some-element',
+                        popover: {
+                            title: username,
+                            description: 'Suivez les instructions pour comprendre comment vous pouvez utiliser ce site.',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    // Deuxième étape
+                    {
+                        element: '.vertical-menu',
+                        popover: {
+                            title: 'Menu Principal',
+                            description: 'Voici le menu principal du tableau de bord.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Troisième étape
+                    {
+                        element: '.navbar-header',
+                        popover: {
+                            title: 'En-tête',
+                            description: 'Ceci est l\'en-tête du tableau de bord.',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+
+
+
+                    // Septième étape
+                    {
+                        element: '.mdi-bell-outline',
+                        popover: {
+                            title: 'Menu des Notifications',
+                            description: 'Cliquez ici pour afficher les notifications.',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    // Huitième étape
+                    {
+                        element: '#page-header-user-dropdown span',
+                        popover: {
+                            title: 'Profil Utilisateur',
+                            description: 'vous trouvez votre profile et username.',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+                    {
+                        element: '.useGuide span',
+                        popover: {
+                            title: 'Profil Utilisateur',
+                            description: 'vous trouvez votre profile et username.',
+                            side: "bottom",
+                            align: 'start'
+                        }
+                    },
+
+                    // Dixième étape
+                    {
+                        element: '.user-wid',
+                        popover: {
+                            title: 'Widget Utilisateur',
+                            description: 'Ceci est le widget utilisateur.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Onzième étape
+                    {
+                        element: '.Acceuil',
+                        popover: {
+                            title: 'Page d\'Accueil',
+                            description: 'Ceci est la page d\'accueil.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Douzième étape
+                    {
+                        element: '.CreateEmploi ',
+                        popover: {
+                            title: 'Calendrier des Demandes',
+                            description: 'Ceci est le calendrier des demandes.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Treizième étape
+                    {
+                        element: '.emploiForFormateurs ',
+                        popover: {
+                            title: 'Calendrier',
+                            description: 'Ceci est le calendrier.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Quatorzième étape
+                    {
+                        element: '.ChaqueFormateur ',
+                        popover: {
+                            title: 'Groupes',
+                            description: 'Ceci sont les groupes.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Quinzième étape
+                    {
+                        element: '.emploiForGroup ',
+                        popover: {
+                            title: 'Modules',
+                            description: 'Ceci sont les modules.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Seizième étape
+                    {
+                        element: '.toutlesEmploi ',
+                        popover: {
+                            title: 'Paramètres',
+                            description: 'Ceci sont les paramètres.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Dix-septième étape
+                    {
+                        element: '.AllRequest ',
+                        popover: {
+                            title: 'Documentation',
+                            description: 'Cliquez ici pour accéder à la documentation.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Dix-huitième étape
+                    {
+                        element: '.AllSetting',
+                        popover: {
+                            title: 'Déconnexion',
+                            description: 'Cliquez ici pour vous déconnecter.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+                    // Dix-huitième étape
+                    {
+                        element: '.logout',
+                        popover: {
+                            title: 'Déconnexion',
+                            description: 'Cliquez ici pour vous déconnecter.',
+                            side: "left",
+                            align: 'start'
+                        }
+                    },
+
+                ]
+            });
+
+            driverObj.drive();
+        }
     </script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>

@@ -407,7 +407,7 @@
                                     @if (
                                         $allseances &&
                                             $allseances->where('user_id', $formateur->id)->whereIn('status_sission', ['Cancelled', 'Pending'])->count() > 0)
-                                        <button wire:click="AccepteAll({{ $formateur->id }})" aria-label="Close"
+                                        <br><button wire:click="AccepteAll({{ $formateur->id }})" aria-label="Close"
                                             type="button" class="btn btn-success">Accepte All</button>
                                     @endif
                                 </td>
